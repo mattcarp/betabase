@@ -1,0 +1,146 @@
+/**
+ * MAC Design System - Color Tokens
+ * Single source of truth for all colors
+ *
+ * Teal palette inspired by the original SIAM design
+ * Professional, clean, timeless
+ */
+
+:root {
+  /* ============================================
+     TEAL PALETTE - Primary Brand Colors
+     ============================================ */
+  --mac-teal-50:  #e0f7fa;
+  --mac-teal-100: #b2ebf2;
+  --mac-teal-200: #80deea;
+  --mac-teal-300: #4dd0e1;
+  --mac-teal-400: #26c6da;  /* Primary - headings, key accents */
+  --mac-teal-500: #00bcd4;  /* Interactive elements */
+  --mac-teal-600: #00acc1;  /* Hover states */
+  --mac-teal-700: #0097a7;  /* User messages, darker accent */
+  --mac-teal-800: #00838f;  /* Deep accent */
+  --mac-teal-900: #006064;  /* Darkest teal */
+
+  /* ============================================
+     SEMANTIC COLOR TOKENS
+     Use these in components, not raw palette
+     ============================================ */
+
+  /* Primary - Main brand color for key UI elements */
+  --color-primary: var(--mac-teal-400);
+  --color-primary-hover: var(--mac-teal-500);
+  --color-primary-active: var(--mac-teal-600);
+  --color-primary-muted: var(--mac-teal-700);
+
+  /* Accent - For highlights and emphasis */
+  --color-accent: var(--mac-teal-500);
+  --color-accent-subtle: rgba(0, 188, 212, 0.15);
+  --color-accent-glow: rgba(38, 198, 218, 0.4);
+
+  /* Headings - Teal for visual hierarchy */
+  --color-heading: var(--mac-teal-400);
+  --color-heading-secondary: var(--mac-teal-300);
+
+  /* Interactive - Links, buttons, focus states */
+  --color-interactive: var(--mac-teal-500);
+  --color-interactive-hover: var(--mac-teal-400);
+  --color-focus-ring: var(--mac-teal-500);
+
+  /* ============================================
+     SURFACE COLORS - Backgrounds
+     ============================================ */
+  --mac-surface-bg: #0a0a0a;
+  --mac-surface-background: #0c0c0c;
+  --mac-surface-elevated: #141414;
+  --mac-surface-card: rgba(20, 20, 20, 0.9);
+  --mac-surface-overlay: rgba(0, 0, 0, 0.8);
+
+  /* ============================================
+     TEXT COLORS - Typography hierarchy
+     ============================================ */
+  --mac-text-primary: #ffffff;
+  --mac-text-secondary: #a3a3a3;
+  --mac-text-muted: #737373;
+  --mac-text-disabled: #525252;
+
+  /* ============================================
+     BORDER COLORS - Subtle, professional
+     ============================================ */
+  --mac-border: rgba(255, 255, 255, 0.08);
+  --mac-border-elevated: rgba(255, 255, 255, 0.12);
+  --mac-border-focus: var(--mac-teal-500);
+  --mac-border-teal: rgba(38, 198, 218, 0.3);
+
+  /* ============================================
+     STATE COLORS - Interactions
+     ============================================ */
+  --mac-state-hover: rgba(255, 255, 255, 0.04);
+  --mac-state-hover-teal: rgba(38, 198, 218, 0.1);
+  --mac-state-focus: var(--mac-teal-500);
+  --mac-state-disabled: #2a2a2a;
+
+  /* ============================================
+     STATUS COLORS - Feedback
+     ============================================ */
+  --mac-status-success: #22c55e;
+  --mac-status-success-bg: rgba(34, 197, 94, 0.1);
+  --mac-status-success-border: rgba(34, 197, 94, 0.2);
+
+  --mac-status-warning: #eab308;
+  --mac-status-warning-bg: rgba(234, 179, 8, 0.1);
+  --mac-status-warning-border: rgba(234, 179, 8, 0.2);
+
+  --mac-status-error: #ef4444;
+  --mac-status-error-bg: rgba(239, 68, 68, 0.1);
+  --mac-status-error-border: rgba(239, 68, 68, 0.2);
+
+  --mac-status-info: var(--mac-teal-400);
+  --mac-status-info-bg: rgba(38, 198, 218, 0.1);
+  --mac-status-info-border: rgba(38, 198, 218, 0.2);
+
+  /* ============================================
+     CODE HIGHLIGHTING - For inline code
+     ============================================ */
+  --mac-code-bg: rgba(38, 198, 218, 0.1);
+  --mac-code-text: var(--mac-teal-300);
+  --mac-code-border: rgba(38, 198, 218, 0.2);
+
+  /* Code block background */
+  --mac-codeblock-bg: #0d1117;
+  --mac-codeblock-border: rgba(255, 255, 255, 0.1);
+
+  /* ============================================
+     GLOW & SHADOW EFFECTS
+     ============================================ */
+  --mac-glow-teal: 0 0 20px rgba(38, 198, 218, 0.3);
+  --mac-glow-teal-strong: 0 0 30px rgba(38, 198, 218, 0.5);
+  --mac-shadow-card: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --mac-shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  /* ============================================
+     CHAT UI SPECIFIC
+     ============================================ */
+  --mac-user-message-bg: var(--mac-teal-700);
+  --mac-user-message-text: #ffffff;
+  --mac-assistant-message-bg: var(--mac-surface-elevated);
+  --mac-assistant-message-text: var(--mac-text-primary);
+
+  /* ============================================
+     DATA VISUALIZATION
+     ============================================ */
+  --mac-data-primary: var(--mac-teal-400);
+  --mac-data-secondary: var(--mac-teal-600);
+  --mac-data-tertiary: var(--mac-teal-800);
+
+  /* ============================================
+     LEGACY COMPATIBILITY
+     Map old variable names to new system
+     ============================================ */
+  --mac-primary-blue-400: var(--mac-teal-400);
+  --mac-primary-blue-600: var(--mac-teal-600);
+  --mac-accent-purple-400: var(--mac-teal-500);
+  --mac-accent-purple-600: var(--mac-teal-700);
+  --mac-utility-border: var(--mac-border);
+  --mac-utility-border-elevated: var(--mac-border-elevated);
+  --mac-utility-shadow: rgba(0, 0, 0, 0.8);
+}

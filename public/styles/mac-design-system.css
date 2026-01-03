@@ -1,18 +1,18 @@
 /**
  * MAC Design System Variables for SIAM Integration
- * Professional design tokens by Matthew Adam Carpenter
+ * Teal Theme - Professional design tokens by Matthew Adam Carpenter
  */
 
 :root {
-  /* MAC Design System Core Colors - Based on Reference */
-  --mac-primary-blue-400: #4a9eff; /* Blue 400 from reference */
-  --mac-primary-blue-600: #3b82f6; /* Blue 600 from reference */
-  --mac-accent-purple-400: #a855f7; /* Purple 400 from reference */
-  --mac-accent-purple-600: #9333ea; /* Purple 600 from reference */
+  /* MAC Design System Core Colors - Teal Palette */
+  --mac-primary-blue-400: #26c6da; /* Teal 400 - primary accent */
+  --mac-primary-blue-600: #00acc1; /* Teal 600 - interactive */
+  --mac-accent-purple-400: #00bcd4; /* Teal 500 - secondary accent */
+  --mac-accent-purple-600: #0097a7; /* Teal 700 - deeper accent */
 
   /* MAC Surface Colors - Professional Dark Theme */
-  --mac-surface-background: #0c0c0c; /* Background from reference */
-  --mac-surface-elevated: #141414; /* Surface from reference */
+  --mac-surface-background: #0c0c0c;
+  --mac-surface-elevated: #141414;
   --mac-surface-card: rgba(20, 20, 20, 0.9);
   --mac-surface-bg: #0a0a0a;
 
@@ -27,12 +27,12 @@
   --mac-utility-border-elevated: rgba(255, 255, 255, 0.12);
   --mac-utility-shadow: rgba(0, 0, 0, 0.8);
 
-  /* MAC State Colors - Subtle Interactions */
+  /* MAC State Colors - Teal Theme */
   --mac-state-hover: rgba(255, 255, 255, 0.04);
-  --mac-state-focus: #4a9eff;
+  --mac-state-focus: #26c6da;
   --mac-state-disabled: #2a2a2a;
 
-  /* MAC Status Badge Colors - Minimal Transparent Style */
+  /* MAC Status Badge Colors */
   --mac-status-connected-bg: rgba(34, 197, 94, 0.1);
   --mac-status-connected-border: rgba(34, 197, 94, 0.2);
   --mac-status-connected-text: #86efac;
@@ -46,28 +46,33 @@
   --mac-status-error-text: #fdba74;
 
   /* Sidebar Variables */
-  --sidebar-width: 16rem; /* 256px */
-  --sidebar-width-medium: 12.5rem; /* 200px - for medium viewports ~800px */
-  --sidebar-width-mobile: 18rem; /* 288px */
-  --sidebar-width-icon: 3rem; /* 48px - collapsed width */
+  --sidebar-width: 16rem;
+  --sidebar-width-medium: 12.5rem;
+  --sidebar-width-mobile: 18rem;
+  --sidebar-width-icon: 3rem;
 
-  /* Sidebar Theme Colors */
+  /* Sidebar Theme Colors - Teal */
   --sidebar-background: var(--mac-surface-elevated);
   --sidebar-foreground: var(--mac-text-primary);
-  --sidebar-primary: var(--mac-primary-blue-400);
+  --sidebar-primary: #26c6da;
   --sidebar-primary-foreground: var(--mac-text-primary);
-  --sidebar-accent: var(--mac-accent-purple-400);
+  --sidebar-accent: #00bcd4;
   --sidebar-accent-foreground: var(--mac-text-primary);
   --sidebar-border: var(--mac-utility-border);
-  --sidebar-ring: var(--mac-state-focus);
+  --sidebar-ring: #26c6da;
+
+  /* Teal Color Tokens */
+  --color-primary: #26c6da;
+  --color-heading: #26c6da;
+  --color-accent: #00bcd4;
+  --mac-code-bg: rgba(38, 198, 218, 0.1);
+  --mac-code-text: #4dd0e1;
+  --mac-code-border: rgba(38, 198, 218, 0.2);
 }
 
 /* MAC Professional Component Styles */
 .mac-professional {
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 300;
   line-height: 1.5;
 }
@@ -105,10 +110,7 @@
   justify-content: center;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 300;
   font-size: 0.875rem;
   line-height: 1.2;
@@ -126,10 +128,12 @@
 }
 
 .mac-button-primary:hover {
-  background-color: var(--mac-state-hover);
+  background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%);
   border-color: var(--mac-utility-border-elevated);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 8px 25px rgba(38, 198, 218, 0.4),
+    0 4px 12px rgba(0, 172, 193, 0.3);
 }
 
 .mac-button-secondary {
@@ -140,7 +144,7 @@
 
 .mac-button-secondary:hover {
   background-color: var(--mac-state-hover);
-  border-color: var(--mac-primary-blue-400);
+  border-color: #26c6da;
   transform: translateY(-1px);
 }
 
@@ -152,7 +156,7 @@
 
 .mac-button-outline:hover {
   background-color: var(--mac-state-hover);
-  border-color: var(--mac-primary-blue-400);
+  border-color: #26c6da;
 }
 
 /* MAC Form Styles */
@@ -164,10 +168,7 @@
   border: 1px solid var(--mac-utility-border);
   border-radius: 0.5rem;
   color: var(--mac-text-primary);
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 300;
   font-size: 0.875rem;
   transition: all 0.2s ease;
@@ -179,8 +180,11 @@
 
 .mac-input:focus {
   outline: none;
-  border-color: var(--mac-primary-blue-400);
-  box-shadow: 0 0 0 3px rgba(51, 133, 255, 0.1);
+  border-color: #26c6da;
+  box-shadow:
+    0 0 0 3px rgba(38, 198, 218, 0.15),
+    0 4px 12px rgba(38, 198, 218, 0.1);
+  transform: translateY(-1px);
 }
 
 /* MAC Card Styles */
@@ -194,8 +198,6 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* mac-card hover effect removed - use mac-card-static for all cards */
-
 .mac-card-elevated {
   background-color: var(--mac-surface-elevated);
   border: 1px solid var(--mac-utility-border-elevated);
@@ -206,10 +208,13 @@
 
 /* MAC Glass Morphism */
 .mac-glass {
-  background: rgba(20, 20, 20, 0.7);
-  backdrop-filter: blur(20px);
+  background: rgba(17, 24, 39, 0.4);
+  backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .mac-glass::before {
@@ -222,63 +227,27 @@
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 }
 
-/* MAC Animations */
-
-/* MAC Floating Orbs */
-
-/* Shimmer Effect */
-
-/* Professional Dark Background */
+/* Professional Dark Background - Teal Accent */
 .mac-background {
   background-color: var(--mac-surface-background);
   background-image:
-    radial-gradient(circle at 25% 25%, rgba(51, 133, 255, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(51, 133, 255, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    radial-gradient(circle at 25% 25%, rgba(38, 198, 218, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(0, 188, 212, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(38, 198, 218, 0.03) 0%, rgba(0, 151, 167, 0.03) 100%);
   background-size: 100% 100%;
   background-attachment: fixed;
 }
 
-/* Enhanced Display Text with Glow */
+/* Enhanced Display Text with Teal Glow */
 .mac-display-text {
   font-size: 3rem;
   font-weight: 100;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #e0f7fa 50%, #b2ebf2 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* Enhanced Glass Morphism with Better Blur */
-.mac-glass {
-  background: rgba(17, 24, 39, 0.4);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Enhanced Button Hover Effects */
-.mac-button-primary:hover {
-  background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-  transform: translateY(-2px);
-  box-shadow:
-    0 8px 25px rgba(139, 92, 246, 0.4),
-    0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-/* Enhanced Input Focus Effects */
-.mac-input:focus {
-  outline: none;
-  border-color: var(--mac-primary-blue-400);
-  box-shadow:
-    0 0 0 3px rgba(51, 133, 255, 0.15),
-    0 4px 12px rgba(51, 133, 255, 0.1);
-  transform: translateY(-1px);
 }
 
 /* MAC Form Components */
@@ -314,51 +283,28 @@
   color: #ef4444;
 }
 
-/* Login Page Specific Enhancements */
+/* Login Page Specific - Teal */
 .login-logo-glow {
   box-shadow:
-    0 0 20px rgba(139, 92, 246, 0.3),
-    0 0 40px rgba(59, 130, 246, 0.2);
+    0 0 20px rgba(38, 198, 218, 0.3),
+    0 0 40px rgba(0, 188, 212, 0.2);
 }
 
-/* ========================
-   VOICE FEATURE ANIMATIONS
-   ======================== */
-
-/* Audio Wave Animation for Voice Indicators */
+/* Voice Feature Animations */
 @keyframes audioWave {
-  0%,
-  100% {
-    transform: scaleY(0.5);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
+  0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+  50% { transform: scaleY(1); opacity: 1; }
 }
 
-/* Shimmer Effect for Active Voice States */
 @keyframes shimmer {
-  to {
-    transform: translateX(200%);
-  }
+  to { transform: translateX(200%); }
 }
 
-/* Pulse Animation for Recording State */
 @keyframes recordingPulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.05);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
 }
 
-/* Voice Button Active States */
 .mac-voice-active {
   position: relative;
   overflow: hidden;
@@ -375,7 +321,6 @@
   animation: shimmer 2s infinite;
 }
 
-/* Audio Visualizer Bars */
 .mac-audio-bar {
   display: inline-block;
   width: 3px;
@@ -384,32 +329,12 @@
   animation: audioWave 1s ease-in-out infinite;
 }
 
-.mac-audio-bar:nth-child(2) {
-  animation-delay: 0.1s;
-}
+.mac-audio-bar:nth-child(2) { animation-delay: 0.1s; }
+.mac-audio-bar:nth-child(3) { animation-delay: 0.2s; }
+.mac-audio-bar:nth-child(4) { animation-delay: 0.3s; }
+.mac-audio-bar:nth-child(5) { animation-delay: 0.4s; }
 
-.mac-audio-bar:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.mac-audio-bar:nth-child(4) {
-  animation-delay: 0.3s;
-}
-
-.mac-audio-bar:nth-child(5) {
-  animation-delay: 0.4s;
-}
-
-/* ========================
-   MAC STATUS BADGES
-   ======================== */
-
-/* MAC Status Badge Standard - Minimal Transparent Style
- * Philosophy: Let the pulsing indicator dot communicate status urgency.
- * Background colors remain subtle and professional.
- * Avoid alarming red backgrounds - use minimal transparency instead.
- */
-
+/* MAC Status Badges */
 .mac-status-badge {
   display: inline-flex;
   align-items: center;
@@ -428,9 +353,7 @@
   color: var(--mac-status-connected-text);
 }
 
-.mac-status-connected:hover {
-  background-color: rgba(34, 197, 94, 0.2);
-}
+.mac-status-connected:hover { background-color: rgba(34, 197, 94, 0.2); }
 
 .mac-status-warning {
   background-color: var(--mac-status-warning-bg);
@@ -438,9 +361,7 @@
   color: var(--mac-status-warning-text);
 }
 
-.mac-status-warning:hover {
-  background-color: rgba(234, 179, 8, 0.2);
-}
+.mac-status-warning:hover { background-color: rgba(234, 179, 8, 0.2); }
 
 .mac-status-error {
   background-color: var(--mac-status-error-bg);
@@ -448,11 +369,8 @@
   color: var(--mac-status-error-text);
 }
 
-.mac-status-error:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+.mac-status-error:hover { background-color: rgba(255, 255, 255, 0.1); }
 
-/* Status Indicator Dot - Pulsing animation for live status */
 .mac-status-dot {
   width: 0.5rem;
   height: 0.5rem;
@@ -460,119 +378,31 @@
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.mac-status-dot-connected {
-  background-color: #22c55e;
-}
+.mac-status-dot-connected { background-color: #22c55e; }
+.mac-status-dot-warning { background-color: #eab308; }
+.mac-status-dot-error { background-color: #ef4444; }
 
-.mac-status-dot-warning {
-  background-color: #eab308;
-}
-
-.mac-status-dot-error {
-  background-color: #ef4444;
-}
-
-/* ========================
-   RESPONSIVE DESIGN
-   ======================== */
-
-/* Medium viewport (tablets and half-screen dev setups ~720-900px) */
+/* Responsive Design */
 @media (min-width: 640px) and (max-width: 1024px) {
-  :root {
-    /* Reduce sidebar width for medium viewports */
-    --sidebar-width: var(--sidebar-width-medium);
-  }
-
-  /* More compact header for medium viewports */
-  header {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-
-  /* Reduce spacing in navigation tabs */
-  .space-x-1 {
-    gap: 0.25rem !important;
-  }
-
-  /* Make buttons more compact */
-  button {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-  }
-
-  /* Hide less critical elements on smaller viewports */
-  .hidden\:md {
-    display: none !important;
-  }
+  :root { --sidebar-width: var(--sidebar-width-medium); }
+  header { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .space-x-1 { gap: 0.25rem !important; }
+  button { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+  .hidden\:md { display: none !important; }
 }
 
-/* Specific adjustments for ~750-800px (half of 15" Mac screen) */
 @media (min-width: 720px) and (max-width: 850px) {
-  :root {
-    --sidebar-width: 14rem; /* 224px - balanced width */
-  }
-
-  /* Minimal header padding for 750px viewport */
-  header {
-    padding-left: 0.25rem !important;
-    padding-right: 0.25rem !important;
-  }
-
-  header .px-6 {
-    padding-left: 0.25rem !important;
-    padding-right: 0.25rem !important;
-  }
-
-  /* Make nav tabs smaller */
-  header button {
-    font-size: 0.8125rem !important;
-    padding: 0.375rem 0.5rem !important;
-  }
-
-  /* Reduce gaps between elements */
-  .space-x-1 {
-    gap: 0.125rem !important;
-  }
-
-  .space-x-2 {
-    gap: 0.25rem !important;
-  }
-
-  .space-x-3 {
-    gap: 0.375rem !important;
-  }
-
-  /* Reduce main header gap to 4px for tighter spacing */
-  header .gap-4 {
-    gap: 0.25rem !important;
-  }
-
-  /* Make nav tabs even more compact */
-  header .space-x-1 button {
-    padding-left: 0.375rem !important;
-    padding-right: 0.375rem !important;
-  }
-
-  /* Reduce spacing within nav tab buttons */
-  header .space-x-2 {
-    gap: 0.125rem !important;
-  }
-
-  /* Keep logo/branding readable - don't shrink too much */
-  /* Removed h1 and .text-xs overrides - keep them at normal size */
-
-  /* Hide Introspection dropdown to save space (~113px) */
-  .introspection-dropdown-container {
-    display: none !important;
-  }
-
-  /* Hide Sign Out text, show icon only (saves ~60px) */
-  .sign-out-text {
-    display: none !important;
-  }
-
-  .sign-out-button {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-  }
+  :root { --sidebar-width: 14rem; }
+  header { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+  header .px-6 { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+  header button { font-size: 0.8125rem !important; padding: 0.375rem 0.5rem !important; }
+  .space-x-1 { gap: 0.125rem !important; }
+  .space-x-2 { gap: 0.25rem !important; }
+  .space-x-3 { gap: 0.375rem !important; }
+  header .gap-4 { gap: 0.25rem !important; }
+  header .space-x-1 button { padding-left: 0.375rem !important; padding-right: 0.375rem !important; }
+  header .space-x-2 { gap: 0.125rem !important; }
+  .introspection-dropdown-container { display: none !important; }
+  .sign-out-text { display: none !important; }
+  .sign-out-button { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
 }

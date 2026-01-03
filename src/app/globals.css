@@ -13,52 +13,51 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 187 71% 50%; /* Teal hue */
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 187 100% 42%; /* Teal accent */
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 187 71% 50%; /* Teal ring */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 0 0% 4%; /* Near black */
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 0 0% 8%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 0 0% 8%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+    --primary: 187 71% 50%; /* Teal #26c6da */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 8%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 0 0% 15%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 187 100% 42%; /* Teal #00bcd4 */
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 0 0% 8%; /* MAC Design System: subtle border (≈ rgba(255,255,255,0.08) on dark bg) */
-    --input: 0 0% 10%; /* Slightly more visible for form inputs */
-    --ring: 212.7 26.8% 83.9%;
-    
-    /* MAC Data Storytelling Colors - Muted Professional Palette */
-    /* Inspired by Pitch & Slide - Bold but not bright */
+    --border: 0 0% 8%; /* MAC Design System: subtle border */
+    --input: 0 0% 10%;
+    --ring: 187 71% 50%; /* Teal ring */
+
+    /* MAC Data Storytelling Colors - Teal Primary */
     --mac-data-coral: #d97752;
     --mac-data-coral-dim: #b86543;
-    --mac-data-teal: #3ba99c;
-    --mac-data-teal-dim: #2d8a7f;
-    --mac-data-purple: #8b5cf6;
-    --mac-data-purple-dim: #7c3aed;
-    
+    --mac-data-teal: #26c6da;
+    --mac-data-teal-dim: #0097a7;
+    --mac-data-purple: #00bcd4; /* Now teal */
+    --mac-data-purple-dim: #00838f;
+
     /* Neutral Hierarchy for Data Viz */
     --mac-data-zinc-100: #fafafa;
     --mac-data-zinc-300: #d4d4d4;
@@ -66,16 +65,21 @@
     --mac-data-zinc-500: #737373;
     --mac-data-zinc-600: #525252;
     --mac-data-zinc-800: #27272a;
-    
+
     /* Data Viz Backgrounds */
     --mac-data-bg-pure: #000000;
     --mac-data-bg-elevated: #0a0a0a;
     --mac-data-bg-card: rgba(10, 10, 10, 0.6);
-    
-    /* Semantic Data Colors (use sparingly) */
+
+    /* Semantic Data Colors */
     --mac-data-success: #22c55e;
     --mac-data-warning: #f59e0b;
     --mac-data-error: #ef4444;
+
+    /* Teal color tokens for components */
+    --color-heading: #26c6da;
+    --color-primary: #26c6da;
+    --color-accent: #00bcd4;
   }
 }
 

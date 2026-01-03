@@ -1,7 +1,7 @@
 /**
- * SIAM with Pure MAC Design System
- * Professional meeting AI interface by Matthew Adam Carpenter
- * Clean, elegant, timeless design - no cyberpunk, just sophistication
+ * SIAM with MAC Design System - Teal Theme
+ * Professional AI interface by Matthew Adam Carpenter
+ * Clean, elegant, timeless design with teal accent palette
  */
 
 /** @type {import('tailwindcss').Config} */
@@ -37,36 +37,38 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        /* Teal Primary Palette */
         primary: {
-          50: "#f0f7ff",
-          100: "#e0efff",
-          200: "#baddff",
-          300: "#7cc0ff",
-          400: "#3385ff",
-          500: "#0969da",
-          600: "#0052cc",
-          700: "#0041a3",
-          800: "#003d82",
-          900: "#00316b",
-          DEFAULT: "#3385ff",
+          50: "#e0f7fa",
+          100: "#b2ebf2",
+          200: "#80deea",
+          300: "#4dd0e1",
+          400: "#26c6da",
+          500: "#00bcd4",
+          600: "#00acc1",
+          700: "#0097a7",
+          800: "#00838f",
+          900: "#006064",
+          DEFAULT: "#26c6da",
           foreground: "#ffffff",
         },
         secondary: {
           DEFAULT: "#141414",
           foreground: "#ffffff",
         },
+        /* Teal Accent (darker shade for variety) */
         accent: {
-          50: "#faf5ff",
-          100: "#f3e8ff",
-          200: "#e9d5ff",
-          300: "#d8b4fe",
-          400: "#8533ff",
-          500: "#8b5cf6",
-          600: "#5200cc",
-          700: "#6b21a8",
-          800: "#581c87",
-          900: "#4c1d95",
-          DEFAULT: "#8533ff",
+          50: "#e0f7fa",
+          100: "#b2ebf2",
+          200: "#80deea",
+          300: "#4dd0e1",
+          400: "#00bcd4",
+          500: "#00acc1",
+          600: "#0097a7",
+          700: "#00838f",
+          800: "#006064",
+          900: "#004d40",
+          DEFAULT: "#00bcd4",
           foreground: "#ffffff",
         },
         muted: {
@@ -100,8 +102,15 @@ module.exports = {
         },
         "mac-state": {
           hover: "rgba(255, 255, 255, 0.05)",
-          focus: "#3385ff",
+          focus: "#26c6da",
           disabled: "#333333",
+        },
+        /* Teal-specific utilities */
+        "mac-teal": {
+          400: "#26c6da",
+          500: "#00bcd4",
+          600: "#00acc1",
+          700: "#0097a7",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -120,10 +129,10 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["system-ui", "-apple-system", "sans-serif"],
-        display: ["system-ui", "-apple-system", "sans-serif"],
-        body: ["system-ui", "-apple-system", "sans-serif"],
-        mono: ["SF Mono", "Monaco", "Consolas", "monospace"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        display: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        body: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        mono: ["SF Mono", "Monaco", "Consolas", "Liberation Mono", "monospace"],
       },
       fontWeight: {
         thin: "100",
@@ -174,8 +183,8 @@ module.exports = {
       boxShadow: {
         "mac-card": "0 4px 12px rgba(0, 0, 0, 0.5)",
         "mac-elevated": "0 8px 24px rgba(0, 0, 0, 0.5)",
-        "mac-purple-glow": "0 4px 12px rgba(133, 51, 255, 0.4)",
-        "mac-blue-glow": "0 4px 12px rgba(51, 133, 255, 0.3)",
+        "mac-teal-glow": "0 4px 12px rgba(38, 198, 218, 0.4)",
+        "mac-teal-glow-strong": "0 8px 20px rgba(38, 198, 218, 0.5)",
         "mac-glass": "0 8px 32px rgba(0, 0, 0, 0.3)",
         sm: "0 1px 2px rgba(0, 0, 0, 0.05)",
         md: "0 4px 6px rgba(0, 0, 0, 0.1)",
@@ -210,10 +219,10 @@ module.exports = {
         },
         "mac-glow": {
           "0%, 100%": {
-            textShadow: "0 0 20px #8533ff",
+            textShadow: "0 0 20px #26c6da",
           },
           "50%": {
-            textShadow: "0 0 30px #8533ff, 0 0 40px #8533ff",
+            textShadow: "0 0 30px #26c6da, 0 0 40px #00bcd4",
           },
         },
         "mac-shimmer": {

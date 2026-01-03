@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-01-03T07:46:14.441Z",
+  "test": "baseline-with-llm-synthesis",
+  "description": "Realistic test including LLM synthesis - what users actually experience",
+  "index_type": "unknown (pre-HNSW on embedding_gemini)",
+  "embedding_model": "Gemini text-embedding-004 (768d)",
+  "llm_model": "Gemini 2.0 Flash",
+  "queries": [
+    {
+      "query": "How do I create a test case in AOMA?",
+      "embedding_ms": 669,
+      "search_ms": 829,
+      "synthesis_ms": 482,
+      "total_ms": 2064,
+      "results": 10,
+      "similarity": 0.646
+    },
+    {
+      "query": "What is the order management workflow?",
+      "embedding_ms": 417,
+      "search_ms": 270,
+      "synthesis_ms": 619,
+      "total_ms": 1307,
+      "results": 1,
+      "similarity": 0.503
+    },
+    {
+      "query": "How to handle failed deliveries?",
+      "embedding_ms": 395,
+      "search_ms": 208,
+      "synthesis_ms": 810,
+      "total_ms": 1414,
+      "results": 3,
+      "similarity": 0.716
+    }
+  ],
+  "averages": {
+    "embedding_ms": 494,
+    "search_ms": 436,
+    "synthesis_ms": 637,
+    "total_ms": 1595
+  },
+  "comparison": {
+    "current_baseline_ms": 1595,
+    "target_cached_ms": 50,
+    "target_with_synthesis_ms": 600,
+    "improvement_factor": "2.7x (baseline to target with synthesis)"
+  },
+  "notes": [
+    "This is a SIMPLIFIED test - real /api/chat adds:",
+    "  - UnifiedRAGOrchestrator with multiple iterations",
+    "  - Agentic RAG for complex queries", 
+    "  - Hybrid search + RRF reranking",
+    "  - Context synthesis preprocessing",
+    "  - Langfuse tracing overhead",
+    "  - Complex system prompts with skill loading",
+    "Real /api/chat responses take 5-15 seconds due to this overhead",
+    "New Unified Knowledge API bypasses all that orchestration"
+  ]
+}

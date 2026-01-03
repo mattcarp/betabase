@@ -1,14 +1,18 @@
 /**
  * MAC Design System Variables for SIAM Integration
- * Professional design tokens by Matthew Adam Carpenter
+ * Teal Theme - Professional design tokens by Matthew Adam Carpenter
  */
 
+/* Import design tokens */
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+
 :root {
-  /* MAC Design System Core Colors - Based on Reference */
-  --mac-primary-blue-400: #4a9eff; /* Blue 400 from reference */
-  --mac-primary-blue-600: #3b82f6; /* Blue 600 from reference */
-  --mac-accent-purple-400: #a855f7; /* Purple 400 from reference */
-  --mac-accent-purple-600: #9333ea; /* Purple 600 from reference */
+  /* MAC Design System Core Colors - Teal Palette */
+  --mac-primary-blue-400: #26c6da; /* Teal 400 - primary accent */
+  --mac-primary-blue-600: #00acc1; /* Teal 600 - interactive */
+  --mac-accent-purple-400: #00bcd4; /* Teal 500 - secondary accent */
+  --mac-accent-purple-600: #0097a7; /* Teal 700 - deeper accent */
 
   /* MAC Surface Colors - Professional Dark Theme */
   --mac-surface-background: #0c0c0c; /* Background from reference */
@@ -29,7 +33,7 @@
 
   /* MAC State Colors - Subtle Interactions */
   --mac-state-hover: rgba(255, 255, 255, 0.04);
-  --mac-state-focus: #4a9eff;
+  --mac-state-focus: #26c6da;
   --mac-state-disabled: #2a2a2a;
 
   /* MAC Status Badge Colors - Minimal Transparent Style */
@@ -66,15 +70,15 @@
   --mac-tier3-bg: rgba(248, 113, 113, 0.1);
   --mac-tier3-border: rgba(248, 113, 113, 0.2);
 
-  /* Info / Blue */
-  --mac-info: #60a5fa;
-  --mac-info-bg: rgba(96, 165, 250, 0.1);
-  --mac-info-border: rgba(96, 165, 250, 0.2);
+  /* Info / Teal */
+  --mac-info: #26c6da;
+  --mac-info-bg: rgba(38, 198, 218, 0.1);
+  --mac-info-border: rgba(38, 198, 218, 0.2);
 
-  /* Purple / Special */
-  --mac-purple: #c084fc;
-  --mac-purple-bg: rgba(192, 132, 252, 0.1);
-  --mac-purple-border: rgba(192, 132, 252, 0.2);
+  /* Special / Dark Teal */
+  --mac-purple: #0097a7;
+  --mac-purple-bg: rgba(0, 151, 167, 0.1);
+  --mac-purple-border: rgba(0, 151, 167, 0.2);
 
   /* MAC Highlighter & Annotation Colors */
   --mac-highlight-yellow: rgba(255, 255, 0, 0.5); /* Yellow highlighter */
@@ -89,15 +93,15 @@
   --sidebar-width-mobile: 18rem; /* 288px */
   --sidebar-width-icon: 3rem; /* 48px - collapsed width */
 
-  /* Sidebar Theme Colors */
+  /* Sidebar Theme Colors - Teal */
   --sidebar-background: var(--mac-surface-elevated);
   --sidebar-foreground: var(--mac-text-primary);
-  --sidebar-primary: var(--mac-primary-blue-400);
+  --sidebar-primary: #26c6da;
   --sidebar-primary-foreground: var(--mac-text-primary);
-  --sidebar-accent: var(--mac-accent-purple-400);
+  --sidebar-accent: #00bcd4;
   --sidebar-accent-foreground: var(--mac-text-primary);
   --sidebar-border: var(--mac-utility-border);
-  --sidebar-ring: var(--mac-state-focus);
+  --sidebar-ring: #26c6da;
 
   /* Session Timeline Variables */
   --timeline-width-default: 320px;
@@ -273,13 +277,13 @@
 
 /* MAC Floating Orbs */
 
-/* Professional Dark Background */
+/* Professional Dark Background - Teal Accent */
 .mac-background {
   background-color: var(--mac-surface-background);
   background-image:
-    radial-gradient(circle at 25% 25%, rgba(51, 133, 255, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(51, 133, 255, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    radial-gradient(circle at 25% 25%, rgba(38, 198, 218, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(0, 188, 212, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(38, 198, 218, 0.03) 0%, rgba(0, 151, 167, 0.03) 100%);
   background-size: 100% 100%;
   background-attachment: fixed;
 }
@@ -320,26 +324,26 @@
   }
 }
 
-/* Enhanced Button Hover Effects */
+/* Enhanced Button Hover Effects - Teal */
 .mac-button-primary:hover {
   background: linear-gradient(
     135deg,
-    var(--mac-accent-purple-400) 0%,
-    var(--mac-primary-blue-600) 100%
+    #26c6da 0%,
+    #00acc1 100%
   );
   transform: translateY(-2px);
   box-shadow:
-    0 8px 25px rgba(139, 92, 246, 0.4),
-    0 4px 12px rgba(59, 130, 246, 0.3);
+    0 8px 25px rgba(38, 198, 218, 0.4),
+    0 4px 12px rgba(0, 172, 193, 0.3);
 }
 
-/* Enhanced Input Focus Effects */
+/* Enhanced Input Focus Effects - Teal */
 .mac-input:focus {
   outline: none;
-  border-color: var(--mac-primary-blue-400);
+  border-color: #26c6da;
   box-shadow:
-    0 0 0 3px rgba(51, 133, 255, 0.15),
-    0 4px 12px rgba(51, 133, 255, 0.1);
+    0 0 0 3px rgba(38, 198, 218, 0.15),
+    0 4px 12px rgba(38, 198, 218, 0.1);
   transform: translateY(-1px);
 }
 
@@ -392,14 +396,14 @@
   transition: outline-offset 150ms ease-in-out;
 }
 
-/* Enhanced focus for buttons */
+/* Enhanced focus for buttons - Teal */
 button:focus-visible,
 .mac-button:focus-visible {
   outline: 2px solid var(--mac-state-focus);
   outline-offset: 2px;
   box-shadow:
-    0 0 0 4px rgba(74, 158, 255, 0.1),
-    0 0 12px rgba(74, 158, 255, 0.15);
+    0 0 0 4px rgba(38, 198, 218, 0.1),
+    0 0 12px rgba(38, 198, 218, 0.15);
 }
 
 /* Enhanced focus for links */
@@ -409,7 +413,7 @@ a:focus-visible {
   border-radius: 4px;
 }
 
-/* Enhanced focus for form inputs */
+/* Enhanced focus for form inputs - Teal */
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
@@ -417,27 +421,27 @@ select:focus-visible,
   outline: none; /* Remove default outline */
   border-color: var(--mac-state-focus);
   box-shadow:
-    0 0 0 3px rgba(74, 158, 255, 0.15),
-    0 0 12px rgba(74, 158, 255, 0.1);
+    0 0 0 3px rgba(38, 198, 218, 0.15),
+    0 0 12px rgba(38, 198, 218, 0.1);
 }
 
-/* Focus for checkboxes and radio buttons */
+/* Focus for checkboxes and radio buttons - Teal */
 input[type="checkbox"]:focus-visible,
 input[type="radio"]:focus-visible {
   outline: 2px solid var(--mac-state-focus);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(74, 158, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(38, 198, 218, 0.1);
 }
 
-/* Focus for cards and interactive panels */
+/* Focus for cards and interactive panels - Teal */
 .mac-card:focus-visible,
 [role="button"]:focus-visible,
 [tabindex="0"]:focus-visible {
   outline: 2px solid var(--mac-state-focus);
   outline-offset: 2px;
   box-shadow:
-    0 0 0 4px rgba(74, 158, 255, 0.08),
-    0 0 16px rgba(74, 158, 255, 0.1);
+    0 0 0 4px rgba(38, 198, 218, 0.08),
+    0 0 16px rgba(38, 198, 218, 0.1);
 }
 
 /* Focus for dropdown/select elements */
@@ -462,7 +466,7 @@ nav button:focus-visible {
   border-radius: 6px;
 }
 
-/* Skip to content link (accessibility) */
+/* Skip to content link (accessibility) - Teal */
 .skip-to-content:focus-visible {
   position: absolute;
   top: 8px;
@@ -474,7 +478,7 @@ nav button:focus-visible {
   border-radius: 6px;
   color: var(--mac-text-primary);
   text-decoration: none;
-  box-shadow: 0 4px 20px rgba(74, 158, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(38, 198, 218, 0.3);
 }
 
 /* Remove focus outline for mouse/touch users (only show for keyboard) */
@@ -482,7 +486,7 @@ nav button:focus-visible {
   outline: none;
 }
 
-/* Ensure focus indicators are visible in high contrast mode */
+/* Ensure focus indicators are visible in high contrast mode - Teal */
 @media (prefers-contrast: high) {
   *:focus-visible {
     outline-width: 3px;
@@ -492,7 +496,7 @@ nav button:focus-visible {
   button:focus-visible,
   .mac-button:focus-visible {
     outline-width: 3px;
-    box-shadow: 0 0 0 6px rgba(74, 158, 255, 0.2);
+    box-shadow: 0 0 0 6px rgba(38, 198, 218, 0.2);
   }
 }
 
@@ -503,11 +507,11 @@ nav button:focus-visible {
   }
 }
 
-/* Login Page Specific Enhancements */
+/* Login Page Specific Enhancements - Teal */
 .login-logo-glow {
   box-shadow:
-    0 0 20px rgba(139, 92, 246, 0.3),
-    0 0 40px rgba(59, 130, 246, 0.2);
+    0 0 20px rgba(38, 198, 218, 0.3),
+    0 0 40px rgba(0, 188, 212, 0.2);
 }
 
 /* ========================

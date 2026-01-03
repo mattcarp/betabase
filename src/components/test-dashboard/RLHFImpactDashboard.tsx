@@ -11,7 +11,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { TrendingUp, TrendingDown, Activity, Target, Users, Award } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "../../lib/supabase";
 import {
   LineChart,
   Line,
@@ -46,12 +46,11 @@ interface TimeSeriesData {
 
 // Helper to safely get Supabase client - returns null if env vars missing
 function getSupabaseClient() {
-  try {
-    return createClientComponentClient();
-  } catch {
+  if (!supabase) {
     console.warn("Supabase not configured - RLHF Impact Dashboard disabled");
     return null;
   }
+  return supabase;
 }
 
 export function RLHFImpactDashboard() {

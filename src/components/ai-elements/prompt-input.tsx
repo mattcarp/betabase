@@ -1424,3 +1424,26 @@ export const PromptInputCommandSeparator = ({
 }: PromptInputCommandSeparatorProps) => (
   <CommandSeparator className={cn(className)} {...props} />
 );
+
+// ============================================================================
+// Toolbar & Model Select Aliases (for API compatibility)
+// ============================================================================
+
+export type PromptInputToolbarProps = PromptInputFooterProps;
+export const PromptInputToolbar = PromptInputFooter;
+
+// Model select aliases - these are the same as the generic select components
+export type PromptInputModelSelectProps = PromptInputSelectProps;
+export const PromptInputModelSelect = PromptInputSelect;
+
+export type PromptInputModelSelectTriggerProps = PromptInputSelectTriggerProps;
+export const PromptInputModelSelectTrigger = PromptInputSelectTrigger;
+
+export type PromptInputModelSelectContentProps = PromptInputSelectContentProps;
+export const PromptInputModelSelectContent = PromptInputSelectContent;
+
+export type PromptInputModelSelectItemProps = PromptInputSelectItemProps;
+export const PromptInputModelSelectItem = PromptInputSelectItem;
+
+export type PromptInputModelSelectValueProps = PromptInputSelectValueProps;
+export const PromptInputModelSelectValue = PromptInputSelectValue;

@@ -1,0 +1,158 @@
+/**
+ * MAC Design System - Typography Tokens
+ * Inter font + professional type scale
+ */
+
+:root {
+  /* ============================================
+     FONT FAMILIES
+     ============================================ */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
+
+  /* ============================================
+     FONT WEIGHTS
+     Inter supports variable weight, use these stops
+     ============================================ */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ============================================
+     TYPE SCALE
+     Based on 1rem = 16px
+     ============================================ */
+
+  /* Display - Hero text, large headings */
+  --text-display-size: 3.75rem;      /* 60px */
+  --text-display-line-height: 1.1;
+  --text-display-weight: var(--font-weight-thin);
+  --text-display-letter-spacing: -0.02em;
+
+  /* Heading XL - Page titles */
+  --text-heading-xl-size: 2.25rem;   /* 36px */
+  --text-heading-xl-line-height: 1.2;
+  --text-heading-xl-weight: var(--font-weight-extralight);
+
+  /* Heading - Section titles */
+  --text-heading-size: 1.875rem;     /* 30px */
+  --text-heading-line-height: 1.3;
+  --text-heading-weight: var(--font-weight-extralight);
+
+  /* Title - Subsection titles */
+  --text-title-size: 1.5rem;         /* 24px */
+  --text-title-line-height: 1.4;
+  --text-title-weight: var(--font-weight-light);
+
+  /* Subtitle - Card titles, emphasis */
+  --text-subtitle-size: 1.25rem;     /* 20px */
+  --text-subtitle-line-height: 1.5;
+  --text-subtitle-weight: var(--font-weight-normal);
+
+  /* Body - Main content */
+  --text-body-size: 1rem;            /* 16px */
+  --text-body-line-height: 1.75;
+  --text-body-weight: var(--font-weight-light);
+
+  /* Small - Secondary content, labels */
+  --text-small-size: 0.875rem;       /* 14px */
+  --text-small-line-height: 1.5;
+  --text-small-weight: var(--font-weight-normal);
+
+  /* Caption - Metadata, timestamps */
+  --text-caption-size: 0.75rem;      /* 12px */
+  --text-caption-line-height: 1.4;
+  --text-caption-weight: var(--font-weight-normal);
+
+  /* Code - Monospace text */
+  --text-code-size: 0.875rem;        /* 14px */
+  --text-code-line-height: 1.6;
+  --text-code-weight: var(--font-weight-normal);
+}
+
+/* ============================================
+   TYPOGRAPHY UTILITY CLASSES
+   ============================================ */
+
+.mac-display {
+  font-family: var(--font-display);
+  font-size: var(--text-display-size);
+  line-height: var(--text-display-line-height);
+  font-weight: var(--text-display-weight);
+  letter-spacing: var(--text-display-letter-spacing);
+}
+
+.mac-heading-xl {
+  font-family: var(--font-sans);
+  font-size: var(--text-heading-xl-size);
+  line-height: var(--text-heading-xl-line-height);
+  font-weight: var(--text-heading-xl-weight);
+}
+
+.mac-heading {
+  font-family: var(--font-sans);
+  font-size: var(--text-heading-size);
+  line-height: var(--text-heading-line-height);
+  font-weight: var(--text-heading-weight);
+}
+
+.mac-title {
+  font-family: var(--font-sans);
+  font-size: var(--text-title-size);
+  line-height: var(--text-title-line-height);
+  font-weight: var(--text-title-weight);
+}
+
+.mac-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-subtitle-size);
+  line-height: var(--text-subtitle-line-height);
+  font-weight: var(--text-subtitle-weight);
+}
+
+.mac-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  font-weight: var(--text-body-weight);
+}
+
+.mac-small {
+  font-family: var(--font-sans);
+  font-size: var(--text-small-size);
+  line-height: var(--text-small-line-height);
+  font-weight: var(--text-small-weight);
+}
+
+.mac-caption {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line-height);
+  font-weight: var(--text-caption-weight);
+  color: var(--mac-text-muted);
+}
+
+.mac-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-code-size);
+  line-height: var(--text-code-line-height);
+  font-weight: var(--text-code-weight);
+}
+
+/* ============================================
+   HEADING COLORS - Teal for AI responses
+   ============================================ */
+
+.mac-response-heading {
+  color: var(--color-heading);
+}
+
+.mac-response-heading-secondary {
+  color: var(--color-heading-secondary);
+}

@@ -27,7 +27,7 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "../../lib/supabase";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
@@ -48,12 +48,11 @@ interface RLHFGeneratedTest {
 
 // Helper to safely get Supabase client - returns null if env vars missing
 function getSupabaseClient() {
-  try {
-    return createClientComponentClient();
-  } catch {
+  if (!supabase) {
     console.warn("Supabase not configured - RLHF features disabled");
     return null;
   }
+  return supabase;
 }
 
 export function RLHFTestSuite() {

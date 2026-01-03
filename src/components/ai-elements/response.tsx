@@ -207,32 +207,32 @@ const components: Options["components"] = {
     </a>
   ),
   h1: ({ node, children, className, ...props }) => (
-    <h1 className={cn("mt-6 mb-2 font-normal text-3xl", className)} {...props}>
+    <h1 className={cn("mt-6 mb-2 font-light text-3xl text-primary", className)} {...props}>
       {children}
     </h1>
   ),
   h2: ({ node, children, className, ...props }) => (
-    <h2 className={cn("mt-6 mb-2 font-normal text-2xl", className)} {...props}>
+    <h2 className={cn("mt-6 mb-2 font-light text-2xl text-primary", className)} {...props}>
       {children}
     </h2>
   ),
   h3: ({ node, children, className, ...props }) => (
-    <h3 className={cn("mt-6 mb-2 font-normal text-xl", className)} {...props}>
+    <h3 className={cn("mt-6 mb-2 font-light text-xl text-primary", className)} {...props}>
       {children}
     </h3>
   ),
   h4: ({ node, children, className, ...props }) => (
-    <h4 className={cn("mt-6 mb-2 font-normal text-lg", className)} {...props}>
+    <h4 className={cn("mt-6 mb-2 font-light text-lg text-primary", className)} {...props}>
       {children}
     </h4>
   ),
   h5: ({ node, children, className, ...props }) => (
-    <h5 className={cn("mt-6 mb-2 font-normal text-base", className)} {...props}>
+    <h5 className={cn("mt-6 mb-2 font-light text-base text-primary", className)} {...props}>
       {children}
     </h5>
   ),
   h6: ({ node, children, className, ...props }) => (
-    <h6 className={cn("mt-6 mb-2 font-normal text-sm", className)} {...props}>
+    <h6 className={cn("mt-6 mb-2 font-light text-sm text-primary", className)} {...props}>
       {children}
     </h6>
   ),
@@ -286,9 +286,14 @@ const components: Options["components"] = {
       return <code className={className} {...props} />;
     }
 
+    // Teal-themed inline code with MAC Design System tokens
     return (
       <code
-        className={cn("rounded bg-muted px-1.5 py-0.5 font-mono text-sm", className)}
+        className={cn(
+          "rounded px-1.5 py-0.5 font-mono text-sm",
+          "bg-[var(--mac-code-bg)] text-[var(--mac-code-text)] border border-[var(--mac-code-border)]",
+          className
+        )}
         {...props}
       />
     );
