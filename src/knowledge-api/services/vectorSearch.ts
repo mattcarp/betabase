@@ -212,7 +212,7 @@ export async function searchMultiSource(
       const { data, error } = await client
         .from('wiki_documents')
         .select('id, title, markdown_content, url, app_name')
-        .eq('app_name', 'AOMA')
+        .or('app_name.eq.AOMA,app_name.eq.AOMA_WIKI') // Both AOMA and AOMA_WIKI pages
         .or(orConditions)
         .limit(limit * 2); // Fetch extra to account for filtering
 

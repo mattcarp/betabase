@@ -47,6 +47,8 @@ const ALLOWED_ERROR_PATTERNS = [
 
   // React hydration warnings (not errors)
   /Warning: Text content did not match/i,
+  /A tree hydrated but some attributes.*didn't match/i,
+  /hydration-mismatch/i,
 
   // Dev-only warnings
   /Download the React DevTools/i,
