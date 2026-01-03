@@ -19,36 +19,9 @@ import {
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
 
-// Server-only AI SDK imports - DO NOT add type annotations that reference the modules
-// Webpack bundles any module that appears in type annotations, even for dynamic imports
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let _openaiModule: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let _embedModule: any = null;
-
-// Check if we're on the server (where process.env exists properly)
-const isServer = typeof window === "undefined";
-
-async function getOpenAIEmbed(): Promise<{ openai: any; embed: any } | null> {
-  // Only attempt to load on server - browser will always get null
-  if (!isServer) {
-    return null;
-  }
-
-  try {
-    if (!_openaiModule) {
-      // Dynamic require to completely avoid webpack bundling
-      _openaiModule = await import("@ai-sdk/openai");
-    }
-    if (!_embedModule) {
-      _embedModule = await import("ai");
-    }
-    return { openai: _openaiModule.openai, embed: _embedModule.embed };
-  } catch (err) {
-    console.warn("[SupabaseVector] Failed to load AI SDK:", err);
-    return null;
-  }
-}
+// NOTE: OpenAI embedding is ONLY available server-side via API routes
+// This service uses Gemini embeddings by default which work on both client and server
+// The OpenAI fallback has been removed to prevent client-side bundling issues
 
 // Get admin client lazily to avoid null at module load time (for scripts)
 function getAdminClient(): SupabaseClient | null {
@@ -80,32 +53,17 @@ export class SupabaseVectorService {
   }
 
   /**
-   * Generate embeddings using configured provider (Gemini by default)
-   * - OpenAI: text-embedding-3-small (1536 dimensions)
-   * - Gemini: text-embedding-004 (768 dimensions)
+   * Generate embeddings using Gemini (768 dimensions)
+   * Note: OpenAI embeddings removed to prevent client-side bundling issues
+   * For OpenAI embeddings, use server-side API routes directly
    */
   async generateEmbedding(text: string): Promise<number[]> {
-    if (this.embeddingProvider === "gemini") {
-      const geminiService = getGeminiEmbeddingService();
-      return await geminiService.generateEmbedding(text);
-    } else {
-      // Fallback to OpenAI (server-only)
-      try {
-        const sdk = await getOpenAIEmbed();
-        if (!sdk) {
-          throw new Error("OpenAI SDK not available in browser environment");
-        }
-        const { embedding } = await sdk.embed({
-          model: sdk.openai.embedding("text-embedding-3-small"),
-          value: text,
-        });
-
-        return embedding;
-      } catch (error) {
-        console.error("Failed to generate OpenAI embedding:", error);
-        throw new Error("OpenAI embedding generation failed");
-      }
+    // Always use Gemini - OpenAI removed to prevent client bundling issues
+    if (this.embeddingProvider === "openai") {
+      console.warn("[SupabaseVector] OpenAI embedding requested but not available client-side, using Gemini");
     }
+    const geminiService = getGeminiEmbeddingService();
+    return await geminiService.generateEmbedding(text);
   }
 
   /**
@@ -337,52 +295,12 @@ export class SupabaseVectorService {
   }
 
   /**
-   * Generate OpenAI embedding (1536d)
+   * Generate embedding for wiki docs (using Gemini - OpenAI removed for client compatibility)
+   * Note: This method name is kept for backwards compatibility but now uses Gemini
    */
   private async generateOpenAIEmbedding(text: string): Promise<number[]> {
-    try {
-      const sdk = await getOpenAIEmbed();
-      if (!sdk) {
-        throw new Error("OpenAI SDK not available in browser environment");
-      }
-      const { embedding } = await sdk.embed({
-        model: sdk.openai.embedding("text-embedding-3-small"),
-        value: text,
-      });
-      return embedding;
-    } catch (error: any) {
-      // Check for quota/billing errors
-      const errorMessage = error?.message || error?.toString() || '';
-      const isQuotaError = errorMessage.includes('quota') || 
-                          errorMessage.includes('billing') ||
-                          errorMessage.includes('insufficient_quota') ||
-                          error?.statusCode === 429;
-      
-      if (isQuotaError) {
-        console.error("\n" + "=".repeat(70));
-        console.error("🚨 CRITICAL ERROR: OPENAI API QUOTA EXCEEDED [ERR_OPENAI_QUOTA_001]");
-        console.error("=".repeat(70));
-        console.error("The OpenAI API key has run out of credits.");
-        console.error("Wiki document search will NOT work until this is resolved.");
-        console.error("");
-        console.error("ACTION REQUIRED:");
-        console.error("  1. Visit https://platform.openai.com/account/billing");
-        console.error("  2. Add credits to your OpenAI account");
-        console.error("  3. Restart the application");
-        console.error("");
-        console.error("Contact: Developer with error code ERR_OPENAI_QUOTA_001");
-        console.error("=".repeat(70) + "\n");
-        
-        throw new Error(
-          "[ERR_OPENAI_QUOTA_001] OpenAI API quota exceeded. " +
-          "Wiki document search unavailable. " +
-          "Please add credits at https://platform.openai.com/account/billing"
-        );
-      }
-      
-      console.error("Failed to generate OpenAI embedding:", error);
-      throw new Error("OpenAI embedding generation failed");
-    }
+    // Use Gemini instead of OpenAI to avoid client-side bundling issues
+    return this.generateGeminiEmbedding(text);
   }
 
   /**

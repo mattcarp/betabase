@@ -140,6 +140,7 @@ export async function searchMultiSource(
   const searchPromises: Promise<void>[] = [];
 
   // 1. Search siam_vectors with Gemini embedding
+  // NOTE: For documentation questions, wiki should be PRIMARY. Jira/git are supporting evidence.
   searchPromises.push(
     client
       .rpc('match_siam_vectors_gemini', {
@@ -156,15 +157,27 @@ export async function searchMultiSource(
           console.error('siam_vectors search error:', error);
           return;
         }
-        const results = (data || []).map((row: Record<string, unknown>) => ({
-          id: row.id as string,
-          content: row.content as string,
-          source_type: row.source_type as SourceType,
-          source_id: row.source_id as string,
-          similarity: row.similarity as number,
-          metadata: (row.metadata as Record<string, unknown>) || {},
-          expandable: row.source_type === 'jira', // Jira has full details via /detail endpoint
-        }));
+
+        const results = (data || []).map((row: Record<string, unknown>) => {
+          const sourceType = row.source_type as SourceType;
+          let similarity = row.similarity as number;
+
+          // Deprioritize Jira tickets - they're supporting evidence, not primary answers
+          // Jira titles are too short to be useful as main content
+          if (sourceType === 'jira') {
+            similarity = similarity * 0.6; // Reduce Jira ranking
+          }
+
+          return {
+            id: row.id as string,
+            content: row.content as string,
+            source_type: sourceType,
+            source_id: row.source_id as string,
+            similarity,
+            metadata: (row.metadata as Record<string, unknown>) || {},
+            expandable: sourceType === 'jira', // Jira has full details via /detail endpoint
+          };
+        });
         console.log(`   siam_vectors: ${results.length} matches`);
         allResults.push(...results);
       })
@@ -201,15 +214,22 @@ export async function searchMultiSource(
         .select('id, title, markdown_content, url, app_name')
         .eq('app_name', 'AOMA')
         .or(orConditions)
-        .limit(limit);
+        .limit(limit * 2); // Fetch extra to account for filtering
 
       if (error) {
         console.error('wiki_documents text search error:', error);
         return;
       }
 
+      // Filter out index/navigation pages (contain "Recently Updated" lists)
+      const contentPages = (data || []).filter((row: Record<string, unknown>) => {
+        const content = (row.markdown_content as string) || '';
+        // Exclude pages that are just navigation/index pages
+        return !content.includes('Recently Updated') && !content.includes('• created by');
+      });
+
       // Score results by term frequency (rough relevance)
-      const results = (data || []).map((row: Record<string, unknown>) => {
+      const results = contentPages.slice(0, limit).map((row: Record<string, unknown>) => {
         const content = ((row.markdown_content as string) || '').toLowerCase();
         let matchCount = 0;
         searchTerms.forEach((term) => {

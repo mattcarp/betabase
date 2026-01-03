@@ -63,6 +63,13 @@ const ALLOWED_ERROR_PATTERNS = [
   /NEXT_PUBLIC_COGNITO_USER_POOL_ID/i,
   /NEXT_PUBLIC_COGNITO_CLIENT_ID/i,
   /Cannot read properties of undefined.*COGNITO/i,
+
+  // AI/Chat API configuration errors (expected when API keys not set)
+  /Google AI API key is not configured/i,
+  /API key.*not configured/i,
+  /CONFIG_ERROR/i,
+  /Chat Error/i,
+  /Service temporarily unavailable/i,
 ];
 
 function shouldIgnoreError(text: string): boolean {

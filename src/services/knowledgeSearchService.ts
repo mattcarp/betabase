@@ -13,35 +13,10 @@
 
 import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 import { OptimizedSupabaseVectorService } from "./optimizedSupabaseVectorService";
+import { getGeminiEmbeddingService } from "./geminiEmbeddingService";
 
-// Server-only AI SDK - DO NOT use type annotations that reference the modules!
-// TypeScript `typeof import()` causes webpack to bundle the module even for dynamic imports
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let _embedModule: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let _googleModule: any = null;
-
-// Check if we're on the server
-const isServer = typeof window === "undefined";
-
-async function getGoogleEmbed(): Promise<{ google: any; embed: any } | null> {
-  if (!isServer) {
-    return null;
-  }
-
-  try {
-    if (!_embedModule) {
-      _embedModule = await import("ai");
-    }
-    if (!_googleModule) {
-      _googleModule = await import("@ai-sdk/google");
-    }
-    return { google: _googleModule.google, embed: _embedModule.embed };
-  } catch (err) {
-    console.warn("[KnowledgeSearch] Failed to load AI SDK:", err);
-    return null;
-  }
-}
+// NOTE: AI SDK imports removed to prevent client-side bundling issues
+// Embeddings are now generated via the Gemini embedding service directly
 
 export type KnowledgeSourceType =
   | "git"
@@ -105,16 +80,10 @@ export function preprocessQuery(query: string): string {
 
 async function getQueryEmbedding(query: string): Promise<number[] | null> {
   try {
-    // CRITICAL: Use Gemini embeddings (768d) to match the documents!
+    // Use Gemini embeddings (768d) via the GeminiEmbeddingService
     // Documents are embedded with text-embedding-004 (768 dimensions)
-    // Using OpenAI (1536d) creates dimension mismatch → poor similarity scores
-    const sdk = await getGoogleEmbed();
-    if (!sdk) {
-      console.warn("[Knowledge] AI SDK not available in browser, falling back to keyword search");
-      return null;
-    }
-    const model = sdk.google.textEmbeddingModel("text-embedding-004");
-    const { embedding } = await sdk.embed({ model, value: query });
+    const geminiService = getGeminiEmbeddingService();
+    const embedding = await geminiService.generateEmbedding(query);
     console.log(`[Knowledge] Generated Gemini query embedding (${embedding.length}d)`);
     return embedding;
   } catch (err) {
