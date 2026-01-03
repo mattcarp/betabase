@@ -1,10 +1,10 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-// DefaultChatTransport is not available in @ai-sdk/react v3.x
-import React, { useState, useRef, useEffect, useCallback } from "react";
+// import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
+import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -30,7 +30,6 @@ import {
   MicOff,
   Volume2,
   VolumeX,
-  FileIcon,
 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
@@ -68,54 +67,18 @@ import {
 } from "../ai-elements/conversation";
 import { Image as AIImage } from "../ai-elements/image";
 import { Loader } from "../ai-elements/loader";
-import { 
-  Message, 
-  MessageContent, 
-  MessageAvatar,
-  MessageActions,
-  MessageAction,
-  MessageResponse,
-  MessageToolbar,
-} from "../ai-elements/message";
-import { Shimmer } from "../ai-elements/shimmer";
-import {
-  ChainOfThought,
-  ChainOfThoughtHeader,
-  ChainOfThoughtStep,
-  ChainOfThoughtSearchResults,
-  ChainOfThoughtSearchResult,
-  ChainOfThoughtContent,
-  ChainOfThoughtSpinner,
-} from "../ai-elements/chain-of-thought";
-import { SearchIcon, DatabaseIcon, SparklesIcon, FilterIcon, PlayIcon, DownloadIcon } from "lucide-react";
-import {
-  Artifact,
-  ArtifactHeader,
-  ArtifactTitle,
-  ArtifactDescription,
-  ArtifactActions,
-  ArtifactAction,
-  ArtifactContent,
-} from "../ai-elements/artifact";
+import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
 import {
   PromptInput,
   PromptInputTextarea,
-  PromptInputFooter,
+  PromptInputToolbar,
   PromptInputTools,
   PromptInputSubmit,
-  PromptInputSelect,
-  PromptInputSelectTrigger,
-  PromptInputSelectContent,
-  PromptInputSelectItem,
-  PromptInputSelectValue,
-  PromptInputButton,
-  PromptInputActionMenu,
-  PromptInputActionMenuTrigger,
-  PromptInputActionMenuContent,
-  PromptInputActionMenuItem,
-  PromptInputActionAddAttachments,
-  PromptInputSpeechButton,
-  PromptInputMessage,
+  PromptInputModelSelect,
+  PromptInputModelSelectTrigger,
+  PromptInputModelSelectContent,
+  PromptInputModelSelectItem,
+  PromptInputModelSelectValue,
 } from "../ai-elements/prompt-input";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/reasoning";
 import { Response } from "../ai-elements/response";
@@ -130,7 +93,6 @@ import {
   ConfidenceBadge,
   DiagramOffer,
   useDiagramOffer,
-  shouldOfferDiagram,
 } from "./demo-enhancements";
 // import { DiagramOffer, useDiagramOffer } from "./demo-enhancements/DiagramOffer";
 
@@ -154,72 +116,6 @@ import {
   WebPreviewBody,
 } from "../ai-elements/web-preview";
 import { FileUpload } from "../ai-elements/file-upload";
-// New AI Elements from gap analysis
-import {
-  Plan,
-  PlanHeader,
-  PlanTitle,
-  PlanDescription,
-  PlanContent,
-  PlanFooter,
-  PlanTrigger,
-  PlanAction,
-} from "../ai-elements/plan";
-import {
-  Context,
-  ContextTrigger,
-  ContextContent,
-  ContextContentHeader,
-  ContextContentBody,
-  ContextContentFooter,
-  ContextInputUsage,
-  ContextOutputUsage,
-  ContextReasoningUsage,
-  ContextCacheUsage,
-} from "../ai-elements/context";
-import {
-  ModelSelector,
-  ModelSelectorTrigger,
-  ModelSelectorContent,
-  ModelSelectorInput,
-  ModelSelectorList,
-  ModelSelectorEmpty,
-  ModelSelectorGroup,
-  ModelSelectorItem,
-  ModelSelectorLogo,
-  ModelSelectorName,
-  ModelSelectorSeparator,
-} from "../ai-elements/model-selector";
-import {
-  Confirmation,
-  ConfirmationTitle,
-  ConfirmationRequest,
-  ConfirmationAccepted,
-  ConfirmationRejected,
-  ConfirmationActions,
-  ConfirmationAction,
-} from "../ai-elements/confirmation";
-import {
-  Queue,
-  QueueSection,
-  QueueSectionTrigger,
-  QueueSectionLabel,
-  QueueSectionContent,
-  QueueList,
-  QueueItem,
-  QueueItemIndicator,
-  QueueItemContent,
-  QueueItemDescription,
-  QueueItemActions,
-  QueueItemAction,
-} from "../ai-elements/queue";
-import {
-  Checkpoint,
-  CheckpointIcon,
-  CheckpointTrigger,
-} from "../ai-elements/checkpoint";
-import { BookmarkIcon, ListTodoIcon, GaugeIcon, Trash2Icon, ChevronsUpDownIcon } from "lucide-react";
-import { MermaidDiagram } from "../ai-elements/mermaid-diagram";
 
 interface AiSdkChatPanelProps {
   api?: string;
@@ -298,75 +194,33 @@ export function AiSdkChatPanel({
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
+  const [messageDurations, setMessageDurations] = useState<Record<string, number>>(() => {
+    // Initialize from sessionStorage to survive remounts
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("siam_message_durations");
+      return stored ? JSON.parse(stored) : {};
+    }
+    return {};
+  }); // Duration per message ID
 
-  // New AI Elements state
-  const [modelSelectorOpen, setModelSelectorOpen] = useState(false);
-  const [tokenUsage, setTokenUsage] = useState({
-    usedTokens: 0,
-    maxOutputTokens: 128000, // Default for most models
-    inputTokens: 0,
-    outputTokens: 0,
-    reasoningTokens: 0,
-    cachedTokens: 0,
-  });
-  const [queueItems, setQueueItems] = useState<Array<{
-    id: string;
-    title: string;
-    description?: string;
-    status: "pending" | "completed";
-  }>>([]);
-  const [checkpoints, setCheckpoints] = useState<Array<{
-    id: string;
-    messageIndex: number;
-    label: string;
-    timestamp: Date;
-  }>>([]);
-  const [pendingConfirmation, setPendingConfirmation] = useState<{
-    id: string;
-    toolName: string;
-    description: string;
-    state: "approval-requested" | "approval-responded" | "output-available";
-    approved?: boolean;
-  } | null>(null);
-  const [activePlan, setActivePlan] = useState<{
-    title: string;
-    description: string;
-    steps: Array<{ label: string; status: "pending" | "active" | "complete" }>;
-    isStreaming: boolean;
-  } | null>(null);
+  // Use window object for refs that need to survive remounts
+  const getQueryStartTime = () => (window as any).__siamQueryStartTime as number | null;
+  const setQueryStartTime = (time: number | null) => {
+    (window as any).__siamQueryStartTime = time;
+  };
+  const getPendingDuration = () => (window as any).__siamPendingDuration as number | null;
+  const setPendingDuration = (duration: number | null) => {
+    (window as any).__siamPendingDuration = duration;
+  };
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, "up" | "down" | null>>({});
-  // Supabase env vars come from Infisical; they may be absent locally.
-  // `createClientComponentClient()` throws if env vars are missing, so lazy-init.
-  const supabaseFeedbackRef = useRef<ReturnType<typeof createClientComponentClient> | null>(null);
-
-  const getSupabaseForFeedback = useCallback(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return null;
-
-    if (supabaseFeedbackRef.current) return supabaseFeedbackRef.current;
-    try {
-      supabaseFeedbackRef.current = createClientComponentClient();
-      return supabaseFeedbackRef.current;
-    } catch (err) {
-      console.warn(
-        "[AiSdkChatPanel] Failed to init Supabase client; disabling RLHF feedback persistence.",
-        err
-      );
-      return null;
-    }
-  }, []);
+  const supabase = useSupabaseClient();
 
   // Demo Enhancement hooks for video recording
   const demoMode = useDemoMode();
   const diagramOffer = useDiagramOffer();
-  
-  // Simple state for diagram viewing - separate from hook
-  const [diagramVisible, setDiagramVisible] = useState(false);
-  const [diagramCode, setDiagramCode] = useState<string>("");
-  const [isGeneratingDiagram, setIsGeneratingDiagram] = useState(false);
+  // const diagramOffer = { shouldOffer: false, offerDiagram: () => {}, dismissOffer: () => {}, isGenerating: false, startBackgroundGeneration: () => {} }; // Mock
 
   // Voice feature states - define before using in hooks
   const [isTTSEnabled, setIsTTSEnabled] = useState(false);
@@ -473,11 +327,11 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    // Gemini 3.x models (primary for RAG) - Dec 2025
-    { id: "gemini-3-flash-preview", name: "⚡ Gemini 3 Flash (3x faster)" },
-    // Gemini 2.x models (legacy)
+    // Gemini models (primary for RAG)
+    { id: "gemini-3-flash-preview", name: "Gemini 3 Flash (Fast)" },
+    { id: "gemini-3-pro-preview", name: "Gemini 3 Pro (1M context)" },
     { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context)" },
-    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Fast)" },
+    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash" },
     { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash" },
     // OpenAI models (fallback)
     { id: "gpt-5", name: "GPT-5 (Fallback)" },
@@ -515,22 +369,15 @@ export function AiSdkChatPanel({
     });
   }, [currentApiEndpoint, selectedModel]); // Only log when endpoint or model changes
 
-  // Filter initial messages - accept AI SDK v4 (content) or v5/v6 (parts) format
-  const filteredInitialMessages = (initialMessages || []).filter((m) => {
-    const v6Content = m.parts?.[0]?.text;
-    const v4Content = m.content;
-    // Accept messages that have parts array (content may be in different format)
-    const hasParts = m.parts && m.parts.length > 0;
-    const hasContent = (v6Content != null && v6Content !== "") || (v4Content != null && v4Content !== "") || hasParts;
-    return hasContent;
-  });
-  
   const chatResult = useChat({
+    // @ts-ignore - AI SDK v5 still supports api option but types haven't caught up
+    api: currentApiEndpoint, // Use the calculated endpoint directly
     id: chatId,
-
-    // Support both AI SDK v4 (content) and v6 (parts[0].text) formats
-    messages: filteredInitialMessages,
-
+    messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
+    // Pass selected model to API - this enables the model selector to actually work
+    body: {
+      model: selectedModel,
+    },
     onResponse: (response: Response) => {
       // Capture RAG metadata from response headers before streaming starts
       const ragMetadataHeader = response.headers.get("X-RAG-Metadata");
@@ -543,26 +390,7 @@ export function AiSdkChatPanel({
           console.warn("Failed to parse RAG metadata header:", e);
         }
       }
-      
-      // Capture token usage from response headers
-      const usageHeader = response.headers.get("X-Token-Usage");
-      if (usageHeader) {
-        try {
-          const usage = JSON.parse(usageHeader);
-          setTokenUsage(prev => ({
-            ...prev,
-            usedTokens: prev.usedTokens + (usage.inputTokens || 0) + (usage.outputTokens || 0),
-            inputTokens: prev.inputTokens + (usage.inputTokens || 0),
-            outputTokens: prev.outputTokens + (usage.outputTokens || 0),
-            reasoningTokens: prev.reasoningTokens + (usage.reasoningTokens || 0),
-            cachedTokens: prev.cachedTokens + (usage.cachedTokens || 0),
-          }));
-        } catch (e) {
-          console.warn("Failed to parse token usage header:", e);
-        }
-      }
     },
-
     onError: (err) => {
       // Network failures are expected during rapid navigation/tests - fail silently
       if (err instanceof TypeError && err.message === "Failed to fetch") {
@@ -638,8 +466,17 @@ export function AiSdkChatPanel({
 
       onError?.(err);
     },
-
     onFinish: () => {
+      // Calculate and store response duration
+      const startTime = getQueryStartTime();
+      if (startTime) {
+        const duration = Math.round((Date.now() - startTime) / 1000);
+        console.log(`[SIAM] Response completed in ${duration}s`);
+        setQueryStartTime(null);
+        // Store duration in window - will be picked up by isLoading watcher
+        setPendingDuration(duration);
+      }
+
       // Clear progress interval if it exists
       if ((window as any).currentProgressInterval) {
         clearInterval((window as any).currentProgressInterval);
@@ -665,9 +502,6 @@ export function AiSdkChatPanel({
         }
       }
     },
-
-    // Use api option directly (transport was removed in @ai-sdk/react v3.x)
-    api: currentApiEndpoint,
   });
 
   const {
@@ -857,58 +691,33 @@ export function AiSdkChatPanel({
   // Derive isLoading from useChat isLoading, status, or manual loading state
   const isLoading = chatIsLoading || (status as any) === "loading" || manualLoading;
 
-  // Start background diagram generation when response finishes (non-blocking)
-  const prevIsLoadingRef = useRef(isLoading);
-  useEffect(() => {
-    // Detect transition from loading → not loading (response finished)
-    if (prevIsLoadingRef.current && !isLoading && messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
-      if (lastMessage.role === "assistant" && shouldOfferDiagram(lastMessage.content || "")) {
-        // Start building diagram in background while user reads
-        diagramOffer.startBackgroundGeneration();
-      }
-    }
-    prevIsLoadingRef.current = isLoading;
-  }, [isLoading, messages, diagramOffer]);
-
-  // Detect when assistant has meaningful content (not just streaming started)
-  // FIX: Only hide progress indicator when there's actual visible content
+  // Detect when assistant starts streaming (to prevent jitter)
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
-      // Only set hasStartedStreaming when there's MEANINGFUL content visible to user
-      // This keeps the progress indicator visible until there's something to show
+      // If last message is from assistant and we were processing, streaming has started
       if (lastMessage?.role === "assistant" && (isProcessing || manualLoading)) {
-        const content = lastMessage.content || lastMessage.parts?.map((p: any) => p.text || '').join('') || '';
-        // Require at least 50 characters of content before hiding progress
-        // This ensures user sees the progress phases during the "thinking" period
-        if (content.length > 50) {
-          setHasStartedStreaming(true);
-        }
+        setHasStartedStreaming(true);
+        // Don't clear loading states immediately - let the progress indicator continue
+        // The onFinish handler will clear everything when done
       }
     }
   }, [messages, isProcessing, manualLoading]);
 
   // Track loading time with seconds counter
-  // FIX: Keep counting until there's meaningful content (not just when streaming starts)
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    // Keep the progress counter running while loading OR while we haven't shown content yet
-    const shouldShowProgress = (isLoading || manualLoading || isProcessing) && !hasStartedStreaming;
-    
-    if (shouldShowProgress) {
-      // Only reset counter when STARTING to load (not when already counting)
-      if (loadingSeconds === 0) {
-        // Counter already at 0, just start interval
-      }
+    if ((isLoading || manualLoading || isProcessing) && !hasStartedStreaming) {
+      // Reset counter when loading starts
+      setLoadingSeconds(0);
 
       // Start counting every second
       interval = setInterval(() => {
         setLoadingSeconds((prev) => prev + 1);
       }, 1000);
-    } else if (!isLoading && !manualLoading && !isProcessing) {
-      // Only reset counter when fully done (not loading at all)
+    } else {
+      // Reset counter when loading stops
       setLoadingSeconds(0);
     }
 
@@ -918,6 +727,42 @@ export function AiSdkChatPanel({
       }
     };
   }, [isLoading, manualLoading, isProcessing, hasStartedStreaming]);
+
+  // Track previous isLoading state to detect when streaming completes
+  const prevIsLoadingRef = useRef(isLoading);
+
+  // Assign pending duration when isLoading transitions from true to false
+  useEffect(() => {
+    const wasLoading = prevIsLoadingRef.current;
+    prevIsLoadingRef.current = isLoading;
+
+    // Check if streaming just completed (isLoading went from true to false)
+    if (wasLoading && !isLoading) {
+      // Small delay to ensure messages state is updated
+      setTimeout(() => {
+        const pendingDuration = getPendingDuration();
+        if (pendingDuration != null && messages.length > 0) {
+          // Find the latest assistant message
+          const latestAssistantMsg = [...messages].reverse().find((m) => m.role === "assistant");
+          if (latestAssistantMsg?.id && !messageDurations[latestAssistantMsg.id]) {
+            setMessageDurations((prev) => {
+              const updated = {
+                ...prev,
+                [latestAssistantMsg.id]: pendingDuration,
+              };
+              // Persist to sessionStorage
+              if (typeof window !== "undefined") {
+                sessionStorage.setItem("siam_message_durations", JSON.stringify(updated));
+              }
+              return updated;
+            });
+            console.log(`[SIAM] Assigned ${pendingDuration}s duration to message ${latestAssistantMsg.id}`);
+            setPendingDuration(null);
+          }
+        }
+      }, 100);
+    }
+  }, [isLoading, messages, messageDurations]);
 
   // Create a local state for input since setInput might not exist in v5
   const [localInput, setLocalInput] = useState("");
@@ -1039,21 +884,17 @@ export function AiSdkChatPanel({
     }
   };
 
-  // Auto-scroll to bottom when messages change or loading state updates (for spinner visibility)
+  // Auto-scroll to bottom
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
         "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
-        // Use smooth scroll for a nicer UX during loading updates
-        scrollContainer.scrollTo({
-          top: scrollContainer.scrollHeight,
-          behavior: isLoading ? 'smooth' : 'auto'
-        });
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
       }
     }
-  }, [messages, loadingSeconds, isLoading]);
+  }, [messages]);
 
   // Hide suggestions after first message
   useEffect(() => {
@@ -1288,11 +1129,13 @@ export function AiSdkChatPanel({
     URL.revokeObjectURL(url);
   };
 
-  const handleFormSubmit = async (message: PromptInputMessage, event?: React.FormEvent<HTMLFormElement>) => {
-    event?.preventDefault();
-    // Use message.text from PromptInput, fallback to localInput for compatibility
-    const messageToSend = message.text || localInput || "";
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const messageToSend = localInput || "";
     if (messageToSend.trim()) {
+      // Track query start time for duration calculation
+      setQueryStartTime(Date.now());
+
       // Debug logging for endpoint routing
       console.log("📨 Submitting message with:");
       console.log("  - Model:", selectedModel);
@@ -1513,13 +1356,6 @@ export function AiSdkChatPanel({
       return;
     }
 
-    const supabase = getSupabaseForFeedback();
-    if (!supabase) {
-      toast.info("Feedback disabled (Supabase not configured)");
-      setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
-      return;
-    }
-
     try {
       // Find the message to get content and metadata
       const message = messages.find((m) => m.id === messageId);
@@ -1575,251 +1411,6 @@ export function AiSdkChatPanel({
     }
   };
 
-  // Checkpoint: Save current conversation state
-  const handleSaveCheckpoint = useCallback((label?: string) => {
-    const checkpointLabel = label || `Checkpoint ${checkpoints.length + 1}`;
-    const newCheckpoint = {
-      id: crypto.randomUUID(),
-      messageIndex: messages.length - 1,
-      label: checkpointLabel,
-      timestamp: new Date(),
-    };
-    setCheckpoints(prev => [...prev, newCheckpoint]);
-    toast.success(`Checkpoint saved: ${checkpointLabel}`);
-  }, [messages.length, checkpoints.length]);
-
-  // Checkpoint: Restore to a saved checkpoint
-  const handleRestoreCheckpoint = useCallback((checkpointId: string) => {
-    const checkpoint = checkpoints.find(c => c.id === checkpointId);
-    if (checkpoint && setMessages) {
-      const restoredMessages = messages.slice(0, checkpoint.messageIndex + 1);
-      setMessages(restoredMessages);
-      toast.info(`Restored to: ${checkpoint.label}`);
-    }
-  }, [checkpoints, messages, setMessages]);
-
-  // Queue: Add item to pending queue
-  const handleAddToQueue = useCallback((title: string, description?: string) => {
-    const newItem = {
-      id: crypto.randomUUID(),
-      title,
-      description,
-      status: "pending" as const,
-    };
-    setQueueItems(prev => [...prev, newItem]);
-  }, []);
-
-  // Queue: Mark queue item as completed
-  const handleCompleteQueueItem = useCallback((itemId: string) => {
-    setQueueItems(prev => 
-      prev.map(item => 
-        item.id === itemId ? { ...item, status: "completed" as const } : item
-      )
-    );
-  }, []);
-
-  // Queue: Remove queue item
-  const handleRemoveQueueItem = useCallback((itemId: string) => {
-    setQueueItems(prev => prev.filter(item => item.id !== itemId));
-  }, []);
-
-  // Generate Mermaid diagram from message content using AI
-  // DEMO: Adds realistic "thinking" delay so it doesn't look pre-planned
-  const generateDiagramFromContent = useCallback(async (content: string) => {
-    setIsGeneratingDiagram(true);
-    setDiagramVisible(true);
-    
-    // DEMO: Add realistic "thinking" delay (2-3.5 seconds randomized)
-    // This simulates AI processing time so it doesn't look pre-baked
-    const thinkingDelay = 2000 + Math.random() * 1500; // 2-3.5 seconds
-    console.log(`🎨 Diagram: Simulating ${Math.round(thinkingDelay)}ms thinking time...`);
-    await new Promise(resolve => setTimeout(resolve, thinkingDelay));
-    
-    try {
-      // Use the same API endpoint to generate a diagram
-      const response = await fetch('/api/aoma/generate-diagram', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setDiagramCode(data.mermaidCode);
-      } else {
-        // Fallback: Generate a contextual diagram based on keywords
-        // These are high-quality pre-built diagrams for demo scenarios
-        const fallbackDiagram = generateFallbackDiagram(content);
-        setDiagramCode(fallbackDiagram);
-      }
-    } catch (error) {
-      console.error("Failed to generate diagram:", error);
-      // Use fallback diagram (pre-built for demo quality)
-      const fallbackDiagram = generateFallbackDiagram(content);
-      setDiagramCode(fallbackDiagram);
-    } finally {
-      setIsGeneratingDiagram(false);
-    }
-  }, []);
-
-  // Generate a contextual Mermaid diagram based on content keywords
-  const generateFallbackDiagram = (content: string): string => {
-    const lowerContent = content.toLowerCase();
-    
-    // Detect workflow type and generate appropriate diagram
-    if (lowerContent.includes('upload') && lowerContent.includes('archive')) {
-      return `flowchart TD
-    subgraph prep["📋 1. Preparation Phase"]
-        A[/"📁 Select Source Files"/] --> B{"🔍 Validate File Names"}
-        B -->|"No special chars"| C[/"✅ Files Ready"/]
-        B -->|"Issues found"| D[/"⚠️ Rename Files"/] --> B
-    end
-    
-    subgraph reg["📝 2. Registration Phase"]
-        C --> E["🎵 Register Asset in AOMA"]
-        E --> F{"Enter Metadata"}
-        F --> G["Title & Artist"]
-        F --> H["ISRC/UPC Codes"]
-        F --> I["Security Groups"]
-        G & H & I --> J["📋 Asset Record Created"]
-    end
-    
-    subgraph upload["⬆️ 3. Upload Phase"]
-        J --> K{"Choose Upload Method"}
-        K -->|"Large files"| L["🚀 Aspera Upload"]
-        K -->|"Cloud source"| M["☁️ Sony Ci Import"]
-        K -->|"Small files"| N["📤 Direct Upload"]
-        L & M & N --> O["📦 Files Transferred"]
-    end
-    
-    subgraph process["⚙️ 4. Processing Phase"]
-        O --> P["🔄 Transcode to Formats"]
-        P --> Q["🔍 QC Validation"]
-        Q -->|"Pass"| R["✅ Ready for Distribution"]
-        Q -->|"Fail"| S["❌ Review Errors"] --> T["🔧 Fix Issues"] --> P
-    end
-    
-    subgraph archive["💾 5. Archive Phase"]
-        R --> U["📚 Store in Long-term Archive"]
-        U --> V["🏷️ AWS S3 Glacier"]
-        U --> W["💿 Master Vault"]
-        V & W --> X(("✨ Asset Complete"))
-    end
-    
-    style prep fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px
-    style reg fill:#1e3a5f,stroke:#a78bfa,stroke-width:2px
-    style upload fill:#1e3a5f,stroke:#34d399,stroke-width:2px
-    style process fill:#1e3a5f,stroke:#fbbf24,stroke-width:2px
-    style archive fill:#1e3a5f,stroke:#f472b6,stroke-width:2px
-    style X fill:#10b981,stroke:#34d399,stroke-width:3px`;
-    }
-    
-    if (lowerContent.includes('permission') || lowerContent.includes('role')) {
-      return `flowchart TD
-    subgraph roles["👥 AOMA Permission Levels"]
-        direction TB
-        A["🔒 Viewer"] -->|"Can view"| B["📖 Read-only access"]
-        C["📝 Editor"] -->|"Can edit"| D["✏️ Modify metadata"]
-        E["👑 Admin"] -->|"Full control"| F["⚙️ Manage users & settings"]
-        G["🌐 Global Admin"] -->|"Everything"| H["🏢 Cross-territory access"]
-    end
-    
-    A -.->|"Upgrade"| C
-    C -.->|"Upgrade"| E
-    E -.->|"Upgrade"| G
-    
-    style A fill:#374151,stroke:#6b7280
-    style C fill:#1e40af,stroke:#3b82f6
-    style E fill:#7c3aed,stroke:#a78bfa
-    style G fill:#dc2626,stroke:#f87171`;
-    }
-    
-    // Default AOMA architecture diagram
-    return `flowchart LR
-    subgraph client["🖥️ Client Layer"]
-        A["🌐 Web Browser"]
-        B["📱 Mobile App"]
-    end
-    
-    subgraph api["🔌 API Gateway"]
-        C["⚡ Next.js API Routes"]
-        D["🔐 Auth Middleware"]
-    end
-    
-    subgraph services["⚙️ Services"]
-        E["🤖 AI/RAG Engine"]
-        F["📊 Analytics"]
-        G["🔔 Notifications"]
-    end
-    
-    subgraph data["💾 Data Layer"]
-        H[("🐘 PostgreSQL")]
-        I[("🔍 pgvector")]
-        J["☁️ S3 Storage"]
-    end
-    
-    A & B --> C
-    C --> D
-    D --> E & F & G
-    E --> I
-    F --> H
-    G --> H
-    E & F --> J
-    
-    style client fill:#1e3a5f,stroke:#60a5fa
-    style api fill:#1e3a5f,stroke:#a78bfa
-    style services fill:#1e3a5f,stroke:#34d399
-    style data fill:#1e3a5f,stroke:#fbbf24`;
-  };
-
-  // Confirmation: Handle tool approval
-  const handleToolApproval = useCallback((approved: boolean, reason?: string) => {
-    if (pendingConfirmation) {
-      setPendingConfirmation(prev => prev ? {
-        ...prev,
-        state: "approval-responded",
-        approved,
-      } : null);
-      
-      if (approved) {
-        toast.success(`Tool "${pendingConfirmation.toolName}" approved`);
-      } else {
-        toast.info(`Tool "${pendingConfirmation.toolName}" rejected${reason ? `: ${reason}` : ""}`);
-      }
-      
-      // Clear confirmation after a delay
-      setTimeout(() => setPendingConfirmation(null), 2000);
-    }
-  }, [pendingConfirmation]);
-
-  // Get model context size based on selected model
-  const getModelContextSize = useCallback((modelId: string): number => {
-    const contextSizes: Record<string, number> = {
-      // Gemini 3.x (Dec 2025)
-      "gemini-3-flash-preview": 1000000,
-      // Gemini 2.x
-      "gemini-2.5-pro": 2000000,
-      "gemini-2.5-flash": 1000000,
-      "gemini-2.0-flash": 1000000,
-      // OpenAI
-      "gpt-5": 128000,
-      "gpt-4o": 128000,
-      "gpt-4o-mini": 128000,
-      // Claude
-      "claude-3-opus": 200000,
-      "claude-3-sonnet": 200000,
-    };
-    return contextSizes[modelId] || 128000;
-  }, []);
-
-  // Update max tokens when model changes
-  useEffect(() => {
-    setTokenUsage(prev => ({
-      ...prev,
-      maxOutputTokens: getModelContextSize(selectedModel),
-    }));
-  }, [selectedModel, getModelContextSize]);
-
   const renderMessage = (message: any, index: number) => {
     const isUser = message.role === "user";
     const isLastMessage = index === messages.length - 1;
@@ -1852,15 +1443,15 @@ export function AiSdkChatPanel({
           {/* Message Content */}
           <MessageContent
             className={cn(
-              "relative",
-              "transition-all duration-200",
+              "relative backdrop-blur-sm border border-border/50 shadow-sm",
+              "transition-all duration-200 hover:shadow-md",
               isUser
-                ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white backdrop-blur-sm border border-border/50 shadow-sm hover:shadow-md"
-                : "text-zinc-100"
+                ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
+                : "bg-background/80 hover:bg-background/90"
             )}
           >
             {/* Reasoning display for AI messages */}
-            {!isUser && showReasoning && message.reasoningText && (
+            {!isUser && showReasoning && message.reasoning && (
               <div className="mb-4">
                 <Reasoning
                   defaultOpen={isLastMessage}
@@ -1868,7 +1459,7 @@ export function AiSdkChatPanel({
                   className="border border-border/30 rounded-lg bg-muted/30 p-4"
                 >
                   <ReasoningTrigger title="AI Reasoning Process" />
-                  <ReasoningContent>{message.reasoningText}</ReasoningContent>
+                  <ReasoningContent>{message.reasoning}</ReasoningContent>
                 </Reasoning>
               </div>
             )}
@@ -1968,46 +1559,6 @@ export function AiSdkChatPanel({
                     );
                   }
 
-                  // Handle image parts (AI SDK format)
-                  if (part.type === "image") {
-                    return (
-                      <div key={index} className="my-3">
-                        <AIImage
-                          src={part.image}
-                          base64={part.base64}
-                          mediaType={part.mediaType}
-                          alt="AI generated image"
-                          className="rounded-lg border border-border/50 shadow-sm hover:shadow-md transition-all duration-200 max-w-full"
-                        />
-                      </div>
-                    );
-                  }
-
-                  // Handle file parts (attachments in responses)
-                  if (part.type === "file") {
-                    return (
-                      <div key={index} className="my-3 p-3 bg-muted/30 rounded-lg border border-border/50 flex items-center gap-3">
-                        <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center">
-                          <FileIcon className="h-5 w-5 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{part.name || "Attachment"}</p>
-                          <p className="text-xs text-muted-foreground">{part.mediaType || "File"}</p>
-                        </div>
-                        {part.url && (
-                          <a
-                            href={part.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:underline text-sm"
-                          >
-                            Download
-                          </a>
-                        )}
-                      </div>
-                    );
-                  }
-
                   return null;
                 })
               ) : (
@@ -2060,193 +1611,93 @@ export function AiSdkChatPanel({
               );
             })()}
 
-            {/* Message Actions - Copy, Retry, Like, Dislike using AI Elements */}
+            {/* HITL Feedback Buttons - Thumbs Up/Down */}
             {!isUser && (
-              <MessageToolbar className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <MessageActions className="gap-1">
-                  <MessageAction
-                    tooltip="Copy response"
-                    onClick={() => {
-                      const text = message.content || message.parts?.map((p: any) => p.text || '').join('') || '';
-                      navigator.clipboard.writeText(text);
-                      toast.success("Copied to clipboard");
-                    }}
-                  >
-                    <Copy className="h-3.5 w-3.5" />
-                  </MessageAction>
-                  <MessageAction
-                    tooltip="Regenerate response"
-                    onClick={() => {
-                      // Find the last user message and resend it
-                      const lastUserMessage = messages.slice(0, index).reverse().find(m => m.role === 'user');
-                      if (lastUserMessage) {
-                        sendMessage(lastUserMessage.content || '');
-                      }
-                    }}
-                  >
-                    <RefreshCw className="h-3.5 w-3.5" />
-                  </MessageAction>
-                  <MessageAction
-                    tooltip="This response was helpful"
-                    onClick={() => handleFeedback(message.id, "up")}
-                    disabled={feedbackGiven[message.id] !== undefined}
-                    className={cn(
-                      feedbackGiven[message.id] === "up" && "text-green-400 bg-green-500/20"
-                    )}
-                  >
-                    <ThumbsUp className="h-3.5 w-3.5" />
-                  </MessageAction>
-                  <MessageAction
-                    tooltip="This response needs improvement"
-                    onClick={() => handleFeedback(message.id, "down")}
-                    disabled={feedbackGiven[message.id] !== undefined}
-                    className={cn(
-                      feedbackGiven[message.id] === "down" && "text-red-400 bg-red-500/20"
-                    )}
-                  >
-                    <ThumbsDown className="h-3.5 w-3.5" />
-                  </MessageAction>
-                </MessageActions>
-              </MessageToolbar>
+              <div className="flex gap-2 mt-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFeedback(message.id, "up")}
+                  disabled={feedbackGiven[message.id] !== undefined}
+                  className={cn(
+                    "h-7 px-2 transition-colors",
+                    feedbackGiven[message.id] === "up"
+                      ? "text-green-400 bg-green-500/20"
+                      : "hover:bg-green-500/10 hover:text-green-400"
+                  )}
+                  title="This response was helpful"
+                >
+                  <ThumbsUp className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFeedback(message.id, "down")}
+                  disabled={feedbackGiven[message.id] !== undefined}
+                  className={cn(
+                    "h-7 px-2 transition-colors",
+                    feedbackGiven[message.id] === "down"
+                      ? "text-red-400 bg-red-500/20"
+                      : "hover:bg-red-500/10 hover:text-red-400"
+                  )}
+                  title="This response needs improvement"
+                >
+                  <ThumbsDown className="h-3.5 w-3.5" />
+                </Button>
+              </div>
             )}
 
-            {/* Diagram Offer - Subtle inline hint for workflow/process content */}
-            {/* DEMO MODE: Show for any substantial assistant response */}
-            {/* Supports both AI SDK v4 (content) and v6 (parts[0].text) formats */}
-            {(() => {
-              // Get message content from either v4 or v6 format
-              const messageText = message.content || message.parts?.map((p: any) => p.text || '').join('') || '';
-              const hasSubstantialContent = messageText.length > 100;
-              const shouldShowOffer = !isUser && isLastMessage && !isLoading && !diagramVisible && hasSubstantialContent;
-              
-              if (!shouldShowOffer) return null;
-              
-              return (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.3 }}
-                  className="mt-4 pt-3 border-t border-zinc-800/30"
-                >
-                  <button
-                    onClick={() => {
-                      console.log("🎨 Diagram offer clicked - generating diagram from content");
-                      generateDiagramFromContent(messageText);
-                    }}
-                    disabled={isGeneratingDiagram}
-                    className="group flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 hover:border-blue-500/40 hover:from-blue-500/20 hover:to-purple-500/20 transition-all duration-300 disabled:opacity-50"
-                  >
-                    <SparklesIcon className="h-4 w-4 text-blue-400 group-hover:text-blue-300" />
-                    <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">
-                      {isGeneratingDiagram ? "Generating diagram..." : "Would you like a visual diagram of this workflow?"}
-                    </span>
-                    <span className="text-xs text-zinc-500 group-hover:text-zinc-400 ml-1">→</span>
-                  </button>
-                </motion.div>
-              );
-            })()}
+            {/* Diagram Offer - Non-blocking "Would you like a diagram?" */}
+            {!isUser && isLastMessage && !isLoading && (
+              <DiagramOffer
+                shouldOffer={true}
+                onAccept={() => {
+                  diagramOffer.offerDiagram();
+                  // In a real app, this would append a message or trigger detailed view
+                }}
+                onDismiss={diagramOffer.dismissOffer}
+                isGenerating={diagramOffer.isGenerating}
+              />
+            )}
 
-            {/* Active Diagram Display - Using REAL MermaidDiagram component */}
-            {!isUser && isLastMessage && !isLoading && diagramVisible && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                transition={{ duration: 0.3 }}
-                className="mt-4"
-              >
-                <div className="relative">
-                  {/* Close button */}
-                  <button
-                    onClick={() => {
-                      setDiagramVisible(false);
-                      setDiagramCode("");
-                    }}
-                    className="absolute top-4 right-4 z-20 p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-600/50 text-zinc-400 hover:text-white transition-colors"
-                    title="Close diagram"
-                  >
-                    <Trash2Icon className="h-4 w-4" />
-                  </button>
-                  
-                  {/* Loading state */}
-                  {isGeneratingDiagram && !diagramCode && (
-                    <div className="flex items-center justify-center py-12 rounded-xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-950">
-                      <Loader className="h-6 w-6 animate-spin mr-3 text-purple-500" />
-                      <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                        Generating workflow diagram with AI...
-                      </span>
+            {/* Active Diagram Display */}
+            {diagramOffer.status === "viewing" && (
+                <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="mt-4 border rounded-lg overflow-hidden bg-black/30 border-white/10"
+                >
+                    <div className="p-3 bg-white/5 border-b border-white/10 flex justify-between items-center">
+                        <span className="text-sm font-medium text-white flex items-center gap-2">
+                           <div className="h-4 w-4">🕸️</div> AOMA Architecture
+                        </span>
+                        <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
                     </div>
-                  )}
-                  
-                  {/* Real Mermaid Diagram - pan, zoom, download, copy code */}
-                  {diagramCode && (
-                    <MermaidDiagram code={diagramCode} />
-                  )}
-                </div>
-              </motion.div>
+                    <div className="p-8 flex justify-center items-center bg-black/50 aspect-video">
+                        <div className="text-center space-y-4">
+                            <div className="flex items-center justify-center gap-4 text-white/50 text-xs font-mono">
+                                <div className="p-2 border border-white/20 rounded">Client</div>
+                                <div>➜</div>
+                                <div className="p-2 border border-blue-500/50 bg-blue-500/10 rounded text-blue-300">AOMA API</div>
+                                <div>➜</div>
+                                <div className="p-2 border border-purple-500/50 bg-purple-500/10 rounded text-purple-300">Vector DB</div>
+                            </div>
+                            <p className="text-muted-foreground text-xs mt-4">Interactive Diagram Visualization Loaded</p>
+                        </div>
+                    </div>
+                </motion.div>
             )}
 
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}
 
-            {/* Enhanced Code blocks wrapped in Artifact */}
+            {/* Enhanced Code blocks */}
             {message.code && (
               <div className="mt-4">
-                <Artifact className="bg-zinc-900/80 border-zinc-700/50">
-                  <ArtifactHeader className="bg-zinc-800/50 border-zinc-700/30">
-                    <div className="flex flex-col gap-1">
-                      <ArtifactTitle>{message.codeLanguage || "Code"}</ArtifactTitle>
-                      <ArtifactDescription className="text-xs">Generated code snippet</ArtifactDescription>
-                    </div>
-                    <ArtifactActions>
-                      <ArtifactAction
-                        tooltip="Run code"
-                        icon={PlayIcon}
-                        onClick={() => {
-                          toast.info("Code execution coming soon!");
-                        }}
-                      />
-                      <ArtifactAction
-                        tooltip="Copy code"
-                        icon={Copy}
-                        onClick={() => {
-                          navigator.clipboard.writeText(message.code);
-                          toast.success("Code copied to clipboard");
-                        }}
-                      />
-                      <ArtifactAction
-                        tooltip="Download"
-                        icon={DownloadIcon}
-                        onClick={() => {
-                          const blob = new Blob([message.code], { type: 'text/plain' });
-                          const url = URL.createObjectURL(blob);
-                          const a = document.createElement('a');
-                          a.href = url;
-                          a.download = `code.${message.codeLanguage || 'txt'}`;
-                          a.click();
-                          URL.revokeObjectURL(url);
-                          toast.success("Code downloaded");
-                        }}
-                      />
-                      <ArtifactAction
-                        tooltip="Regenerate"
-                        icon={RefreshCw}
-                        onClick={() => {
-                          // Find the last user message and resend it
-                          const lastUserMessage = messages.slice(0, index).reverse().find(m => m.role === 'user');
-                          if (lastUserMessage) {
-                            sendMessage(lastUserMessage.content || '');
-                          }
-                        }}
-                      />
-                    </ArtifactActions>
-                  </ArtifactHeader>
-                  <ArtifactContent className="p-0">
-                    <CodeBlock
-                      language={message.codeLanguage || "javascript"}
-                      code={message.code}
-                      className="rounded-none border-0"
-                    />
-                  </ArtifactContent>
-                </Artifact>
+                <CodeBlock
+                  language={message.codeLanguage || "javascript"}
+                  code={message.code}
+                  className="rounded-lg border border-border/50 shadow-sm"
+                />
               </div>
             )}
 
@@ -2338,11 +1789,11 @@ export function AiSdkChatPanel({
                       <div className="flex items-start gap-4">
                         {preview.image && (
                           // eslint-disable-next-line @next/next/no-img-element
-                          (<img
+                          <img
                             src={preview.image}
                             alt={preview.title || "Preview"}
                             className="w-16 h-16 object-cover rounded-md flex-shrink-0"
-                          />)
+                          />
                         )}
                         <div className="flex-1">
                           <h4 className="mac-title text-sm font-medium text-foreground mb-2">
@@ -2402,6 +1853,14 @@ export function AiSdkChatPanel({
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
+                {/* Show duration for assistant messages */}
+                {!isUser && messageDurations[message.id] !== undefined && (
+                  <span className="ml-2 text-emerald-500/80">
+                    ({messageDurations[message.id] >= 60
+                      ? `${Math.floor(messageDurations[message.id] / 60)}m ${messageDurations[message.id] % 60}s`
+                      : `${messageDurations[message.id]}s`})
+                  </span>
+                )}
               </span>
 
               {/* Message actions for assistant messages */}
@@ -2524,31 +1983,6 @@ export function AiSdkChatPanel({
 
             {/* Control Panel */}
             <div className="flex items-center gap-3">
-              {/* Context/Token Usage Indicator */}
-              <Context
-                usedTokens={tokenUsage.usedTokens}
-                maxOutputTokens={tokenUsage.maxTokens}
-                usage={{
-                  inputTokens: tokenUsage.inputTokens,
-                  outputTokens: tokenUsage.outputTokens,
-                  reasoningTokens: tokenUsage.reasoningTokens,
-                  cachedInputTokens: tokenUsage.cachedTokens,
-                }}
-                modelId={selectedModel}
-              >
-                <ContextTrigger className="h-8 px-2 text-xs" />
-                <ContextContent side="bottom" align="end">
-                  <ContextContentHeader />
-                  <ContextContentBody className="space-y-1">
-                    <ContextInputUsage />
-                    <ContextOutputUsage />
-                    <ContextReasoningUsage />
-                    <ContextCacheUsage />
-                  </ContextContentBody>
-                  <ContextContentFooter />
-                </ContextContent>
-              </Context>
-
               <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
                 <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
@@ -2557,16 +1991,6 @@ export function AiSdkChatPanel({
               <div className="flex items-center gap-2">
                 {messages.length > 0 && (
                   <>
-                    {/* Checkpoint Button */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleSaveCheckpoint()}
-                      className="h-8 w-8 hover:bg-emerald-500/10 hover:text-emerald-400 mac-button mac-button-outline"
-                      title={`Save checkpoint (${checkpoints.length} saved)`}
-                    >
-                      <BookmarkIcon className="h-4 w-4" />
-                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -2604,6 +2028,7 @@ export function AiSdkChatPanel({
           </div>
         </div>
       )}
+
       {/* Hero Metrics Strip - Show RAG stats at a glance (always visible for demo) */}
       <HeroMetricsStrip
         vectorCount={26568}
@@ -2612,151 +2037,14 @@ export function AiSdkChatPanel({
         compact={true}
         className="flex-shrink-0"
       />
-      {/* Active Plan Display - Shows when AI is executing multi-step operations */}
-      <AnimatePresence>
-        {activePlan && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="px-4 py-2 border-b border-zinc-800/50"
-          >
-            <Plan isStreaming={activePlan.isStreaming} defaultOpen={true}>
-              <PlanHeader>
-                <div className="flex-1">
-                  <PlanTitle>{activePlan.title}</PlanTitle>
-                  <PlanDescription>{activePlan.description}</PlanDescription>
-                </div>
-                <PlanAction>
-                  <PlanTrigger />
-                </PlanAction>
-              </PlanHeader>
-              <PlanContent>
-                <div className="space-y-2">
-                  {activePlan.steps.map((step, idx) => (
-                    <div
-                      key={idx}
-                      className={cn(
-                        "flex items-center gap-2 text-sm",
-                        step.status === "complete" && "text-emerald-400",
-                        step.status === "active" && "text-blue-400",
-                        step.status === "pending" && "text-muted-foreground"
-                      )}
-                    >
-                      {step.status === "complete" && <CheckCircle className="h-4 w-4" />}
-                      {step.status === "active" && <Loader className="h-4 w-4 animate-spin" />}
-                      {step.status === "pending" && <div className="h-4 w-4 rounded-full border border-muted-foreground/50" />}
-                      <span>{step.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </PlanContent>
-              <PlanFooter className="text-xs text-muted-foreground">
-                {activePlan.steps.filter(s => s.status === "complete").length} of {activePlan.steps.length} steps complete
-              </PlanFooter>
-            </Plan>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {/* Queue Panel - Shows pending batch operations */}
-      <AnimatePresence>
-        {queueItems.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="px-4 py-2 border-b border-zinc-800/50"
-          >
-            <Queue>
-              <QueueSection defaultOpen={true}>
-                <QueueSectionTrigger>
-                  <QueueSectionLabel
-                    count={queueItems.filter(i => i.status === "pending").length}
-                    label="pending tasks"
-                    icon={<ListTodoIcon className="h-4 w-4" />}
-                  />
-                </QueueSectionTrigger>
-                <QueueSectionContent>
-                  <QueueList>
-                    {queueItems.map((item) => (
-                      <QueueItem key={item.id}>
-                        <div className="flex items-center gap-2">
-                          <QueueItemIndicator completed={item.status === "completed"} />
-                          <QueueItemContent completed={item.status === "completed"}>
-                            {item.title}
-                          </QueueItemContent>
-                          <QueueItemActions>
-                            {item.status === "pending" && (
-                              <QueueItemAction onClick={() => handleCompleteQueueItem(item.id)}>
-                                <CheckCircle className="h-3 w-3" />
-                              </QueueItemAction>
-                            )}
-                            <QueueItemAction onClick={() => handleRemoveQueueItem(item.id)}>
-                              <Trash2Icon className="h-3 w-3" />
-                            </QueueItemAction>
-                          </QueueItemActions>
-                        </div>
-                        {item.description && (
-                          <QueueItemDescription completed={item.status === "completed"}>
-                            {item.description}
-                          </QueueItemDescription>
-                        )}
-                      </QueueItem>
-                    ))}
-                  </QueueList>
-                </QueueSectionContent>
-              </QueueSection>
-            </Queue>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {/* Tool Confirmation Dialog */}
-      <AnimatePresence>
-        {pendingConfirmation && pendingConfirmation.state === "approval-requested" && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="px-4 py-2 border-b border-amber-500/30 bg-amber-500/5"
-          >
-            <Confirmation
-              approval={{ id: pendingConfirmation.id }}
-              state={pendingConfirmation.state as any}
-            >
-              <ConfirmationTitle>
-                <span className="font-medium">Tool Approval Required:</span>{" "}
-                <span className="text-amber-400">{pendingConfirmation.toolName}</span>
-                {pendingConfirmation.description && (
-                  <span className="text-muted-foreground"> — {pendingConfirmation.description}</span>
-                )}
-              </ConfirmationTitle>
-              <ConfirmationRequest>
-                <ConfirmationActions>
-                  <ConfirmationAction
-                    variant="outline"
-                    onClick={() => handleToolApproval(false, "User rejected")}
-                  >
-                    Reject
-                  </ConfirmationAction>
-                  <ConfirmationAction
-                    className="bg-emerald-600 hover:bg-emerald-700"
-                    onClick={() => handleToolApproval(true)}
-                  >
-                    Approve
-                  </ConfirmationAction>
-                </ConfirmationActions>
-              </ConfirmationRequest>
-            </Confirmation>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
       {/* Main Chat Area */}
       <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
         <Conversation className="bg-zinc-950">
           <ConversationContent className="px-6 py-4 pb-8 bg-zinc-950">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
-              (<motion.div
+              <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
@@ -2766,6 +2054,7 @@ export function AiSdkChatPanel({
                 <div className="relative mb-8">
                   <SiamLogo size="xl" className="mx-auto" />
                 </div>
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -2775,10 +2064,11 @@ export function AiSdkChatPanel({
                   <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
-                  <p className="text-lg font-light text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                    yup. it's back.
+                  <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    Don't be an asshat.
                   </p>
                 </motion.div>
+
                 {/* Enhanced Suggestions */}
                 {showSuggestions &&
                   (dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).length > 0 && (
@@ -2815,52 +2105,26 @@ export function AiSdkChatPanel({
                       </div>
                     </motion.div>
                   )}
-              </motion.div>)
+              </motion.div>
             ) : (
               /* Messages Area */
-              (<div className="space-y-6">
+              <div className="space-y-6">
                 <AnimatePresence>
-                  {messages.map((message, index) => {
-                    // Check if there's a checkpoint after this message
-                    const checkpointAtIndex = checkpoints.find(c => c.messageIndex === index);
-                    
-                    return (
-                      <React.Fragment key={message.id || index}>
-                        <motion.div
-                          layout={enableAnimations}
-                          initial={enableAnimations ? { opacity: 0, y: 20 } : undefined}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={enableAnimations ? { opacity: 0, y: -20 } : undefined}
-                          transition={{ duration: 0.3, ease: "easeOut" }}
-                        >
-                          {renderMessage(message, index)}
-                        </motion.div>
-                        
-                        {/* Checkpoint Marker */}
-                        {checkpointAtIndex && (
-                          <motion.div
-                            initial={{ opacity: 0, scaleX: 0 }}
-                            animate={{ opacity: 1, scaleX: 1 }}
-                            className="my-4"
-                          >
-                            <Checkpoint className="text-emerald-400/70">
-                              <CheckpointIcon className="text-emerald-400" />
-                              <CheckpointTrigger
-                                tooltip={`Restore to: ${checkpointAtIndex.label}`}
-                                onClick={() => handleRestoreCheckpoint(checkpointAtIndex.id)}
-                                className="text-xs text-emerald-400/70 hover:text-emerald-400"
-                              >
-                                {checkpointAtIndex.label} • {new Date(checkpointAtIndex.timestamp).toLocaleTimeString()}
-                              </CheckpointTrigger>
-                            </Checkpoint>
-                          </motion.div>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
+                  {messages.map((message, index) => (
+                    <motion.div
+                      key={message.id || index}
+                      layout={enableAnimations}
+                      initial={enableAnimations ? { opacity: 0, y: 20 } : undefined}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={enableAnimations ? { opacity: 0, y: -20 } : undefined}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                    >
+                      {renderMessage(message, index)}
+                    </motion.div>
+                  ))}
 
-                  {/* Loading indicator with ChainOfThought RAG visualization */}
-                  {/* FIX: Keep visible until meaningful content arrives (50+ chars) */}
+                  {/* Loading indicator - appears AFTER messages (below user question, above AI response) */}
+                  {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
                   {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
                     <motion.div
                       key="loading-indicator"
@@ -2868,106 +2132,20 @@ export function AiSdkChatPanel({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="p-4 ml-12"
+                      className="flex items-center gap-3 p-4 ml-12"
                     >
-                      <ChainOfThought defaultOpen={true} className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50">
-                        <ChainOfThoughtHeader>
-                          <Shimmer duration={1.5} className="text-sm">
-                            {/* Use currentProgress title if available for more descriptive phases */}
-                            {currentProgress?.title 
-                              ? `${currentProgress.title}${loadingSeconds > 0 ? ` (${loadingSeconds}s)` : ''}`
-                              : loadingSeconds > 5
-                                ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
-                                : loadingSeconds > 0
-                                  ? `Processing query... (${loadingSeconds}s)`
-                                  : "Processing query..."}
-                          </Shimmer>
-                        </ChainOfThoughtHeader>
-                        <ChainOfThoughtContent>
-                          {/* Use currentProgress.phase for step status when available */}
-                          <ChainOfThoughtStep
-                            icon={SearchIcon}
-                            label="Query Analysis"
-                            status={
-                              currentProgress?.phase === "parsing" || currentProgress?.phase === "connecting" ? "active" :
-                              (currentProgress?.progress || 0) > 20 || loadingSeconds > 0 ? "complete" : "active"
-                            }
-                            description="Analyzing your question to find the best search strategy"
-                          />
-                          <ChainOfThoughtStep
-                            icon={DatabaseIcon}
-                            label="Knowledge Search"
-                            status={
-                              currentProgress?.phase === "knowledge-search" ? "active" :
-                              (currentProgress?.progress || 0) > 50 || loadingSeconds > 3 ? "complete" :
-                              (currentProgress?.progress || 0) > 20 || loadingSeconds > 1 ? "active" : "pending"
-                            }
-                            description="Searching 45,000+ AOMA document embeddings"
-                          >
-                            {((currentProgress?.progress || 0) > 35 || loadingSeconds > 2) && (
-                              <ChainOfThoughtSearchResults>
-                                <ChainOfThoughtSearchResult>AOMA Documentation</ChainOfThoughtSearchResult>
-                                <ChainOfThoughtSearchResult>Workflows & Processes</ChainOfThoughtSearchResult>
-                                <ChainOfThoughtSearchResult>Best Practices</ChainOfThoughtSearchResult>
-                              </ChainOfThoughtSearchResults>
-                            )}
-                          </ChainOfThoughtStep>
-                          <ChainOfThoughtStep
-                            icon={FilterIcon}
-                            label="Context Building & Re-ranking"
-                            status={
-                              currentProgress?.phase === "context-building" ? "active" :
-                              (currentProgress?.progress || 0) > 65 || loadingSeconds > 5 ? "complete" :
-                              (currentProgress?.progress || 0) > 50 || loadingSeconds > 3 ? "active" : "pending"
-                            }
-                            description="Building context and re-ranking for relevance"
-                          />
-                          <ChainOfThoughtStep
-                            icon={SparklesIcon}
-                            label="Response Generation"
-                            status={
-                              currentProgress?.phase === "generating" || currentProgress?.phase === "formatting" ? "active" :
-                              (currentProgress?.progress || 0) > 80 || loadingSeconds > 6 ? "active" : "pending"
-                            }
-                            description="Generating comprehensive response with AI model"
-                          />
-                          {/* Show spinner when response generation is active */}
-                          {((currentProgress?.progress || 0) > 65 || loadingSeconds > 5) && (
-                            <ChainOfThoughtSpinner 
-                              message={currentProgress?.phase === "formatting" 
-                                ? "Formatting response with code blocks and citations..." 
-                                : "Crafting a thoughtful response..."
-                              } 
-                            />
-                          )}
-                          
-                          {/* Progress bar with percentage */}
-                          {currentProgress && (
-                            <div className="mt-4 pt-3 border-t border-zinc-700/30">
-                              <div className="flex items-center justify-between mb-2">
-                                <span className="text-xs text-zinc-400 capitalize">
-                                  {currentProgress.phase?.replace(/-/g, ' ') || 'Processing'}
-                                </span>
-                                <span className="text-xs font-mono text-zinc-500">
-                                  {Math.round(currentProgress.progress || 0)}%
-                                </span>
-                              </div>
-                              <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-                                <motion.div
-                                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500"
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${Math.min(currentProgress.progress || 0, 100)}%` }}
-                                  transition={{ duration: 0.3, ease: "easeOut" }}
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </ChainOfThoughtContent>
-                      </ChainOfThought>
+                      <Loader size={20} className="text-blue-400 animate-spin" />
+                      <span className="text-sm text-muted-foreground">
+                        {loadingSeconds > 5
+                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
+                          : loadingSeconds > 0
+                            ? `Thinking... (${loadingSeconds}s)`
+                            : "Thinking..."}
+                      </span>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>)
+              </div>
             )}
 
             {/* Error State */}
@@ -3003,6 +2181,7 @@ export function AiSdkChatPanel({
           <ConversationScrollButton />
         </Conversation>
       </div>
+
       {/* Modern Input Area */}
       <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
         {/* Real-Time Transcription Display */}
@@ -3016,7 +2195,11 @@ export function AiSdkChatPanel({
                     {[...Array(5)].map((_, i) => (
                       <div
                         key={i}
-                        className="w-1 bg-red-400 rounded-full mac-audio-bar h-4"
+                        className="w-1 bg-red-400 rounded-full mac-audio-bar"
+                        style={{
+                          height: `${Math.random() * 20 + 10}px`,
+                          animationDelay: `${i * 0.1}s`,
+                        }}
                       />
                     ))}
                   </div>
@@ -3062,49 +2245,8 @@ export function AiSdkChatPanel({
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
 
-          <PromptInputFooter className="border-t border-zinc-800/50 bg-zinc-900/30">
-            <PromptInputTools className="gap-1.5">
-              {/* Context Token Usage Indicator */}
-              <Context
-                usedTokens={tokenUsage.usedTokens}
-                maxOutputTokens={tokenUsage.maxTokens}
-                usage={{
-                  inputTokens: tokenUsage.inputTokens,
-                  outputTokens: tokenUsage.outputTokens,
-                  reasoningTokens: tokenUsage.reasoningTokens,
-                  cachedInputTokens: tokenUsage.cachedTokens,
-                }}
-                modelId={selectedModel}
-              >
-                <ContextTrigger className="!h-6 !px-1.5 !text-[10px] text-muted-foreground hover:text-foreground" />
-                <ContextContent side="top" align="start">
-                  <ContextContentHeader />
-                  <ContextContentBody className="space-y-1">
-                    <ContextInputUsage />
-                    <ContextOutputUsage />
-                    <ContextReasoningUsage />
-                    <ContextCacheUsage />
-                  </ContextContentBody>
-                  <ContextContentFooter />
-                </ContextContent>
-              </Context>
-
-              {/* Checkpoint Save Button */}
-              {messages.length > 0 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleSaveCheckpoint()}
-                  className="!h-6 !w-6 !p-0 text-muted-foreground hover:text-emerald-400 hover:bg-emerald-500/10"
-                  title={`Save checkpoint (${checkpoints.length} saved)`}
-                >
-                  <BookmarkIcon className="h-3 w-3" />
-                </Button>
-              )}
-
-              <div className="w-px h-4 bg-zinc-700/50" />
-
+          <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
+            <PromptInputTools className="gap-2">
               <FileUpload
                 compact={true}
                 onUploadComplete={handleFileUploadComplete}
@@ -3117,11 +2259,11 @@ export function AiSdkChatPanel({
                 variant={isRecording ? "destructive" : "ghost"}
                 className={cn(
                   "mac-button mac-button-primary",
-                  "!h-6 !w-6 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isRecording
                     ? [
                         "bg-gradient-to-r from-red-500 to-red-600",
-                        "border-red-400/50 shadow-[0_0_15px_rgba(239,68,68,0.5)]",
+                        "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
                         "text-white",
                         "animate-pulse",
                       ]
@@ -3177,10 +2319,10 @@ export function AiSdkChatPanel({
                 }
               >
                 {isRecording ? (
-                  <MicOff className="h-3 w-3 text-white" />
+                  <MicOff className="h-4 w-4 text-white" />
                 ) : (
                   <Mic
-                    className={cn("h-3 w-3", permissionState === "denied" && "text-orange-400")}
+                    className={cn("h-4 w-4", permissionState === "denied" && "text-orange-400")}
                   />
                 )}
                 {isRecording && (
@@ -3197,11 +2339,11 @@ export function AiSdkChatPanel({
                 variant={isTTSEnabled ? "default" : "ghost"}
                 className={cn(
                   "mac-button mac-button-primary",
-                  "!h-6 !w-6 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                   isTTSEnabled
                     ? [
                         "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
-                        "border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]",
+                        "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
                       ]
                     : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
                 )}
@@ -3221,9 +2363,9 @@ export function AiSdkChatPanel({
                 title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
               >
                 {isTTSEnabled ? (
-                  <Volume2 className="h-3 w-3 text-white" />
+                  <Volume2 className="h-4 w-4 text-white" />
                 ) : (
-                  <VolumeX className="h-3 w-3" />
+                  <VolumeX className="h-4 w-4" />
                 )}
                 {isPlaying && (
                   <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
@@ -3240,93 +2382,22 @@ export function AiSdkChatPanel({
                 />
               )}
 
-              {/* Upgraded Model Selector with searchable command palette */}
-              <ModelSelector open={modelSelectorOpen} onOpenChange={setModelSelectorOpen}>
-                <ModelSelectorTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="!h-6 !px-1.5 !text-[10px] bg-transparent border border-zinc-700/50 shrink-0 hover:bg-zinc-800/50 gap-1"
-                    disabled={isMaxMessagesReached || isLoading}
-                  >
-                    <ModelSelectorLogo 
-                      provider={
-                        selectedModel.startsWith("gemini") ? "google" :
-                        selectedModel.startsWith("gpt") ? "openai" :
-                        selectedModel.startsWith("claude") ? "anthropic" : "openai"
-                      }
-                    />
-                    <ModelSelectorName className="max-w-[120px]">
-                      {availableModels.find(m => m.id === selectedModel)?.name || selectedModel}
-                    </ModelSelectorName>
-                    <ChevronsUpDownIcon className="h-3 w-3 opacity-50" />
-                  </Button>
-                </ModelSelectorTrigger>
-                <ModelSelectorContent title="Select AI Model">
-                  <ModelSelectorInput placeholder="Search models..." />
-                  <ModelSelectorList>
-                    <ModelSelectorEmpty>No models found.</ModelSelectorEmpty>
-                    <ModelSelectorGroup heading="Google Gemini">
-                      {availableModels.filter(m => m.id.startsWith("gemini")).map((model) => (
-                        <ModelSelectorItem
-                          key={model.id}
-                          value={model.id}
-                          onSelect={() => {
-                            setSelectedModel(model.id);
-                            setModelSelectorOpen(false);
-                          }}
-                          className={cn(
-                            "flex items-center gap-2",
-                            selectedModel === model.id && "bg-accent"
-                          )}
-                        >
-                          <ModelSelectorLogo provider="google" />
-                          <ModelSelectorName>{model.name}</ModelSelectorName>
-                        </ModelSelectorItem>
-                      ))}
-                    </ModelSelectorGroup>
-                    <ModelSelectorSeparator />
-                    <ModelSelectorGroup heading="OpenAI">
-                      {availableModels.filter(m => m.id.startsWith("gpt")).map((model) => (
-                        <ModelSelectorItem
-                          key={model.id}
-                          value={model.id}
-                          onSelect={() => {
-                            setSelectedModel(model.id);
-                            setModelSelectorOpen(false);
-                          }}
-                          className={cn(
-                            "flex items-center gap-2",
-                            selectedModel === model.id && "bg-accent"
-                          )}
-                        >
-                          <ModelSelectorLogo provider="openai" />
-                          <ModelSelectorName>{model.name}</ModelSelectorName>
-                        </ModelSelectorItem>
-                      ))}
-                    </ModelSelectorGroup>
-                    <ModelSelectorSeparator />
-                    <ModelSelectorGroup heading="Anthropic Claude">
-                      {availableModels.filter(m => m.id.startsWith("claude")).map((model) => (
-                        <ModelSelectorItem
-                          key={model.id}
-                          value={model.id}
-                          onSelect={() => {
-                            setSelectedModel(model.id);
-                            setModelSelectorOpen(false);
-                          }}
-                          className={cn(
-                            "flex items-center gap-2",
-                            selectedModel === model.id && "bg-accent"
-                          )}
-                        >
-                          <ModelSelectorLogo provider="anthropic" />
-                          <ModelSelectorName>{model.name}</ModelSelectorName>
-                        </ModelSelectorItem>
-                      ))}
-                    </ModelSelectorGroup>
-                  </ModelSelectorList>
-                </ModelSelectorContent>
-              </ModelSelector>
+              <PromptInputModelSelect
+                value={selectedModel}
+                onValueChange={setSelectedModel}
+                disabled={isMaxMessagesReached || isLoading}
+              >
+                <PromptInputModelSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
+                  <PromptInputModelSelectValue />
+                </PromptInputModelSelectTrigger>
+                <PromptInputModelSelectContent>
+                  {availableModels.map((model) => (
+                    <PromptInputModelSelectItem key={model.id} value={model.id}>
+                      {model.name}
+                    </PromptInputModelSelectItem>
+                  ))}
+                </PromptInputModelSelectContent>
+              </PromptInputModelSelect>
 
               {uploadedFiles.length > 0 && (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -3346,9 +2417,9 @@ export function AiSdkChatPanel({
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}
               status={isLoading ? "streaming" : undefined}
-              className="!h-6 !w-6 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-sm hover:shadow-md transition-all duration-200 shrink-0"
+              className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
             />
-          </PromptInputFooter>
+          </PromptInputToolbar>
         </PromptInput>
       </div>
     </div>
