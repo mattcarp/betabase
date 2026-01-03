@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.72",
+  "version": "0.24.73",
   "private": true,
   "scripts": {
     "dev": "infisical run --env=dev -- npm run dev:raw",
