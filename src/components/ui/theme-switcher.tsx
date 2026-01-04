@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTheme, type ThemeName } from "../../contexts/ThemeContext";
-import { Palette, Check, Sparkles } from "lucide-react";
+import { Palette, Check, Sparkles, Sun, Moon, Cpu, Building2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +62,6 @@ export function ThemeSwitcher() {
 
         {availableThemes.map((theme) => {
           const isActive = theme.id === currentTheme;
-          const themeIcon = getThemeIcon(theme.id);
 
           return (
             <DropdownMenuItem
@@ -76,7 +75,7 @@ export function ThemeSwitcher() {
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">{themeIcon}</span>
+                  <ThemeIcon theme={theme.id} />
                   <span className="font-medium">{theme.name}</span>
                 </div>
                 {isActive && <Check className="h-4 w-4 text-green-500" />}
@@ -88,7 +87,7 @@ export function ThemeSwitcher() {
 
         <DropdownMenuSeparator />
         <div className="px-3 py-2 text-xs text-muted-foreground">
-          💡 Tip: You can also switch themes using voice commands
+          Tip: You can also switch themes using voice commands
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -98,16 +97,19 @@ export function ThemeSwitcher() {
 /**
  * Theme icon helper
  */
-function getThemeIcon(theme: ThemeName): string {
+function ThemeIcon({ theme, className }: { theme: ThemeName; className?: string }) {
+  const iconClass = className || "h-4 w-4";
   switch (theme) {
+    case "light":
+      return <Sun className={iconClass} />;
     case "mac":
-      return "💙";
+      return <Moon className={iconClass} />;
     case "jarvis":
-      return "🔷";
+      return <Cpu className={iconClass} />;
     case "aoma":
-      return "🟠";
+      return <Building2 className={iconClass} />;
     default:
-      return "🎨";
+      return <Palette className={iconClass} />;
   }
 }
 
@@ -180,8 +182,8 @@ export function ThemePreviewCard({ theme, isActive, onSelect }: ThemePreviewCard
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl">
-            {getThemeIcon(theme.id)}
+          <div className="w-full h-full flex items-center justify-center">
+            <ThemeIcon theme={theme.id} className="h-12 w-12" />
           </div>
         )}
       </div>

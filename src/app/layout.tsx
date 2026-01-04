@@ -29,6 +29,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   try {
     var theme = localStorage.getItem('siam-theme-preference') || 'mac';
     document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'light') {
+      document.body.classList.remove('dark');
+    }
   } catch (e) {}
 })();
 `,

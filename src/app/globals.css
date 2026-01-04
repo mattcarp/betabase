@@ -7,28 +7,75 @@
 /* Base styles */
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --radius: 0.5rem;
+  }
+
+  /* Light Theme */
+  [data-theme="light"],
+  :root:not([data-theme]) {
+    --background: 0 0% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 187 71% 50%; /* Teal hue */
-    --primary-foreground: 210 40% 98%;
+    --primary: 187 71% 40%; /* Darker teal for light mode */
+    --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 187 100% 42%; /* Teal accent */
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 187 100% 35%; /* Darker teal accent */
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 85%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 187 71% 50%; /* Teal ring */
-    --radius: 0.5rem;
+    --ring: 187 71% 40%;
+
+    /* MAC Data Colors - Light Mode */
+    --mac-data-coral: #c95d3a;
+    --mac-data-coral-dim: #a84c30;
+    --mac-data-teal: #0097a7;
+    --mac-data-teal-dim: #00838f;
+    --mac-data-purple: #00838f;
+    --mac-data-purple-dim: #006064;
+
+    /* Neutral Hierarchy for Data Viz - Light Mode */
+    --mac-data-zinc-100: #27272a;
+    --mac-data-zinc-300: #525252;
+    --mac-data-zinc-400: #737373;
+    --mac-data-zinc-500: #a3a3a3;
+    --mac-data-zinc-600: #d4d4d4;
+    --mac-data-zinc-800: #f4f4f5;
+
+    /* Data Viz Backgrounds - Light Mode */
+    --mac-data-bg-pure: #ffffff;
+    --mac-data-bg-elevated: #f8fafc;
+    --mac-data-bg-card: rgba(255, 255, 255, 0.8);
+
+    /* Semantic Data Colors - Light Mode (slightly darker for contrast) */
+    --mac-data-success: #16a34a;
+    --mac-data-warning: #d97706;
+    --mac-data-error: #dc2626;
+
+    /* Color tokens - Light Mode */
+    --color-heading: #0097a7;
+    --color-primary: #0097a7;
+    --color-accent: #00838f;
+
+    /* MAC Surface Variables - Light Mode */
+    --mac-surface-bg: #f8fafc;
+    --mac-surface-elevated: #ffffff;
+    --mac-text-primary: #0f172a;
+    --mac-text-secondary: #475569;
+    --mac-utility-border: rgba(0, 0, 0, 0.1);
+    --mac-primary-blue-400: #0097a7;
   }
 
+  /* Dark Theme (MAC) */
+  [data-theme="mac"],
+  [data-theme="dark"],
   .dark {
     --background: 0 0% 4%; /* Near black */
     --foreground: 210 40% 98%;

@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 /**
  * Available theme options
  */
-export type ThemeName = "mac" | "jarvis" | "aoma";
+export type ThemeName = "light" | "mac" | "jarvis" | "aoma";
 
 /**
  * Theme context value interface
@@ -32,9 +32,15 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
  */
 const AVAILABLE_THEMES = [
   {
+    id: "light" as ThemeName,
+    name: "Light Mode",
+    description: "Clean light theme for daytime use",
+    preview: "/themes/previews/light/preview.png",
+  },
+  {
     id: "mac" as ThemeName,
-    name: "MAC Design System",
-    description: "Professional dark theme with blue/purple accents (default)",
+    name: "MAC Dark",
+    description: "Professional dark theme with teal accents (default)",
     preview: "/themes/previews/mac/preview.png",
   },
   {
@@ -83,7 +89,7 @@ export function ThemeProvider({ children, defaultTheme = "mac" }: ThemeProviderP
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName | null;
-      if (savedTheme && ["mac", "jarvis", "aoma"].includes(savedTheme)) {
+      if (savedTheme && ["light", "mac", "jarvis", "aoma"].includes(savedTheme)) {
         setCurrentTheme(savedTheme);
         applyThemeToDOM(savedTheme, false);
       } else {
@@ -99,6 +105,7 @@ export function ThemeProvider({ children, defaultTheme = "mac" }: ThemeProviderP
     if (typeof window === "undefined") return;
 
     const root = document.documentElement;
+    const body = document.body;
 
     // Add transition class if requested
     if (withTransition) {
@@ -108,6 +115,13 @@ export function ThemeProvider({ children, defaultTheme = "mac" }: ThemeProviderP
 
     // Set theme data attribute
     root.setAttribute("data-theme", theme);
+
+    // Toggle dark class on body for light/dark mode
+    if (theme === "light") {
+      body.classList.remove("dark");
+    } else {
+      body.classList.add("dark");
+    }
 
     // Load theme-specific CSS if needed
     loadThemeStylesheet(theme);
