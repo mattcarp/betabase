@@ -55,7 +55,7 @@ const STATUS_CONFIG = {
   staged: { color: "bg-blue-500", label: "Staged", icon: GitBranch },
   deployed: { color: "bg-green-500", label: "Deployed", icon: Rocket },
   deprecated: { color: "bg-orange-500", label: "Deprecated", icon: AlertTriangle },
-  archived: { color: "bg-zinc-600", label: "Archived", icon: Archive },
+  archived: { color: "bg-muted", label: "Archived", icon: Archive },
 };
 
 export function ModelRegistryPanel() {

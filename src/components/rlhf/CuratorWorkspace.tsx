@@ -313,11 +313,11 @@ export function CuratorWorkspace({
 
   if (!currentItem && filteredItems.length === 0) {
     return (
-      <Card className={cn("bg-zinc-900/50 border-zinc-800", className)}>
+      <Card className={cn("bg-card/50 border-border", className)}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <CheckCircle className="h-16 w-16 text-green-400 mb-4" />
-          <h3 className="text-xl font-medium text-zinc-100">Queue Empty!</h3>
-          <p className="text-zinc-400 mt-2">All feedback has been reviewed. Great work!</p>
+          <h3 className="text-xl font-medium text-foreground">Queue Empty!</h3>
+          <p className="text-muted-foreground mt-2">All feedback has been reviewed. Great work!</p>
         </CardContent>
       </Card>
     );
@@ -326,22 +326,22 @@ export function CuratorWorkspace({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Header with Filters */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg text-zinc-100 flex items-center gap-2">
+              <CardTitle className="text-lg text-foreground flex items-center gap-2">
                 <Users className="h-5 w-5 text-purple-400" />
                 Curator Workspace
               </CardTitle>
-              <CardDescription className="text-zinc-400">
+              <CardDescription className="text-muted-foreground">
                 Review and approve feedback for training
               </CardDescription>
             </div>
 
             <div className="flex items-center gap-3">
               {/* Queue Position */}
-              <Badge variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+              <Badge variant="outline" className="bg-muted text-foreground border-border">
                 {currentIndex + 1} of {filteredItems.length}
               </Badge>
 
@@ -349,7 +349,7 @@ export function CuratorWorkspace({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-zinc-500">
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
                       <Keyboard className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -357,19 +357,19 @@ export function CuratorWorkspace({
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
                         <span>Approve</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Cmd+A</kbd>
+                        <kbd className="px-1.5 bg-muted rounded text-xs">Cmd+A</kbd>
                       </div>
                       <div className="flex justify-between">
                         <span>Reject</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Cmd+R</kbd>
+                        <kbd className="px-1.5 bg-muted rounded text-xs">Cmd+R</kbd>
                       </div>
                       <div className="flex justify-between">
                         <span>Skip</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Cmd+S</kbd>
+                        <kbd className="px-1.5 bg-muted rounded text-xs">Cmd+S</kbd>
                       </div>
                       <div className="flex justify-between">
                         <span>Navigate</span>
-                        <kbd className="px-1.5 bg-zinc-700 rounded text-xs">Arrow Left/Right</kbd>
+                        <kbd className="px-1.5 bg-muted rounded text-xs">Arrow Left/Right</kbd>
                       </div>
                     </div>
                   </TooltipContent>
@@ -381,12 +381,12 @@ export function CuratorWorkspace({
           {/* Filters Row */}
           <div className="flex items-center gap-4 mt-4">
             <div className="relative flex-1 max-w-xs">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search feedback..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-zinc-800/50 border-zinc-700"
+                className="pl-9 bg-muted/50 border-border"
               />
             </div>
 
@@ -394,7 +394,7 @@ export function CuratorWorkspace({
               value={filterStatus}
               onValueChange={(v) => setFilterStatus(v as FeedbackStatus | "all")}
             >
-              <SelectTrigger className="w-[140px] bg-zinc-800/50 border-zinc-700">
+              <SelectTrigger className="w-[140px] bg-muted/50 border-border">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -410,7 +410,7 @@ export function CuratorWorkspace({
               value={filterCategory}
               onValueChange={(v) => setFilterCategory(v as FeedbackCategory | "all")}
             >
-              <SelectTrigger className="w-[140px] bg-zinc-800/50 border-zinc-700">
+              <SelectTrigger className="w-[140px] bg-muted/50 border-border">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -446,10 +446,10 @@ export function CuratorWorkspace({
                     : "text-yellow-400"
               )}
             />
-            <h3 className="text-xl font-medium text-zinc-100 capitalize">
+            <h3 className="text-xl font-medium text-foreground capitalize">
               {showSuccess.replace("-", " ")}!
             </h3>
-            <p className="text-zinc-400 mt-2">Loading next item...</p>
+            <p className="text-muted-foreground mt-2">Loading next item...</p>
           </motion.div>
         ) : currentItem ? (
           <motion.div
@@ -460,10 +460,10 @@ export function CuratorWorkspace({
             className="grid grid-cols-1 lg:grid-cols-2 gap-4"
           >
             {/* Left: Original Response */}
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-card/50 border-border">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-zinc-400">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Original AI Response
                   </CardTitle>
                   <div className="flex items-center gap-2">
@@ -482,7 +482,7 @@ export function CuratorWorkspace({
                               "h-3 w-3",
                               i < currentItem.feedback.rating!
                                 ? "fill-yellow-400 text-yellow-400"
-                                : "text-zinc-600"
+                                : "text-muted-foreground"
                             )}
                           />
                         ))}
@@ -493,17 +493,17 @@ export function CuratorWorkspace({
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* User Query */}
-                <div className="bg-zinc-800/30 rounded-lg p-3">
-                  <div className="flex items-center gap-2 text-xs text-zinc-500 mb-2">
+                <div className="bg-muted/30 rounded-lg p-3">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                     <MessageSquare className="h-3 w-3" />
                     User Query
                   </div>
-                  <p className="text-sm text-zinc-300">{currentItem.feedback.userQuery}</p>
+                  <p className="text-sm text-foreground">{currentItem.feedback.userQuery}</p>
                 </div>
 
                 {/* AI Response */}
-                <div className="bg-zinc-800/30 rounded-lg p-3">
-                  <div className="flex items-center gap-2 text-xs text-zinc-500 mb-2">
+                <div className="bg-muted/30 rounded-lg p-3">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                     <Sparkles className="h-3 w-3" />
                     AI Response
                   </div>
@@ -556,9 +556,9 @@ export function CuratorWorkspace({
             </Card>
 
             {/* Right: Suggested Correction & Actions */}
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-card/50 border-border">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-zinc-400">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
                   Suggested Correction
                 </CardTitle>
               </CardHeader>
@@ -575,35 +575,35 @@ export function CuratorWorkspace({
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-zinc-800/30 rounded-lg p-6 text-center">
-                    <FileText className="h-8 w-8 text-zinc-600 mx-auto mb-2" />
-                    <p className="text-sm text-zinc-500">No correction suggested by user</p>
+                  <div className="bg-muted/30 rounded-lg p-6 text-center">
+                    <FileText className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">No correction suggested by user</p>
                   </div>
                 )}
 
                 {/* Metadata */}
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-zinc-800/30 rounded-lg p-3">
-                    <span className="text-zinc-500">Model</span>
-                    <p className="text-zinc-300 mt-1">
+                  <div className="bg-muted/30 rounded-lg p-3">
+                    <span className="text-muted-foreground">Model</span>
+                    <p className="text-foreground mt-1">
                       {currentItem.feedback.modelUsed || "Unknown"}
                     </p>
                   </div>
-                  <div className="bg-zinc-800/30 rounded-lg p-3">
-                    <span className="text-zinc-500">RAG Confidence</span>
-                    <p className="text-zinc-300 mt-1">
+                  <div className="bg-muted/30 rounded-lg p-3">
+                    <span className="text-muted-foreground">RAG Confidence</span>
+                    <p className="text-foreground mt-1">
                       {currentItem.feedback.ragMetadata?.confidence
                         ? `${(currentItem.feedback.ragMetadata.confidence * 100).toFixed(0)}%`
                         : "N/A"}
                     </p>
                   </div>
-                  <div className="bg-zinc-800/30 rounded-lg p-3">
-                    <span className="text-zinc-500">Priority</span>
-                    <p className="text-zinc-300 mt-1">{currentItem.priority}</p>
+                  <div className="bg-muted/30 rounded-lg p-3">
+                    <span className="text-muted-foreground">Priority</span>
+                    <p className="text-foreground mt-1">{currentItem.priority}</p>
                   </div>
-                  <div className="bg-zinc-800/30 rounded-lg p-3">
-                    <span className="text-zinc-500">Submitted</span>
-                    <p className="text-zinc-300 mt-1">
+                  <div className="bg-muted/30 rounded-lg p-3">
+                    <span className="text-muted-foreground">Submitted</span>
+                    <p className="text-foreground mt-1">
                       {new Date(currentItem.feedback.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -611,14 +611,14 @@ export function CuratorWorkspace({
 
                 {/* Curator Notes */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300">
+                  <label className="text-sm font-medium text-foreground">
                     Curator Notes (required for reject/revision)
                   </label>
                   <Textarea
                     value={curatorNotes}
                     onChange={(e) => setCuratorNotes(e.target.value)}
                     placeholder="Add notes about your decision..."
-                    className="bg-zinc-800/50 border-zinc-700 text-zinc-200 placeholder:text-zinc-500"
+                    className="bg-muted/50 border-border text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
 
@@ -659,12 +659,12 @@ export function CuratorWorkspace({
                 </div>
 
                 {/* Navigation */}
-                <div className="flex justify-between pt-4 border-t border-zinc-800">
+                <div className="flex justify-between pt-4 border-t border-border">
                   <Button
                     variant="ghost"
                     onClick={navigatePrevious}
                     disabled={currentIndex === 0}
-                    className="text-zinc-400"
+                    className="text-muted-foreground"
                   >
                     <ChevronLeft className="h-4 w-4 mr-1" />
                     Previous
@@ -675,7 +675,7 @@ export function CuratorWorkspace({
                       onSkip(currentItem.feedback.id);
                       navigateNext();
                     }}
-                    className="text-zinc-500"
+                    className="text-muted-foreground"
                   >
                     Skip
                   </Button>
@@ -683,7 +683,7 @@ export function CuratorWorkspace({
                     variant="ghost"
                     onClick={navigateNext}
                     disabled={currentIndex === filteredItems.length - 1}
-                    className="text-zinc-400"
+                    className="text-muted-foreground"
                   >
                     Next
                     <ChevronRight className="h-4 w-4 ml-1" />

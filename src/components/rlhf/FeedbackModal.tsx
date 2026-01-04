@@ -348,7 +348,7 @@ export function FeedbackModal({
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsExpanded(!isExpanded)}
-                    className="h-8 px-3 hover:bg-zinc-700/50"
+                    className="h-8 px-3 hover:bg-muted/50"
                   >
                     <MessageSquarePlus className="h-4 w-4 mr-1" />
                     Detailed
@@ -383,10 +383,10 @@ export function FeedbackModal({
   );
 
   const renderDetailedForm = () => (
-    <div className="space-y-6 p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+    <div className="space-y-6 p-4 bg-card/50 rounded-lg border border-border">
       {/* Star Rating */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300">Rate this response</label>
+        <label className="text-sm font-medium text-foreground">Rate this response</label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -399,7 +399,7 @@ export function FeedbackModal({
                   "h-6 w-6 transition-colors",
                   rating && rating >= star
                     ? "fill-yellow-400 text-yellow-400"
-                    : "text-zinc-600 hover:text-zinc-400"
+                    : "text-muted-foreground hover:text-muted-foreground"
                 )}
               />
             </button>
@@ -409,7 +409,7 @@ export function FeedbackModal({
 
       {/* Issue Categories */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300">What aspects need improvement?</label>
+        <label className="text-sm font-medium text-foreground">What aspects need improvement?</label>
         <div className="flex flex-wrap gap-2">
           {CATEGORY_CONFIG.map((cat) => (
             <TooltipProvider key={cat.id}>
@@ -422,7 +422,7 @@ export function FeedbackModal({
                       "cursor-pointer transition-all",
                       categories.includes(cat.id)
                         ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
-                        : "bg-zinc-800/50 text-zinc-400 border-zinc-700 hover:border-zinc-600"
+                        : "bg-muted/50 text-muted-foreground border-border hover:border-border"
                     )}
                   >
                     {cat.icon}
@@ -439,7 +439,7 @@ export function FeedbackModal({
       {/* Severity */}
       {categories.length > 0 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-300">Issue severity</label>
+          <label className="text-sm font-medium text-foreground">Issue severity</label>
           <div className="flex gap-2">
             {SEVERITY_CONFIG.map((sev) => (
               <TooltipProvider key={sev.id}>
@@ -450,7 +450,7 @@ export function FeedbackModal({
                       onClick={() => setSeverity(severity === sev.id ? null : sev.id)}
                       className={cn(
                         "cursor-pointer transition-all",
-                        severity === sev.id ? sev.color : "bg-zinc-800/50"
+                        severity === sev.id ? sev.color : "bg-muted/50"
                       )}
                     >
                       {sev.label}
@@ -466,18 +466,18 @@ export function FeedbackModal({
 
       {/* Free-text Feedback */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300">Additional comments (optional)</label>
+        <label className="text-sm font-medium text-foreground">Additional comments (optional)</label>
         <Textarea
           value={feedbackText}
           onChange={(e) => setFeedbackText(e.target.value)}
           placeholder="What could be improved? What was missing or incorrect?"
-          className="bg-zinc-800/50 border-zinc-700 text-zinc-200 placeholder:text-zinc-500 min-h-[80px]"
+          className="bg-muted/50 border-border text-foreground placeholder:text-muted-foreground min-h-[80px]"
         />
       </div>
 
       {/* Suggested Correction */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-300 flex items-center gap-2">
+        <label className="text-sm font-medium text-foreground flex items-center gap-2">
           <Edit3 className="h-4 w-4 text-blue-400" />
           Suggest a better response (helps train the AI)
         </label>
@@ -485,9 +485,9 @@ export function FeedbackModal({
           value={suggestedCorrection}
           onChange={(e) => setSuggestedCorrection(e.target.value)}
           placeholder="How would you rewrite this response? Your corrections help improve our AI."
-          className="bg-zinc-800/50 border-zinc-700 text-zinc-200 placeholder:text-zinc-500 min-h-[100px]"
+          className="bg-muted/50 border-border text-foreground placeholder:text-muted-foreground min-h-[100px]"
         />
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-muted-foreground">
           Your suggested corrections are used to train better AI models through Direct Preference
           Optimization (DPO).
         </p>
@@ -496,12 +496,12 @@ export function FeedbackModal({
       {/* Document Relevance Marking */}
       {documentsMarked.length > 0 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-300">Were these sources relevant?</label>
+          <label className="text-sm font-medium text-foreground">Were these sources relevant?</label>
           <div className="space-y-2">
             {documentsMarked.map((doc, idx) => (
               <div
                 key={doc.documentId}
-                className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-lg"
+                className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg"
               >
                 <button
                   onClick={() => {
@@ -517,8 +517,8 @@ export function FeedbackModal({
                   {doc.relevant ? <CheckCircle className="h-5 w-5" /> : <X className="h-5 w-5" />}
                 </button>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-zinc-300 truncate">{doc.title}</div>
-                  <div className="text-xs text-zinc-500 line-clamp-2">{doc.snippet}</div>
+                  <div className="text-sm font-medium text-foreground truncate">{doc.title}</div>
+                  <div className="text-xs text-muted-foreground line-clamp-2">{doc.snippet}</div>
                 </div>
               </div>
             ))}
@@ -532,7 +532,7 @@ export function FeedbackModal({
           variant="outline"
           size="sm"
           onClick={() => setIsExpanded(false)}
-          className="border-zinc-700"
+          className="border-border"
         >
           Cancel
         </Button>
@@ -562,13 +562,13 @@ export function FeedbackModal({
   // Modal mode
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[600px] bg-zinc-900 border-zinc-800">
+      <DialogContent className="sm:max-w-[600px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-zinc-100 flex items-center gap-2">
+          <DialogTitle className="text-foreground flex items-center gap-2">
             <MessageSquarePlus className="h-5 w-5 text-purple-400" />
             Provide Feedback
           </DialogTitle>
-          <DialogDescription className="text-zinc-400">
+          <DialogDescription className="text-muted-foreground">
             Your feedback helps improve our AI. All feedback is reviewed by curators.
           </DialogDescription>
         </DialogHeader>
@@ -580,20 +580,20 @@ export function FeedbackModal({
             className="flex flex-col items-center justify-center py-8"
           >
             <CheckCircle className="h-12 w-12 text-green-400 mb-4" />
-            <h3 className="text-lg font-medium text-zinc-100">Thank You!</h3>
-            <p className="text-sm text-zinc-400">Your feedback has been recorded.</p>
+            <h3 className="text-lg font-medium text-foreground">Thank You!</h3>
+            <p className="text-sm text-muted-foreground">Your feedback has been recorded.</p>
           </motion.div>
         ) : (
           <>
             {/* Context Preview */}
-            <div className="space-y-3 p-4 bg-zinc-800/30 rounded-lg border border-zinc-700/50">
+            <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border/50">
               <div>
-                <span className="text-xs font-medium text-zinc-500">Your question:</span>
-                <p className="text-sm text-zinc-300 line-clamp-2">{userQuery}</p>
+                <span className="text-xs font-medium text-muted-foreground">Your question:</span>
+                <p className="text-sm text-foreground line-clamp-2">{userQuery}</p>
               </div>
               <div>
-                <span className="text-xs font-medium text-zinc-500">AI response:</span>
-                <p className="text-sm text-zinc-400 line-clamp-3">
+                <span className="text-xs font-medium text-muted-foreground">AI response:</span>
+                <p className="text-sm text-muted-foreground line-clamp-3">
                   {aiResponse.substring(0, 200)}...
                 </p>
               </div>

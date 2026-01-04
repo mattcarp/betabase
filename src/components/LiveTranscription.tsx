@@ -75,7 +75,7 @@ export default function LiveTranscription({
       >
         <div
           ref={scrollRef}
-          className="h-full overflow-y-auto p-4 bg-gray-900/50 rounded-lg border border-gray-700"
+          className="h-full overflow-y-auto p-4 bg-card/50 rounded-lg border border-border"
           data-test-id="transcription-display"
         >
           {displayedText ? (
@@ -108,7 +108,7 @@ export default function LiveTranscription({
 
               {/* Confidence Indicator */}
               <div className="mt-4 flex items-center gap-2 text-xs">
-                <span className="text-gray-400 font-mono">Confidence:</span>
+                <span className="text-muted-foreground font-mono">Confidence:</span>
                 <div className="flex gap-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                   <span className="text-green-400">High</span>
@@ -122,9 +122,9 @@ export default function LiveTranscription({
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
+            <div className="flex items-center justify-center h-full text-muted-foreground">
               <div className="text-center">
-                <div className="w-12 h-12 border-2 border-gray-600 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+                <div className="w-12 h-12 border-2 border-border border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
                 <p className="font-mono text-sm">
                   {isRecording ? "Listening for speech..." : "Ready to transcribe..."}
                 </p>
@@ -135,12 +135,12 @@ export default function LiveTranscription({
       </Suspense>
       {/* Word Count & Stats */}
       {displayedText && (
-        <div className="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-4 py-2">
+        <div className="absolute top-2 right-2 bg-muted/80 backdrop-blur-sm rounded-lg px-4 py-2">
           <div className="flex items-center gap-4 text-xs font-mono">
-            <span className="text-gray-400">
+            <span className="text-muted-foreground">
               Words: <span className="text-blue-600">{displayedText.split(" ").length}</span>
             </span>
-            <span className="text-gray-400">
+            <span className="text-muted-foreground">
               WPM: <span className="text-green-400">{Math.floor(Math.random() * 50 + 120)}</span>
             </span>
           </div>

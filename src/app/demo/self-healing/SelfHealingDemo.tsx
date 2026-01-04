@@ -53,13 +53,13 @@ function SelfHealingDemoContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-background via-card to-background text-white">
       {showControls && (
-        <div className="fixed top-4 right-4 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl p-4 z-50">
-          <div className="text-xs text-slate-400 mb-3">Demo Controls</div>
+        <div className="fixed top-4 right-4 bg-card/95 backdrop-blur border border-border rounded-xl p-4 z-50">
+          <div className="text-xs text-muted-foreground mb-3">Demo Controls</div>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((v) => (
-              <button key={v} onClick={() => setVariant(v)} className={`w-10 h-10 rounded-lg text-sm font-semibold ${variant === v ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-400"}`}>{v}</button>
+              <button key={v} onClick={() => setVariant(v)} className={`w-10 h-10 rounded-lg text-sm font-semibold ${variant === v ? "bg-blue-600 text-white" : "bg-muted text-muted-foreground"}`}>{v}</button>
             ))}
           </div>
         </div>
@@ -73,12 +73,12 @@ function SelfHealingDemoContent() {
             </div>
             <div>
               <h1 className="text-2xl font-bold">TechStore Pro</h1>
-              <p className="text-sm text-slate-400">Secure Checkout</p>
+              <p className="text-sm text-muted-foreground">Secure Checkout</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-slate-900/80 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden">
+        <div className="bg-card/80 backdrop-blur border border-border/50 rounded-2xl overflow-hidden">
           <div className="p-8">
             <h2 className="text-lg font-semibold mb-6">Order Summary</h2>
             <div className="space-y-4 mb-8">
@@ -87,27 +87,27 @@ function SelfHealingDemoContent() {
                 <span className="font-bold text-blue-400">$2,487.59</span>
               </div>
             </div>
-            <div className="pt-6 border-t border-slate-700/50">{renderButton()}</div>
+            <div className="pt-6 border-t border-border/50">{renderButton()}</div>
             {submitted && <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-sm">Order submitted successfully!</div>}
           </div>
         </div>
 
         {showDevTools && (
-          <div className="mt-6 bg-slate-950 border border-slate-800 rounded-xl overflow-hidden font-mono text-sm">
-            <div className="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center gap-2">
-              <span className="text-slate-400 text-xs">Element Inspector</span>
+          <div className="mt-6 bg-background border border-border rounded-xl overflow-hidden font-mono text-sm">
+            <div className="bg-card px-4 py-2 border-b border-border flex items-center gap-2">
+              <span className="text-muted-foreground text-xs">Element Inspector</span>
               <span className={`ml-auto text-xs px-2 py-0.5 rounded ${variant === 1 ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"}`}>{selectorInfo.label}</span>
             </div>
-            <div className="p-4 text-slate-300">
+            <div className="p-4 text-muted-foreground">
               {selectorInfo.id && <div><span className="text-blue-400">id</span>=<span className="text-amber-400">"{selectorInfo.id}"</span></div>}
             </div>
-            <div className="border-t border-slate-800 p-4 bg-slate-900/50">
+            <div className="border-t border-border p-4 bg-card/50">
               <code className={`text-sm ${variant === 1 ? "text-green-400" : "text-red-400"}`}>page.click('#submit-btn')</code>
               {variant !== 1 && <div className="mt-2 text-xs text-red-400/80">Selector not found</div>}
             </div>
           </div>
         )}
-        <div className="mt-6 mb-12 text-center text-slate-500 text-xs">Variant {variant} of 5</div>
+        <div className="mt-6 mb-12 text-center text-muted-foreground text-xs">Variant {variant} of 5</div>
       </div>
     </div>
   );
@@ -115,7 +115,7 @@ function SelfHealingDemoContent() {
 
 export default function SelfHealingDemo() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">Loading...</div>}>
       <SelfHealingDemoContent />
     </Suspense>
   );

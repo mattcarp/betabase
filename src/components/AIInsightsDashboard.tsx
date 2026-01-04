@@ -132,47 +132,47 @@ export function AIInsightsDashboard({
     <div className={cn("space-y-6", className)}>
       {/* Real-time Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="bg-muted/60 border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-green-400" />
-            <span className="text-xs font-mono text-gray-400">SENTIMENT</span>
+            <span className="text-xs font-mono text-muted-foreground">SENTIMENT</span>
           </div>
           <div className="text-lg font-bold text-green-400">{sentiment.positive.toFixed(0)}%</div>
-          <div className="text-xs text-gray-500">Positive</div>
+          <div className="text-xs text-muted-foreground">Positive</div>
         </div>
 
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="bg-muted/60 border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-4 h-4 text-blue-600" />
-            <span className="text-xs font-mono text-gray-400">TOPICS</span>
+            <span className="text-xs font-mono text-muted-foreground">TOPICS</span>
           </div>
           <div className="text-lg font-bold text-blue-600">{keyTopics.length}</div>
-          <div className="text-xs text-gray-500">Identified</div>
+          <div className="text-xs text-muted-foreground">Identified</div>
         </div>
 
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="bg-muted/60 border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Lightbulb className="w-4 h-4 text-yellow-400" />
-            <span className="text-xs font-mono text-gray-400">ACTIONS</span>
+            <span className="text-xs font-mono text-muted-foreground">ACTIONS</span>
           </div>
           <div className="text-lg font-bold text-yellow-400">{actionItems.length}</div>
-          <div className="text-xs text-gray-500">Suggested</div>
+          <div className="text-xs text-muted-foreground">Suggested</div>
         </div>
 
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="bg-muted/60 border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-4 h-4 text-purple-400" />
-            <span className="text-xs font-mono text-gray-400">DURATION</span>
+            <span className="text-xs font-mono text-muted-foreground">DURATION</span>
           </div>
           <div className="text-lg font-bold text-purple-400">
             {Math.floor(Math.random() * 45 + 5)}m
           </div>
-          <div className="text-xs text-gray-500">Active</div>
+          <div className="text-xs text-muted-foreground">Active</div>
         </div>
       </div>
 
       {/* Live Insights Feed */}
-      <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+      <div className="bg-muted/60 border border-border rounded-lg p-4">
         <div className="flex items-center gap-2 mb-4">
           <Lightbulb className="w-5 h-5 text-blue-600" />
           <h3 className="mac-title" className="mac-title text-lg font-bold text-blue-600 font-mono">
@@ -214,7 +214,7 @@ export function AIInsightsDashboard({
               );
             })
           ) : (
-            <div className="text-center text-gray-500 py-8">
+            <div className="text-center text-muted-foreground py-8">
               <Lightbulb className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p className="font-mono text-sm">
                 {isRecording ? "Analyzing conversation..." : "Start recording to see AI insights"}
@@ -226,7 +226,7 @@ export function AIInsightsDashboard({
 
       {/* Key Topics */}
       {keyTopics.length > 0 && (
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="bg-muted/60 border border-border rounded-lg p-4">
           <h3
             className="mac-title"
             className="mac-title text-sm font-bold text-blue-600 font-mono mb-4"
@@ -248,7 +248,7 @@ export function AIInsightsDashboard({
 
       {/* Action Items */}
       {actionItems.length > 0 && (
-        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="bg-muted/60 border border-border rounded-lg p-4">
           <h3
             className="mac-title"
             className="mac-title text-sm font-bold text-yellow-400 font-mono mb-4"
@@ -259,7 +259,7 @@ export function AIInsightsDashboard({
             {actionItems.map((action, index) => (
               <div key={index} className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
-                <span className="text-sm text-gray-300">{action}</span>
+                <span className="text-sm text-foreground">{action}</span>
               </div>
             ))}
           </div>

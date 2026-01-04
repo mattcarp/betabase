@@ -75,11 +75,11 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
   return (
     <div
       className={cn(
-        "space-y-2 p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800",
+        "space-y-2 p-4 rounded-lg bg-secondary dark:bg-card/50 border border-border",
         className
       )}
     >
-      <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-4">
+      <div className="text-xs font-medium text-muted-foreground mb-4">
         AOMA Query Progress
       </div>
 
@@ -102,14 +102,14 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
               </div>
 
               {update.resultCount !== undefined && update.resultCount > 0 && (
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                <div className="text-xs text-muted-foreground mt-2">
                   {update.resultCount} result{update.resultCount !== 1 ? "s" : ""} found
                 </div>
               )}
             </div>
 
             {update.duration && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+              <span className="text-xs text-muted-foreground flex-shrink-0">
                 {formatDuration(update.duration)}
               </span>
             )}
@@ -118,7 +118,7 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
       </AnimatePresence>
 
       {updates.length === 0 && (
-        <div className="text-sm text-gray-500 dark:text-gray-400 italic">Waiting for query...</div>
+        <div className="text-sm text-muted-foreground italic">Waiting for query...</div>
       )}
     </div>
   );

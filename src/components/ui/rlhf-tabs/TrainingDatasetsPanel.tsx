@@ -55,11 +55,11 @@ interface TrainingDataset {
 }
 
 const STATUS_CONFIG = {
-  draft: { color: "bg-zinc-500", label: "Draft", icon: Edit2 },
+  draft: { color: "bg-muted", label: "Draft", icon: Edit2 },
   curating: { color: "bg-yellow-500", label: "Curating", icon: Clock },
   ready: { color: "bg-blue-500", label: "Ready", icon: CheckCircle2 },
   exported: { color: "bg-green-500", label: "Exported", icon: Download },
-  archived: { color: "bg-zinc-700", label: "Archived", icon: Archive },
+  archived: { color: "bg-muted", label: "Archived", icon: Archive },
 };
 
 const TYPE_LABELS = {

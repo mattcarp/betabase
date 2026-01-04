@@ -58,11 +58,11 @@ export function DiagramOffer({
       <button
         onClick={handleAccept}
         disabled={isGenerating}
-        className="text-xs italic text-zinc-500 hover:text-zinc-400 transition-colors cursor-pointer disabled:cursor-wait"
+        className="text-xs italic text-muted-foreground hover:text-muted-foreground/80 transition-colors cursor-pointer disabled:cursor-wait"
       >
         {isGenerating ? (
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-1 h-1 rounded-full bg-zinc-500 animate-pulse" />
+            <span className="inline-block w-1 h-1 rounded-full bg-muted animate-pulse" />
             preparing diagram...
           </span>
         ) : isReady ? (
@@ -74,7 +74,7 @@ export function DiagramOffer({
       {!isGenerating && (
         <button
           onClick={handleDismiss}
-          className="text-[10px] text-zinc-600 hover:text-zinc-500 transition-colors"
+          className="text-[10px] text-muted hover:text-muted-foreground transition-colors"
           aria-label="Dismiss diagram offer"
         >
           ✕

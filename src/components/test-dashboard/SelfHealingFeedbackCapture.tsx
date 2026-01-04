@@ -93,7 +93,7 @@ const rejectionReasons: {
     label: "Other Reason",
     description: "Something else - please provide details",
     icon: <MessageSquare className="h-5 w-5" />,
-    color: "text-gray-400 bg-gray-500/10 border-gray-500/20 hover:bg-gray-500/20",
+    color: "text-muted-foreground bg-muted/10 border-border hover:bg-muted/20",
   },
 ];
 

@@ -242,7 +242,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <CardContent className="space-y-3 pt-2">
             {suiteTrends.map((suite, idx) => (
               <div key={idx} className="flex items-center gap-6 group hover:bg-white/[0.02] p-2 rounded-lg transition-colors">
-                <div className="w-32 text-xs text-zinc-400 font-light">{suite.name}</div>
+                <div className="w-32 text-xs text-muted-foreground font-light">{suite.name}</div>
                 <div className="flex-1 h-8">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={suite.data.map((v) => ({ value: v }))}>
@@ -256,7 +256,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="text-xs text-zinc-300 font-mono w-12 text-right">{suite.data[suite.data.length - 1]} tests</div>
+                <div className="text-xs text-foreground font-mono w-12 text-right">{suite.data[suite.data.length - 1]} tests</div>
               </div>
             ))}
           </CardContent>
@@ -267,7 +267,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       <div className="grid grid-cols-6 gap-3">
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Pass Rate</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Pass Rate</div>
             <div className="flex items-baseline gap-2">
               <span className="text-xl font-light" style={{ color: 'var(--mac-data-success)' }}>
                 {healthMetrics.passRate}%
@@ -281,36 +281,36 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Failing</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Failing</div>
             <span className="text-xl font-light text-rose-400">{healthMetrics.failingTests}</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Auto-Healed</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Auto-Healed</div>
             <span className="text-xl font-light" style={{ color: 'var(--mac-primary-blue-400)' }}>{healthMetrics.healedToday}</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Need HITL</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Need HITL</div>
             <span className="text-xl font-light text-amber-400">{healthMetrics.pendingReview}</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Coverage</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Coverage</div>
             <span className="text-xl font-light text-teal-400">87%</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Flaky</div>
-            <span className="text-xl font-light text-zinc-400">{healthMetrics.flakyTests}</span>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Flaky</div>
+            <span className="text-xl font-light text-muted-foreground">{healthMetrics.flakyTests}</span>
           </CardContent>
         </Card>
       </div>
@@ -323,22 +323,22 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Archive className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
-                  <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">Historical Vault</span>
+                  <span className="text-xs font-medium text-foreground uppercase tracking-wider">Historical Vault</span>
                 </div>
                 <div className="flex items-center gap-4 text-[11px]">
                   <div>
                     <span className="text-lg font-light text-[var(--mac-primary-blue-400)]">{healthMetrics.totalTests.toLocaleString()}</span>
-                    <span className="text-zinc-500 ml-1.5">tests</span>
+                    <span className="text-muted-foreground ml-1.5">tests</span>
                   </div>
-                  <div className="text-zinc-700">•</div>
+                  <div className="text-border">•</div>
                   <div>
-                    <span className="text-base font-light text-zinc-300">{healthMetrics.totalExecutions.toLocaleString()}</span>
-                    <span className="text-zinc-500 ml-1.5">runs</span>
+                    <span className="text-base font-light text-foreground">{healthMetrics.totalExecutions.toLocaleString()}</span>
+                    <span className="text-muted-foreground ml-1.5">runs</span>
                   </div>
-                  <div className="text-zinc-700">•</div>
+                  <div className="text-border">•</div>
                   <div>
-                    <span className="text-base font-light text-zinc-500">{healthMetrics.testsNeverExecuted.toLocaleString()}</span>
-                    <span className="text-zinc-600 ml-1.5">dormant</span>
+                    <span className="text-base font-light text-muted-foreground">{healthMetrics.testsNeverExecuted.toLocaleString()}</span>
+                    <span className="text-muted-foreground ml-1.5">dormant</span>
                   </div>
                 </div>
               </div>
@@ -366,7 +366,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 </div>
                 <div>
                   <p className="text-xs font-medium text-white">AI Needs Your Expertise</p>
-                  <p className="text-[10px] text-zinc-500">
+                  <p className="text-[10px] text-muted-foreground">
                     {healthMetrics.pendingReview} items awaiting review
                   </p>
                 </div>
@@ -416,7 +416,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               {recentSelfHeals.map((heal) => (
                 <div
                   key={heal.id}
-                  className="flex items-center justify-between p-2 rounded-lg bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors cursor-pointer border border-zinc-800/50"
+                  className="flex items-center justify-between p-2 rounded-lg bg-card/30 hover:bg-card/50 transition-colors cursor-pointer border border-border"
                   onClick={() => onNavigate?.("self-healing")}
                 >
                   <div className="flex items-center gap-2">
@@ -426,8 +426,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                       <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
                     )}
                     <div>
-                      <p className="text-xs font-medium text-zinc-200">{heal.testName}</p>
-                      <p className="text-[10px] text-zinc-500">{heal.time}</p>
+                      <p className="text-xs font-medium text-foreground">{heal.testName}</p>
+                      <p className="text-[10px] text-muted-foreground">{heal.time}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -468,7 +468,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               {attentionItems.map((item) => (
                 <div
                   key={item.id}
-                  className="p-2 rounded-lg border border-zinc-800/50 cursor-pointer hover:bg-zinc-900/30 transition-colors bg-zinc-900/20"
+                  className="p-2 rounded-lg border border-border cursor-pointer hover:bg-card/30 transition-colors bg-card/20"
                   onClick={() => {
                     if (item.type === "low-confidence") onNavigate?.("results");
                     if (item.type === "flaky") onNavigate?.("flaky");
@@ -481,7 +481,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                     ) : (
                       <Activity className="h-3.5 w-3.5 mt-0.5 text-[var(--mac-primary-blue-400)]" />
                     )}
-                    <p className="text-xs text-zinc-300">{item.message}</p>
+                    <p className="text-xs text-foreground">{item.message}</p>
                   </div>
                 </div>
               ))}
@@ -506,7 +506,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => setShowCuratorQueue(!showCuratorQueue)}
-              className="gap-1.5 h-7 text-xs text-zinc-400 hover:text-white"
+              className="gap-1.5 h-7 text-xs text-muted-foreground hover:text-foreground"
             >
               {showCuratorQueue ? (
                 <><ChevronUp className="h-3 w-3" /> Collapse</>
@@ -515,7 +515,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               )}
             </Button>
           </div>
-          <p className="text-[10px] text-zinc-500 mt-1 uppercase tracking-wider">
+          <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">
             Review AI responses, test corrections, and low-confidence results
           </p>
         </CardHeader>

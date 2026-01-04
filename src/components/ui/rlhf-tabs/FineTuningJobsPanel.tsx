@@ -61,13 +61,13 @@ interface FineTuningJob {
 }
 
 const STATUS_CONFIG = {
-  pending: { color: "bg-zinc-500", label: "Pending", icon: Clock },
+  pending: { color: "bg-muted-foreground", label: "Pending", icon: Clock },
   validating: { color: "bg-blue-500", label: "Validating", icon: RefreshCw },
   queued: { color: "bg-yellow-500", label: "Queued", icon: Clock },
   training: { color: "bg-purple-500", label: "Training", icon: Activity },
   completed: { color: "bg-green-500", label: "Completed", icon: CheckCircle2 },
   failed: { color: "bg-red-500", label: "Failed", icon: XCircle },
-  cancelled: { color: "bg-zinc-600", label: "Cancelled", icon: XCircle },
+  cancelled: { color: "bg-muted", label: "Cancelled", icon: XCircle },
 };
 
 const PROVIDER_CONFIG = {
@@ -354,7 +354,7 @@ export function FineTuningJobsPanel() {
                           <div
                             className={cn(
                               "h-10 w-10 rounded-lg flex items-center justify-center",
-                              job.status === "training" ? "bg-purple-500/20" : "bg-zinc-800"
+                              job.status === "training" ? "bg-purple-500/20" : "bg-muted"
                             )}
                           >
                             <Cpu
@@ -362,7 +362,7 @@ export function FineTuningJobsPanel() {
                                 "h-5 w-5",
                                 job.status === "training"
                                   ? "text-purple-400 animate-pulse"
-                                  : "text-zinc-400"
+                                  : "text-muted-foreground"
                               )}
                             />
                           </div>

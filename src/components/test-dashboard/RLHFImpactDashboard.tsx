@@ -248,7 +248,7 @@ export function RLHFImpactDashboard() {
     icon: any;
     color: string;
   }) => (
-    <Card className="bg-zinc-900/30 border-zinc-800">
+    <Card className="bg-card/30 border-border">
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className={`p-2 rounded-lg ${color}`}>
@@ -270,8 +270,8 @@ export function RLHFImpactDashboard() {
             </Badge>
           )}
         </div>
-        <div className="text-3xl font-bold text-zinc-100 mb-1">{value}</div>
-        <div className="text-sm text-zinc-500">{title}</div>
+        <div className="text-3xl font-bold text-foreground mb-1">{value}</div>
+        <div className="text-sm text-muted-foreground">{title}</div>
       </CardContent>
     </Card>
   );
@@ -279,11 +279,11 @@ export function RLHFImpactDashboard() {
   // Graceful fallback when Supabase is not configured
   if (!supabaseAvailable) {
     return (
-      <Card className="h-full flex items-center justify-center bg-zinc-900/50 border-zinc-800">
-        <div className="text-center text-zinc-500">
+      <Card className="h-full flex items-center justify-center bg-card/50 border-border">
+        <div className="text-center text-muted-foreground">
           <Activity className="h-8 w-8 mx-auto mb-3 text-yellow-500/60" />
           <p className="text-sm">Database connection not configured</p>
-          <p className="text-xs mt-1 text-zinc-600">RLHF Impact Dashboard requires Supabase</p>
+          <p className="text-xs mt-1 text-muted-foreground">RLHF Impact Dashboard requires Supabase</p>
         </div>
       </Card>
     );
@@ -291,8 +291,8 @@ export function RLHFImpactDashboard() {
 
   if (loading) {
     return (
-      <Card className="h-full flex items-center justify-center bg-zinc-900/50 border-zinc-800">
-        <div className="text-zinc-400">Loading impact metrics...</div>
+      <Card className="h-full flex items-center justify-center bg-card/50 border-border">
+        <div className="text-muted-foreground">Loading impact metrics...</div>
       </Card>
     );
   }
@@ -300,13 +300,13 @@ export function RLHFImpactDashboard() {
   return (
     <div className="h-full space-y-6">
       {/* Header */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-zinc-100">
+          <CardTitle className="flex items-center gap-2 text-foreground">
             <Activity className="h-5 w-5 text-purple-400" />
             RLHF Impact Dashboard
           </CardTitle>
-          <CardDescription className="text-zinc-400">
+          <CardDescription className="text-muted-foreground">
             Track how human feedback improves AI performance over time
           </CardDescription>
         </CardHeader>
@@ -344,16 +344,16 @@ export function RLHFImpactDashboard() {
       </div>
 
       {/* Time Series Chart (Simplified ASCII representation) */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-zinc-100 text-lg">30-Day Trends</CardTitle>
+          <CardTitle className="text-foreground text-lg">30-Day Trends</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-8">
             {/* Rating Trend */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="text-sm font-medium text-zinc-400">Average Rating Trend</div>
+                <div className="text-sm font-medium text-muted-foreground">Average Rating Trend</div>
                 <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
                   Last 30 Days
                 </Badge>
@@ -406,7 +406,7 @@ export function RLHFImpactDashboard() {
             {/* Confidence Trend */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="text-sm font-medium text-zinc-400">Retrieval Confidence Trend</div>
+                <div className="text-sm font-medium text-muted-foreground">Retrieval Confidence Trend</div>
                 <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/20">
                   Semantic Accuracy
                 </Badge>
@@ -460,7 +460,7 @@ export function RLHFImpactDashboard() {
             {/* Feedback Volume */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="text-sm font-medium text-zinc-400">Daily Feedback Volume</div>
+                <div className="text-sm font-medium text-muted-foreground">Daily Feedback Volume</div>
                 <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
                   Engagement
                 </Badge>
@@ -506,9 +506,9 @@ export function RLHFImpactDashboard() {
       </Card>
 
       {/* Insights */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-zinc-100 text-lg">Key Insights</CardTitle>
+          <CardTitle className="text-foreground text-lg">Key Insights</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {metrics.ratingTrend > 5 && (
@@ -516,7 +516,7 @@ export function RLHFImpactDashboard() {
               <TrendingUp className="h-5 w-5 text-green-400 mt-0.5" />
               <div>
                 <div className="text-sm font-medium text-green-400">Positive Rating Trend</div>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs text-muted-foreground">
                   Average rating improved by {metrics.ratingTrend.toFixed(1)}% - feedback loop is
                   working!
                 </div>
@@ -529,7 +529,7 @@ export function RLHFImpactDashboard() {
               <Award className="h-5 w-5 text-purple-400 mt-0.5" />
               <div>
                 <div className="text-sm font-medium text-purple-400">High Approval Rate</div>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs text-muted-foreground">
                   {metrics.approvalRate.toFixed(1)}% of responses are curator-approved - excellent
                   quality!
                 </div>
@@ -542,7 +542,7 @@ export function RLHFImpactDashboard() {
               <Target className="h-5 w-5 text-amber-400 mt-0.5" />
               <div>
                 <div className="text-sm font-medium text-amber-400">Confidence Increasing</div>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs text-muted-foreground">
                   Document relevance confidence up {metrics.confidenceTrend.toFixed(1)}% - retrieval
                   improving!
                 </div>
@@ -551,11 +551,11 @@ export function RLHFImpactDashboard() {
           )}
 
           {metrics.totalFeedback === 0 && (
-            <div className="flex items-start gap-3 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg">
-              <Users className="h-5 w-5 text-zinc-400 mt-0.5" />
+            <div className="flex items-start gap-3 p-3 bg-muted/50 border border-border rounded-lg">
+              <Users className="h-5 w-5 text-muted-foreground mt-0.5" />
               <div>
-                <div className="text-sm font-medium text-zinc-400">No Data Yet</div>
-                <div className="text-xs text-zinc-500">
+                <div className="text-sm font-medium text-muted-foreground">No Data Yet</div>
+                <div className="text-xs text-muted-foreground">
                   Start curating feedback to see impact metrics and trends!
                 </div>
               </div>

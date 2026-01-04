@@ -136,19 +136,19 @@ export function SessionCard({
 
         {/* Session Metadata */}
         <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Clock className="h-4 w-4" />
             <span>{formatDuration(session.duration)}</span>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <MousePointerClick className="h-4 w-4" />
             <span>{session.interactionCount} interactions</span>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <User className="h-4 w-4" />
             <span className="truncate">{session.testerName}</span>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>{formatRelativeTime(session.date)}</span>
           </div>
@@ -156,7 +156,7 @@ export function SessionCard({
 
         {/* Notes (if any) */}
         {session.notes && (
-          <p className="text-xs text-zinc-500 line-clamp-2 italic">{session.notes}</p>
+          <p className="text-xs text-muted-foreground line-clamp-2 italic">{session.notes}</p>
         )}
 
         {/* Tags */}

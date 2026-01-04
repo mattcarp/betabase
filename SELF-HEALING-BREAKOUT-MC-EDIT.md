@@ -1,9 +1,22 @@
-# 🔧 SELF-HEALING TESTS DEMO SCRIPT
-**For Senior Executive Demos | Critical Feature**
+# Self-Healing Breakout - MC Edit
+
 
 ---
 
-## 🎯 WHY THIS MATTERS (Executive Value Prop)
+Blast Radius (IBM term): Use example of login page - developer moves button
+
+	* if small change, AI rewrite script
+	* if large change - ask human (move button to top right )
+
+
+
+
+
+
+
+# AI Slop:
+
+## WHY THIS MATTERS (Executive Value Prop)
 
 **Problem**: Traditional test automation fails when UI changes. Teams spend 40-60% of QA time just maintaining broken tests.
 

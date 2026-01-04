@@ -173,7 +173,7 @@ export const ManualTestingPanel: React.FC = () => {
       case "paused":
         return "text-amber-500";
       default:
-        return "text-slate-500";
+        return "text-muted-foreground";
     }
   };
 

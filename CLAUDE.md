@@ -12,7 +12,9 @@
 
 ### Development Essentials
 
-- **Always kill port 3000 before starting**: `npx kill-port 3000 && npm run dev`
+- **Always start with Infisical**: `npx kill-port 3000 && infisical run --env=dev -- npx next dev -p 3000`
+  - Infisical injects 47 secrets including Google AI API keys
+  - Without it, chat and AI features will fail with "CONFIG_ERROR"
 - **Always test before claiming PR-ready**: Run `npm run test:aoma`, `npm run test:visual`, smoke tests
 - **Always bump version before pushing to main**: `npm version patch` (triggers deployment)
 - **Use git acm alias**: `git acm "commit message"` (adds all + commits)
@@ -36,6 +38,7 @@
 
 ### Testing
 
+- **Always start local dev server for integration testing**: Use Infisical to inject secrets - production requires auth that Playwright cannot bypass
 - **Always check console errors** before claiming work is done
 - **Write Playwright tests** for every change, bypassing auth where possible
 - **Test with MCP servers**: playwright-mcp, browserbase, browser-tools, firecrawl-mcp
@@ -74,13 +77,19 @@
 
 ### NEVER DO THIS (Hardcoded CSS = REJECTED)
 
+**WHY**: Hardcoded colors (`zinc-*`, `gray-*`, `#hex`) break theme switching. We have
+CSS variables in `globals.css` that support light/dark modes. Use semantic tokens instead.
+See `docs/THEME-PREP-AUDIT.md` for the complete mapping table.
+
 ```tsx
-// BAD - Hardcoded colors
+// BAD - Hardcoded colors (breaks theming)
 className="border-zinc-800"           // NO! Use border-border
 className="border-[#27272a]"          // NO! Hardcoded hex
+className="bg-zinc-900"               // NO! Use bg-card or bg-secondary
 className="bg-[#1a1a1a]"              // NO! Use bg-background or mac-* class
 style={{ borderColor: '#333' }}       // NO! Inline styles with hardcoded colors
 className="text-gray-400"             // NO! Use text-muted-foreground
+className="text-zinc-500"             // NO! Use text-muted-foreground
 ```
 
 ### ALWAYS DO THIS (Use Design System Variables)

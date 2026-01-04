@@ -293,7 +293,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
       case "in-progress":
         return <Activity className={cn(baseClass, "text-orange-500 animate-pulse")} />;
       default:
-        return <Clock className={cn(baseClass, "text-gray-500")} />;
+        return <Clock className={cn(baseClass, "text-muted-foreground")} />;
     }
   };
 

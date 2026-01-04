@@ -152,7 +152,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
     <div className="w-full max-w-2xl mx-auto p-6">
       <div className="mb-6">
         <h3 className="mac-title">Document Upload</h3>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Upload documents to the AOMA knowledge base for enhanced assistance
         </p>
       </div>
@@ -162,7 +162,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all ${
           isDragging
             ? "border-blue-500 bg-blue-500/10"
-            : "border-gray-600 hover:border-gray-500 bg-gray-800/50"
+            : "border-border hover:border-border bg-muted/50"
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -183,7 +183,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <>
                 <Upload className="w-12 h-12 text-blue-500 mb-4" />
                 <p className="mac-body text-white mb-2">Drop files here or click to browse</p>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Supports PDF, TXT, MD, DOC, DOCX, Images, CSV, JSON (max 50MB)
                 </p>
               </>
@@ -201,7 +201,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <>
                 <Loader2 className="w-12 h-12 text-blue-500 mb-4 animate-spin" />
                 <p className="mac-body text-white mb-2">Processing document...</p>
-                <p className="text-sm text-gray-400">Adding to knowledge base</p>
+                <p className="text-sm text-muted-foreground">Adding to knowledge base</p>
               </>
             )}
 
@@ -209,7 +209,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <>
                 <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
                 <p className="mac-body text-white mb-2">Upload complete!</p>
-                <p className="text-sm text-gray-400">Document added to knowledge base</p>
+                <p className="text-sm text-muted-foreground">Document added to knowledge base</p>
               </>
             )}
 
@@ -232,13 +232,13 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             {uploadedFiles.map((file) => (
               <div
                 key={file.id}
-                className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border"
               >
                 <div className="flex items-center gap-4">
                   <File className="w-5 h-5 text-blue-500" />
                   <div>
                     <p className="text-sm text-white">{file.name}</p>
-                    <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                    <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                   </div>
                 </div>
                 <CheckCircle className="w-5 h-5 text-green-500" />
@@ -251,7 +251,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       {/* Info Alert */}
       <Alert className="mt-6 border-blue-500/20 bg-blue-500/5">
         <AlertCircle className="h-4 w-4 text-blue-500" />
-        <AlertDescription className="text-gray-300">
+        <AlertDescription className="text-foreground">
           Documents are indexed and searchable immediately after upload. The AI will use this
           knowledge to provide more accurate AOMA-specific answers.
         </AlertDescription>

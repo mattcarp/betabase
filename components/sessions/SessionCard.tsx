@@ -136,25 +136,25 @@ export function SessionCard({
 
       <CardContent className="space-y-4" onClick={() => onPlay(session)}>
         {/* Thumbnail Placeholder */}
-        <div className="aspect-video bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 rounded-lg border border-white/10 flex items-center justify-center group-hover:border-purple-500/30 transition-colors">
+        <div className="aspect-video bg-gradient-to-br from-muted/50 to-card/50 rounded-lg border border-white/10 flex items-center justify-center group-hover:border-purple-500/30 transition-colors">
           <Play className="h-12 w-12 text-white/20 group-hover:text-purple-400/50 transition-colors" />
         </div>
 
         {/* Session Metadata */}
         <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Clock className="h-4 w-4" />
             <span>{formatDuration(session.duration)}</span>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <MousePointerClick className="h-4 w-4" />
             <span>{session.interactionCount} interactions</span>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <User className="h-4 w-4" />
             <span className="truncate">{session.testerName}</span>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>{formatRelativeTime(session.date)}</span>
           </div>
@@ -162,7 +162,7 @@ export function SessionCard({
 
         {/* Notes (if any) */}
         {session.notes && (
-          <p className="text-xs text-zinc-500 line-clamp-2 italic">{session.notes}</p>
+          <p className="text-xs text-muted-foreground line-clamp-2 italic">{session.notes}</p>
         )}
 
         {/* Tags */}

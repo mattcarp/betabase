@@ -124,7 +124,7 @@ export const TopicCloud: React.FC<TopicCloudProps> = ({
 
   if (sortedTopics.length === 0) {
     return (
-      <div className={cn("text-center text-zinc-400 py-8", className)}>
+      <div className={cn("text-center text-muted-foreground py-8", className)}>
         <Lightbulb className="mx-auto mb-2 h-8 w-8 opacity-50" />
         <p className="text-sm">No topics extracted yet</p>
       </div>
@@ -170,7 +170,7 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
 
   if (trendingTopics.length === 0) {
     return (
-      <div className={cn("text-center text-zinc-400 py-4", className)}>
+      <div className={cn("text-center text-muted-foreground py-4", className)}>
         <TrendingUp className="mx-auto mb-2 h-6 w-6 opacity-50" />
         <p className="text-sm">No trending topics</p>
       </div>
@@ -182,22 +182,22 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
       {trendingTopics.map((topic, index) => (
         <div
           key={topic.id}
-          className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer"
+          className="flex items-center justify-between p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
           onClick={() => onTopicClick?.(topic)}
         >
           <div className="flex items-center gap-4">
-            <span className="text-lg font-bold text-zinc-500">#{index + 1}</span>
+            <span className="text-lg font-bold text-muted-foreground">#{index + 1}</span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-zinc-200">{topic.term}</span>
+                <span className="font-medium text-foreground">{topic.term}</span>
                 <TrendingUp className="h-3 w-3 text-green-400" />
               </div>
-              <div className="text-xs text-zinc-500">
+              <div className="text-xs text-muted-foreground">
                 {topic.documentIds.length} documents • Score: {(topic.score * 100).toFixed(0)}
               </div>
             </div>
           </div>
-          <ChevronRight className="h-4 w-4 text-zinc-500" />
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
         </div>
       ))}
     </div>
@@ -217,7 +217,7 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
 }) => {
   if (clusters.length === 0) {
     return (
-      <div className={cn("text-center text-zinc-400 py-8", className)}>
+      <div className={cn("text-center text-muted-foreground py-8", className)}>
         <Circle className="mx-auto mb-2 h-8 w-8 opacity-50" />
         <p className="text-sm">No topic clusters found</p>
       </div>
@@ -229,13 +229,13 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
       {clusters.map((cluster) => (
         <Card
           key={cluster.id}
-          className="mac-card bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
+          className="mac-card bg-card/50 border-border hover:border-muted transition-colors cursor-pointer"
           onClick={() => onClusterClick?.(cluster)}
         >
           <CardHeader className="mac-card pb-4">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
               <span className="flex items-center gap-2">
-                <Circle className="h-4 w-4 text-zinc-500" />
+                <Circle className="h-4 w-4 text-muted-foreground" />
                 {cluster.name}
               </span>
               <Badge variant="secondary" className="text-xs">
@@ -246,19 +246,19 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
           <CardContent className="space-y-2">
             <div className="flex flex-wrap gap-2">
               {cluster.topics.slice(0, 5).map((topic) => (
-                <Badge key={topic.id} variant="outline" className="text-xs border-zinc-700">
+                <Badge key={topic.id} variant="outline" className="text-xs border-border">
                   {topic.term}
                 </Badge>
               ))}
               {cluster.topics.length > 5 && (
-                <Badge variant="outline" className="text-xs border-zinc-700">
+                <Badge variant="outline" className="text-xs border-border">
                   +{cluster.topics.length - 5} more
                 </Badge>
               )}
             </div>
 
             {cluster.metadata && (
-              <div className="text-xs text-zinc-500 space-y-1 pt-2 border-t border-zinc-800">
+              <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t border-border">
                 {cluster.metadata.jiraTickets?.length &&
                   cluster.metadata.jiraTickets.length > 0 && (
                     <div>Jira: {cluster.metadata.jiraTickets?.length} tickets</div>
@@ -316,17 +316,17 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.label} className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
+          <div key={stat.label} className="bg-card/50 rounded-lg p-4 border border-border">
             <div className="flex items-center gap-2 mb-2">
               <Icon className={cn("h-4 w-4", stat.color)} />
-              <span className="text-xs text-zinc-500">{stat.label}</span>
+              <span className="text-xs text-muted-foreground">{stat.label}</span>
             </div>
-            <div className="text-2xl font-bold text-zinc-200">{stat.value.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-foreground">{stat.value.toLocaleString()}</div>
           </div>
         );
       })}
       {lastUpdated && (
-        <div className="col-span-3 text-xs text-zinc-500 text-center pt-2 border-t border-zinc-800">
+        <div className="col-span-3 text-xs text-muted-foreground text-center pt-2 border-t border-border">
           <Clock className="inline-block h-3 w-3 mr-2" />
           Last updated: {lastUpdated.toLocaleTimeString()}
         </div>
@@ -360,16 +360,16 @@ export const TopicPanel: React.FC<TopicPanelProps> = ({
   className,
 }) => {
   return (
-    <Card className={cn("mac-card", "bg-zinc-950 border-zinc-800", className)}>
+    <Card className={cn("mac-card", "bg-background border-border", className)}>
       <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2">
-          <Lightbulb className="h-5 w-5 text-zinc-400" />
+          <Lightbulb className="h-5 w-5 text-muted-foreground" />
           Topic Intelligence
         </CardTitle>
       </CardHeader>
       <CardContent className="mac-card">
         <Tabs defaultValue="cloud" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-zinc-900">
+          <TabsList className="grid w-full grid-cols-4 bg-card">
             <TabsTrigger value="cloud">Cloud</TabsTrigger>
             <TabsTrigger value="trending">Trending</TabsTrigger>
             <TabsTrigger value="clusters">Clusters</TabsTrigger>

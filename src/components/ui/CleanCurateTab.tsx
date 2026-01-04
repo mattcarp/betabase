@@ -145,7 +145,7 @@ const NativeTabsList = ({ className, children }: NativeTabsListProps) => (
   <div 
     role="tablist" 
     className={cn(
-      "inline-flex h-10 items-center justify-center gap-1 rounded-lg bg-zinc-800/50 p-1 text-zinc-400",
+      "inline-flex h-10 items-center justify-center gap-1 rounded-lg bg-muted/50 p-1 text-muted-foreground",
       className
     )}
   >
@@ -167,8 +167,8 @@ const NativeTabsTrigger = ({ value, className, children }: NativeTabsTriggerProp
       data-state={activeTab === value ? "active" : "inactive"}
       onClick={() => setActiveTab(value)}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-zinc-200",
-        activeTab === value && "bg-zinc-700 text-white",
+        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-foreground",
+        activeTab === value && "bg-muted text-white",
         className
       )}
     >
@@ -819,11 +819,11 @@ export function CleanCurateTab({
                           return (
                             <div key={i} className="space-y-1">
                               <div className="flex justify-between text-sm">
-                                <span className="font-light text-zinc-300 capitalize">{stat.source_type}</span>
-                                <span className="text-zinc-400 tabular-nums">{stat.document_count.toLocaleString()}</span>
+                                <span className="font-light text-foreground capitalize">{stat.source_type}</span>
+                                <span className="text-muted-foreground tabular-nums">{stat.document_count.toLocaleString()}</span>
                               </div>
                               {/* MAC Data Storytelling: minimal bar with muted coral */}
-                              <div className="h-1 bg-zinc-800 rounded-sm overflow-hidden">
+                              <div className="h-1 bg-muted rounded-sm overflow-hidden">
                                 <div 
                                   className="h-full transition-all duration-500"
                                   style={{ 
@@ -832,7 +832,7 @@ export function CleanCurateTab({
                                   }}
                                 />
                               </div>
-                              <div className="flex justify-between text-xs text-zinc-500">
+                              <div className="flex justify-between text-xs text-muted-foreground">
                                 <span>{stat.embedding_storage_size}</span>
                                 <span>{new Date(stat.newest_document).toLocaleDateString()}</span>
                               </div>
@@ -840,10 +840,10 @@ export function CleanCurateTab({
                           );
                         })}
                         {/* Total */}
-                        <div className="pt-2 border-t border-zinc-800">
+                        <div className="pt-2 border-t border-border">
                           <div className="flex justify-between text-sm font-medium">
-                            <span className="text-zinc-300">Total Documents</span>
-                            <span className="text-zinc-200 tabular-nums">{realData.totalDocuments.toLocaleString()}</span>
+                            <span className="text-foreground">Total Documents</span>
+                            <span className="text-foreground tabular-nums">{realData.totalDocuments.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
@@ -881,10 +881,10 @@ export function CleanCurateTab({
                           return (
                             <div key={i} className="space-y-1">
                               <div className="flex justify-between text-sm">
-                                <span className="text-zinc-300 capitalize">{label}</span>
-                                <span className="text-zinc-400 tabular-nums">{stat.count.toLocaleString()}</span>
+                                <span className="text-foreground capitalize">{label}</span>
+                                <span className="text-muted-foreground tabular-nums">{stat.count.toLocaleString()}</span>
                               </div>
-                              <div className="h-1 bg-zinc-800 rounded-sm overflow-hidden">
+                              <div className="h-1 bg-muted rounded-sm overflow-hidden">
                                 <div 
                                   className="h-full transition-all duration-500"
                                   style={{ 
@@ -897,9 +897,9 @@ export function CleanCurateTab({
                           );
                         })}
                         {/* Total */}
-                        <div className="pt-2 border-t border-zinc-800">
+                        <div className="pt-2 border-t border-border">
                           <div className="flex justify-between text-sm font-medium">
-                            <span className="text-zinc-300">Total Test Cases</span>
+                            <span className="text-foreground">Total Test Cases</span>
                             <span className="tabular-nums" style={{ color: 'var(--mac-data-teal)' }}>{realData.totalTestCases.toLocaleString()}</span>
                           </div>
                         </div>
@@ -1306,7 +1306,7 @@ export function CleanCurateTab({
                           selectedFiles.size === filteredFiles.length && filteredFiles.length > 0
                         }
                         onChange={selectAllFiles}
-                        className="rounded border-gray-300"
+                        className="rounded border-border"
                       />
                       <span className="text-sm text-muted-foreground">
                         Select all ({filteredFiles.length})
@@ -1326,7 +1326,7 @@ export function CleanCurateTab({
                           type="checkbox"
                           checked={selectedFiles.has(file.id)}
                           onChange={() => toggleFileSelection(file.id)}
-                          className="rounded border-gray-300"
+                          className="rounded border-border"
                         />
 
                         <FileIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
@@ -1389,7 +1389,7 @@ export function CleanCurateTab({
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
-                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-zinc-800/50 inline-flex items-center justify-center transition-colors"
+                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-muted/50 inline-flex items-center justify-center transition-colors"
                             onClick={() => {
                               setPreviewFile(file);
                               setIsPreviewOpen(true);
@@ -1400,14 +1400,14 @@ export function CleanCurateTab({
                           </button>
                           <button
                             type="button"
-                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-zinc-800/50 inline-flex items-center justify-center transition-colors"
+                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-muted/50 inline-flex items-center justify-center transition-colors"
                             title="AI Analysis"
                           >
                             <Lightbulb className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
-                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-zinc-800/50 inline-flex items-center justify-center transition-colors text-red-400 hover:text-red-300"
+                            className="h-8 w-8 p-0 rounded-md bg-transparent hover:bg-muted/50 inline-flex items-center justify-center transition-colors text-red-400 hover:text-red-300"
                             onClick={() => confirmDeleteFiles([file.id])}
                             title="Delete"
                           >
@@ -1522,8 +1522,8 @@ export function CleanCurateTab({
                   ) : (
                     <div className="space-y-4">
                       {/* Tufte-style data table */}
-                      <div className="divide-y divide-zinc-800">
-                        <div className="grid grid-cols-4 py-2 text-xs text-zinc-500 font-medium">
+                      <div className="divide-y divide-border">
+                        <div className="grid grid-cols-4 py-2 text-xs text-muted-foreground font-medium">
                           <span>Source</span>
                           <span className="text-right">Documents</span>
                           <span className="text-right">Storage</span>
@@ -1531,25 +1531,25 @@ export function CleanCurateTab({
                         </div>
                         {realData.vectorStats.map((stat: RealVectorStat, i: number) => (
                           <div key={i} className="grid grid-cols-4 py-3 text-sm">
-                            <span className="capitalize text-zinc-300">{stat.source_type}</span>
+                            <span className="capitalize text-foreground">{stat.source_type}</span>
                             <span className="text-right tabular-nums">{stat.document_count.toLocaleString()}</span>
-                            <span className="text-right text-zinc-400">{stat.embedding_storage_size}</span>
-                            <span className="text-right text-zinc-500">
+                            <span className="text-right text-muted-foreground">{stat.embedding_storage_size}</span>
+                            <span className="text-right text-muted-foreground">
                               {new Date(stat.newest_document).toLocaleDateString()}
                             </span>
                           </div>
                         ))}
                       </div>
                       {/* Summary row */}
-                      <div className="pt-3 border-t border-zinc-700">
+                      <div className="pt-3 border-t border-border">
                         <div className="flex justify-between text-sm">
-                          <span className="font-medium text-zinc-300">Total Documents</span>
-                          <span className="font-medium tabular-nums text-zinc-200">
+                          <span className="font-medium text-foreground">Total Documents</span>
+                          <span className="font-medium tabular-nums text-foreground">
                             {realData.totalDocuments.toLocaleString()}
                           </span>
                         </div>
                         {realData.queriedAt && (
-                          <p className="text-xs text-zinc-500 mt-2">
+                          <p className="text-xs text-muted-foreground mt-2">
                             Last queried: {new Date(realData.queriedAt).toLocaleString()}
                           </p>
                         )}
@@ -1616,7 +1616,7 @@ export function CleanCurateTab({
                     </div>
                     <div className="flex items-center gap-2">
                        <span className="text-3xl font-light text-emerald-400">+127%</span>
-                       <span className="text-sm text-zinc-500">vs last month</span>
+                       <span className="text-sm text-muted-foreground">vs last month</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -1646,7 +1646,7 @@ export function CleanCurateTab({
                 <FileIcon className="h-10 w-10 text-blue-400" />
                 <div>
                   <DialogTitle className="text-xl font-light tracking-tight">{previewFile?.filename}</DialogTitle>
-                  <DialogDescription className="text-sm text-gray-400 mt-1 flex items-center gap-4">
+                  <DialogDescription className="text-sm text-muted-foreground mt-1 flex items-center gap-4">
                      <span>{previewFile ? formatFileSize(previewFile.bytes) : '0 KB'}</span>
                      <span>•</span>
                      <span>Updated {previewFile ? formatDate(previewFile.created_at) : 'Today'}</span>
@@ -1658,7 +1658,7 @@ export function CleanCurateTab({
                 </div>
              </div>
           </DialogHeader>
-          <div className="flex-1 overflow-auto p-8 bg-white/5 font-mono text-sm leading-relaxed text-gray-300">
+          <div className="flex-1 overflow-auto p-8 bg-white/5 font-mono text-sm leading-relaxed text-foreground">
              {/* Fake Content for Demo */}
              <div className="max-w-3xl mx-auto space-y-6">
                 <div className="h-8 w-3/4 bg-white/10 rounded animate-pulse" />

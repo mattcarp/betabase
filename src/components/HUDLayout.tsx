@@ -101,7 +101,7 @@ export function HUDLayout({
               <div className="hud-element p-4 border border-blue-500/30 rounded-lg hover:border-blue-600/50 transition-all duration-300">
                 <div className="text-blue-600 text-sm font-mono">SENTIMENT ANALYSIS</div>
                 <div className="text-green-400 mt-2 font-mono">● NEUTRAL ●</div>
-                <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
+                <div className="w-full bg-muted rounded-full h-1 mt-2">
                   <div className="bg-green-400 h-1 rounded-full" style={{ width: "65%" }}></div>
                 </div>
               </div>

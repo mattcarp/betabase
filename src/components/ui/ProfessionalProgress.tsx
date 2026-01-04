@@ -23,23 +23,23 @@ interface ProfessionalProgressProps {
 const variantStyles = {
   default: {
     bar: "bg-blue-600 dark:bg-blue-500",
-    text: "text-gray-600 dark:text-gray-400",
-    track: "bg-gray-100 dark:bg-gray-800",
+    text: "text-muted-foreground",
+    track: "bg-muted",
   },
   success: {
     bar: "bg-green-600 dark:bg-green-500",
     text: "text-green-600 dark:text-green-500",
-    track: "bg-gray-100 dark:bg-gray-800",
+    track: "bg-muted",
   },
   warning: {
     bar: "bg-amber-600 dark:bg-amber-500",
     text: "text-amber-600 dark:text-amber-500",
-    track: "bg-gray-100 dark:bg-gray-800",
+    track: "bg-muted",
   },
   error: {
     bar: "bg-red-600 dark:bg-red-500",
     text: "text-red-600 dark:text-red-500",
-    track: "bg-gray-100 dark:bg-gray-800",
+    track: "bg-muted",
   },
 };
 
@@ -80,7 +80,7 @@ export function ProfessionalProgress({
       {(label || showValue) && (
         <div className="flex items-center justify-between">
           {label && (
-            <span className={cn(sizes.text, "font-medium text-gray-700 dark:text-gray-300")}>
+            <span className={cn(sizes.text, "font-medium text-foreground")}>
               {label}
             </span>
           )}
@@ -102,7 +102,7 @@ export function ProfessionalProgress({
 
       {/* Sub Label */}
       {subLabel && (
-        <p className={cn(sizes.text, "text-gray-500 dark:text-gray-400 mt-2")}>{subLabel}</p>
+        <p className={cn(sizes.text, "text-muted-foreground mt-2")}>{subLabel}</p>
       )}
     </div>
   );
@@ -175,7 +175,7 @@ export function CircularProfessionalProgress({
           stroke="currentColor"
           strokeWidth={strokeWidth}
           fill="transparent"
-          className="text-gray-200 dark:text-gray-700"
+          className="text-muted"
         />
 
         {/* Progress circle */}
@@ -196,11 +196,11 @@ export function CircularProfessionalProgress({
       {/* Center content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         {showValue && (
-          <span className="text-lg font-normal text-gray-900 dark:text-gray-100">
+          <span className="text-lg font-normal text-foreground">
             {Math.round(clampedValue)}%
           </span>
         )}
-        {label && <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>}
+        {label && <span className="text-xs text-muted-foreground">{label}</span>}
       </div>
     </div>
   );
@@ -236,7 +236,7 @@ export function StepProgress({
                     "flex-1 h-0.5",
                     i <= currentStep - 1
                       ? "bg-blue-600 dark:bg-blue-500"
-                      : "bg-gray-200 dark:bg-gray-700"
+                      : "bg-muted"
                   )}
                 />
               )}
@@ -247,7 +247,7 @@ export function StepProgress({
                     ? "bg-blue-600 dark:bg-blue-500 text-white"
                     : i === currentStep
                       ? "bg-blue-600 dark:bg-blue-500 text-white ring-4 ring-blue-100 dark:ring-blue-900"
-                      : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                      : "bg-muted text-muted-foreground"
                 )}
               >
                 {i < currentStep ? <Check className="w-4 h-4" /> : i + 1}
@@ -258,13 +258,13 @@ export function StepProgress({
                     "flex-1 h-0.5",
                     i < currentStep - 1
                       ? "bg-blue-600 dark:bg-blue-500"
-                      : "bg-gray-200 dark:bg-gray-700"
+                      : "bg-muted"
                   )}
                 />
               )}
             </div>
             {labels?.[i] && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 mt-2">{labels[i]}</span>
+              <span className="text-xs text-muted-foreground mt-2">{labels[i]}</span>
             )}
           </div>
         ))}

@@ -228,7 +228,7 @@ test('user can submit order', async ({ page }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-zinc-900/50 border-border">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -284,7 +284,7 @@ test('user can submit order', async ({ page }) => {
       {/* Main Demo Area */}
       <div className="grid grid-cols-2 gap-6">
         {/* Left: App Preview */}
-        <Card className="bg-zinc-900/50 border-border">
+        <Card className="bg-card/50 border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-foreground">
               <Eye className="h-4 w-4 text-blue-400" />
@@ -301,7 +301,7 @@ test('user can submit order', async ({ page }) => {
             <div className="rounded-lg overflow-hidden border border-border">
               <iframe
                 src={`/demo/self-healing?variant=${variant}`}
-                className="w-full h-[400px] bg-zinc-950"
+                className="w-full h-[400px] bg-background"
                 title="Demo App"
               />
             </div>
@@ -321,7 +321,7 @@ test('user can submit order', async ({ page }) => {
         </Card>
 
         {/* Right: Test Code */}
-        <Card className="bg-zinc-900/50 border-border">
+        <Card className="bg-card/50 border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-foreground">
               <Code className="h-4 w-4 text-purple-400" />
@@ -341,7 +341,7 @@ test('user can submit order', async ({ page }) => {
                   ? "bg-red-950/30 border-red-500/30 text-red-300"
                   : step === "healed" || step === "running-healed" || step === "healed-passed"
                     ? "bg-green-950/30 border-green-500/30 text-green-300"
-                    : "bg-zinc-950 border-border text-zinc-300"
+                    : "bg-background border-border text-foreground"
               }`}
             >
               {step === "idle" || step === "running-original" || step === "original-passed"
@@ -355,7 +355,7 @@ test('user can submit order', async ({ page }) => {
       </div>
 
       {/* Progress Steps */}
-      <Card className="bg-zinc-900/50 border-border">
+      <Card className="bg-card/50 border-border">
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             {[
@@ -390,7 +390,7 @@ test('user can submit order', async ({ page }) => {
 
       {/* Healing Result */}
       {healingResult && (step === "healed" || step === "running-healed" || step === "healed-passed") && (
-        <Card className="bg-zinc-900/50 border-green-500/30">
+        <Card className="bg-card/50 border-green-500/30">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-green-400">
               <Sparkles className="h-4 w-4" />
@@ -410,7 +410,7 @@ test('user can submit order', async ({ page }) => {
               <div>
                 <div className="text-xs text-muted-foreground mb-1">Confidence</div>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-green-500 transition-all duration-1000"
                       style={{ width: `${healingResult.confidence * 100}%` }}
@@ -427,7 +427,7 @@ test('user can submit order', async ({ page }) => {
               <div className="space-y-1">
                 {healingResult.alternatives.map((alt, idx) => (
                   <div key={idx} className="flex items-center justify-between text-xs">
-                    <code className="text-zinc-400">{alt.selector}</code>
+                    <code className="text-muted-foreground">{alt.selector}</code>
                     <span className="text-muted-foreground">{(alt.confidence * 100).toFixed(0)}%</span>
                   </div>
                 ))}
@@ -438,7 +438,7 @@ test('user can submit order', async ({ page }) => {
       )}
 
       {/* Activity Log */}
-      <Card className="bg-zinc-900/50 border-border">
+      <Card className="bg-card/50 border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2 text-foreground">
             <Activity className="h-4 w-4 text-blue-400" />
@@ -446,7 +446,7 @@ test('user can submit order', async ({ page }) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-32 overflow-auto bg-zinc-950 rounded-lg p-3 font-mono text-xs">
+          <div className="h-32 overflow-auto bg-background rounded-lg p-3 font-mono text-xs">
             {logs.length === 0 ? (
               <span className="text-muted-foreground">Click "Run Demo" to start...</span>
             ) : (
@@ -460,7 +460,7 @@ test('user can submit order', async ({ page }) => {
                         ? "text-green-400"
                         : log.includes("CHANGED")
                           ? "text-amber-400"
-                          : "text-zinc-400"
+                          : "text-muted-foreground"
                   }`}
                 >
                   {log}

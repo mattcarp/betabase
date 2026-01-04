@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, KeyboardEvent } from "react";
+import { useRef, useState, useCallback, KeyboardEvent } from "react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
@@ -14,13 +14,14 @@ import {
   X,
   Loader2,
   Sparkles,
-  Zap,
   Plus,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Suggestions, Suggestion } from "../ai-elements/suggestion";
+import { detectDDP, parseDDP } from "../../services/ddpParser";
+import type { ParsedDDP } from "../../types/ddp";
 
 interface Attachment {
   id: string;
@@ -46,6 +47,7 @@ interface ChatInputProps {
   isRecording?: boolean;
   suggestions?: string[];
   onSuggestionClick?: (suggestion: string) => void;
+  onDDPDetected?: (ddp: ParsedDDP) => void;
 }
 
 export function ChatInput({
@@ -64,9 +66,11 @@ export function ChatInput({
   isRecording = false,
   suggestions = [],
   onSuggestionClick,
+  onDDPDetected,
 }: ChatInputProps) {
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [isParsingDDP, setIsParsingDDP] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -84,17 +88,50 @@ export function ChatInput({
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const newAttachments: Attachment[] = files.map((file) => ({
-      id: Math.random().toString(36).substr(2, 9),
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      url: URL.createObjectURL(file),
-    }));
-    setAttachments((prev) => [...prev, ...newAttachments]);
-  };
+    if (files.length === 0) return;
+
+    // Check if this looks like a DDP folder
+    const detection = detectDDP(files);
+
+    if (detection.isDDP && onDDPDetected) {
+      // It's a DDP - parse it
+      setIsParsingDDP(true);
+      try {
+        const parsed = await parseDDP(files);
+        onDDPDetected(parsed);
+      } catch (error) {
+        console.error('Failed to parse DDP:', error);
+        // Fall back to treating as regular attachments
+        const newAttachments: Attachment[] = files
+          .filter(f => f.size <= 20 * 1024 * 1024) // Skip large files
+          .map((file) => ({
+            id: Math.random().toString(36).substr(2, 9),
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            url: URL.createObjectURL(file),
+          }));
+        setAttachments((prev) => [...prev, ...newAttachments]);
+      } finally {
+        setIsParsingDDP(false);
+      }
+    } else {
+      // Regular attachments
+      const newAttachments: Attachment[] = files.map((file) => ({
+        id: Math.random().toString(36).substr(2, 9),
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: URL.createObjectURL(file),
+      }));
+      setAttachments((prev) => [...prev, ...newAttachments]);
+    }
+
+    // Reset input so same files can be selected again
+    if (e.target) e.target.value = '';
+  }, [onDDPDetected]);
 
   const removeAttachment = (id: string) => {
     setAttachments((prev) => prev.filter((a) => a.id !== id));
@@ -247,7 +284,7 @@ export function ChatInput({
 
             {/* Enhanced Action Buttons */}
             <div className="absolute bottom-3 right-3 flex items-center gap-2">
-              {/* Attachment Button */}
+              {/* Attachment Button - auto-detects DDP */}
               {allowAttachments && !isLoading && !isRecording && (
                 <>
                   <input
@@ -265,11 +302,18 @@ export function ChatInput({
                         variant="ghost"
                         className="h-9 w-9 hover:bg-muted/50 transition-colors mac-button mac-button-outline"
                         onClick={() => fileInputRef.current?.click()}
+                        disabled={isParsingDDP}
                       >
-                        <Plus className="h-4 w-4" />
+                        {isParsingDDP ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Plus className="h-4 w-4" />
+                        )}
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Attach files</TooltipContent>
+                    <TooltipContent>
+                      {onDDPDetected ? "Attach files (DDP auto-detected)" : "Attach files"}
+                    </TooltipContent>
                   </Tooltip>
                 </>
               )}

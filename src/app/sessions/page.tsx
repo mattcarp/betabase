@@ -125,7 +125,7 @@ export default function SessionsPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="mac-heading text-3xl mb-2">Test Sessions</h1>
-          <p className="mac-body text-zinc-400">Browse and manage your recorded test sessions</p>
+          <p className="mac-body text-muted-foreground">Browse and manage your recorded test sessions</p>
         </div>
 
         {/* Search and Filters Bar */}
@@ -134,7 +134,7 @@ export default function SessionsPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="Search sessions by name, AUT, tester, or tags..."
@@ -147,7 +147,7 @@ export default function SessionsPage() {
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -194,14 +194,14 @@ export default function SessionsPage() {
 
           {/* Filter Row (Collapsible) */}
           {showFilters && (
-            <div className="flex flex-col sm:flex-row gap-4 p-4 rounded-lg bg-zinc-900/50 border border-white/10">
+            <div className="flex flex-col sm:flex-row gap-4 p-4 rounded-lg bg-card/50 border border-white/10">
               <div className="flex-1">
-                <label className="text-xs text-zinc-400 mb-2 block">Tester</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Tester</label>
                 <Select value={selectedTester} onValueChange={setSelectedTester}>
                   <SelectTrigger className="mac-input">
                     <SelectValue placeholder="All testers" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-white/10">
+                  <SelectContent className="bg-card border-white/10">
                     <SelectItem value="all">All testers</SelectItem>
                     {testers.map((tester: string) => (
                       <SelectItem key={tester} value={tester}>
@@ -213,12 +213,12 @@ export default function SessionsPage() {
               </div>
 
               <div className="flex-1">
-                <label className="text-xs text-zinc-400 mb-2 block">Application Under Test</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Application Under Test</label>
                 <Select value={selectedAUT} onValueChange={setSelectedAUT}>
                   <SelectTrigger className="mac-input">
                     <SelectValue placeholder="All applications" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-white/10">
+                  <SelectContent className="bg-card border-white/10">
                     <SelectItem value="all">All applications</SelectItem>
                     {auts.map((aut: string) => (
                       <SelectItem key={aut} value={aut}>
@@ -230,7 +230,7 @@ export default function SessionsPage() {
               </div>
 
               <div className="flex-1">
-                <label className="text-xs text-zinc-400 mb-2 block">Status</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Status</label>
                 <Select
                   value={selectedStatus}
                   onValueChange={(value: string) =>
@@ -240,7 +240,7 @@ export default function SessionsPage() {
                   <SelectTrigger className="mac-input">
                     <SelectValue placeholder="All statuses" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-white/10">
+                  <SelectContent className="bg-card border-white/10">
                     <SelectItem value="all">All statuses</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
                     <SelectItem value="in-progress">In Progress</SelectItem>
@@ -254,7 +254,7 @@ export default function SessionsPage() {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="gap-2 text-zinc-400 hover:text-white"
+                    className="gap-2 text-muted-foreground hover:text-white"
                   >
                     <X className="h-4 w-4" />
                     Clear
@@ -267,7 +267,7 @@ export default function SessionsPage() {
 
         {/* Results Count */}
         {filteredSessions.length > 0 && (
-          <div className="mb-4 text-sm text-zinc-400">
+          <div className="mb-4 text-sm text-muted-foreground">
             Showing {filteredSessions.length}{" "}
             {filteredSessions.length === 1 ? "session" : "sessions"}
           </div>
@@ -278,9 +278,9 @@ export default function SessionsPage() {
           <EmptyState />
         ) : filteredSessions.length === 0 ? (
           <div className="text-center py-16">
-            <Filter className="h-12 w-12 text-zinc-600 mx-auto mb-4" />
+            <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="mac-title text-lg mb-2">No sessions found</h3>
-            <p className="mac-body text-zinc-500 mb-4">Try adjusting your search or filters</p>
+            <p className="mac-body text-muted-foreground mb-4">Try adjusting your search or filters</p>
             <Button onClick={clearFilters} variant="outline" className="mac-button-outline">
               Clear Filters
             </Button>

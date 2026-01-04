@@ -136,13 +136,13 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
       exit={{ opacity: 0, y: -20 }}
       className="mb-4"
     >
-      <Card className="border-zinc-800/50 bg-zinc-950/30 backdrop-blur-sm">
+      <Card className="border-border bg-card/30 backdrop-blur-sm">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <Lightbulb className="h-4 w-4 text-purple-400" />
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-muted-foreground">
                   {new Date(item.timestamp).toLocaleString()}
                 </span>
                 {item.feedbackSubmitted && (
@@ -152,7 +152,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                   </Badge>
                 )}
               </div>
-              <CardTitle className="text-base font-medium text-zinc-100">{item.query}</CardTitle>
+              <CardTitle className="text-base font-medium text-foreground">{item.query}</CardTitle>
             </div>
           </div>
         </CardHeader>
@@ -161,7 +161,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           {/* Response Preview */}
           <div className="relative">
             <div
-              className={cn("text-sm text-zinc-300 transition-all", !expanded && "line-clamp-3")}
+              className={cn("text-sm text-foreground transition-all", !expanded && "line-clamp-3")}
             >
               {item.response}
             </div>
@@ -177,8 +177,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
           {/* Quick Actions */}
           {!item.feedbackSubmitted && (
-            <div className="flex items-center gap-2 pt-2 border-t border-zinc-800/50">
-              <span className="text-xs text-zinc-500 mr-2">Quick feedback:</span>
+            <div className="flex items-center gap-2 pt-2 border-t border-border">
+              <span className="text-xs text-muted-foreground mr-2">Quick feedback:</span>
               <Button
                 size="sm"
                 variant={feedbackType === "thumbs_up" ? "default" : "outline"}
@@ -213,7 +213,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                         "h-4 w-4 transition-colors",
                         star <= rating
                           ? "fill-yellow-400 text-yellow-400"
-                          : "text-zinc-600 hover:text-zinc-400"
+                          : "text-muted-foreground hover:text-muted-foreground"
                       )}
                     />
                   </button>
@@ -234,8 +234,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
           {/* Retrieved Documents */}
           {expanded && item.retrievedDocs.length > 0 && (
-            <div className="space-y-2 pt-4 border-t border-zinc-800/50">
-              <h4 className="text-sm font-medium text-zinc-300 flex items-center gap-2">
+            <div className="space-y-2 pt-4 border-t border-border">
+              <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-purple-400" />
                 Retrieved Documents ({item.retrievedDocs.length})
               </h4>
@@ -243,7 +243,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                 {item.retrievedDocs.map((doc, idx) => (
                   <div
                     key={doc.id}
-                    className="flex items-start gap-3 p-3 rounded-lg border border-zinc-800/50 bg-zinc-900/30"
+                    className="flex items-start gap-3 p-3 rounded-lg border border-border bg-card/30"
                   >
                     <div className="flex flex-col gap-1">
                       <Badge variant="secondary" className="text-xs">
@@ -259,12 +259,12 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                           {doc.source_type}
                         </Badge>
                         {doc.rerankScore !== undefined && (
-                          <span className="text-xs text-zinc-500">
+                          <span className="text-xs text-muted-foreground">
                             Rank: {(doc.rerankScore * 100).toFixed(0)}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-zinc-400 line-clamp-2">{doc.content}</p>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{doc.content}</p>
                     </div>
                     {!item.feedbackSubmitted && (
                       <div className="flex gap-1">
@@ -294,8 +294,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
 
           {/* Detailed Feedback */}
           {expanded && !item.feedbackSubmitted && (
-            <div className="space-y-2 pt-4 border-t border-zinc-800/50">
-              <h4 className="text-sm font-medium text-zinc-300 flex items-center gap-2">
+            <div className="space-y-2 pt-4 border-t border-border">
+              <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Edit3 className="h-4 w-4 text-purple-400" />
                 Detailed Feedback
               </h4>
@@ -303,7 +303,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                 placeholder="Provide specific corrections or suggestions..."
                 value={correction}
                 onChange={(e) => setCorrection(e.target.value)}
-                className="min-h-[100px] bg-zinc-900/50 border-zinc-800"
+                className="min-h-[100px] bg-card/50 border-border"
               />
               <Button
                 onClick={handleDetailedFeedback}
@@ -442,21 +442,21 @@ export function RLHFFeedbackTab() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-zinc-400">Loading feedback queue...</div>
+        <div className="text-muted-foreground">Loading feedback queue...</div>
       </div>
     );
   }
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-6 border-b border-zinc-800/50">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-zinc-100 flex items-center gap-2">
+            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
               <Lightbulb className="h-6 w-6 text-purple-400" />
               RLHF Feedback Queue
             </h2>
-            <p className="text-sm text-zinc-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Help improve AI responses by providing feedback
             </p>
           </div>
@@ -477,7 +477,7 @@ export function RLHFFeedbackTab() {
       <ScrollArea className="flex-1 p-6">
         <AnimatePresence>
           {feedbackQueue.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-zinc-500">
+            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
               <AlertCircle className="h-12 w-12 mb-4" />
               <p>No feedback items in queue</p>
             </div>

@@ -99,7 +99,7 @@ export function NanoBananaInfographic({
 
       {/* Loading State - Enhanced with progress info */}
       {isGenerating && (
-        <div className="w-full aspect-video bg-gradient-to-br from-zinc-900/80 to-slate-900/80 rounded-xl border border-yellow-500/20 flex flex-col items-center justify-center gap-5 p-8">
+        <div className="w-full aspect-video bg-gradient-to-br from-card/80 to-background/80 rounded-xl border border-yellow-500/20 flex flex-col items-center justify-center gap-5 p-8">
           {/* Animated spinner */}
           <div className="relative">
             {/* Outer ring */}
@@ -112,11 +112,11 @@ export function NanoBananaInfographic({
           
           {/* Status messages */}
           <div className="text-center space-y-3">
-            <p className="text-base text-zinc-200 font-medium flex items-center gap-2 justify-center">
+            <p className="text-base text-foreground font-medium flex items-center gap-2 justify-center">
               <span className="text-2xl">🍌</span>
               <span>The Betabase is creating your infographic...</span>
             </p>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               Gemini 3 Pro • Hand-drawn editorial style • 2K resolution
             </p>
             
@@ -142,7 +142,7 @@ export function NanoBananaInfographic({
 
       {/* Generated Image */}
       {imageUrl && !isGenerating && (
-        <div className="relative w-full aspect-video bg-zinc-900/30 rounded-lg border border-zinc-800 overflow-hidden">
+        <div className="relative w-full aspect-video bg-card/30 rounded-lg border border-border overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
@@ -154,7 +154,7 @@ export function NanoBananaInfographic({
 
       {/* Manual Generate Button (if auto-generate disabled) */}
       {!autoGenerate && !imageUrl && !isGenerating && (
-        <div className="w-full aspect-video bg-zinc-900/50 rounded-lg border border-dashed border-zinc-700 flex items-center justify-center">
+        <div className="w-full aspect-video bg-card/50 rounded-lg border border-dashed border-border flex items-center justify-center">
           <Button onClick={generateInfographic} variant="outline" className="gap-2">
             <ImageIcon className="w-4 h-4" />
             Generate Infographic

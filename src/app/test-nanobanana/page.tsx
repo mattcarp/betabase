@@ -39,14 +39,14 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-8">
+    <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-light text-white mb-2">
             🍌 Nano Banana Pro Test Lab
           </h1>
-          <p className="text-zinc-400">
+          <p className="text-muted-foreground">
             Testing Gemini image generation for META DEMO - the system creating its own demo slides!
           </p>
         </div>
@@ -59,7 +59,7 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
             className="h-auto py-4 flex-col items-start gap-2"
           >
             <span className="font-medium">🏢 Multi-Tenant ERD</span>
-            <span className="text-xs text-zinc-500">The Betabase architecture</span>
+            <span className="text-xs text-muted-foreground">The Betabase architecture</span>
           </Button>
           
           <Button
@@ -68,7 +68,7 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
             className="h-auto py-4 flex-col items-start gap-2"
           >
             <span className="font-medium">🔄 RLHF Loop</span>
-            <span className="text-xs text-zinc-500">Feedback cycle diagram</span>
+            <span className="text-xs text-muted-foreground">Feedback cycle diagram</span>
           </Button>
           
           <Button
@@ -77,20 +77,20 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
             className="h-auto py-4 flex-col items-start gap-2"
           >
             <span className="font-medium">🛡️ Self-Healing</span>
-            <span className="text-xs text-zinc-500">4-step process + tiers</span>
+            <span className="text-xs text-muted-foreground">4-step process + tiers</span>
           </Button>
         </div>
 
         {/* Custom Prompt */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-300">
+          <label className="text-sm font-medium text-muted-foreground">
             Or write your own prompt:
           </label>
           <Textarea
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             placeholder="Create a hand-drawn style infographic showing..."
-            className="min-h-[120px] bg-zinc-900 border-zinc-800 text-zinc-200"
+            className="min-h-[120px] bg-card border-border text-foreground"
           />
           <Button
             onClick={() => setActivePrompt(customPrompt)}
@@ -125,10 +125,10 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
 
             {/* Prompt Used (for reference) */}
             <details className="text-xs">
-              <summary className="text-zinc-500 cursor-pointer hover:text-zinc-400">
+              <summary className="text-muted-foreground cursor-pointer hover:text-muted-foreground">
                 Show prompt used
               </summary>
-              <pre className="mt-2 p-4 bg-zinc-900 rounded border border-zinc-800 text-zinc-400 whitespace-pre-wrap">
+              <pre className="mt-2 p-4 bg-card rounded border border-border text-muted-foreground whitespace-pre-wrap">
                 {activePrompt}
               </pre>
             </details>
@@ -137,24 +137,24 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
 
         {/* Instructions */}
         {!activePrompt && (
-          <div className="p-6 bg-zinc-900/50 rounded-lg border border-zinc-800">
+          <div className="p-6 bg-card/50 rounded-lg border border-border">
             <h3 className="text-lg font-medium text-white mb-3">🎬 How To Use For Demo:</h3>
-            <ol className="space-y-2 text-sm text-zinc-300">
+            <ol className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <strong className="text-zinc-200">1. Test the 3 demo prompts above</strong> - Make sure they generate beautiful infographics
+                <strong className="text-foreground">1. Test the 3 demo prompts above</strong> - Make sure they generate beautiful infographics
               </li>
               <li>
-                <strong className="text-zinc-200">2. During recording:</strong> Ask the system a question, then say:
-                <code className="ml-2 px-2 py-1 bg-zinc-800 rounded text-yellow-400">
+                <strong className="text-foreground">2. During recording:</strong> Ask the system a question, then say:
+                <code className="ml-2 px-2 py-1 bg-muted rounded text-yellow-400">
                   "I'm recording a demo - create an infographic of that"
                 </code>
               </li>
               <li>
-                <strong className="text-zinc-200">3. Watch it generate:</strong> 3-5 second spinner, then BOOM - beautiful hand-drawn infographic!
+                <strong className="text-foreground">3. Watch it generate:</strong> 3-5 second spinner, then BOOM - beautiful hand-drawn infographic!
               </li>
               <li>
-                <strong className="text-zinc-200">4. META MOMENT:</strong> Say to your audience:
-                <em className="ml-2 text-zinc-400">
+                <strong className="text-foreground">4. META MOMENT:</strong> Say to your audience:
+                <em className="ml-2 text-muted-foreground">
                   "The system just created its own demo slide. That's meta, right?"
                 </em>
               </li>

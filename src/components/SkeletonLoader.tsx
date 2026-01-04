@@ -10,7 +10,7 @@ interface SkeletonProps {
 export const Skeleton: React.FC<SkeletonProps> = ({ className, animate = true, style }) => (
   <div
     className={cn(
-      "bg-gradient-to-r from-gray-700/20 via-gray-600/30 to-gray-700/20 rounded",
+      "bg-gradient-to-r from-muted/20 via-muted/30 to-muted/20 rounded",
       animate && "animate-pulse",
       className
     )}
@@ -79,7 +79,7 @@ export const AIInsightsSkeleton: React.FC = () => (
 
     {/* Insight cards */}
     {Array.from({ length: 3 }).map((_, i) => (
-      <div key={i} className="space-y-3 p-4 border border-gray-700/30 rounded-lg">
+      <div key={i} className="space-y-3 p-4 border border-border/30 rounded-lg">
         <div className="flex items-center justify-between">
           <Skeleton className="h-4 w-20" />
           <Skeleton className="h-4 w-12" />
@@ -104,7 +104,7 @@ export const SystemMonitorSkeleton: React.FC = () => (
           <Skeleton className="h-4 w-20" />
           <Skeleton className="h-4 w-12" />
         </div>
-        <div className="w-full bg-gray-700/20 rounded-full h-2">
+        <div className="w-full bg-muted/20 rounded-full h-2">
           <Skeleton
             className="h-2 rounded-full bg-[var(--jarvis-success)]/40"
             style={{ width: `${Math.random() * 60 + 20}%` }}
@@ -221,7 +221,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
             fill="none"
             stroke="currentColor"
             strokeWidth="4"
-            className="text-gray-700/30"
+            className="text-muted/30"
           />
           <circle
             cx="32"
@@ -256,7 +256,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 
       {/* Progress bar */}
       {progress !== undefined && (
-        <div className="w-full bg-gray-700/30 rounded-full h-1">
+        <div className="w-full bg-muted/30 rounded-full h-1">
           <div
             className="bg-[var(--jarvis-primary)] h-1 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}

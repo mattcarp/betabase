@@ -240,10 +240,10 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="absolute -right-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+        className="absolute -right-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border/50 hover:bg-muted transition-colors group"
         aria-label="Toggle sidebar"
       >
-        <ChevronLeft className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
+        <ChevronLeft className="h-4 w-4 text-muted-foreground group-hover:text-white transition-colors" />
       </button>
 
       {/* Header with New Conversation Button */}

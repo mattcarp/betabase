@@ -928,8 +928,8 @@ export function AiSdkChatPanel({
       let outputTokens = 0;
 
       messages.forEach((msg) => {
-        const content = typeof msg.content === "string" ? msg.content : JSON.stringify(msg.content);
-        const estimatedTokens = Math.ceil(content.length / 4);
+        const content = typeof msg.content === "string" ? msg.content : (msg.content ? JSON.stringify(msg.content) : "");
+        const estimatedTokens = Math.ceil((content?.length || 0) / 4);
 
         if (msg.role === "user") {
           inputTokens += estimatedTokens;

@@ -13,6 +13,11 @@ import { Alert, AlertDescription } from "../ui/alert";
 import { motion } from "framer-motion";
 import { InfographicDisplay, type InfographicData } from "./infographic-display";
 import { Q8Button, Q8FeedbackContext } from "../ui/Q8Button";
+import { DDPDisplay } from "../ddp/DDPDisplay";
+import { getTrackOffsets, getLeadoutOffset } from "../../services/ddpParser";
+import { lookupFromDDP, calculateDiscId } from "../../services/musicBrainz";
+import type { ParsedDDP } from "../../types/ddp";
+import type { MusicBrainzLookupResult } from "../../services/musicBrainz";
 
 // AI Elements imports - MAXIMIZE USAGE!
 import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
@@ -137,6 +142,56 @@ export function EnhancedChatPanelWithAIElements({
     >
   >({});
   const pendingQuestionRef = useRef<{ id: string; question: string } | null>(null);
+
+  // DDP state: parsed DDP and MusicBrainz lookup
+  const [parsedDDP, setParsedDDP] = useState<ParsedDDP | null>(null);
+  const [ddpMusicBrainz, setDdpMusicBrainz] = useState<MusicBrainzLookupResult | null>(null);
+  const [isLoadingMusicBrainz, setIsLoadingMusicBrainz] = useState(false);
+
+  // Handle DDP detection from file upload
+  const handleDDPDetected = useCallback(async (ddp: ParsedDDP) => {
+    setParsedDDP(ddp);
+    setDdpMusicBrainz(null);
+
+    // Look up MusicBrainz in the background
+    setIsLoadingMusicBrainz(true);
+    try {
+      // Calculate disc ID if we have PQ data
+      let discId: string | undefined;
+      if (ddp.pqEntries.length > 0) {
+        const offsets = getTrackOffsets(ddp.pqEntries);
+        const leadout = getLeadoutOffset(ddp.pqEntries);
+        if (offsets.length > 0 && leadout > 0) {
+          discId = await calculateDiscId(1, offsets.length, leadout, offsets);
+        }
+      }
+
+      // Collect ISRCs from tracks
+      const isrcs = ddp.tracks
+        .map(t => t.isrc)
+        .filter((isrc): isrc is string => !!isrc);
+
+      const mbResult = await lookupFromDDP({
+        discId,
+        barcode: ddp.summary.upc,
+        isrcs,
+        artist: ddp.cdText?.albumPerformer,
+        title: ddp.cdText?.albumTitle,
+      });
+
+      setDdpMusicBrainz(mbResult);
+    } catch (error) {
+      console.error('MusicBrainz lookup failed:', error);
+    } finally {
+      setIsLoadingMusicBrainz(false);
+    }
+  }, []);
+
+  // Clear DDP display
+  const clearDDP = useCallback(() => {
+    setParsedDDP(null);
+    setDdpMusicBrainz(null);
+  }, []);
 
   // Generate infographic for a message (runs in parallel with chat)
   const generateInfographicForMessage = useCallback(
@@ -269,6 +324,7 @@ export function EnhancedChatPanelWithAIElements({
     setShowSuggestions(true);
     setInfographics({});
     pendingQuestionRef.current = null;
+    clearDDP();
   };
 
   const handleExport = () => {
@@ -516,6 +572,22 @@ export function EnhancedChatPanelWithAIElements({
               </div>
             )}
 
+            {/* DDP Display - shows parsed DDP data from folder upload */}
+            {parsedDDP && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6"
+              >
+                <DDPDisplay
+                  ddp={parsedDDP}
+                  musicBrainz={ddpMusicBrainz}
+                  isLoadingMusicBrainz={isLoadingMusicBrainz}
+                  onDismiss={clearDDP}
+                />
+              </motion.div>
+            )}
+
             {error && (
               <Alert variant="destructive" className="mt-4">
                 <AlertCircle className="h-4 w-4" />
@@ -556,10 +628,11 @@ export function EnhancedChatPanelWithAIElements({
               isLoading={isLoading}
               placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
               className="w-full"
-              allowAttachments={false}
+              allowAttachments={true}
               allowVoice={false}
               suggestions={showSuggestions ? suggestions : []}
               onSuggestionClick={handleSuggestionClick}
+              onDDPDetected={handleDDPDetected}
             />
           </div>
         </CardFooter>

@@ -153,13 +153,13 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
   };
 
   return (
-    <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
+    <Card className="h-full flex flex-col bg-card/50 border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-zinc-100">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Activity className="h-5 w-5 text-purple-400" />
           RAG Pipeline Debugger
         </CardTitle>
-        <CardDescription className="text-zinc-400">
+        <CardDescription className="text-muted-foreground">
           Trace the full retrieval, re-ranking, and generation pipeline
         </CardDescription>
       </CardHeader>
@@ -172,7 +172,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowRecent(true)}
-              className="bg-zinc-900/50 border-zinc-800 pr-10"
+              className="bg-card/50 border-border pr-10"
             />
             <Button
               variant="ghost"
@@ -188,8 +188,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
 
             {/* Recent items dropdown */}
             {showRecent && recentItems.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
-                <div className="p-2 border-b border-zinc-700 text-xs text-zinc-400 flex items-center gap-2">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
+                <div className="p-2 border-b border-border text-xs text-muted-foreground flex items-center gap-2">
                   <Clock className="h-3 w-3" />
                   Recent Feedback Items
                   {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
@@ -202,20 +202,20 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                       loadDebugInfo(item.id);
                     }}
                     className={cn(
-                      "w-full text-left px-3 py-2 hover:bg-zinc-800 transition-colors border-b border-zinc-800/50 last:border-0",
-                      selectedId === item.id && "bg-zinc-800"
+                      "w-full text-left px-3 py-2 hover:bg-muted transition-colors border-b border-border/50 last:border-0",
+                      selectedId === item.id && "bg-muted"
                     )}
                   >
                     <div className="flex items-center gap-2">
                       {item.thumbs_up === true && <ThumbsUp className="h-3 w-3 text-green-400" />}
                       {item.thumbs_up === false && <ThumbsDown className="h-3 w-3 text-red-400" />}
-                      <span className="text-xs text-zinc-300 truncate flex-1">
+                      <span className="text-xs text-muted-foreground truncate flex-1">
                         {item.query?.substring(0, 60)}...
                       </span>
-                      <span className="text-xs text-zinc-500">{formatTimeAgo(item.created_at)}</span>
+                      <span className="text-xs text-muted-foreground">{formatTimeAgo(item.created_at)}</span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <code className="text-[10px] text-zinc-500 font-mono">{item.id.substring(0, 8)}...</code>
+                      <code className="text-[10px] text-muted-foreground font-mono">{item.id.substring(0, 8)}...</code>
                       {item.rating && (
                         <Badge variant="outline" className="text-[10px] h-4">
                           {item.rating}/5
@@ -273,14 +273,14 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
             <TabsContent value="overview" className="flex-1">
               <ScrollArea className="h-[500px]">
                 <div className="space-y-4">
-                  <Card className="bg-zinc-900/30 border-zinc-800">
+                  <Card className="bg-card/30 border-border">
                     <CardHeader>
-                      <CardTitle className="text-sm text-zinc-300">Query Information</CardTitle>
+                      <CardTitle className="text-sm text-muted-foreground">Query Information</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <div>
-                        <span className="text-xs text-zinc-500">Original Query:</span>
-                        <p className="text-sm text-zinc-200 mt-1">{debugData.query}</p>
+                        <span className="text-xs text-muted-foreground">Original Query:</span>
+                        <p className="text-sm text-foreground mt-1">{debugData.query}</p>
                       </div>
                       <div className="flex gap-2 mt-2">
                         <Badge
@@ -290,7 +290,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                               ? "bg-purple-500/20 text-purple-300"
                               : debugData.strategy === "context-aware"
                                 ? "bg-blue-500/20 text-blue-300"
-                                : "bg-gray-500/20 text-gray-300"
+                                : "bg-muted/20 text-foreground"
                           )}
                         >
                           {debugData.strategy} RAG
@@ -307,31 +307,31 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-zinc-900/30 border-zinc-800">
+                  <Card className="bg-card/30 border-border">
                     <CardHeader>
-                      <CardTitle className="text-sm text-zinc-300">Pipeline Metrics</CardTitle>
+                      <CardTitle className="text-sm text-muted-foreground">Pipeline Metrics</CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4">
                       <div>
-                        <span className="text-xs text-zinc-500">Initial Documents:</span>
+                        <span className="text-xs text-muted-foreground">Initial Documents:</span>
                         <p className="text-lg font-bold text-purple-400">
                           {debugData.retrievedDocs.length}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs text-zinc-500">After Re-ranking:</span>
+                        <span className="text-xs text-muted-foreground">After Re-ranking:</span>
                         <p className="text-lg font-bold text-blue-400">
                           {debugData.rerankedDocs.length}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs text-zinc-500">Agent Steps:</span>
+                        <span className="text-xs text-muted-foreground">Agent Steps:</span>
                         <p className="text-lg font-bold text-cyan-400">
                           {debugData.agentSteps.length}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs text-zinc-500">History Turns:</span>
+                        <span className="text-xs text-muted-foreground">History Turns:</span>
                         <p className="text-lg font-bold text-green-400">
                           {debugData.sessionHistory.length}
                         </p>
@@ -347,10 +347,10 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                 <div className="space-y-3">
                   {debugData.retrievedDocs.length > 0 ? (
                     debugData.retrievedDocs.map((doc, idx) => (
-                      <Card key={idx} className="bg-zinc-900/30 border-zinc-800">
+                      <Card key={idx} className="bg-card/30 border-border">
                         <CardHeader>
                           <div className="flex items-center justify-between">
-                            <CardTitle className="text-sm text-zinc-300">
+                            <CardTitle className="text-sm text-muted-foreground">
                               Document #{idx + 1}
                             </CardTitle>
                             <Badge variant="outline" className="text-xs">
@@ -359,14 +359,14 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-xs text-zinc-400 line-clamp-3">
+                          <p className="text-xs text-muted-foreground line-clamp-3">
                             {doc.content?.substring(0, 200)}...
                           </p>
                         </CardContent>
                       </Card>
                     ))
                   ) : (
-                    <p className="text-zinc-500 text-center py-8">No retrieval data available</p>
+                    <p className="text-muted-foreground text-center py-8">No retrieval data available</p>
                   )}
                 </div>
               </ScrollArea>
@@ -377,10 +377,10 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                 <div className="space-y-3">
                   {debugData.rerankedDocs.length > 0 ? (
                     debugData.rerankedDocs.map((doc, idx) => (
-                      <Card key={idx} className="bg-zinc-900/30 border-zinc-800">
+                      <Card key={idx} className="bg-card/30 border-border">
                         <CardHeader>
                           <div className="flex items-center justify-between">
-                            <CardTitle className="text-sm text-zinc-300">
+                            <CardTitle className="text-sm text-muted-foreground">
                               Document #{idx + 1}
                             </CardTitle>
                             <div className="flex gap-2">
@@ -394,7 +394,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-xs text-zinc-400 line-clamp-3">
+                          <p className="text-xs text-muted-foreground line-clamp-3">
                             {doc.content?.substring(0, 200)}...
                           </p>
                           {doc.rlhfBoost && (
@@ -406,7 +406,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                       </Card>
                     ))
                   ) : (
-                    <p className="text-zinc-500 text-center py-8">No re-ranking data available</p>
+                    <p className="text-muted-foreground text-center py-8">No re-ranking data available</p>
                   )}
                 </div>
               </ScrollArea>
@@ -417,20 +417,20 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                 <div className="space-y-3">
                   {debugData.agentSteps.length > 0 ? (
                     debugData.agentSteps.map((step, idx) => (
-                      <Card key={idx} className="bg-zinc-900/30 border-zinc-800">
+                      <Card key={idx} className="bg-card/30 border-border">
                         <CardHeader>
-                          <CardTitle className="text-sm text-zinc-300 flex items-center gap-2">
+                          <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                             <GitBranch className="h-4 w-4 text-cyan-400" />
                             Step {idx + 1}: {step.action}
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
                           <div>
-                            <span className="text-xs text-zinc-500">Reasoning:</span>
-                            <p className="text-xs text-zinc-300 mt-1">{step.reasoningText}</p>
+                            <span className="text-xs text-muted-foreground">Reasoning:</span>
+                            <p className="text-xs text-muted-foreground mt-1">{step.reasoningText}</p>
                           </div>
                           <div>
-                            <span className="text-xs text-zinc-500">Confidence:</span>
+                            <span className="text-xs text-muted-foreground">Confidence:</span>
                             <Badge className="ml-2 text-xs">
                               {(step.confidence * 100).toFixed(0)}%
                             </Badge>
@@ -440,8 +440,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                     ))
                   ) : (
                     <div className="text-center py-8">
-                      <Lightbulb className="h-12 w-12 mx-auto text-zinc-600 mb-2" />
-                      <p className="text-zinc-500">No agent steps (standard retrieval used)</p>
+                      <Lightbulb className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
+                      <p className="text-muted-foreground">No agent steps (standard retrieval used)</p>
                     </div>
                   )}
                 </div>
@@ -450,12 +450,12 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
 
             <TabsContent value="context" className="flex-1">
               <ScrollArea className="h-[500px]">
-                <Card className="bg-zinc-900/30 border-zinc-800">
+                <Card className="bg-card/30 border-border">
                   <CardHeader>
-                    <CardTitle className="text-sm text-zinc-300">Session Context</CardTitle>
+                    <CardTitle className="text-sm text-muted-foreground">Session Context</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <pre className="text-xs text-zinc-400 overflow-x-auto">
+                    <pre className="text-xs text-muted-foreground overflow-x-auto">
                       {JSON.stringify(debugData.sessionHistory, null, 2)}
                     </pre>
                   </CardContent>
@@ -467,8 +467,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
 
         {/* Empty state */}
         {!debugData && !loading && (
-          <div className="flex-1 flex flex-col items-center justify-center text-center text-zinc-500">
-            <FileText className="h-16 w-16 mb-4 text-zinc-700" />
+          <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground">
+            <FileText className="h-16 w-16 mb-4 text-muted-foreground" />
             <p className="text-lg mb-2">No debug session loaded</p>
             <p className="text-sm">Enter a message ID above to trace its RAG pipeline</p>
           </div>

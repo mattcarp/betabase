@@ -247,7 +247,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
       case "skipped":
         return <AlertTriangle className="h-4 w-4 text-amber-600" />;
       default:
-        return <Clock className="h-4 w-4 text-slate-500" />;
+        return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

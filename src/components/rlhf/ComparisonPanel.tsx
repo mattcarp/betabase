@@ -156,12 +156,12 @@ export function ComparisonPanel({
           onClick={() => setSelectedPreference(side)}
           className={cn(
             "cursor-pointer transition-all h-full",
-            "bg-zinc-900/50 border-2",
+            "bg-card/50 border-2",
             isSelected
               ? "border-purple-500 ring-2 ring-purple-500/20"
               : isHovered
-                ? "border-zinc-600"
-                : "border-zinc-800",
+                ? "border-border"
+                : "border-border",
             isSelected && "shadow-lg shadow-purple-500/10"
           )}
         >
@@ -174,12 +174,12 @@ export function ComparisonPanel({
                     "text-lg font-bold",
                     isSelected
                       ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
-                      : "bg-zinc-800 text-zinc-400 border-zinc-700"
+                      : "bg-muted text-muted-foreground border-border"
                   )}
                 >
                   {side}
                 </Badge>
-                {model && <span className="text-xs text-zinc-500 font-normal">{model}</span>}
+                {model && <span className="text-xs text-muted-foreground font-normal">{model}</span>}
               </CardTitle>
 
               <AnimatePresence>
@@ -192,7 +192,7 @@ export function ComparisonPanel({
             </div>
 
             {metadata && (
-              <div className="flex gap-3 text-xs text-zinc-500 mt-2">
+              <div className="flex gap-3 text-xs text-muted-foreground mt-2">
                 {metadata.sources !== undefined && <span>{metadata.sources} sources</span>}
                 {metadata.latencyMs !== undefined && <span>{metadata.latencyMs}ms</span>}
               </div>
@@ -204,7 +204,7 @@ export function ComparisonPanel({
               className={cn(
                 "prose prose-sm prose-invert max-w-none",
                 "max-h-[400px] overflow-y-auto",
-                "text-zinc-300"
+                "text-foreground"
               )}
             >
               <Response>{content}</Response>
@@ -223,8 +223,8 @@ export function ComparisonPanel({
         className="flex flex-col items-center justify-center py-16"
       >
         <CheckCircle className="h-16 w-16 text-green-400 mb-4" />
-        <h3 className="text-xl font-medium text-zinc-100">Preference Recorded!</h3>
-        <p className="text-sm text-zinc-400 mt-2">Loading next comparison...</p>
+        <h3 className="text-xl font-medium text-foreground">Preference Recorded!</h3>
+        <p className="text-sm text-muted-foreground mt-2">Loading next comparison...</p>
       </motion.div>
     );
   }
@@ -235,9 +235,9 @@ export function ComparisonPanel({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Sparkles className="h-5 w-5 text-purple-400" />
-          <h2 className="text-lg font-medium text-zinc-100">Compare Responses</h2>
+          <h2 className="text-lg font-medium text-foreground">Compare Responses</h2>
           {queuePosition && (
-            <Badge variant="outline" className="text-zinc-400 border-zinc-700">
+            <Badge variant="outline" className="text-muted-foreground border-border">
               {queuePosition.current} of {queuePosition.total}
             </Badge>
           )}
@@ -247,7 +247,7 @@ export function ComparisonPanel({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-zinc-500">
+                <Button variant="ghost" size="sm" className="text-muted-foreground">
                   <Keyboard className="h-4 w-4 mr-1" />
                   Shortcuts
                 </Button>
@@ -256,23 +256,23 @@ export function ComparisonPanel({
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Select A</span>
-                    <kbd className="px-2 py-0.5 bg-zinc-700 rounded">A / Left Arrow</kbd>
+                    <kbd className="px-2 py-0.5 bg-muted rounded">A / Left Arrow</kbd>
                   </div>
                   <div className="flex justify-between">
                     <span>Select B</span>
-                    <kbd className="px-2 py-0.5 bg-zinc-700 rounded">B / Right Arrow</kbd>
+                    <kbd className="px-2 py-0.5 bg-muted rounded">B / Right Arrow</kbd>
                   </div>
                   <div className="flex justify-between">
                     <span>Tie</span>
-                    <kbd className="px-2 py-0.5 bg-zinc-700 rounded">T / =</kbd>
+                    <kbd className="px-2 py-0.5 bg-muted rounded">T / =</kbd>
                   </div>
                   <div className="flex justify-between">
                     <span>Submit</span>
-                    <kbd className="px-2 py-0.5 bg-zinc-700 rounded">Enter</kbd>
+                    <kbd className="px-2 py-0.5 bg-muted rounded">Enter</kbd>
                   </div>
                   <div className="flex justify-between">
                     <span>Skip</span>
-                    <kbd className="px-2 py-0.5 bg-zinc-700 rounded">S</kbd>
+                    <kbd className="px-2 py-0.5 bg-muted rounded">S</kbd>
                   </div>
                 </div>
               </TooltipContent>
@@ -282,13 +282,13 @@ export function ComparisonPanel({
       </div>
 
       {/* Query Display */}
-      <Card className="bg-zinc-800/30 border-zinc-700/50">
+      <Card className="bg-muted/30 border-border/50">
         <CardContent className="py-4">
           <div className="flex items-start gap-3">
             <MessageSquare className="h-5 w-5 text-blue-400 mt-0.5" />
             <div>
-              <span className="text-xs text-zinc-500 font-medium block mb-1">USER QUERY</span>
-              <p className="text-zinc-200">{comparison.query}</p>
+              <span className="text-xs text-muted-foreground font-medium block mb-1">USER QUERY</span>
+              <p className="text-foreground">{comparison.query}</p>
             </div>
           </div>
         </CardContent>
@@ -310,8 +310,8 @@ export function ComparisonPanel({
 
         {/* VS Divider (visible on desktop) */}
         <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-          <div className="bg-zinc-900 border border-zinc-700 rounded-full p-2">
-            <span className="text-zinc-500 font-medium text-sm">VS</span>
+          <div className="bg-card border border-border rounded-full p-2">
+            <span className="text-muted-foreground font-medium text-sm">VS</span>
           </div>
         </div>
 
@@ -336,7 +336,7 @@ export function ComparisonPanel({
             onClick={() => setSelectedPreference("A")}
             className={cn(
               "min-w-[120px]",
-              selectedPreference === "A" ? "bg-purple-600 hover:bg-purple-500" : "border-zinc-700"
+              selectedPreference === "A" ? "bg-purple-600 hover:bg-purple-500" : "border-border"
             )}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -348,7 +348,7 @@ export function ComparisonPanel({
             onClick={() => setSelectedPreference("tie")}
             className={cn(
               "min-w-[100px]",
-              selectedPreference === "tie" ? "bg-zinc-600 hover:bg-zinc-500" : "border-zinc-700"
+              selectedPreference === "tie" ? "bg-muted hover:bg-muted/80" : "border-border"
             )}
           >
             <Equal className="h-4 w-4 mr-2" />
@@ -360,7 +360,7 @@ export function ComparisonPanel({
             onClick={() => setSelectedPreference("B")}
             className={cn(
               "min-w-[120px]",
-              selectedPreference === "B" ? "bg-purple-600 hover:bg-purple-500" : "border-zinc-700"
+              selectedPreference === "B" ? "bg-purple-600 hover:bg-purple-500" : "border-border"
             )}
           >
             Prefer B
@@ -383,7 +383,7 @@ export function ComparisonPanel({
                 placeholder={`Why do you prefer ${
                   selectedPreference === "tie" ? "neither (tie)" : `Response ${selectedPreference}`
                 }? (optional but helpful)`}
-                className="bg-zinc-800/50 border-zinc-700 text-zinc-200 placeholder:text-zinc-500"
+                className="bg-muted/50 border-border text-foreground placeholder:text-muted-foreground"
               />
             </motion.div>
           )}
@@ -392,7 +392,7 @@ export function ComparisonPanel({
         {/* Action Buttons */}
         <div className="flex items-center gap-3">
           {onSkip && (
-            <Button variant="ghost" onClick={onSkip} className="text-zinc-500 hover:text-zinc-300">
+            <Button variant="ghost" onClick={onSkip} className="text-muted-foreground hover:text-foreground">
               <SkipForward className="h-4 w-4 mr-1" />
               Skip
             </Button>

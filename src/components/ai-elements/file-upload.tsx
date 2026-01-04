@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Action } from "./actions";
+import { detectDDP, parseDDP } from "../../services/ddpParser";
+import type { ParsedDDP } from "../../types/ddp";
 
 interface FileUploadItem {
   file: File;
@@ -33,6 +35,7 @@ interface FileUploadProps {
   className?: string;
   onUploadComplete?: (fileId: string, filename: string) => void;
   onUploadError: (error: string) => void;
+  onDDPDetected?: (ddp: ParsedDDP) => void; // Callback for DDP folder detection
   assistantId?: string;
   maxFileSize?: number; // in bytes
   acceptedFileTypes?: string[];
@@ -59,6 +62,7 @@ export function FileUpload({
   className,
   onUploadComplete,
   onUploadError,
+  onDDPDetected,
   maxFileSize = 20 * 1024 * 1024, // 20MB default
   acceptedFileTypes = [
     ".pdf",
@@ -77,16 +81,40 @@ export function FileUpload({
 }: FileUploadProps) {
   const [uploadQueue, setUploadQueue] = useState<FileUploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [isParsingDDP, setIsParsingDDP] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = useCallback(
-    (files: FileList | null) => {
+    async (files: FileList | null, inputElement?: HTMLInputElement) => {
       if (!files || files.length === 0) return;
+
+      const filesArray = Array.from(files);
+
+      // Check if this looks like a DDP folder
+      if (onDDPDetected) {
+        const detection = detectDDP(filesArray);
+        if (detection.isDDP) {
+          // It's a DDP - parse it instead of uploading
+          setIsParsingDDP(true);
+          try {
+            const parsed = await parseDDP(filesArray);
+            onDDPDetected(parsed);
+          } catch (error) {
+            console.error('Failed to parse DDP:', error);
+            toast.error('Failed to parse DDP folder');
+          } finally {
+            setIsParsingDDP(false);
+            // Reset input
+            if (inputElement) inputElement.value = '';
+          }
+          return;
+        }
+      }
 
       const newFiles: FileUploadItem[] = [];
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      for (let i = 0; i < filesArray.length; i++) {
+        const file = filesArray[i];
 
         // Validate file size
         if (file.size > maxFileSize) {
@@ -108,8 +136,11 @@ export function FileUpload({
         // Auto-start upload
         uploadFiles(newFiles);
       }
+
+      // Reset input
+      if (inputElement) inputElement.value = '';
     },
-    [maxFileSize]
+    [maxFileSize, onDDPDetected]
   );
 
   const uploadFiles = async (files: FileUploadItem[]) => {
@@ -195,21 +226,23 @@ export function FileUpload({
   if (compact) {
     return (
       <>
+        {/* File input - auto-detects DDP when multiple files selected */}
         <input
           ref={fileInputRef}
           type="file"
           multiple
           accept={acceptedFileTypes.join(",")}
-          onChange={(e) => handleFileSelect(e.target.files)}
+          onChange={(e) => handleFileSelect(e.target.files, e.target)}
           className="hidden"
           suppressHydrationWarning
         />
+        {/* Single file upload button - handles both regular files and DDP */}
         <Action
           onClick={() => fileInputRef.current?.click()}
-          tooltip="Upload files to knowledge base"
-          disabled={isUploading}
+          tooltip={onDDPDetected ? "Upload files (DDP auto-detected)" : "Upload files to knowledge base"}
+          disabled={isUploading || isParsingDDP}
         >
-          {isUploading ? (
+          {isUploading || isParsingDDP ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             <Paperclip className="h-4 w-4" />
@@ -240,12 +273,10 @@ export function FileUpload({
                   {item.status === "error" && <AlertCircle className="h-3 w-3 text-red-500" />}
                   <span className="text-xs flex-1 truncate">{item.file.name}</span>
                   <Button
-                    className="mac-button mac-button-outline"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
-                    className="h-5 w-5 p-0"
+                    className="h-5 w-5 p-0 mac-button mac-button-outline"
                   >
                     <X className="h-3 w-3" />
                   </Button>
@@ -293,10 +324,7 @@ export function FileUpload({
           </div>
 
           <div>
-            <h3
-              className="mac-title"
-              className="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]"
-            >
+            <h3 className="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]">
               Upload to Knowledge Base
             </h3>
             <p className="text-sm text-[var(--mac-text-secondary)] mb-4 font-light">
@@ -396,12 +424,10 @@ export function FileUpload({
                   </div>
 
                   <Button
-                    className="mac-button mac-button-outline"
                     variant="ghost"
-                    className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => removeFile(item.id)}
-                    className="h-8 w-8 p-0"
+                    className="h-8 w-8 p-0 mac-button mac-button-outline"
                   >
                     <X className="h-4 w-4" />
                   </Button>

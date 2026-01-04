@@ -164,7 +164,7 @@ export function DashboardTab() {
               {dynamicAppTrends.map((app: any, i: number) => (
                 <div key={i} className="flex items-center justify-between group border-b border-white/5 pb-3">
                   <div className="space-y-1">
-                    <p className="text-[11px] font-light text-zinc-400 uppercase tracking-wider">{app.name}</p>
+                    <p className="text-[11px] font-light text-muted-foreground uppercase tracking-wider">{app.name}</p>
                     <div className="flex items-center gap-2">
                       <span className="text-2xl font-extralight tracking-tighter tabular-nums">
                         {app.current || app.data[app.data.length - 1]}
@@ -191,11 +191,11 @@ export function DashboardTab() {
             </div>
             <div className="mt-6 flex justify-between items-center">
               <div className="flex gap-4">
-                <div className="text-[10px] text-zinc-500 flex items-center gap-1.5">
+                <div className="text-[10px] text-muted-foreground flex items-center gap-1.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-[var(--mac-primary-blue-400)]" />
                   Primary App
                 </div>
-                <div className="text-[10px] text-zinc-500 flex items-center gap-1.5">
+                <div className="text-[10px] text-muted-foreground flex items-center gap-1.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-[var(--mac-data-teal)]" />
                   Secondary Mesh
                 </div>
@@ -252,7 +252,7 @@ export function DashboardTab() {
               </CardTitle>
               <CardDescription className="text-xs uppercase tracking-widest opacity-60">Daily indexing volume vs average quality</CardDescription>
             </div>
-            <div className="flex items-center gap-6 text-[10px] uppercase tracking-widest text-zinc-500 font-light">
+            <div className="flex items-center gap-6 text-[10px] uppercase tracking-widest text-muted-foreground font-light">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-[var(--mac-data-coral)]" />
                 Processed Chunks
@@ -339,11 +339,11 @@ function SummaryTableCard({
           )}>
             {value}
           </h4>
-          <p className="text-[10px] text-zinc-500 font-light uppercase tracking-widest truncate">{subValue}</p>
+          <p className="text-[10px] text-muted-foreground font-light uppercase tracking-widest truncate">{subValue}</p>
         </div>
         <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-          <span className="text-[9px] text-zinc-600 font-light uppercase tracking-[0.2em]">{status}</span>
-          <div className="h-1 w-10 bg-zinc-800 rounded-full overflow-hidden">
+          <span className="text-[9px] text-muted-foreground font-light uppercase tracking-[0.2em]">{status}</span>
+          <div className="h-1 w-10 bg-muted rounded-full overflow-hidden">
             <div 
               className={cn(
                 "h-full rounded-full transition-all duration-1000 ease-out",

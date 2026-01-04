@@ -99,7 +99,7 @@ export function ConfidenceBadge({
       <Icon className={cn("h-3.5 w-3.5", iconClass)} />
       <span>{percentage}%</span>
       {sourceCount !== undefined && (
-        <span className="text-zinc-500 text-[10px] ml-1">
+        <span className="text-muted-foreground text-[10px] ml-1">
           ({sourceCount} source{sourceCount !== 1 ? "s" : ""})
         </span>
       )}
@@ -112,12 +112,12 @@ export function ConfidenceBadge({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{badge}</TooltipTrigger>
-        <TooltipContent side="top" className="max-w-xs bg-zinc-900 border-zinc-700">
+        <TooltipContent side="top" className="max-w-xs bg-card border-border">
           <div className="space-y-1">
             <div className={cn("font-medium", textClass)}>{label}</div>
-            <p className="text-xs text-zinc-400">{description}</p>
+            <p className="text-xs text-muted-foreground">{description}</p>
             {strategy && (
-              <div className="text-xs text-zinc-500 pt-1 border-t border-zinc-700 mt-2">
+              <div className="text-xs text-muted-foreground pt-1 border-t border-border mt-2">
                 Strategy:{" "}
                 {strategy === "context-aware"
                   ? "Context-Aware"

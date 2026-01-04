@@ -164,10 +164,10 @@ export function CuratorWorkspaceContainer({
   // Loading state
   if (isLoading) {
     return (
-      <Card className={`bg-zinc-900/50 border-zinc-800 ${className}`}>
+      <Card className={`bg-card/50 border-border ${className}`}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <Loader2 className="h-10 w-10 text-purple-400 animate-spin mb-4" />
-          <p className="text-zinc-400">Loading annotation queue...</p>
+          <p className="text-muted-foreground">Loading annotation queue...</p>
         </CardContent>
       </Card>
     );
@@ -176,12 +176,12 @@ export function CuratorWorkspaceContainer({
   // Error state
   if (error && queue.length === 0) {
     return (
-      <Card className={`bg-zinc-900/50 border-zinc-800 ${className}`}>
+      <Card className={`bg-card/50 border-border ${className}`}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <AlertCircle className="h-10 w-10 text-red-400 mb-4" />
-          <p className="text-zinc-200 font-medium mb-2">Failed to load queue</p>
-          <p className="text-zinc-500 text-sm mb-4">{error}</p>
-          <Button variant="outline" onClick={fetchQueue} className="border-zinc-700 text-zinc-300">
+          <p className="text-foreground font-medium mb-2">Failed to load queue</p>
+          <p className="text-muted-foreground text-sm mb-4">{error}</p>
+          <Button variant="outline" onClick={fetchQueue} className="border-border text-foreground">
             <RefreshCw className="h-4 w-4 mr-2" />
             Retry
           </Button>
@@ -205,9 +205,9 @@ export function CuratorWorkspaceContainer({
               </Badge>
             )}
             {stats && (
-              <div className="flex items-center gap-4 text-sm text-zinc-400">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span>
-                  <strong className="text-zinc-200">{stats.pending}</strong> pending
+                  <strong className="text-foreground">{stats.pending}</strong> pending
                 </span>
                 <span>
                   <strong className="text-green-400">{stats.approved}</strong> approved
@@ -222,7 +222,7 @@ export function CuratorWorkspaceContainer({
             variant="ghost"
             size="sm"
             onClick={fetchQueue}
-            className="text-zinc-500 hover:text-zinc-300"
+            className="text-muted-foreground hover:text-foreground"
           >
             <RefreshCw className="h-4 w-4 mr-1" />
             Refresh

@@ -29,19 +29,19 @@ const FlowDiagram = ({ chart }: { chart: string }) => {
   useEffect(() => {
     // Static visualization of agent decision path
     const mockSvg = `
-      <div class="flow-diagram p-6 bg-zinc-900/50 rounded-xl border border-border text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
+      <div class="flow-diagram p-6 bg-card/50 rounded-xl border border-border text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
         <div class="flex flex-col items-center space-y-4">
           <div class="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-300">Query: "SACD Sector Specs"</div>
-          <div class="h-8 w-px bg-zinc-700"></div>
+          <div class="h-8 w-px bg-muted"></div>
           <div class="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-300">Intent: Knowledge Retrieval</div>
-          <div class="h-8 w-px bg-zinc-700"></div>
+          <div class="h-8 w-px bg-muted"></div>
           <div class="flex gap-8">
-            <div class="p-3 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400">Vector Search (0.92)</div>
-            <div class="p-3 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400">Cross-Ref Jira (0.45)</div>
+            <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Vector Search (0.92)</div>
+            <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Cross-Ref Jira (0.45)</div>
           </div>
-          <div class="h-8 w-px bg-zinc-700"></div>
+          <div class="h-8 w-px bg-muted"></div>
           <div class="p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400">Reranking (Gemini 2.0)</div>
-          <div class="h-8 w-px bg-zinc-700"></div>
+          <div class="h-8 w-px bg-muted"></div>
           <div class="p-3 bg-blue-500/20 border border-blue-500/50 rounded-lg font-normal text-blue-300">Final Response Generation</div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export function AgentInsightsTab() {
                       onClick={() => toggleDecision(i)}
                     >
                       <div className="flex items-center gap-4 text-[var(--mac-text-primary)]">
-                        <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-light text-[var(--mac-text-secondary)]">
+                        <div className="h-8 w-8 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-light text-[var(--mac-text-secondary)]">
                           {d.step}
                         </div>
                         <div>
@@ -199,7 +199,7 @@ export function AgentInsightsTab() {
                           <div className="flex items-center gap-2 text-[10px] uppercase text-[var(--mac-text-muted)] tracking-widest">
                             <Info className="h-3 w-3" /> AI Reasoning
                           </div>
-                          <p className="text-xs font-light leading-relaxed text-zinc-300 italic">
+                          <p className="text-xs font-light leading-relaxed text-foreground italic">
                             "{d.reasoning}"
                           </p>
                         </div>

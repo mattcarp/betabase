@@ -61,9 +61,9 @@ export function RAGContextViewer({
     standard: {
       label: "Standard RAG",
       description: "Two-stage retrieval with Gemini re-ranking",
-      color: "text-zinc-400",
-      bgColor: "bg-zinc-500/10",
-      borderColor: "border-zinc-500/30",
+      color: "text-muted-foreground",
+      bgColor: "bg-muted/10",
+      borderColor: "border-border",
     },
     "context-aware": {
       label: "Context-Aware RAG",
@@ -91,14 +91,14 @@ export function RAGContextViewer({
           size="sm"
           className={cn(
             "w-full justify-between px-3 py-2 h-auto",
-            "bg-zinc-900/50 border border-zinc-700/50 rounded-lg",
-            "hover:bg-zinc-800/50 transition-all duration-200",
+            "bg-card/50 border border-border rounded-lg",
+            "hover:bg-muted/50 transition-all duration-200",
             isOpen && "rounded-b-none border-b-0"
           )}
         >
           <div className="flex items-center gap-2">
-            <Search className="h-4 w-4 text-zinc-400" />
-            <span className="text-sm text-zinc-300">RAG Context</span>
+            <Search className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">RAG Context</span>
             <Badge
               variant="outline"
               className={cn("text-xs", config.bgColor, config.borderColor, config.color)}
@@ -107,31 +107,31 @@ export function RAGContextViewer({
             </Badge>
           </div>
           {isOpen ? (
-            <ChevronDown className="h-4 w-4 text-zinc-400" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           ) : (
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
           )}
         </Button>
       </CollapsibleTrigger>
 
       <CollapsibleContent
         className={cn(
-          "bg-zinc-900/50 border border-t-0 border-zinc-700/50 rounded-b-lg",
+          "bg-card/50 border border-t-0 border-border rounded-b-lg",
           "overflow-hidden"
         )}
       >
         <div className="p-4 space-y-4">
           {/* Strategy Description */}
-          <p className="text-xs text-zinc-400">{config.description}</p>
+          <p className="text-xs text-muted-foreground">{config.description}</p>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-3">
             {/* Total Vectors */}
-            <div className="flex items-center gap-2 p-2 bg-zinc-800/50 rounded-md">
+            <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-md">
               <Database className="h-4 w-4 text-emerald-400" />
               <div>
-                <div className="text-xs text-zinc-500">Vector Database</div>
-                <div className="text-sm font-medium text-zinc-200">
+                <div className="text-xs text-muted-foreground">Vector Database</div>
+                <div className="text-sm font-medium text-foreground">
                   {totalVectors.toLocaleString()} vectors
                 </div>
               </div>
@@ -139,22 +139,22 @@ export function RAGContextViewer({
 
             {/* Search Time */}
             {searchTimeMs !== undefined && (
-              <div className="flex items-center gap-2 p-2 bg-zinc-800/50 rounded-md">
+              <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-md">
                 <Clock className="h-4 w-4 text-yellow-400" />
                 <div>
-                  <div className="text-xs text-zinc-500">Search Time</div>
-                  <div className="text-sm font-medium text-zinc-200">{searchTimeMs}ms</div>
+                  <div className="text-xs text-muted-foreground">Search Time</div>
+                  <div className="text-sm font-medium text-foreground">{searchTimeMs}ms</div>
                 </div>
               </div>
             )}
 
             {/* Re-ranking */}
             {reranked && initialDocs !== undefined && finalDocs !== undefined && (
-              <div className="flex items-center gap-2 p-2 bg-zinc-800/50 rounded-md">
+              <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-md">
                 <Layers className="h-4 w-4 text-blue-400" />
                 <div>
-                  <div className="text-xs text-zinc-500">Re-ranked</div>
-                  <div className="text-sm font-medium text-zinc-200">
+                  <div className="text-xs text-muted-foreground">Re-ranked</div>
+                  <div className="text-sm font-medium text-foreground">
                     {initialDocs} → {finalDocs} docs
                   </div>
                 </div>
@@ -163,11 +163,11 @@ export function RAGContextViewer({
 
             {/* Agent Steps (for agentic RAG) */}
             {agentSteps !== undefined && agentSteps > 0 && (
-              <div className="flex items-center gap-2 p-2 bg-zinc-800/50 rounded-md">
+              <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-md">
                 <Zap className="h-4 w-4 text-purple-400" />
                 <div>
-                  <div className="text-xs text-zinc-500">Agent Steps</div>
-                  <div className="text-sm font-medium text-zinc-200">
+                  <div className="text-xs text-muted-foreground">Agent Steps</div>
+                  <div className="text-sm font-medium text-foreground">
                     {agentSteps} iteration{agentSteps !== 1 ? "s" : ""}
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export function RAGContextViewer({
           {/* Retrieved Documents */}
           {documents.length > 0 && (
             <div className="space-y-2">
-              <div className="text-xs text-zinc-500 font-medium">
+              <div className="text-xs text-muted-foreground font-medium">
                 Retrieved Documents ({documents.length})
               </div>
               <div className="space-y-1 max-h-48 overflow-y-auto">
@@ -187,8 +187,8 @@ export function RAGContextViewer({
                     key={doc.id || idx}
                     className={cn(
                       "p-2 rounded-md cursor-pointer transition-all duration-200",
-                      "bg-zinc-800/30 hover:bg-zinc-800/50 border border-zinc-700/30",
-                      expandedDoc === (doc.id || String(idx)) && "bg-zinc-800/50"
+                      "bg-muted/30 hover:bg-muted/50 border border-border",
+                      expandedDoc === (doc.id || String(idx)) && "bg-muted/50"
                     )}
                     onClick={() =>
                       setExpandedDoc(
@@ -197,10 +197,10 @@ export function RAGContextViewer({
                     }
                   >
                     <div className="flex items-start gap-2">
-                      <FileText className="h-3.5 w-3.5 text-zinc-400 mt-0.5 shrink-0" />
+                      <FileText className="h-3.5 w-3.5 text-muted-foreground mt-0.5 shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-zinc-200 truncate">
+                          <span className="text-sm text-foreground truncate">
                             {doc.title || `Document ${idx + 1}`}
                           </span>
                           {doc.score !== undefined && (
@@ -212,7 +212,7 @@ export function RAGContextViewer({
                                   ? "border-green-500/30 text-green-400"
                                   : doc.score >= 0.6
                                     ? "border-yellow-500/30 text-yellow-400"
-                                    : "border-zinc-500/30 text-zinc-400"
+                                    : "border-border text-muted-foreground"
                               )}
                             >
                               {Math.round(doc.score * 100)}%
@@ -220,7 +220,7 @@ export function RAGContextViewer({
                           )}
                         </div>
                         {expandedDoc === (doc.id || String(idx)) && doc.content && (
-                          <p className="text-xs text-zinc-400 mt-2 line-clamp-4">{doc.content}</p>
+                          <p className="text-xs text-muted-foreground mt-2 line-clamp-4">{doc.content}</p>
                         )}
                       </div>
                     </div>

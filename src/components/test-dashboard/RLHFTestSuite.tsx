@@ -250,21 +250,21 @@ export function RLHFTestSuite() {
   // Graceful fallback when Supabase is not configured
   if (!supabaseAvailable) {
     return (
-      <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
+      <Card className="h-full flex flex-col bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-zinc-100">
+          <CardTitle className="flex items-center gap-2 text-foreground">
             <Lightbulb className="h-5 w-5 text-purple-400" />
             RLHF-Generated Test Suite
           </CardTitle>
-          <CardDescription className="text-zinc-400">
+          <CardDescription className="text-muted-foreground">
             Auto-generated from curator corrections and high-confidence feedback
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-1 flex items-center justify-center">
-          <div className="text-center text-zinc-500">
+          <div className="text-center text-muted-foreground">
             <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-yellow-500/60" />
             <p className="text-sm">Database connection not configured</p>
-            <p className="text-xs mt-1 text-zinc-600">RLHF features require Supabase</p>
+            <p className="text-xs mt-1 text-muted-foreground">RLHF features require Supabase</p>
           </div>
         </CardContent>
       </Card>
@@ -272,47 +272,47 @@ export function RLHFTestSuite() {
   }
 
   return (
-    <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
+    <Card className="h-full flex flex-col bg-card/50 border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-zinc-100">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Lightbulb className="h-5 w-5 text-purple-400" />
           RLHF-Generated Test Suite
         </CardTitle>
-        <CardDescription className="text-zinc-400">
+        <CardDescription className="text-muted-foreground">
           Auto-generated from curator corrections and high-confidence feedback
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col space-y-4">
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-          <Card className="bg-zinc-900/30 border-zinc-800">
+          <Card className="bg-card/30 border-border">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-zinc-100">{stats.total}</div>
-              <div className="text-xs text-zinc-500">Total Tests</div>
+              <div className="text-2xl font-bold text-foreground">{stats.total}</div>
+              <div className="text-xs text-muted-foreground">Total Tests</div>
             </CardContent>
           </Card>
           <Card className="bg-green-500/10 border-green-500/30">
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-green-400">{stats.passing}</div>
-              <div className="text-xs text-zinc-500">Passing</div>
+              <div className="text-xs text-muted-foreground">Passing</div>
             </CardContent>
           </Card>
           <Card className="bg-red-500/10 border-red-500/30">
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-red-400">{stats.failing}</div>
-              <div className="text-xs text-zinc-500">Failing</div>
+              <div className="text-xs text-muted-foreground">Failing</div>
             </CardContent>
           </Card>
           <Card className="bg-amber-500/10 border-amber-500/30">
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-amber-400">{stats.pending}</div>
-              <div className="text-xs text-zinc-500">Pending</div>
+              <div className="text-xs text-muted-foreground">Pending</div>
             </CardContent>
           </Card>
           <Card className="bg-purple-500/10 border-purple-500/30">
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-purple-400">{stats.generationRate}</div>
-              <div className="text-xs text-zinc-500">Generated/Week</div>
+              <div className="text-xs text-muted-foreground">Generated/Week</div>
             </CardContent>
           </Card>
         </div>
@@ -360,29 +360,29 @@ export function RLHFTestSuite() {
               </div>
               <div>
                 <p className="text-lg font-medium text-purple-200">AI Awaiting Human Guidance</p>
-                <p className="text-sm text-zinc-400 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Tests in this suite are generated from <strong className="text-amber-300">human curator corrections</strong>.
                   The AI learns what "good" looks like from your feedback.
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-4 text-xs text-zinc-500 pl-14">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground pl-14">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-lg">👤</div>
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">👤</div>
                 <span>Human reviews AI response</span>
               </div>
               <span className="text-purple-500">→</span>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-lg">✏️</div>
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">✏️</div>
                 <span>Human provides correction</span>
               </div>
               <span className="text-purple-500">→</span>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-lg">🧪</div>
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">🧪</div>
                 <span>AI generates test</span>
               </div>
             </div>
-            <p className="text-xs text-zinc-500 pl-14 border-l-2 border-purple-500/30 ml-2">
+            <p className="text-xs text-muted-foreground pl-14 border-l-2 border-purple-500/30 ml-2">
               💡 <strong>RLHF</strong> (Reinforcement Learning from Human Feedback) ensures AI improves through human wisdom, not just data.
             </p>
           </div>
@@ -393,7 +393,7 @@ export function RLHFTestSuite() {
           {tests.length > 0 ? (
             <div className="space-y-3">
               {tests.map((test) => (
-                <Card key={test.id} className="bg-zinc-900/30 border-zinc-800">
+                <Card key={test.id} className="bg-card/30 border-border">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -412,12 +412,12 @@ export function RLHFTestSuite() {
                             {test.status}
                           </Badge>
                           {test.run_count > 0 && (
-                            <span className="text-xs text-zinc-500">
+                            <span className="text-xs text-muted-foreground">
                               Runs: {test.run_count} ({test.pass_count}✓ / {test.fail_count}✗)
                             </span>
                           )}
                         </div>
-                        <CardTitle className="text-sm text-zinc-200">
+                        <CardTitle className="text-sm text-foreground">
                           {test.test_description}
                         </CardTitle>
                       </div>
@@ -425,15 +425,15 @@ export function RLHFTestSuite() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div>
-                      <span className="text-xs text-zinc-500">Original Query:</span>
-                      <p className="text-xs text-zinc-300 mt-1 font-mono bg-zinc-950/50 p-2 rounded line-clamp-2">
+                      <span className="text-xs text-muted-foreground">Original Query:</span>
+                      <p className="text-xs text-foreground mt-1 font-mono bg-background/50 p-2 rounded line-clamp-2">
                         {test.original_query}
                       </p>
                     </div>
                     {test.curator_correction && (
                       <div>
-                        <span className="text-xs text-zinc-500">Curator Correction:</span>
-                        <p className="text-xs text-zinc-400 mt-1 line-clamp-2">
+                        <span className="text-xs text-muted-foreground">Curator Correction:</span>
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                           {test.curator_correction}
                         </p>
                       </div>
@@ -463,17 +463,17 @@ export function RLHFTestSuite() {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-center text-zinc-500 py-12">
+            <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground py-12">
               {loading ? (
                 <>
-                  <RefreshCw className="h-12 w-12 animate-spin mb-4 text-zinc-700" />
+                  <RefreshCw className="h-12 w-12 animate-spin mb-4 text-muted-foreground" />
                   <p>Loading RLHF tests...</p>
                 </>
               ) : (
                 <>
-                  <Lightbulb className="h-16 w-16 mb-4 text-zinc-700" />
+                  <Lightbulb className="h-16 w-16 mb-4 text-muted-foreground" />
                   <p className="text-lg mb-2">No RLHF-generated tests yet</p>
-                  <p className="text-sm text-zinc-600 max-w-md">
+                  <p className="text-sm text-muted-foreground max-w-md">
                     Tests will be automatically generated from curator feedback and corrections.
                     Start curating in the RLHF Feedback tab!
                   </p>
@@ -486,13 +486,13 @@ export function RLHFTestSuite() {
 
       {/* Code Viewer Dialog */}
       <Dialog open={codeViewerOpen} onOpenChange={setCodeViewerOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden bg-zinc-900 border-zinc-800">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-zinc-100">
+            <DialogTitle className="flex items-center gap-2 text-foreground">
               <FileText className="h-5 w-5 text-purple-400" />
               Test Code
             </DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogDescription className="text-muted-foreground">
               {selectedTest?.test_description}
             </DialogDescription>
           </DialogHeader>
@@ -500,20 +500,20 @@ export function RLHFTestSuite() {
           <div className="space-y-4">
             {/* Original Query */}
             <div>
-              <label className="text-xs font-medium text-zinc-500 mb-1 block">Original Query</label>
-              <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                <p className="text-sm text-zinc-300">{selectedTest?.original_query}</p>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Original Query</label>
+              <div className="p-3 rounded-lg bg-muted/50 border border-border">
+                <p className="text-sm text-foreground">{selectedTest?.original_query}</p>
               </div>
             </div>
 
             {/* Expected Response */}
             {selectedTest?.curator_correction && (
               <div>
-                <label className="text-xs font-medium text-zinc-500 mb-1 block">
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">
                   Expected Response (Curator Correction)
                 </label>
                 <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20 max-h-24 overflow-y-auto">
-                  <p className="text-xs text-zinc-400">{selectedTest.curator_correction}</p>
+                  <p className="text-xs text-muted-foreground">{selectedTest.curator_correction}</p>
                 </div>
               </div>
             )}
@@ -521,7 +521,7 @@ export function RLHFTestSuite() {
             {/* Test Code */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-medium text-zinc-500">
+                <label className="text-xs font-medium text-muted-foreground">
                   Generated Playwright Test
                 </label>
                 <Button
@@ -544,15 +544,15 @@ export function RLHFTestSuite() {
                 </Button>
               </div>
               <ScrollArea className="h-[300px]">
-                <pre className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-300 font-mono whitespace-pre-wrap overflow-x-auto">
+                <pre className="p-4 rounded-lg bg-background border border-border text-xs text-foreground font-mono whitespace-pre-wrap overflow-x-auto">
                   {selectedTest?.test_code || "No test code available"}
                 </pre>
               </ScrollArea>
             </div>
 
             {/* Test Status */}
-            <div className="flex items-center justify-between pt-3 border-t border-zinc-800">
-              <div className="flex items-center gap-4 text-xs text-zinc-500">
+            <div className="flex items-center justify-between pt-3 border-t border-border">
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {selectedTest?.run_count || 0} runs

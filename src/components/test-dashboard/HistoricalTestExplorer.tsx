@@ -338,19 +338,19 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 Historical Tests
               </h3>
             </div>
-            <Badge variant="outline" className="text-[10px] px-2 py-0 border-zinc-700 text-zinc-400 font-mono">
+            <Badge variant="outline" className="text-[10px] px-2 py-0 border-border text-muted-foreground font-mono">
               {total.toLocaleString()}
             </Badge>
           </div>
           
           {/* Compact Search */}
           <div className="relative group">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500 group-focus-within:text-[var(--mac-primary-blue-400)] transition-colors" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-[var(--mac-primary-blue-400)] transition-colors" />
             <Input
               placeholder="Filter by name, script..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-9 pl-9 text-xs bg-zinc-900/50 border-zinc-800 focus:border-[var(--mac-primary-blue-400)] text-zinc-100 placeholder:text-zinc-600 transition-all rounded-lg"
+              className="h-9 pl-9 text-xs bg-card/50 border-border focus:border-[var(--mac-primary-blue-400)] text-foreground placeholder:text-muted-foreground transition-all rounded-lg"
               data-test-id="search-input"
             />
           </div>
@@ -361,7 +361,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <select
                 value={selectedApp}
                 onChange={(e) => setSelectedApp(e.target.value)}
-                className="w-full h-8 pl-2 pr-8 text-[11px] bg-zinc-900/30 border border-zinc-800 rounded-md text-zinc-300 font-medium appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
+                className="w-full h-8 pl-2 pr-8 text-[11px] bg-card/30 border border-border rounded-md text-foreground font-medium appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
                 data-test-id="app-filter"
               >
                 <option value="">All Applications</option>
@@ -369,21 +369,21 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   <option key={app} value={app}>{app}</option>
                 ))}
               </select>
-              <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-600 rotate-90 pointer-events-none" />
+              <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground rotate-90 pointer-events-none" />
             </div>
             
             <div className="flex-1 relative">
               <select
                 value={hasExecutions}
                 onChange={(e) => setHasExecutions(e.target.value)}
-                className="w-full h-8 pl-2 pr-8 text-[11px] bg-zinc-900/30 border border-zinc-800 rounded-md text-zinc-300 font-medium appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
+                className="w-full h-8 pl-2 pr-8 text-[11px] bg-card/30 border border-border rounded-md text-foreground font-medium appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
                 data-test-id="execution-filter"
               >
                 <option value="">Status: All</option>
                 <option value="true">Executed Only</option>
                 <option value="false">Never Run</option>
               </select>
-              <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-600 rotate-90 pointer-events-none" />
+              <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground rotate-90 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -392,26 +392,26 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
         <div 
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto bg-zinc-950/20 custom-scrollbar"
+          className="flex-1 overflow-y-auto bg-background/20 custom-scrollbar"
           data-test-id="test-list"
         >
           {!initialLoadComplete ? (
             <div className="flex flex-col items-center justify-center h-48 gap-3">
               <RefreshCw className="h-5 w-5 text-[var(--mac-primary-blue-400)] animate-spin" />
-              <span className="text-[11px] text-zinc-500 font-medium uppercase tracking-widest">Warming cache...</span>
+              <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-widest">Warming cache...</span>
             </div>
           ) : tests.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 opacity-40 grayscale">
-              <Archive className="h-12 w-12 text-zinc-600 mb-4" />
-              <p className="text-xs font-medium text-zinc-500">Zero matches found</p>
+              <Archive className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-xs font-medium text-muted-foreground">Zero matches found</p>
             </div>
           ) : (
             <div className="min-w-full relative">
               <Table className="border-collapse">
-                <TableHeader className="sticky top-0 bg-zinc-900/90 backdrop-blur-md z-30 shadow-sm border-b border-zinc-800">
+                <TableHeader className="sticky top-0 bg-card/90 backdrop-blur-md z-30 shadow-sm border-b border-border">
                   <TableRow className="hover:bg-transparent border-none">
                     <TableHead 
-                      className="w-[60px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] cursor-pointer hover:text-zinc-300 transition-colors"
+                      className="w-[60px] h-10 px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("id")}
                     >
                       <div className="flex items-center">
@@ -419,7 +419,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] cursor-pointer hover:text-zinc-300 transition-colors"
+                      className="h-10 px-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -427,7 +427,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="w-[100px] h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-center cursor-pointer hover:text-zinc-300 transition-colors"
+                      className="w-[100px] h-10 px-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] text-center cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("app_under_test")}
                     >
                       <div className="flex items-center justify-center">
@@ -435,12 +435,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="w-[60px] h-10 px-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-center"
+                      className="w-[60px] h-10 px-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] text-center"
                     >
                       Conf.
                     </TableHead>
                     <TableHead 
-                      className="w-[70px] h-10 px-4 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em] text-right cursor-pointer hover:text-zinc-300 transition-colors"
+                      className="w-[70px] h-10 px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] text-right cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("pass_count")}
                     >
                       <div className="flex items-center justify-end">
@@ -462,7 +462,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         key={`${test.id}-${index}`}
                         onClick={() => setSelectedTest(test)}
                         className={cn(
-                          "cursor-pointer transition-all border-b border-zinc-900/50 h-10 group relative",
+                          "cursor-pointer transition-all border-b border-border/50 h-10 group relative",
                           isSelected
                             ? "bg-[var(--mac-primary-blue-400)]/10 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-[var(--mac-primary-blue-400)] before:shadow-[0_0_8px_var(--mac-primary-blue-400)] before:content-['']"
                             : "hover:bg-white/[0.03]"
@@ -470,20 +470,20 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         data-test-id={`test-row-${test.id}`}
                       >
                         
-                        <TableCell className="py-0 px-4 text-[11px] font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors">
+                        <TableCell className="py-0 px-4 text-[11px] font-mono text-muted-foreground group-hover:text-muted-foreground transition-colors">
                           #{test.id}
                         </TableCell>
-                        <TableCell className="py-0 px-2 text-[12px] font-medium text-zinc-200 truncate max-w-[180px] tracking-tight group-hover:text-white transition-colors" title={test.test_name}>
+                        <TableCell className="py-0 px-2 text-[12px] font-medium text-foreground truncate max-w-[180px] tracking-tight group-hover:text-white transition-colors" title={test.test_name}>
                           {test.test_name || "Unnamed Scenario"}
                         </TableCell>
                         <TableCell className="py-0 px-2 text-center">
-                          <Badge variant="outline" className="text-[9px] h-auto py-0.5 px-2 border-zinc-800 text-zinc-500 font-bold uppercase group-hover:border-zinc-700 transition-colors whitespace-nowrap">
+                          <Badge variant="outline" className="text-[9px] h-auto py-0.5 px-2 border-border text-muted-foreground font-bold uppercase group-hover:border-border transition-colors whitespace-nowrap">
                             {test.app_under_test}
                           </Badge>
                         </TableCell>
                         <TableCell className="py-0 px-2 text-center">
                           <div className="flex flex-col items-center gap-0.5">
-                            <div className="h-6 w-1 rounded-full bg-zinc-800 overflow-hidden flex flex-col justify-end">
+                            <div className="h-6 w-1 rounded-full bg-muted overflow-hidden flex flex-col justify-end">
                               <div 
                                 className={cn(
                                   "w-full transition-all duration-1000",
@@ -494,7 +494,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                                 style={{ height: `${calculateAutomationConfidence(test) * 100}%` }}
                               />
                             </div>
-                            <span className="text-[8px] font-mono text-zinc-600 tabular-nums">
+                            <span className="text-[8px] font-mono text-muted-foreground tabular-nums">
                               {Math.round(calculateAutomationConfidence(test) * 100)}
                             </span>
                           </div>
@@ -510,7 +510,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               {passRate}%
                             </span>
                           ) : (
-                            <span className="text-zinc-800">--</span>
+                            <span className="text-muted-foreground">--</span>
                           )}
                         </TableCell>
                       </TableRow>
@@ -521,14 +521,14 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               
               {/* Infinite Scroll Loading Indicator */}
               {loading && (
-                <div className="p-4 text-center text-zinc-400 text-xs font-light bg-zinc-900/50 animate-pulse">
+                <div className="p-4 text-center text-muted-foreground text-xs font-light bg-card/50 animate-pulse">
                   <RefreshCw className="h-3 w-3 inline mr-2 animate-spin" />
                   Fetching batch...
                 </div>
               )}
               
               {!hasMore && tests.length > 0 && (
-                <div className="p-6 text-center text-zinc-600 text-[10px] font-bold uppercase tracking-widest bg-zinc-900/20 border-t border-zinc-900">
+                <div className="p-6 text-center text-muted-foreground text-[10px] font-bold uppercase tracking-widest bg-card/20 border-t border-border">
                   Total of {total.toLocaleString()} records indexed
                 </div>
               )}
@@ -557,13 +557,13 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] text-zinc-400 font-light font-mono">
+                  <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-light font-mono">
                     <span className="opacity-40">VAULT://</span>
                     <span className="flex items-center gap-1">
                       ID-{selectedTest.id}
                     </span>
-                    <span className="text-zinc-700">|</span>
-                    <span className="text-zinc-300 font-bold uppercase tracking-wider">
+                    <span className="text-muted-foreground">|</span>
+                    <span className="text-foreground font-bold uppercase tracking-wider">
                       {selectedTest.app_under_test}
                     </span>
                   </div>
@@ -572,7 +572,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   variant="ghost"
                   size="sm"
                   onClick={() => setSelectedTest(null)}
-                  className="text-zinc-500 hover:text-white hover:bg-zinc-800 h-7 w-7 p-0 flex-shrink-0 rounded-full transition-all"
+                  className="text-muted-foreground hover:text-white hover:bg-muted h-7 w-7 p-0 flex-shrink-0 rounded-full transition-all"
                   title="Close detail view"
                 >
                   <span className="text-lg">×</span>
@@ -581,8 +581,8 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
               {/* Quick Stats Cards */}
               <div className="grid grid-cols-3 gap-2">
-                <div className="p-2 rounded-lg bg-zinc-900/40 border border-zinc-800/50 hover:border-[var(--mac-primary-blue-400)]/40 transition-all group shadow-inner text-center">
-                  <div className="text-[8px] text-zinc-500 font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                <div className="p-2 rounded-lg bg-card/40 border border-border/50 hover:border-[var(--mac-primary-blue-400)]/40 transition-all group shadow-inner text-center">
+                  <div className="text-[8px] text-muted-foreground font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
                     <Activity className="h-2 w-2 text-[var(--mac-primary-blue-400)] group-hover:scale-110 transition-transform" />
                     Runs
                   </div>
@@ -590,8 +590,8 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     {selectedTest.execution_count.toLocaleString()}
                   </div>
                 </div>
-                <div className="p-2 rounded-lg bg-zinc-900/40 border border-zinc-800/50 hover:border-emerald-900/30 transition-all group shadow-inner text-center">
-                  <div className="text-[8px] text-zinc-500 font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                <div className="p-2 rounded-lg bg-card/40 border border-border/50 hover:border-emerald-900/30 transition-all group shadow-inner text-center">
+                  <div className="text-[8px] text-muted-foreground font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
                     <CheckCircle className="h-2 w-2 text-emerald-500 group-hover:scale-110 transition-transform" />
                     Pass
                   </div>
@@ -599,9 +599,9 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     {getPassRate(selectedTest) || "—"}{getPassRate(selectedTest) ? "%" : ""}
                   </div>
                 </div>
-                <div className="p-2 rounded-lg bg-zinc-900/40 border border-zinc-800/50 hover:border-zinc-700/50 transition-all group shadow-inner text-center">
-                  <div className="text-[8px] text-zinc-500 font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
-                    <FileText className="h-2 w-2 text-zinc-400 group-hover:scale-110 transition-transform" />
+                <div className="p-2 rounded-lg bg-card/40 border border-border/50 hover:border-border/50 transition-all group shadow-inner text-center">
+                  <div className="text-[8px] text-muted-foreground font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                    <FileText className="h-2 w-2 text-muted-foreground group-hover:scale-110 transition-transform" />
                     JIRA
                   </div>
                   <div className="text-lg font-extralight text-white">
@@ -612,14 +612,14 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
             </div>
 
             {/* Detail Body - Scrollable */}
-            <ScrollArea className="flex-1 p-6 bg-zinc-950/40">
+            <ScrollArea className="flex-1 p-6 bg-background/40">
               <div className="max-w-4xl mx-auto space-y-6">
                 {/* Description */}
                 {selectedTest.description && (
-                  <div className="group border-l border-zinc-800/50 pl-6 ml-1 transition-colors hover:border-[var(--mac-primary-blue-400)]/30">
-                    <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-3">Context Summary</h3>
+                  <div className="group border-l border-border/50 pl-6 ml-1 transition-colors hover:border-[var(--mac-primary-blue-400)]/30">
+                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] mb-3">Context Summary</h3>
                     <div 
-                      className="leading-relaxed text-zinc-300 text-[14px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
+                      className="leading-relaxed text-foreground text-[14px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.description) }}
                     />
                   </div>
@@ -627,10 +627,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                 {/* Preconditions */}
                 {selectedTest.preconditions && (
-                  <div className="group border-l border-zinc-800/50 pl-6 ml-1 transition-colors hover:border-amber-500/30">
-                    <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-3">System Prerequisites</h3>
+                  <div className="group border-l border-border/50 pl-6 ml-1 transition-colors hover:border-amber-500/30">
+                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] mb-3">System Prerequisites</h3>
                     <div 
-                      className="p-4 rounded-xl bg-amber-900/5 border border-amber-900/10 text-zinc-400 text-[13px] font-light leading-relaxed shadow-sm overflow-hidden break-words prose prose-invert prose-sm max-w-none italic"
+                      className="p-4 rounded-xl bg-amber-900/5 border border-amber-900/10 text-muted-foreground text-[13px] font-light leading-relaxed shadow-sm overflow-hidden break-words prose prose-invert prose-sm max-w-none italic"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.preconditions) }}
                     />
                   </div>
@@ -638,17 +638,17 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                 {/* Test Script */}
                 {selectedTest.test_script && (
-                  <div className="border-l border-zinc-800/50 pl-6 ml-1 transition-colors hover:border-indigo-500/30">
-                    <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-3">Instruction Logic</h3>
+                  <div className="border-l border-border/50 pl-6 ml-1 transition-colors hover:border-indigo-500/30">
+                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] mb-3">Instruction Logic</h3>
                     <div className="relative group">
                       <div 
-                        className="p-5 rounded-2xl bg-zinc-950/40 border border-zinc-900/20 shadow-inner leading-relaxed text-zinc-300 text-[14px] font-mono overflow-hidden break-words prose prose-invert prose-sm max-w-none"
+                        className="p-5 rounded-2xl bg-background/40 border border-border/20 shadow-inner leading-relaxed text-foreground text-[14px] font-mono overflow-hidden break-words prose prose-invert prose-sm max-w-none"
                         dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.test_script) }}
                       />
                       <Button 
                         size="sm" 
                         variant="ghost" 
-                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-500 hover:text-white bg-zinc-900/50 backdrop-blur-sm h-7 text-[9px] uppercase font-bold tracking-widest"
+                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-white bg-card/50 backdrop-blur-sm h-7 text-[9px] uppercase font-bold tracking-widest"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedTest.test_script);
                           toast.success("Copied to clipboard");
@@ -662,57 +662,57 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                 <div className="grid grid-cols-2 gap-6 pt-2">
                   {/* Metadata Section */}
-                  <div className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/50 shadow-md">
-                    <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-4">Test Details</h3>
+                  <div className="p-5 rounded-2xl bg-card/40 border border-border/50 shadow-md">
+                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4">Test Details</h3>
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/30">
-                        <span className="text-xs text-zinc-500 font-light">Application</span>
-                        <Badge variant="outline" className="text-[10px] border-zinc-700 text-zinc-300 bg-zinc-800/30 font-medium">
+                      <div className="flex items-center justify-between py-1.5 border-b border-border/30">
+                        <span className="text-xs text-muted-foreground font-light">Application</span>
+                        <Badge variant="outline" className="text-[10px] border-border text-foreground bg-muted/30 font-medium">
                           {selectedTest.category}
                         </Badge>
                       </div>
-                      <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/30">
-                        <span className="text-xs text-zinc-500 font-light">Priority</span>
+                      <div className="flex items-center justify-between py-1.5 border-b border-border/30">
+                        <span className="text-xs text-muted-foreground font-light">Priority</span>
                         <span className="text-xs text-white font-medium tabular-nums">{selectedTest.client_priority || "0"}</span>
                       </div>
-                      <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/30">
-                        <span className="text-xs text-zinc-500 font-light">Security</span>
+                      <div className="flex items-center justify-between py-1.5 border-b border-border/30">
+                        <span className="text-xs text-muted-foreground font-light">Security</span>
                         <span className={cn(
                           "text-[10px] font-bold uppercase tracking-wider",
-                          selectedTest.is_security ? "text-amber-400" : "text-zinc-600"
+                          selectedTest.is_security ? "text-amber-400" : "text-muted-foreground"
                         )}>
                           {selectedTest.is_security ? "Active" : "Standard"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between py-1.5">
-                        <span className="text-xs text-zinc-500 font-light">Coverage</span>
+                        <span className="text-xs text-muted-foreground font-light">Coverage</span>
                         <span className="text-xs text-white font-mono">{selectedTest.coverage || "0.0%"}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* History Section */}
-                  <div className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/50 shadow-md">
-                    <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-4">History</h3>
+                  <div className="p-5 rounded-2xl bg-card/40 border border-border/50 shadow-md">
+                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4">History</h3>
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/30">
-                        <span className="text-xs text-zinc-500 font-light">Success</span>
+                      <div className="flex items-center justify-between py-1.5 border-b border-border/30">
+                        <span className="text-xs text-muted-foreground font-light">Success</span>
                         <span className="text-emerald-400 font-bold tabular-nums text-xs">{selectedTest.pass_count.toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/30">
-                        <span className="text-xs text-zinc-500 font-light">Failure</span>
+                      <div className="flex items-center justify-between py-1.5 border-b border-border/30">
+                        <span className="text-xs text-muted-foreground font-light">Failure</span>
                         <span className="text-rose-400 font-bold tabular-nums text-xs">{selectedTest.fail_count.toLocaleString()}</span>
                       </div>
                       {selectedTest.first_executed_at && (
-                        <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/30">
-                          <span className="text-xs text-zinc-500 font-light">First Run</span>
-                          <span className="text-[10px] text-zinc-300 font-mono tabular-nums">{new Date(selectedTest.first_executed_at).toLocaleDateString()}</span>
+                        <div className="flex items-center justify-between py-1.5 border-b border-border/30">
+                          <span className="text-xs text-muted-foreground font-light">First Run</span>
+                          <span className="text-[10px] text-foreground font-mono tabular-nums">{new Date(selectedTest.first_executed_at).toLocaleDateString()}</span>
                         </div>
                       )}
                       {selectedTest.last_executed_at && (
                         <div className="flex items-center justify-between py-1.5">
-                          <span className="text-xs text-zinc-500 font-light">Last Run</span>
-                          <span className="text-[10px] text-zinc-300 font-mono tabular-nums">{new Date(selectedTest.last_executed_at).toLocaleDateString()}</span>
+                          <span className="text-xs text-muted-foreground font-light">Last Run</span>
+                          <span className="text-[10px] text-foreground font-mono tabular-nums">{new Date(selectedTest.last_executed_at).toLocaleDateString()}</span>
                         </div>
                       )}
                     </div>
@@ -735,7 +735,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       
                       {aiConfidence.automationFeasibility && (
                         <div className="text-right">
-                          <div className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Automation</div>
+                          <div className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Automation</div>
                           <Badge variant="outline" className={cn(
                             "uppercase text-[9px] font-bold tracking-tighter px-1.5 h-4",
                             aiConfidence.automationFeasibility === "high" ? "border-emerald-500/50 text-emerald-400 bg-emerald-500/10" :
@@ -751,18 +751,18 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <div className="space-y-4">
                       <div className="relative">
                         <div className="absolute -left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--mac-primary-blue-400)]/40 via-transparent to-transparent" />
-                        <h4 className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 pl-2">Reasoning</h4>
-                        <p className="text-[14px] text-zinc-200 font-extralight italic leading-relaxed pl-2">
+                        <h4 className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5 pl-2">Reasoning</h4>
+                        <p className="text-[14px] text-foreground font-extralight italic leading-relaxed pl-2">
                           {aiConfidence.rationale}
                         </p>
                       </div>
 
                       {aiConfidence.recommendations && aiConfidence.recommendations.length > 0 && (
-                        <div className="pt-3 border-t border-zinc-800/50">
-                          <h4 className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Suggestions</h4>
+                        <div className="pt-3 border-t border-border/50">
+                          <h4 className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Suggestions</h4>
                           <ul className="space-y-1.5">
                             {aiConfidence.recommendations.map((rec, i) => (
-                              <li key={i} className="flex items-start gap-2.5 text-[11px] text-zinc-400 font-light leading-relaxed">
+                              <li key={i} className="flex items-start gap-2.5 text-[11px] text-muted-foreground font-light leading-relaxed">
                                 <div className="h-1 w-1 rounded-full bg-[var(--mac-primary-blue-400)]/40 mt-1.5 flex-shrink-0" />
                                 {rec}
                               </li>
@@ -776,8 +776,8 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                 {/* Automated Test Code */}
                 {generatedCode && (
-                  <Artifact className="border-zinc-800/80 shadow-2xl animate-in zoom-in-95 duration-300 bg-zinc-950">
-                    <ArtifactHeader className="bg-zinc-900/50 border-b border-zinc-800/50">
+                  <Artifact className="border-border/80 shadow-2xl animate-in zoom-in-95 duration-300 bg-background">
+                    <ArtifactHeader className="bg-card/50 border-b border-border/50">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                           <Sparkles className="h-4 w-4 text-emerald-400" />
@@ -787,12 +787,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         </ArtifactTitle>
                       </div>
                       <ArtifactActions>
-                        <div className="flex bg-zinc-900/80 p-0.5 rounded-lg border border-zinc-800 mr-2">
+                        <div className="flex bg-card/80 p-0.5 rounded-lg border border-border mr-2">
                           <button
                             onClick={() => setArtifactMode("human")}
                             className={cn(
                               "px-2 py-1 text-[9px] font-bold uppercase tracking-widest rounded-md transition-all",
-                              artifactMode === "human" ? "bg-zinc-700 text-white shadow-sm" : "text-zinc-500 hover:text-zinc-300"
+                              artifactMode === "human" ? "bg-muted text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                             )}
                           >
                             Human
@@ -801,7 +801,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                             onClick={() => setArtifactMode("code")}
                             className={cn(
                               "px-2 py-1 text-[9px] font-bold uppercase tracking-widest rounded-md transition-all",
-                              artifactMode === "code" ? "bg-zinc-700 text-white shadow-sm" : "text-zinc-500 hover:text-zinc-300"
+                              artifactMode === "code" ? "bg-muted text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                             )}
                           >
                             Code
@@ -855,7 +855,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <ArtifactContent className="p-0 bg-black/40">
                       <div className="relative group">
                         {showCritique && (
-                          <div className="absolute inset-0 z-50 bg-zinc-950/90 backdrop-blur-sm p-6 animate-in fade-in zoom-in-95 duration-200 flex flex-col">
+                          <div className="absolute inset-0 z-50 bg-background/90 backdrop-blur-sm p-6 animate-in fade-in zoom-in-95 duration-200 flex flex-col">
                             <div className="flex items-center justify-between mb-4">
                               <h4 className="text-xs font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Edit3 className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
@@ -863,20 +863,20 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               </h4>
                               <Button variant="ghost" size="sm" onClick={() => setShowCritique(false)} className="h-6 w-6 p-0 rounded-full">×</Button>
                             </div>
-                            <p className="text-[11px] text-zinc-500 mb-4 font-light italic">
+                            <p className="text-[11px] text-muted-foreground mb-4 font-light italic">
                               Suggest improvements, fix selectors, or clarify logic. The AI will rebuild the script based on your feedback.
                             </p>
                             <textarea
                               value={critiqueText}
                               onChange={(e) => setCritiqueText(e.target.value)}
                               placeholder="e.g. 'Use data-test-id for the login button', 'Add an assertion for the successful redirect'..."
-                              className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-xs text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:border-[var(--mac-primary-blue-400)] transition-all resize-none font-light leading-relaxed mb-4"
+                              className="flex-1 bg-card border border-border rounded-xl p-4 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[var(--mac-primary-blue-400)] transition-all resize-none font-light leading-relaxed mb-4"
                             />
                             <div className="flex gap-3">
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
-                                className="flex-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white"
+                                className="flex-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
                                 onClick={() => {
                                   setCritiqueText("");
                                   setShowCritique(false);
@@ -929,7 +929,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               <CheckCircle className="h-4 w-4" />
                               Manual Execution Logic
                             </h4>
-                            <div className="space-y-4 text-zinc-300 font-light">
+                            <div className="space-y-4 text-foreground font-light">
                               <div>
                                 <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Step 1: Environment Setup</span>
                                 <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.preconditions) }} />
@@ -952,7 +952,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 )}
 
                 {/* Action Buttons - Moved to bottom of scroll area */}
-                <div className="pt-8 mt-4 border-t border-zinc-800/30">
+                <div className="pt-8 mt-4 border-t border-border/30">
                   <div className="flex gap-6">
                     <Button 
                       size="lg" 
@@ -1002,7 +1002,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <Button 
                       size="lg" 
                       variant="outline" 
-                      className="flex-1 border-zinc-700/50 text-zinc-300 hover:text-white hover:bg-zinc-800/80 font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl transition-all group shadow-xl active:scale-95 bg-zinc-900/30 backdrop-blur-sm"
+                      className="flex-1 border-border/50 text-foreground hover:text-white hover:bg-muted/80 font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl transition-all group shadow-xl active:scale-95 bg-card/30 backdrop-blur-sm"
                       onClick={async () => {
                         if (!selectedTest) return;
                         setCalculatingConfidence(true);
@@ -1040,7 +1040,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       data-test-id="calculate-confidence-btn"
                     >
                       {calculatingConfidence ? (
-                        <RefreshCw className="h-5 w-5 mr-4 animate-spin text-zinc-400" />
+                        <RefreshCw className="h-5 w-5 mr-4 animate-spin text-muted-foreground" />
                       ) : (
                         <Zap className="h-5 w-5 mr-4 text-[var(--mac-primary-blue-400)] group-hover:scale-125 transition-transform" />
                       )}
@@ -1053,28 +1053,28 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
           </div>
         ) : (
           // Empty state - no test selected
-          <div className="flex flex-col items-center justify-start h-full text-center p-12 pt-24 bg-zinc-950/20 backdrop-blur-3xl overflow-y-auto">
+          <div className="flex flex-col items-center justify-start h-full text-center p-12 pt-24 bg-background/20 backdrop-blur-3xl overflow-y-auto">
             <div className="relative mb-8">
               <div className="absolute -inset-4 bg-[var(--mac-primary-blue-400)]/10 rounded-full blur-2xl transition-all duration-700" />
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative shadow-2xl border border-zinc-700/50 transition-transform">
-                <FileSearch className="h-10 w-10 text-zinc-500 transition-colors" />
+              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative shadow-2xl border border-border/50 transition-transform">
+                <FileSearch className="h-10 w-10 text-muted-foreground transition-colors" />
               </div>
             </div>
             <h3 className="text-2xl font-extralight text-white mb-4 tracking-tight">Select a Test</h3>
-            <p className="text-sm text-zinc-500 font-light max-w-sm leading-relaxed mb-10">
+            <p className="text-sm text-muted-foreground font-light max-w-sm leading-relaxed mb-10">
               Pick a historical scenario from the vault to generate scripts, run AI analysis, and view performance history.
             </p>
-            <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-zinc-900 bg-zinc-900/20 transition-colors">
+            <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
                 <Sparkles className="h-4 w-4 text-emerald-500" />
                 <span className="flex-1 text-left">Script Generator</span>
               </div>
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-zinc-900 bg-zinc-900/20 transition-colors">
+              <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
                 <Zap className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
                 <span className="flex-1 text-left">AI Analyzer</span>
               </div>
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-zinc-900 bg-zinc-900/20 transition-colors">
-                <TrendingUp className="h-4 w-4 text-zinc-500" />
+              <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <span className="flex-1 text-left">Test History</span>
               </div>
             </div>

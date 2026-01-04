@@ -221,7 +221,7 @@ export const FirecrawlPanel: React.FC = () => {
       case "low":
         return "text-green-500";
       default:
-        return "text-gray-500";
+        return "text-muted-foreground";
     }
   };
 

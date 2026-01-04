@@ -90,13 +90,13 @@ export function LiveRAGMonitor() {
   const getStrategyColor = (strategy: string) => {
     switch (strategy) {
       case "basic":
-        return "bg-gray-500/20 text-gray-300";
+        return "bg-muted/20 text-muted-foreground";
       case "context-aware":
         return "bg-blue-500/20 text-blue-300";
       case "agentic":
         return "bg-purple-500/20 text-purple-300";
       default:
-        return "bg-zinc-500/20 text-zinc-300";
+        return "bg-muted/20 text-muted-foreground";
     }
   };
 
@@ -116,9 +116,9 @@ export function LiveRAGMonitor() {
   return (
     <div className="h-full space-y-4">
       {/* Header with stats */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-zinc-100">
+          <CardTitle className="flex items-center gap-2 text-foreground">
             <Activity className="h-5 w-5 text-green-400 animate-pulse" />
             Live RAG Pipeline Monitor
           </CardTitle>
@@ -126,46 +126,46 @@ export function LiveRAGMonitor() {
         <CardContent>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <div className="text-2xl font-bold text-zinc-100">
+              <div className="text-2xl font-bold text-foreground">
                 {stats.avgDuration.toFixed(0)}ms
               </div>
-              <div className="text-xs text-zinc-500">Avg Duration</div>
+              <div className="text-xs text-muted-foreground">Avg Duration</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-zinc-100">
+              <div className="text-2xl font-bold text-foreground">
                 {(stats.avgConfidence * 100).toFixed(0)}%
               </div>
-              <div className="text-xs text-zinc-500">Avg Confidence</div>
+              <div className="text-xs text-muted-foreground">Avg Confidence</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-zinc-100">{events.length}</div>
-              <div className="text-xs text-zinc-500">Recent Events</div>
+              <div className="text-2xl font-bold text-foreground">{events.length}</div>
+              <div className="text-xs text-muted-foreground">Recent Events</div>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Strategy Distribution */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-sm text-zinc-100">Strategy Distribution</CardTitle>
+          <CardTitle className="text-sm text-foreground">Strategy Distribution</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-zinc-400">Basic RAG</span>
-              <Badge className="bg-gray-500/20 text-gray-300">
+              <span className="text-xs text-muted-foreground">Basic RAG</span>
+              <Badge className="bg-muted/20 text-muted-foreground">
                 {stats.strategyDistribution.basic}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-zinc-400">Context-Aware</span>
+              <span className="text-xs text-muted-foreground">Context-Aware</span>
               <Badge className="bg-blue-500/20 text-blue-300">
                 {stats.strategyDistribution["context-aware"]}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-zinc-400">Agentic RAG</span>
+              <span className="text-xs text-muted-foreground">Agentic RAG</span>
               <Badge className="bg-purple-500/20 text-purple-300">
                 {stats.strategyDistribution.agentic}
               </Badge>
@@ -175,16 +175,16 @@ export function LiveRAGMonitor() {
       </Card>
 
       {/* Event Timeline */}
-      <Card className="bg-zinc-900/50 border-zinc-800 flex-1">
+      <Card className="bg-card/50 border-border flex-1">
         <CardHeader>
-          <CardTitle className="text-sm text-zinc-100">Pipeline Events</CardTitle>
+          <CardTitle className="text-sm text-foreground">Pipeline Events</CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[400px]">
             {events.length > 0 ? (
               <div className="space-y-3">
                 {events.map((event) => (
-                  <Card key={event.id} className="bg-zinc-900/30 border-zinc-800">
+                  <Card key={event.id} className="bg-card/30 border-border">
                     <CardContent className="p-4 space-y-2">
                       {/* Event header */}
                       <div className="flex items-start justify-between">
@@ -193,9 +193,9 @@ export function LiveRAGMonitor() {
                             {getStrategyIcon(event.strategy)}
                             <span className="ml-1">{event.strategy}</span>
                           </Badge>
-                          <p className="text-xs text-zinc-300 mt-2 line-clamp-1">{event.query}</p>
+                          <p className="text-xs text-foreground mt-2 line-clamp-1">{event.query}</p>
                         </div>
-                        <div className="text-xs text-zinc-500">
+                        <div className="text-xs text-muted-foreground">
                           {new Date(event.timestamp).toLocaleTimeString()}
                         </div>
                       </div>
@@ -220,7 +220,7 @@ export function LiveRAGMonitor() {
                       </div>
 
                       {/* Event metrics */}
-                      <div className="flex items-center gap-4 text-xs text-zinc-500">
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {event.totalDuration}ms
@@ -245,10 +245,10 @@ export function LiveRAGMonitor() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-64 text-zinc-500">
-                <Activity className="h-12 w-12 mb-4 text-zinc-700" />
+              <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
+                <Activity className="h-12 w-12 mb-4 text-muted-foreground" />
                 <p className="text-sm">No pipeline events yet</p>
-                <p className="text-xs text-zinc-600 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Events will appear here as users interact with the chat
                 </p>
               </div>

@@ -40,15 +40,25 @@ export interface Conversation {
  * Generate a concise, meaningful title from user's first message.
  * Extracts the essence of the query for sidebar display.
  */
-function generateTitleFromMessage(content: string): string {
+export function generateTitleFromMessage(content: string): string {
   if (!content || typeof content !== "string") return "New Conversation";
-  
+
   // Clean up the content
   let title = content
     .trim()
-    .replace(/\s+/g, " ") // Normalize whitespace
-    .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "") // Remove common prefixes
-    .replace(/[?!.]+$/, ""); // Remove trailing punctuation
+    .replace(/\s+/g, " "); // Normalize whitespace
+
+  // Remove common prefixes - apply repeatedly to handle compound phrases like "Hey can you"
+  // Note: Keep meaningful phrases like "help me", "show me", "tell me" as they indicate user intent
+  const prefixPattern = /^(hey|hi|hello|please|can you|could you|i need|i want|i'd like to|explain|so)\s+/i;
+  let prevTitle = "";
+  while (prevTitle !== title && prefixPattern.test(title)) {
+    prevTitle = title;
+    title = title.replace(prefixPattern, "");
+  }
+
+  // Remove trailing punctuation
+  title = title.replace(/[?!.]+$/, "");
   
   // If empty after cleaning, return default
   if (!title) return "New Conversation";
@@ -74,7 +84,7 @@ function generateTitleFromMessage(content: string): string {
 /**
  * Check if a title needs auto-generation (is a default/placeholder title)
  */
-function isDefaultTitle(title: string): boolean {
+export function isDefaultTitle(title: string): boolean {
   const defaultTitles = [
     "new conversation",
     "the betabase",
@@ -95,14 +105,10 @@ function getMessageContent(m: any): string | undefined {
   if (!m) return undefined;
 
   // AI SDK v5/v6: parts array with text
+  // Join ALL text parts to support multi-part messages
   if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
-    // Try first text part
-    const textPart = m.parts.find((p: any) => p.type === "text" || p.text);
-    if (textPart?.text) {
-      return textPart.text;
-    }
-    // Fallback: join all text parts
     const allText = m.parts
+      .filter((p: any) => p.type === "text" || p.text)
       .map((p: any) => p.text || "")
       .filter(Boolean)
       .join("");

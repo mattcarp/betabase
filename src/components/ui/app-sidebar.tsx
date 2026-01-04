@@ -191,7 +191,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
             <button
               onClick={() => setSearchQuery("pinned")}
               title="Show pinned"
-              className="p-1.5 text-xs rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/50 transition-colors"
+              className="p-1.5 text-xs rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
             >
               <Pin className="h-3.5 w-3.5" />
             </button>
@@ -203,7 +203,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                 );
               }}
               title="Today only"
-              className="p-1.5 text-xs rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/50 transition-colors"
+              className="p-1.5 text-xs rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
             >
               <Clock className="h-3.5 w-3.5" />
             </button>
@@ -298,7 +298,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           deleteConversation(conversation.id);
                         }
                       }}
-                      className="absolute right-8 bottom-2.5 opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-red-500/20 text-zinc-500 hover:text-red-400 transition-all duration-150"
+                      className="absolute right-8 bottom-2.5 opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-red-500/20 text-muted-foreground hover:text-red-400 transition-all duration-150"
                       title="Delete conversation"
                       data-test-id="delete-conversation-btn"
                     >

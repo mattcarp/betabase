@@ -101,7 +101,7 @@ const CATEGORY_COLORS: Record<FeedbackCategory, string> = {
   formatting: "bg-indigo-500",
   citations: "bg-cyan-500",
   tone: "bg-orange-500",
-  other: "bg-zinc-500",
+  other: "bg-muted-foreground",
 };
 
 interface FeedbackAnalyticsProps {
@@ -269,15 +269,15 @@ export function FeedbackAnalytics({
     subtitle?: string,
     color?: string
   ) => (
-    <Card className="bg-zinc-900/50 border-zinc-800">
+    <Card className="bg-card/50 border-border">
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className={cn("p-2 rounded-lg", color || "bg-purple-500/20")}>{icon}</div>
             <div>
-              <p className="text-sm text-zinc-400">{title}</p>
-              <p className="text-2xl font-bold text-zinc-100">{value}</p>
-              {subtitle && <p className="text-xs text-zinc-500 mt-1">{subtitle}</p>}
+              <p className="text-sm text-muted-foreground">{title}</p>
+              <p className="text-2xl font-bold text-foreground">{value}</p>
+              {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
             </div>
           </div>
           {trend !== undefined && (
@@ -319,12 +319,12 @@ export function FeedbackAnalytics({
             className="space-y-1"
           >
             <div className="flex items-center justify-between text-sm">
-              <span className="text-zinc-300 capitalize">{category}</span>
-              <span className="text-zinc-400">
+              <span className="text-foreground capitalize">{category}</span>
+              <span className="text-muted-foreground">
                 {count} ({((count / totalCategorized) * 100).toFixed(1)}%)
               </span>
             </div>
-            <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(count / maxValue) * 100}%` }}
@@ -379,18 +379,18 @@ export function FeedbackAnalytics({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
             className={cn(
-              "p-4 rounded-lg border border-zinc-800",
-              "bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors"
+              "p-4 rounded-lg border border-border",
+              "bg-card/30 hover:bg-card/50 transition-colors"
             )}
           >
             <div className="flex items-center gap-2 mb-2">
               <div className={cn("p-1.5 rounded", item.bgColor)}>
                 <item.Icon className={cn("h-4 w-4", item.textColor)} />
               </div>
-              <span className="text-sm text-zinc-300">{item.level}</span>
+              <span className="text-sm text-foreground">{item.level}</span>
             </div>
-            <p className="text-2xl font-bold text-zinc-100">{item.count}</p>
-            <p className="text-xs text-zinc-500">
+            <p className="text-2xl font-bold text-foreground">{item.count}</p>
+            <p className="text-xs text-muted-foreground">
               {((item.count / totalSeverity) * 100).toFixed(1)}% of issues
             </p>
           </motion.div>
@@ -435,7 +435,7 @@ export function FeedbackAnalytics({
             className="space-y-2"
           >
             <div className="flex items-center justify-between text-sm">
-              <span className="text-zinc-300 font-medium">{day.date}</span>
+              <span className="text-foreground font-medium">{day.date}</span>
               <div className="flex items-center gap-3 text-xs">
                 <span className="text-green-400 flex items-center gap-1">
                   <ThumbsUp className="h-3 w-3" /> {day.positive}
@@ -448,7 +448,7 @@ export function FeedbackAnalytics({
                 </span>
               </div>
             </div>
-            <div className="h-3 bg-zinc-800 rounded-full overflow-hidden flex">
+            <div className="h-3 bg-muted rounded-full overflow-hidden flex">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{
@@ -474,47 +474,47 @@ export function FeedbackAnalytics({
 
   const renderCuratorMetrics = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardContent className="pt-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center p-3 rounded-full bg-green-500/20 mb-3">
               <CheckCircle className="h-6 w-6 text-green-400" />
             </div>
-            <p className="text-3xl font-bold text-zinc-100">
+            <p className="text-3xl font-bold text-foreground">
               {(metrics.curatorApprovalRate * 100).toFixed(0)}%
             </p>
-            <p className="text-sm text-zinc-400">Approval Rate</p>
-            <p className="text-xs text-zinc-500 mt-1">High quality feedback submissions</p>
+            <p className="text-sm text-muted-foreground">Approval Rate</p>
+            <p className="text-xs text-muted-foreground mt-1">High quality feedback submissions</p>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardContent className="pt-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center p-3 rounded-full bg-blue-500/20 mb-3">
               <Clock className="h-6 w-6 text-blue-400" />
             </div>
-            <p className="text-3xl font-bold text-zinc-100">
+            <p className="text-3xl font-bold text-foreground">
               {metrics.avgReviewTimeHours.toFixed(1)}h
             </p>
-            <p className="text-sm text-zinc-400">Avg Review Time</p>
-            <p className="text-xs text-zinc-500 mt-1">From submission to decision</p>
+            <p className="text-sm text-muted-foreground">Avg Review Time</p>
+            <p className="text-xs text-muted-foreground mt-1">From submission to decision</p>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-card/50 border-border">
         <CardContent className="pt-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center p-3 rounded-full bg-purple-500/20 mb-3">
               <Users className="h-6 w-6 text-purple-400" />
             </div>
-            <p className="text-3xl font-bold text-zinc-100">
+            <p className="text-3xl font-bold text-foreground">
               {Math.round(metrics.totalFeedback * metrics.curatorApprovalRate)}
             </p>
-            <p className="text-sm text-zinc-400">DPO-Ready Examples</p>
-            <p className="text-xs text-zinc-500 mt-1">Ready for model training</p>
+            <p className="text-sm text-muted-foreground">DPO-Ready Examples</p>
+            <p className="text-xs text-muted-foreground mt-1">Ready for model training</p>
           </div>
         </CardContent>
       </Card>
@@ -540,12 +540,12 @@ export function FeedbackAnalytics({
             className="space-y-2"
           >
             <div className="flex items-center justify-between text-sm">
-              <span className="text-zinc-300">{metric.label}</span>
-              <span className="text-zinc-400">
+              <span className="text-foreground">{metric.label}</span>
+              <span className="text-muted-foreground">
                 {metric.value} / {metric.target}
               </span>
             </div>
-            <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{
@@ -568,11 +568,11 @@ export function FeedbackAnalytics({
           </motion.div>
         ))}
 
-        <div className="pt-4 border-t border-zinc-800">
+        <div className="pt-4 border-t border-border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-zinc-200">Training Ready</p>
-              <p className="text-xs text-zinc-500">Minimum 500 high-quality pairs needed</p>
+              <p className="text-sm font-medium text-foreground">Training Ready</p>
+              <p className="text-xs text-muted-foreground">Minimum 500 high-quality pairs needed</p>
             </div>
             <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Ready</Badge>
           </div>
@@ -588,14 +588,14 @@ export function FeedbackAnalytics({
         <div className="flex items-center gap-3">
           <BarChart3 className="h-6 w-6 text-purple-400" />
           <div>
-            <h2 className="text-xl font-semibold text-zinc-100">Feedback Analytics</h2>
-            <p className="text-sm text-zinc-400">RLHF feedback collection and quality metrics</p>
+            <h2 className="text-xl font-semibold text-foreground">Feedback Analytics</h2>
+            <p className="text-sm text-muted-foreground">RLHF feedback collection and quality metrics</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <Select value={timeRange} onValueChange={(v) => setTimeRange(v as typeof timeRange)}>
-            <SelectTrigger className="w-32 bg-zinc-800 border-zinc-700">
+            <SelectTrigger className="w-32 bg-muted border-border">
               <Calendar className="h-4 w-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -611,7 +611,7 @@ export function FeedbackAnalytics({
             variant="outline"
             size="icon"
             onClick={handleRefresh}
-            className="border-zinc-700"
+            className="border-border"
             disabled={loading}
           >
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
@@ -619,7 +619,7 @@ export function FeedbackAnalytics({
 
           {onExport && (
             <Select onValueChange={(v) => onExport(v as "json" | "csv" | "dpo")}>
-              <SelectTrigger className="w-32 bg-zinc-800 border-zinc-700">
+              <SelectTrigger className="w-32 bg-muted border-border">
                 <Download className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Export" />
               </SelectTrigger>
@@ -670,20 +670,20 @@ export function FeedbackAnalytics({
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-zinc-900 border border-zinc-800">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-zinc-800">
+        <TabsList className="bg-card border border-border">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-muted">
             <LineChart className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="categories" className="data-[state=active]:bg-zinc-800">
+          <TabsTrigger value="categories" className="data-[state=active]:bg-muted">
             <PieChart className="h-4 w-4 mr-2" />
             Categories
           </TabsTrigger>
-          <TabsTrigger value="curators" className="data-[state=active]:bg-zinc-800">
+          <TabsTrigger value="curators" className="data-[state=active]:bg-muted">
             <Users className="h-4 w-4 mr-2" />
             Curators
           </TabsTrigger>
-          <TabsTrigger value="dpo" className="data-[state=active]:bg-zinc-800">
+          <TabsTrigger value="dpo" className="data-[state=active]:bg-muted">
             <Lightbulb className="h-4 w-4 mr-2" />
             DPO Quality
           </TabsTrigger>
@@ -691,7 +691,7 @@ export function FeedbackAnalytics({
 
         <TabsContent value="overview" className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-purple-400" />
@@ -700,14 +700,14 @@ export function FeedbackAnalytics({
               </CardHeader>
               <CardContent>
                 {renderTrendChart()}
-                <div className="flex items-center justify-between mt-4 text-sm text-zinc-400">
+                <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
                   <span>14 days ago</span>
                   <span>Today</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-blue-400" />
@@ -721,7 +721,7 @@ export function FeedbackAnalytics({
 
         <TabsContent value="categories" className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <PieChart className="h-5 w-5 text-green-400" />
@@ -731,7 +731,7 @@ export function FeedbackAnalytics({
               <CardContent>{renderCategoryChart()}</CardContent>
             </Card>
 
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5 text-orange-400" />
@@ -748,7 +748,7 @@ export function FeedbackAnalytics({
         </TabsContent>
 
         <TabsContent value="dpo" className="mt-4">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-purple-400" />

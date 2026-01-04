@@ -71,7 +71,7 @@ export function FeedbackBadge({
         ))}
         {hasHalf && <StarHalf className="h-3 w-3 fill-yellow-400 text-yellow-400" />}
         {Array.from({ length: emptyStars }).map((_, i) => (
-          <Star key={`empty-${i}`} className="h-3 w-3 text-zinc-600" />
+          <Star key={`empty-${i}`} className="h-3 w-3 text-muted-foreground" />
         ))}
       </div>
     );
@@ -189,7 +189,7 @@ export function FeedbackBadge({
             <p>
               {thumbsUp ? "Positive feedback" : "Negative feedback"}
               {feedbackText && (
-                <span className="block text-xs text-zinc-400 mt-1 max-w-48 truncate">
+                <span className="block text-xs text-muted-foreground mt-1 max-w-48 truncate">
                   &ldquo;{feedbackText}&rdquo;
                 </span>
               )}
@@ -212,8 +212,8 @@ export function FeedbackBadge({
               onClick={onClick}
               className={cn(
                 "inline-flex items-center gap-1.5 px-2 py-1 rounded-full",
-                "bg-zinc-800/50 border border-zinc-700/50",
-                "hover:bg-zinc-800 transition-colors",
+                "bg-muted/50 border border-border/50",
+                "hover:bg-muted transition-colors",
                 className
               )}
             >
@@ -228,7 +228,7 @@ export function FeedbackBadge({
               {rating !== null && rating !== undefined && (
                 <div className="flex items-center gap-0.5">
                   <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs text-zinc-300">{rating}</span>
+                  <span className="text-xs text-foreground">{rating}</span>
                 </div>
               )}
 
@@ -237,7 +237,7 @@ export function FeedbackBadge({
               {severity && renderSeverityIndicator()}
 
               {categoriesCount !== undefined && categoriesCount > 0 && (
-                <span className="text-xs text-zinc-500">+{categoriesCount}</span>
+                <span className="text-xs text-muted-foreground">+{categoriesCount}</span>
               )}
             </motion.button>
           </TooltipTrigger>
@@ -256,9 +256,9 @@ export function FeedbackBadge({
                 <p className="text-xs text-blue-400">Contains suggested correction</p>
               )}
               {feedbackText && (
-                <p className="text-xs text-zinc-400 italic">&ldquo;{feedbackText}&rdquo;</p>
+                <p className="text-xs text-muted-foreground italic">&ldquo;{feedbackText}&rdquo;</p>
               )}
-              {status && <p className="text-xs text-zinc-400">Status: {status}</p>}
+              {status && <p className="text-xs text-muted-foreground">Status: {status}</p>}
             </div>
           </TooltipContent>
         </Tooltip>
@@ -274,8 +274,8 @@ export function FeedbackBadge({
       onClick={onClick}
       className={cn(
         "flex items-center gap-3 p-2 rounded-lg",
-        "bg-zinc-800/30 border border-zinc-700/50",
-        onClick && "cursor-pointer hover:bg-zinc-800/50 transition-colors",
+        "bg-muted/30 border border-border/50",
+        onClick && "cursor-pointer hover:bg-muted/50 transition-colors",
         className
       )}
     >
@@ -320,7 +320,7 @@ export function FeedbackBadge({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Badge variant="outline" className="text-xs text-zinc-400 border-zinc-600">
+                <Badge variant="outline" className="text-xs text-muted-foreground border-border">
                   <MessageSquare className="h-3 w-3 mr-1" />
                   Comment
                 </Badge>

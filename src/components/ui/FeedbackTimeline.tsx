@@ -135,7 +135,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
     if (event.status === "rejected") return <XCircle className="h-4 w-4 text-red-400" />;
     if (event.thumbs_up === true) return <ThumbsUp className="h-4 w-4 text-green-400" />;
     if (event.thumbs_up === false) return <ThumbsDown className="h-4 w-4 text-red-400" />;
-    return <MessageSquare className="h-4 w-4 text-zinc-400" />;
+    return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getEventColor = (event: TimelineEvent) => {
@@ -144,7 +144,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
     if (event.suggested_correction) return "border-l-cyan-500";
     if (event.thumbs_up === false || (event.rating && event.rating < 3)) return "border-l-orange-500";
     if (event.thumbs_up === true || (event.rating && event.rating >= 4)) return "border-l-green-500";
-    return "border-l-zinc-700";
+    return "border-l-border";
   };
 
   // Group events by date
@@ -156,15 +156,15 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
   }, {} as Record<string, TimelineEvent[]>);
 
   return (
-    <Card className={cn("h-full flex flex-col bg-zinc-900/50 border-zinc-800", className)}>
+    <Card className={cn("h-full flex flex-col bg-card/50 border-border", className)}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2 text-zinc-100">
+            <CardTitle className="flex items-center gap-2 text-foreground">
               <Clock className="h-5 w-5 text-purple-400" />
               Feedback Timeline
             </CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardDescription className="text-muted-foreground">
               Track feedback history and improvement loop
             </CardDescription>
           </div>
@@ -222,27 +222,27 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
 
         {/* Stats summary */}
         <div className="grid grid-cols-4 gap-2 mt-4">
-          <div className="bg-zinc-900/30 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-zinc-100">{events.length}</p>
-            <p className="text-xs text-zinc-500">Total</p>
+          <div className="bg-card/30 rounded-lg p-2 text-center">
+            <p className="text-lg font-bold text-foreground">{events.length}</p>
+            <p className="text-xs text-muted-foreground">Total</p>
           </div>
-          <div className="bg-zinc-900/30 rounded-lg p-2 text-center">
+          <div className="bg-card/30 rounded-lg p-2 text-center">
             <p className="text-lg font-bold text-green-400">
               {events.filter(e => e.thumbs_up === true || (e.rating && e.rating >= 4)).length}
             </p>
-            <p className="text-xs text-zinc-500">Positive</p>
+            <p className="text-xs text-muted-foreground">Positive</p>
           </div>
-          <div className="bg-zinc-900/30 rounded-lg p-2 text-center">
+          <div className="bg-card/30 rounded-lg p-2 text-center">
             <p className="text-lg font-bold text-orange-400">
               {events.filter(e => e.thumbs_up === false || (e.rating && e.rating < 3)).length}
             </p>
-            <p className="text-xs text-zinc-500">Negative</p>
+            <p className="text-xs text-muted-foreground">Negative</p>
           </div>
-          <div className="bg-zinc-900/30 rounded-lg p-2 text-center">
+          <div className="bg-card/30 rounded-lg p-2 text-center">
             <p className="text-lg font-bold text-cyan-400">
               {events.filter(e => e.suggested_correction).length}
             </p>
-            <p className="text-xs text-zinc-500">Corrected</p>
+            <p className="text-xs text-muted-foreground">Corrected</p>
           </div>
         </div>
       </CardHeader>
@@ -251,11 +251,11 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
         <ScrollArea className="h-full pr-4">
           {loading && events.length === 0 ? (
             <div className="flex items-center justify-center py-8">
-              <RefreshCw className="h-8 w-8 animate-spin text-zinc-600" />
+              <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           ) : events.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-zinc-500">
-              <Clock className="h-12 w-12 mb-4 text-zinc-700" />
+            <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+              <Clock className="h-12 w-12 mb-4 text-muted" />
               <p className="text-lg">No feedback events found</p>
               <p className="text-sm">Feedback from chat sessions will appear here</p>
             </div>
@@ -264,9 +264,9 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
               {Object.entries(groupedEvents).map(([date, dateEvents]) => (
                 <div key={date}>
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px bg-zinc-700 flex-1" />
-                    <span className="text-xs text-zinc-500 font-medium">{date}</span>
-                    <div className="h-px bg-zinc-700 flex-1" />
+                    <div className="h-px bg-muted flex-1" />
+                    <span className="text-xs text-muted-foreground font-medium">{date}</span>
+                    <div className="h-px bg-muted flex-1" />
                   </div>
 
                   <div className="space-y-3">
@@ -274,7 +274,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
                       <div
                         key={event.id}
                         className={cn(
-                          "bg-zinc-900/30 border border-zinc-800 rounded-lg p-3 border-l-4",
+                          "bg-card/30 border border-border rounded-lg p-3 border-l-4",
                           getEventColor(event)
                         )}
                       >
@@ -282,7 +282,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
                           <div className="mt-1">{getEventIcon(event)}</div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <code className="text-[10px] text-zinc-500 font-mono">
+                              <code className="text-[10px] text-muted-foreground font-mono">
                                 {event.id.substring(0, 8)}...
                               </code>
                               {event.rating && (
@@ -319,12 +319,12 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
                                   {event.model_used}
                                 </Badge>
                               )}
-                              <span className="text-xs text-zinc-500 ml-auto">
+                              <span className="text-xs text-muted-foreground ml-auto">
                                 {formatTimeAgo(event.created_at)}
                               </span>
                             </div>
 
-                            <p className="text-sm text-zinc-200 mt-2 line-clamp-2">
+                            <p className="text-sm text-foreground mt-2 line-clamp-2">
                               {event.query}
                             </p>
 
@@ -334,20 +334,20 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
                                   <Edit3 className="h-3 w-3" />
                                   Correction Applied
                                 </div>
-                                <p className="text-xs text-zinc-300 line-clamp-2">
+                                <p className="text-xs text-foreground line-clamp-2">
                                   {event.suggested_correction}
                                 </p>
                               </div>
                             )}
 
                             {event.curator_notes && (
-                              <p className="text-xs text-zinc-400 mt-2 italic">
+                              <p className="text-xs text-muted-foreground mt-2 italic">
                                 "{event.curator_notes}"
                               </p>
                             )}
 
                             {event.reviewed_at && (
-                              <p className="text-xs text-zinc-500 mt-1">
+                              <p className="text-xs text-muted-foreground mt-1">
                                 Reviewed: {formatDate(event.reviewed_at)}
                               </p>
                             )}

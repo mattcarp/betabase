@@ -169,7 +169,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
   const getServerStatus = () => {
     if (!status?.data?.servers?.[0]) {
-      return { text: "Not configured", color: "text-gray-400" };
+      return { text: "Not configured", color: "text-muted-foreground" };
     }
 
     const server = status.data.servers[0];
@@ -179,11 +179,11 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
       case "connecting":
         return { text: "Connecting...", color: "text-yellow-400" };
       case "disconnected":
-        return { text: "Disconnected", color: "text-gray-400" };
+        return { text: "Disconnected", color: "text-muted-foreground" };
       case "error":
         return { text: "Error", color: "text-red-400" };
       default:
-        return { text: "Unknown", color: "text-gray-400" };
+        return { text: "Unknown", color: "text-muted-foreground" };
     }
   };
 
@@ -220,7 +220,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
       return (
         <div key={category} className="mb-6">
-          <h5 className="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+          <h5 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
             {getCategoryIcon(category)}
             {category.charAt(0).toUpperCase() + category.slice(1)} ({features.length})
           </h5>
@@ -231,13 +231,13 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
                 className={`p-3 rounded border ${
                   feature.isAdvanced
                     ? "bg-yellow-900/20 border-yellow-500/30"
-                    : "bg-gray-800/30 border-gray-700"
+                    : "bg-card/30 border-border"
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <code className="text-xs font-mono text-blue-300 bg-gray-800 px-2 py-1 rounded">
+                      <code className="text-xs font-mono text-blue-300 bg-muted px-2 py-1 rounded">
                         {feature.toolName}
                       </code>
                       {feature.isAdvanced && (
@@ -246,7 +246,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 mt-1 line-clamp-2">{feature.description}</p>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -266,17 +266,17 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-blue-600 font-mono">MCP Settings</h3>
         <div className="flex items-center gap-2 text-sm font-mono">
-          <span className="text-gray-300">Status:</span>
+          <span className="text-foreground">Status:</span>
           <span className={serverStatus.color}>{serverStatus.text}</span>
         </div>
       </div>
 
       <div className="space-y-6">
         {/* Enable Toggle */}
-        <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+        <div className="flex items-center justify-between p-4 bg-card/50 rounded-lg border border-border">
           <div>
-            <label className="text-sm font-medium text-gray-300">Enable MCP</label>
-            <p className="text-xs text-gray-400 mt-1">
+            <label className="text-sm font-medium text-foreground">Enable MCP</label>
+            <p className="text-xs text-muted-foreground mt-1">
               Enable Model Context Protocol integration for enhanced AI capabilities
             </p>
           </div>
@@ -285,7 +285,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
             className={`flex items-center gap-2 px-3 py-2 rounded font-mono text-sm transition-colors ${
               formData.enabled
                 ? "bg-blue-400/20 border border-blue-500 text-blue-300"
-                : "bg-gray-600/20 border border-gray-500 text-gray-300"
+                : "bg-muted/20 border border-border text-foreground"
             }`}
             data-testid="mcp-enable-toggle"
           >
@@ -307,7 +307,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         <div className="grid grid-cols-1 gap-6">
           {/* Server URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               <Server className="w-4 h-4 inline mr-2" />
               Server URL
             </label>
@@ -317,10 +317,10 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               onChange={(e) => handleFieldChange("serverUrl", e.target.value)}
               placeholder="https://your-mcp-server.com"
               disabled={!formData.enabled}
-              className={`w-full bg-gray-700 border rounded px-3 py-2 text-white focus:outline-none font-mono text-sm ${
+              className={`w-full bg-muted border rounded px-3 py-2 text-white focus:outline-none font-mono text-sm ${
                 validationErrors.serverUrl
                   ? "border-red-500 focus:border-red-400"
-                  : "border-gray-600 focus:border-blue-600"
+                  : "border-border focus:border-blue-600"
               } ${!formData.enabled ? "opacity-50 cursor-not-allowed" : ""}`}
               data-testid="mcp-server-url"
             />
@@ -334,10 +334,10 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
           {/* API Key */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               <Key className="w-4 h-4 inline mr-2" />
               API Key
-              <span className="text-gray-400 font-normal ml-2">(optional)</span>
+              <span className="text-muted-foreground font-normal ml-2">(optional)</span>
             </label>
             <input
               type="password"
@@ -345,7 +345,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               onChange={(e) => handleFieldChange("apiKey", e.target.value)}
               placeholder="Enter API key if required"
               disabled={!formData.enabled}
-              className={`w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none font-mono text-sm ${
+              className={`w-full bg-muted border border-border rounded px-3 py-2 text-white focus:border-blue-600 focus:outline-none font-mono text-sm ${
                 !formData.enabled ? "opacity-50 cursor-not-allowed" : ""
               }`}
               data-testid="mcp-api-key"
@@ -354,7 +354,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
           {/* Timeout */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               <Clock className="w-4 h-4 inline mr-2" />
               Timeout (ms)
             </label>
@@ -366,10 +366,10 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               value={formData.timeout}
               onChange={(e) => handleFieldChange("timeout", parseInt(e.target.value) || 5000)}
               disabled={!formData.enabled}
-              className={`w-full bg-gray-700 border rounded px-3 py-2 text-white focus:outline-none font-mono text-sm ${
+              className={`w-full bg-muted border rounded px-3 py-2 text-white focus:outline-none font-mono text-sm ${
                 validationErrors.timeout
                   ? "border-red-500 focus:border-red-400"
-                  : "border-gray-600 focus:border-blue-600"
+                  : "border-border focus:border-blue-600"
               } ${!formData.enabled ? "opacity-50 cursor-not-allowed" : ""}`}
               data-testid="mcp-timeout"
             />
@@ -379,7 +379,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
                 {validationErrors.timeout}
               </p>
             )}
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Connection timeout in milliseconds (1000-60000)
             </p>
           </div>
@@ -387,17 +387,17 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
         {/* Server Information */}
         {status?.data?.servers?.[0] && (
-          <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
-            <h4 className="text-sm font-medium text-gray-300 mb-3">Server Information</h4>
+          <div className="p-4 bg-card/30 rounded-lg border border-border">
+            <h4 className="text-sm font-medium text-foreground mb-3">Server Information</h4>
             <div className="grid grid-cols-2 gap-4 text-sm font-mono">
               <div>
-                <span className="text-gray-400">Name:</span>
+                <span className="text-muted-foreground">Name:</span>
                 <span className="text-blue-300 ml-2">
                   {status.data.servers[0].name || "Unknown"}
                 </span>
               </div>
               <div>
-                <span className="text-gray-400">Uptime:</span>
+                <span className="text-muted-foreground">Uptime:</span>
                 <span className="text-blue-300 ml-2">
                   {status.data.servers[0].uptime
                     ? `${Math.floor(status.data.servers[0].uptime / 1000)}s`
@@ -407,13 +407,13 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
               {status.data.servers[0].statistics && (
                 <>
                   <div>
-                    <span className="text-gray-400">Requests:</span>
+                    <span className="text-muted-foreground">Requests:</span>
                     <span className="text-blue-300 ml-2">
                       {status.data.servers[0].statistics.requestCount}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Errors:</span>
+                    <span className="text-muted-foreground">Errors:</span>
                     <span className="text-blue-300 ml-2">
                       {status.data.servers[0].statistics.errorCount}
                     </span>
@@ -426,9 +426,9 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
         {/* MCP Capabilities & Features */}
         {capabilities && formData.enabled && (
-          <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+          <div className="p-4 bg-card/30 rounded-lg border border-border">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-medium text-gray-300">AOMA Mesh MCP Capabilities</h4>
+              <h4 className="text-sm font-medium text-foreground">AOMA Mesh MCP Capabilities</h4>
               <button
                 onClick={() => setShowFeatures(!showFeatures)}
                 className="text-xs text-blue-600 hover:text-blue-300 font-mono"
@@ -439,15 +439,15 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
             <div className="grid grid-cols-3 gap-4 text-sm font-mono mb-4">
               <div>
-                <span className="text-gray-400">Version:</span>
+                <span className="text-muted-foreground">Version:</span>
                 <span className="text-blue-300 ml-2">{capabilities.serverVersion}</span>
               </div>
               <div>
-                <span className="text-gray-400">Tools:</span>
+                <span className="text-muted-foreground">Tools:</span>
                 <span className="text-blue-300 ml-2">{capabilities.totalTools}</span>
               </div>
               <div>
-                <span className="text-gray-400">Advanced:</span>
+                <span className="text-muted-foreground">Advanced:</span>
                 <span className="text-yellow-300 ml-2">
                   {capabilities.features.filter((f) => f.isAdvanced).length}
                 </span>
@@ -464,20 +464,20 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
                       : "bg-yellow-400"
                 }`}
               />
-              <span className="text-gray-400">
+              <span className="text-muted-foreground">
                 {capabilities.connectionStatus === "connected"
                   ? "All features available"
                   : capabilities.connectionStatus === "error"
                     ? "Connection error"
                     : "Connecting..."}
               </span>
-              <span className="text-gray-500 ml-auto">
+              <span className="text-muted-foreground ml-auto">
                 Updated: {new Date(capabilities.lastUpdated).toLocaleTimeString()}
               </span>
             </div>
 
             {showFeatures && (
-              <div className="mt-6 border-t border-gray-700 pt-4">
+              <div className="mt-6 border-t border-border pt-4">
                 <div className="max-h-96 overflow-y-auto">{renderFeaturesByCategory()}</div>
               </div>
             )}
@@ -485,7 +485,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         )}
 
         {/* Save Button */}
-        <div className="flex justify-end pt-4 border-t border-gray-700">
+        <div className="flex justify-end pt-4 border-t border-border">
           <button
             onClick={handleSave}
             disabled={isLoading}

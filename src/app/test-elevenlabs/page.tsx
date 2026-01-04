@@ -9,25 +9,25 @@ export default function TestElevenLabsPage() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-light mb-2">Voice AI Testing Interface</h1>
-          <p className="text-zinc-400">
+          <p className="text-muted-foreground">
             Test the integrated voice conversation system with knowledge base access
           </p>
-          <div className="mt-4 p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+          <div className="mt-4 p-4 bg-card rounded-lg border border-border">
             <div className="flex items-center justify-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
               <span className="text-sm text-green-400">System Ready</span>
             </div>
-            <p className="text-xs text-slate-500 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               Agent ID: {process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || "Not configured"}
             </p>
           </div>
         </div>
 
-        <div className="border border-zinc-800 rounded-lg overflow-hidden">
-          <div className="bg-zinc-900 px-6 py-3 border-b border-zinc-800">
+        <div className="border border-border rounded-lg overflow-hidden">
+          <div className="bg-card px-6 py-3 border-b border-border">
             <h2 className="text-lg font-light">Conversational AI Interface</h2>
           </div>
-          <div className="p-6 bg-zinc-950">
+          <div className="p-6 bg-background">
             <ConversationalAI
               agentId={
                 process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID || "agent_01jz1ar6k2e8tvst14g6cbgc7m"
@@ -42,9 +42,9 @@ export default function TestElevenLabsPage() {
           </div>
         </div>
 
-        <div className="mt-8 p-6 bg-zinc-900 rounded-lg border border-zinc-800">
+        <div className="mt-8 p-6 bg-card rounded-lg border border-border">
           <h3 className="text-lg font-light mb-4">Testing Instructions</h3>
-          <ol className="space-y-2 text-sm text-zinc-400">
+          <ol className="space-y-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
               <span className="text-blue-400">1.</span>
               <span>Click "Start Conversation" to begin voice interaction</span>

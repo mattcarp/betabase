@@ -672,7 +672,7 @@ export const SelfHealingTestViewer: React.FC = () => {
       case "testing":
         return <RefreshCw className="h-5 w-5 text-blue-500 animate-spin" />;
       default:
-        return <Clock className="h-5 w-5 text-gray-400" />;
+        return <Clock className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
@@ -692,7 +692,7 @@ export const SelfHealingTestViewer: React.FC = () => {
       case "testing":
         return getStatusStyles.info;
       default:
-        return "bg-gray-500/10 text-gray-400 border-gray-500/20";
+        return "bg-muted/10 text-muted-foreground border-border";
     }
   };
 
@@ -1334,7 +1334,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="ml-5 border-l-2 border-dashed border-gray-700 h-8" />
+                          <div className="ml-5 border-l-2 border-dashed border-border h-8" />
 
                           {/* Step 2: Analysis */}
                           <div className="flex items-center gap-3 mb-4">
@@ -1349,7 +1349,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="ml-5 border-l-2 border-dashed border-gray-700 h-8" />
+                          <div className="ml-5 border-l-2 border-dashed border-border h-8" />
 
                           {/* Step 3: Healing */}
                           <div className="flex items-center gap-3 mb-4">
@@ -1415,7 +1415,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="ml-5 border-l-2 border-dashed border-gray-700 h-8" />
+                          <div className="ml-5 border-l-2 border-dashed border-border h-8" />
 
                           {/* Step 4: Result */}
                           <div className="flex items-center gap-3">
@@ -1623,7 +1623,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                             title={`${day.date}: ${day.totalAttempts} total, ${day.successful} successful`}
                           >
                             <div
-                              className="w-full bg-gray-700 rounded-t relative"
+                              className="w-full bg-muted rounded-t relative"
                               style={{ height: `${height}%` }}
                             >
                               <div
@@ -1644,7 +1644,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                         <span>Successful</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <div className="w-3 h-3 bg-gray-700 rounded" />
+                        <div className="w-3 h-3 bg-muted rounded" />
                         <span>Total Attempts</span>
                       </div>
                     </div>

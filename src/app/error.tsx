@@ -19,7 +19,7 @@ export default function Error({
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="max-w-md w-full space-y-4 text-center">
         <h2 className="text-2xl font-bold text-red-600">Something went wrong!</h2>
-        <p className="text-gray-600">{error.message || "An unexpected error occurred"}</p>
+        <p className="text-muted-foreground">{error.message || "An unexpected error occurred"}</p>
         <div className="flex gap-4 justify-center">
           <Button className="mac-button mac-button-primary" onClick={reset}>
             Try again

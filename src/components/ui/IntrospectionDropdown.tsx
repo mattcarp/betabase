@@ -229,7 +229,7 @@ export function IntrospectionDropdown() {
       case "pending":
         return <Loader2 className="h-3 w-3 animate-spin text-yellow-500" />;
       default:
-        return <Clock className="h-3 w-3 text-gray-500" />;
+        return <Clock className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
@@ -244,7 +244,7 @@ export function IntrospectionDropdown() {
       case "retriever":
         return "bg-orange-500/10 text-orange-500";
       default:
-        return "bg-gray-500/10 text-gray-500";
+        return "bg-muted/10 text-muted-foreground";
     }
   };
 

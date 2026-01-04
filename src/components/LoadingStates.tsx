@@ -6,7 +6,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className }: SkeletonProps) {
-  return <div className={cn("animate-pulse rounded-md bg-gray-700/50", className)} />;
+  return <div className={cn("animate-pulse rounded-md bg-muted/50", className)} />;
 }
 
 interface PulsingDotProps {
@@ -67,7 +67,7 @@ export function EmptyState({
     <div className={cn("text-center py-8", className)}>
       <div className={cn("mx-auto mb-4 opacity-50", animated && "animate-pulse")}>{icon}</div>
       <h3 className="mac-title">{title}</h3>
-      <p className="text-sm text-gray-400 font-mono">{description}</p>
+      <p className="text-sm text-muted-foreground font-mono">{description}</p>
       {animated && (
         <div className="flex justify-center gap-2 mt-4">
           <PulsingDot delay="0s" />
@@ -87,7 +87,7 @@ export function TranscriptionSkeleton({ count = 3 }: TranscriptionSkeletonProps)
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-4">
+        <div key={index} className="bg-muted/50 border border-border rounded p-4">
           <div className="flex items-center gap-2 mb-2">
             <Skeleton className="w-2 h-2 rounded-full" />
             <Skeleton className="h-4 w-32" />
@@ -132,7 +132,7 @@ export function VectorMatchesSkeleton({ count = 3 }: VectorMatchesSkeletonProps)
   return (
     <div className="space-y-2">
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="bg-gray-700/50 border border-gray-600 rounded p-2">
+        <div key={index} className="bg-muted/50 border border-border rounded p-2">
           <div className="flex justify-between items-center mb-2">
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-8" />
@@ -156,7 +156,7 @@ export function AnimatedWaiting({ message, icon, subMessage }: AnimatedWaitingPr
       <div className="flex justify-center mb-4">
         {icon && <div className="animate-pulse opacity-50">{icon}</div>}
       </div>
-      <div className="font-mono text-gray-300 mb-2">
+      <div className="font-mono text-foreground mb-2">
         {message}
         <span className="inline-flex ml-2">
           <span className="animate-pulse" style={{ animationDelay: "0s" }}>
@@ -170,7 +170,7 @@ export function AnimatedWaiting({ message, icon, subMessage }: AnimatedWaitingPr
           </span>
         </span>
       </div>
-      {subMessage && <p className="text-sm text-gray-400 font-mono">{subMessage}</p>}
+      {subMessage && <p className="text-sm text-muted-foreground font-mono">{subMessage}</p>}
       <div className="flex justify-center gap-2 mt-4">
         <PulsingDot delay="0s" />
         <PulsingDot delay="0.3s" />
@@ -206,8 +206,8 @@ export function StatusIndicator({ status, message, size = "md" }: StatusIndicato
         };
       default:
         return {
-          color: "text-gray-400",
-          icon: <div className="w-4 h-4 bg-gray-400 rounded-full opacity-50" />,
+          color: "text-muted-foreground",
+          icon: <div className="w-4 h-4 bg-muted-foreground rounded-full opacity-50" />,
         };
     }
   };

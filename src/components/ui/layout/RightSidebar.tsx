@@ -72,10 +72,10 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="absolute -left-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+        className="absolute -left-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border/50 hover:bg-muted transition-colors group"
         aria-label="Toggle sidebar"
       >
-        <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors" />
+        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
       </button>
 
       {/* Navigation Section */}

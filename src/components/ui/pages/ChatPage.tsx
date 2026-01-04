@@ -274,9 +274,9 @@ Be helpful, concise, and professional in your responses.`;
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col w-full">
+      <div className="h-screen bg-background text-foreground overflow-hidden flex flex-col w-full">
         {/* Sophisticated Header - Mobile Optimized */}
-        <header className="border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/60 flex-shrink-0 overflow-visible relative z-50">
+        <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60 flex-shrink-0 overflow-visible relative z-50">
           <div className="px-3 sm:px-6 py-2 sm:py-4 h-14 sm:h-16">
             <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 h-full">
               {/* Brand Identity - Compact on mobile */}
@@ -287,7 +287,7 @@ Be helpful, concise, and professional in your responses.`;
                   <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
                     The Betabase
                   </h1>
-                  <p className="text-xs text-zinc-200 font-light whitespace-nowrap">
+                  <p className="text-xs text-foreground font-light whitespace-nowrap">
                     Intelligence Platform
                   </p>
                 </div>
@@ -296,7 +296,7 @@ Be helpful, concise, and professional in your responses.`;
               {/* Navigation Tabs - Hidden on mobile, shown on tablet+ */}
               {/* Use hydration-safe mode: always "chat" during SSR, actual mode after hydration */}
               <TooltipProvider delayDuration={200}>
-                <div className="hidden md:flex items-center space-x-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 flex-shrink-0">
+                <div className="hidden md:flex items-center space-x-1 bg-card/50 p-1 rounded-lg border border-border/50 flex-shrink-0">
                   {COMPONENT_MODES.map((mode) => {
                     // Only use actual activeMode after hydration to prevent SSR mismatch
                     const isActive = isHydrated ? activeMode === mode.mode : mode.mode === "chat";
@@ -308,8 +308,8 @@ Be helpful, concise, and professional in your responses.`;
                             className={cn(
                               "relative flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-sm font-light transition-all duration-200",
                               isActive
-                                ? "bg-zinc-800 text-white shadow-sm"
-                                : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                                ? "bg-muted text-white shadow-sm"
+                                : "text-muted-foreground hover:text-white hover:bg-muted/50"
                             )}
                             suppressHydrationWarning
                           >
@@ -327,10 +327,10 @@ Be helpful, concise, and professional in your responses.`;
                         </TooltipTrigger>
                         <TooltipContent 
                           side="bottom" 
-                          className="bg-zinc-800 text-zinc-100 border-zinc-700"
+                          className="bg-muted text-foreground border-border"
                         >
                           <p className="font-normal">{mode.label}</p>
-                          <p className="text-zinc-400 text-[10px]">{mode.description}</p>
+                          <p className="text-muted-foreground text-[10px]">{mode.description}</p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -340,7 +340,7 @@ Be helpful, concise, and professional in your responses.`;
 
               {/* Mobile Navigation - Compact tabs for small screens */}
               <TooltipProvider delayDuration={300}>
-                <div className="flex md:hidden items-center space-x-0.5 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50">
+                <div className="flex md:hidden items-center space-x-0.5 bg-card/50 p-1 rounded-lg border border-border/50">
                   {COMPONENT_MODES.map((mode) => {
                     const isActive = isHydrated ? activeMode === mode.mode : mode.mode === "chat";
                     return (
@@ -351,8 +351,8 @@ Be helpful, concise, and professional in your responses.`;
                             className={cn(
                               "flex items-center justify-center p-2 rounded-md transition-all duration-200",
                               isActive
-                                ? "bg-zinc-800 shadow-sm"
-                                : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                                ? "bg-muted shadow-sm"
+                                : "text-muted-foreground hover:text-white hover:bg-muted/50"
                             )}
                             aria-label={mode.label}
                             suppressHydrationWarning
@@ -370,10 +370,10 @@ Be helpful, concise, and professional in your responses.`;
                         </TooltipTrigger>
                         <TooltipContent 
                           side="bottom" 
-                          className="bg-zinc-800 text-zinc-100 border-zinc-700"
+                          className="bg-muted text-foreground border-border"
                         >
                           <p className="font-normal">{mode.label}</p>
-                          <p className="text-zinc-400 text-[10px]">{mode.description}</p>
+                          <p className="text-muted-foreground text-[10px]">{mode.description}</p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -389,7 +389,7 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
                 {/* Knowledge status badges */}
                 <div className="hidden lg:flex items-center gap-2">
-                  <Badge variant="secondary" title="Knowledge status" className="whitespace-nowrap border-0 bg-zinc-800/50 text-zinc-400">
+                  <Badge variant="secondary" title="Knowledge status" className="whitespace-nowrap border-0 bg-muted/50 text-muted-foreground">
                     {knowledgeStatus === "ok"
                       ? "Knowledge: OK"
                       : knowledgeStatus === "degraded"
@@ -399,7 +399,7 @@ Be helpful, concise, and professional in your responses.`;
                   {lastKnowledgeRefresh && (
                     <Badge
                       variant="secondary"
-                      className="text-xs whitespace-nowrap border-0 bg-zinc-800/50 text-zinc-400"
+                      className="text-xs whitespace-nowrap border-0 bg-muted/50 text-muted-foreground"
                       title="Last refresh"
                     >
                       updated {lastKnowledgeRefresh}
@@ -408,12 +408,12 @@ Be helpful, concise, and professional in your responses.`;
                 </div>
 
                 {/* Sidebar trigger with MAC styling */}
-                <SidebarTrigger className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-md transition-colors" />
+                <SidebarTrigger className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors" />
 
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
+                  className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted/50 mac-button mac-button-outline"
                   onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
                   title="Knowledge Base"
                   aria-label="Toggle knowledge base panel"
@@ -425,7 +425,7 @@ Be helpful, concise, and professional in your responses.`;
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hidden sm:flex h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 mac-button mac-button-outline"
+                  className="hidden sm:flex h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted/50 mac-button mac-button-outline"
                   onClick={() => (window.location.href = "/performance")}
                   title="Performance Dashboard"
                   aria-label="Open performance dashboard"
@@ -438,7 +438,7 @@ Be helpful, concise, and professional in your responses.`;
                     variant="ghost"
                     size="sm"
                     onClick={onLogout}
-                    className="sign-out-button text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 text-xs px-2 sm:px-4 flex items-center gap-1 sm:gap-2 mac-button mac-button-outline"
+                    className="sign-out-button text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs px-2 sm:px-4 flex items-center gap-1 sm:gap-2 mac-button mac-button-outline"
                     aria-label="Sign out of your account"
                   >
                     <LogOut className="h-4 w-4" />
@@ -453,7 +453,7 @@ Be helpful, concise, and professional in your responses.`;
         {/* Main Layout with proper sidebar */}
         <div className="flex flex-1 min-h-0 relative w-full">
           {/* Enhanced Sidebar with persistence - Only show on Chat tab */}
-          {activeMode === "chat" && <AppSidebar className="border-r border-zinc-800/50" />}
+          {activeMode === "chat" && <AppSidebar className="border-r border-border/50" />}
 
           {/* Main Content with SidebarInset */}
           <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">
@@ -555,11 +555,11 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "test" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
-                      <TestTube className="h-5 w-5 text-zinc-300" />
+                    <h2 className="text-lg font-normal text-foreground flex items-center gap-2">
+                      <TestTube className="h-5 w-5 text-muted-foreground" />
                       Advanced Testing & Quality Assurance
                     </h2>
-                    <p className="text-sm text-zinc-300 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Comprehensive testing suite with historical data, RLHF-generated tests, and
                       live monitoring
                     </p>
@@ -602,11 +602,11 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "fix" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-normal text-zinc-100 flex items-center gap-2">
-                      <Wrench className="h-5 w-5 text-zinc-300" />
+                    <h2 className="text-lg font-normal text-foreground flex items-center gap-2">
+                      <Wrench className="h-5 w-5 text-muted-foreground" />
                       Debug & Fix Assistant
                     </h2>
-                    <p className="text-sm text-zinc-300 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Analyze responses, make corrections, and generate tests
                     </p>
                   </div>
@@ -640,12 +640,12 @@ Be helpful, concise, and professional in your responses.`;
 
               {activeMode === "curate" && (
                 <div className="h-full">
-                  <div className="p-6 border-b border-zinc-800/50">
-                    <h2 className="mac-heading text-lg font-normal text-zinc-100 flex items-center gap-2">
-                      <Library className="h-5 w-5 text-zinc-300" />
+                  <div className="p-6 border-b border-border/50">
+                    <h2 className="mac-heading text-lg font-normal text-foreground flex items-center gap-2">
+                      <Library className="h-5 w-5 text-muted-foreground" />
                       Knowledge Curation
                     </h2>
-                    <p className="text-sm text-zinc-300 mt-2">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Manage and organize your knowledge base
                     </p>
                   </div>
@@ -659,7 +659,7 @@ Be helpful, concise, and professional in your responses.`;
 
           {/* Right Sidebar */}
           {isRightSidebarOpen && (
-            <aside className="w-96 border-l border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/30">
+            <aside className="w-96 border-l border-border/50 bg-background/50 backdrop-blur-sm supports-[backdrop-filter]:bg-background/30">
               <RightSidebar onToggle={() => setIsRightSidebarOpen(false)}>
                 <EnhancedKnowledgePanel className="h-full" />
               </RightSidebar>

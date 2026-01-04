@@ -211,7 +211,7 @@ export default function PerformanceDashboard() {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-4xl font-bold mb-2">Performance Dashboard</h1>
-            <p className="text-gray-400">Real-time system monitoring and analytics</p>
+            <p className="text-muted-foreground">Real-time system monitoring and analytics</p>
           </div>
           <div className="flex gap-2">
             <Button
@@ -294,13 +294,13 @@ export default function PerformanceDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card className="mac-card bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Avg Response Time</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Avg Response Time</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">
               {formatDuration(metrics.queryMetrics.avgResponseTime)}
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               P95: {formatDuration(metrics.queryMetrics.p95ResponseTime)}
             </p>
           </CardContent>
@@ -308,11 +308,11 @@ export default function PerformanceDashboard() {
 
         <Card className="mac-card bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Total Queries</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Queries</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{metrics.queryMetrics.totalQueries}</div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               Success rate: {metrics.queryMetrics.successRate.toFixed(1)}%
             </p>
           </CardContent>
@@ -320,13 +320,13 @@ export default function PerformanceDashboard() {
 
         <Card className="mac-card bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">System Load</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">System Load</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">
               {metrics.systemMetrics.cpuUsage.toFixed(1)}%
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               CPU Usage | Memory: {metrics.systemMetrics.memoryUsage.toFixed(1)}%
             </p>
           </CardContent>
@@ -334,13 +334,13 @@ export default function PerformanceDashboard() {
 
         <Card className="mac-card bg-white/5 border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Uptime</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Uptime</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">
               {formatUptime(metrics.systemMetrics.uptime)}
             </div>
-            <p className="text-xs text-gray-400 mt-2">System uptime</p>
+            <p className="text-xs text-muted-foreground mt-2">System uptime</p>
           </CardContent>
         </Card>
       </div>
@@ -367,7 +367,7 @@ export default function PerformanceDashboard() {
           <Card className="mac-card bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white">Response Time Trends</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Average and P95 response times over time
               </CardDescription>
             </CardHeader>
@@ -408,7 +408,7 @@ export default function PerformanceDashboard() {
             <Card className="mac-card bg-white/5 border-white/10">
               <CardHeader>
                 <CardTitle className="text-white">Query Types</CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Distribution by query type
                 </CardDescription>
               </CardHeader>
@@ -436,29 +436,29 @@ export default function PerformanceDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">P50 Latency</span>
+                    <span className="text-muted-foreground">P50 Latency</span>
                     <span className="text-white font-normal">
                       {formatDuration(metrics.queryMetrics.p50ResponseTime)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">P95 Latency</span>
+                    <span className="text-muted-foreground">P95 Latency</span>
                     <span className="text-white font-normal">
                       {formatDuration(metrics.queryMetrics.p95ResponseTime)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">P99 Latency</span>
+                    <span className="text-muted-foreground">P99 Latency</span>
                     <span className="text-white font-normal">
                       {formatDuration(metrics.queryMetrics.p99ResponseTime)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Success Rate</span>
+                    <span className="text-muted-foreground">Success Rate</span>
                     <Badge variant="default">{metrics.queryMetrics.successRate.toFixed(1)}%</Badge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Error Rate</span>
+                    <span className="text-muted-foreground">Error Rate</span>
                     <Badge
                       variant={metrics.queryMetrics.errorRate > 5 ? "destructive" : "secondary"}
                     >
@@ -476,7 +476,7 @@ export default function PerformanceDashboard() {
           <Card className="mac-card bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white">System Resource Usage</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 CPU, Memory, and Disk usage over time
               </CardDescription>
             </CardHeader>
@@ -526,7 +526,7 @@ export default function PerformanceDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="mac-card bg-white/5 border-white/10">
               <CardHeader>
-                <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Server className="h-4 w-4" />
                   CPU Usage
                 </CardTitle>
@@ -535,7 +535,7 @@ export default function PerformanceDashboard() {
                 <div className="text-3xl font-bold text-white mb-2">
                   {metrics.systemMetrics.cpuUsage.toFixed(1)}%
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
                       metrics.systemMetrics.cpuUsage > 80
@@ -552,7 +552,7 @@ export default function PerformanceDashboard() {
 
             <Card className="mac-card bg-white/5 border-white/10">
               <CardHeader>
-                <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Database className="h-4 w-4" />
                   Memory Usage
                 </CardTitle>
@@ -561,7 +561,7 @@ export default function PerformanceDashboard() {
                 <div className="text-3xl font-bold text-white mb-2">
                   {metrics.systemMetrics.memoryUsage.toFixed(1)}%
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
                       metrics.systemMetrics.memoryUsage > 80
@@ -578,7 +578,7 @@ export default function PerformanceDashboard() {
 
             <Card className="mac-card bg-white/5 border-white/10">
               <CardHeader>
-                <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <HardDrive className="h-4 w-4" />
                   Disk Usage
                 </CardTitle>
@@ -587,7 +587,7 @@ export default function PerformanceDashboard() {
                 <div className="text-3xl font-bold text-white mb-2">
                   {metrics.systemMetrics.diskUsage.toFixed(1)}%
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
                       metrics.systemMetrics.diskUsage > 80
@@ -617,19 +617,19 @@ export default function PerformanceDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Total Documents</span>
+                    <span className="text-muted-foreground">Total Documents</span>
                     <span className="text-white font-normal">
                       {metrics.dataFreshness.vectorStore.totalDocuments}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Last Update</span>
+                    <span className="text-muted-foreground">Last Update</span>
                     <span className="text-white font-normal">
                       {new Date(metrics.dataFreshness.vectorStore.lastUpdate).toLocaleDateString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Staleness</span>
+                    <span className="text-muted-foreground">Staleness</span>
                     <Badge
                       variant={
                         metrics.dataFreshness.vectorStore.staleness > 72
@@ -656,19 +656,19 @@ export default function PerformanceDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Cache Hit Rate</span>
+                    <span className="text-muted-foreground">Cache Hit Rate</span>
                     <span className="text-white font-normal">
                       {(metrics.dataFreshness.aomaCache.cacheHitRate * 100).toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Cache Miss Rate</span>
+                    <span className="text-muted-foreground">Cache Miss Rate</span>
                     <span className="text-white font-normal">
                       {(metrics.dataFreshness.aomaCache.cacheMissRate * 100).toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Last Update</span>
+                    <span className="text-muted-foreground">Last Update</span>
                     <span className="text-white font-normal">
                       {formatTime(metrics.dataFreshness.aomaCache.lastUpdate)}
                     </span>
@@ -687,13 +687,13 @@ export default function PerformanceDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Total Files</span>
+                    <span className="text-muted-foreground">Total Files</span>
                     <span className="text-white font-normal">
                       {metrics.dataFreshness.knowledgeBase.fileCount}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Last Update</span>
+                    <span className="text-muted-foreground">Last Update</span>
                     <span className="text-white font-normal">
                       {new Date(
                         metrics.dataFreshness.knowledgeBase.lastUpdate
@@ -711,7 +711,7 @@ export default function PerformanceDashboard() {
           <Card className="mac-card bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white">API Endpoint Performance</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Latency and error rates by endpoint
               </CardDescription>
             </CardHeader>
@@ -725,14 +725,14 @@ export default function PerformanceDashboard() {
                     <div className="flex-1">
                       <div className="font-normal text-white mb-2">{api.endpoint}</div>
                       <div className="flex gap-4 text-sm">
-                        <span className="text-gray-400">
+                        <span className="text-muted-foreground">
                           Latency:{" "}
                           <span className="text-white">{formatDuration(api.avgLatency)}</span>
                         </span>
-                        <span className="text-gray-400">
+                        <span className="text-muted-foreground">
                           Requests: <span className="text-white">{api.requestCount}</span>
                         </span>
-                        <span className="text-gray-400">
+                        <span className="text-muted-foreground">
                           Errors: <span className="text-white">{api.errorCount}</span>
                         </span>
                       </div>

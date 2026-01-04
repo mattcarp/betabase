@@ -101,7 +101,7 @@ function Step({ number, title, description }: StepProps) {
       </div>
       <div className="flex-1 pt-0.5">
         <h4 className="text-sm font-light text-white">{title}</h4>
-        <p className="text-xs text-zinc-400 mt-0.5">{description}</p>
+        <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
       </div>
     </div>
   );

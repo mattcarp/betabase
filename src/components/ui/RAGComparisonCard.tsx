@@ -53,13 +53,13 @@ export function RAGComparisonCard() {
   };
 
   return (
-    <Card className="bg-zinc-900/50 border-zinc-800">
+    <Card className="bg-card/50 border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-zinc-100">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <GitCompare className="h-5 w-5 text-purple-400" />
           Basic vs Advanced RAG Comparison
         </CardTitle>
-        <CardDescription className="text-zinc-400">
+        <CardDescription className="text-muted-foreground">
           Side-by-side performance test - prove advanced RAG works better!
         </CardDescription>
       </CardHeader>
@@ -70,7 +70,7 @@ export function RAGComparisonCard() {
             placeholder="Enter test query..."
             value={testQuery}
             onChange={(e) => setTestQuery(e.target.value)}
-            className="flex-1 bg-zinc-900/50 border-zinc-800"
+            className="flex-1 bg-card/50 border-border"
           />
           <Button
             onClick={runComparison}
@@ -97,43 +97,43 @@ export function RAGComparisonCard() {
             {/* Summary Cards */}
             <div className="grid grid-cols-2 gap-4">
               {/* Basic RAG */}
-              <Card className="bg-zinc-900/30 border-zinc-700">
+              <Card className="bg-card/30 border-border">
                 <CardHeader>
-                  <CardTitle className="text-sm text-zinc-300 flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-gray-400" />
+                  <CardTitle className="text-sm text-foreground flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-muted-foreground" />
                     Basic RAG
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <span className="text-xs text-zinc-500">Time:</span>
-                    <Badge className="ml-2 bg-gray-500/20 text-gray-300">
+                    <span className="text-xs text-muted-foreground">Time:</span>
+                    <Badge className="ml-2 bg-muted/20 text-foreground">
                       <Clock className="h-3 w-3 mr-1" />
                       {comparison.basic.timeMs}ms
                     </Badge>
                   </div>
                   <div>
-                    <span className="text-xs text-zinc-500">Documents:</span>
-                    <Badge className="ml-2 bg-gray-500/20 text-gray-300">
+                    <span className="text-xs text-muted-foreground">Documents:</span>
+                    <Badge className="ml-2 bg-muted/20 text-foreground">
                       <FileText className="h-3 w-3 mr-1" />
                       {comparison.basic.documentCount}
                     </Badge>
                   </div>
-                  <div className="text-xs text-zinc-500 pt-2">Standard vector search only</div>
+                  <div className="text-xs text-muted-foreground pt-2">Standard vector search only</div>
                 </CardContent>
               </Card>
 
               {/* Advanced RAG */}
-              <Card className="bg-zinc-900/30 border-purple-500/30 ring-1 ring-purple-500/20">
+              <Card className="bg-card/30 border-purple-500/30 ring-1 ring-purple-500/20">
                 <CardHeader>
-                  <CardTitle className="text-sm text-zinc-100 flex items-center gap-2">
+                  <CardTitle className="text-sm text-foreground flex items-center gap-2">
                     <Lightbulb className="h-4 w-4 text-purple-400" />
                     Advanced RAG
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <span className="text-xs text-zinc-500">Time:</span>
+                    <span className="text-xs text-muted-foreground">Time:</span>
                     <Badge
                       className={cn(
                         "ml-2",
@@ -153,27 +153,27 @@ export function RAGComparisonCard() {
                     </Badge>
                   </div>
                   <div>
-                    <span className="text-xs text-zinc-500">Documents:</span>
+                    <span className="text-xs text-muted-foreground">Documents:</span>
                     <Badge className="ml-2 bg-purple-500/20 text-purple-300">
                       <FileText className="h-3 w-3 mr-1" />
                       {comparison.advanced.documentCount}
                     </Badge>
                   </div>
                   <div>
-                    <span className="text-xs text-zinc-500">Strategy:</span>
+                    <span className="text-xs text-muted-foreground">Strategy:</span>
                     <Badge className="ml-2 bg-blue-500/20 text-blue-300">
                       {comparison.advanced.metadata.strategy}
                     </Badge>
                   </div>
                   <div>
-                    <span className="text-xs text-zinc-500">Confidence:</span>
+                    <span className="text-xs text-muted-foreground">Confidence:</span>
                     <Badge className="ml-2 bg-green-500/20 text-green-300">
                       {Math.round(comparison.advanced.metadata.confidence * 100)}%
                     </Badge>
                   </div>
                   {comparison.advanced.metadata.agentIterations > 0 && (
                     <div>
-                      <span className="text-xs text-zinc-500">Agent Steps:</span>
+                      <span className="text-xs text-muted-foreground">Agent Steps:</span>
                       <Badge className="ml-2 bg-cyan-500/20 text-cyan-300">
                         {comparison.advanced.metadata.agentIterations}
                       </Badge>
@@ -187,7 +187,7 @@ export function RAGComparisonCard() {
             {comparison.comparison.advancedAdvantages.length > 0 && (
               <Card className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border-purple-500/30">
                 <CardHeader>
-                  <CardTitle className="text-sm text-zinc-100 flex items-center gap-2">
+                  <CardTitle className="text-sm text-foreground flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-purple-400" />
                     Advanced RAG Advantages
                   </CardTitle>
@@ -196,7 +196,7 @@ export function RAGComparisonCard() {
                   <ul className="space-y-2">
                     {comparison.comparison.advancedAdvantages.map(
                       (advantage: string, idx: number) => (
-                        <li key={idx} className="text-xs text-zinc-300 flex items-start gap-2">
+                        <li key={idx} className="text-xs text-foreground flex items-start gap-2">
                           <span className="text-purple-400 mt-0.5">✓</span>
                           <span>{advantage}</span>
                         </li>
@@ -208,31 +208,31 @@ export function RAGComparisonCard() {
             )}
 
             {/* Document Overlap Analysis */}
-            <Card className="bg-zinc-900/30 border-zinc-800">
+            <Card className="bg-card/30 border-border">
               <CardHeader>
-                <CardTitle className="text-sm text-zinc-300">Document Overlap Analysis</CardTitle>
+                <CardTitle className="text-sm text-foreground">Document Overlap Analysis</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-zinc-500">Shared Documents:</span>
+                    <span className="text-xs text-muted-foreground">Shared Documents:</span>
                     <Badge variant="outline">
                       {comparison.comparison.documentOverlap} / {comparison.basic.documentCount}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-zinc-500">Overlap:</span>
+                    <span className="text-xs text-muted-foreground">Overlap:</span>
                     <Badge variant="outline">
                       {comparison.comparison.documentOverlapPercent.toFixed(1)}%
                     </Badge>
                   </div>
-                  <div className="w-full bg-zinc-800 rounded-full h-2 mt-3">
+                  <div className="w-full bg-muted rounded-full h-2 mt-3">
                     <div
                       className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
                       style={{ width: `${comparison.comparison.documentOverlapPercent}%` }}
                     />
                   </div>
-                  <p className="text-xs text-zinc-500 mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     {comparison.comparison.documentOverlapPercent < 50
                       ? "Advanced RAG discovered significantly different (potentially better) documents!"
                       : comparison.comparison.documentOverlapPercent < 80
@@ -247,8 +247,8 @@ export function RAGComparisonCard() {
 
         {/* Empty state */}
         {!comparison && !loading && (
-          <div className="text-center py-8 text-zinc-500">
-            <GitCompare className="h-12 w-12 mx-auto mb-3 text-zinc-700" />
+          <div className="text-center py-8 text-muted-foreground">
+            <GitCompare className="h-12 w-12 mx-auto mb-3 text-muted" />
             <p className="text-sm">Enter a query and click "Run Comparison" to test</p>
           </div>
         )}

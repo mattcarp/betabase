@@ -210,7 +210,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
       <div
         ref={nodeRef}
         className={cn(
-          "fixed bg-gray-900/95 border border-gray-700 rounded-lg shadow-2xl backdrop-blur-md",
+          "fixed bg-card/95 border border-border rounded-lg shadow-2xl backdrop-blur-md",
           "min-w-[200px] min-h-[100px] max-w-[90vw] max-h-[90vh]",
           "transition-all duration-200 ease-out",
           isFocused && "ring-2 ring-blue-600/50",
@@ -228,7 +228,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
       >
         {/* Header */}
         <div
-          className={`panel-header flex items-center justify-between px-4 py-2 border-b border-gray-600 cursor-${isDraggable && !isMaximized ? "move" : "default"} bg-gray-800/50`}
+          className={`panel-header flex items-center justify-between px-4 py-2 border-b border-border cursor-${isDraggable && !isMaximized ? "move" : "default"} bg-muted/50`}
         >
           <div className="flex items-center gap-2">
             {icon && <div className="text-blue-600">{icon}</div>}
@@ -244,7 +244,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {/* Reset button */}
             <button
               onClick={handleReset}
-              className="p-2 text-gray-400 hover:text-blue-300 transition-colors"
+              className="p-2 text-muted-foreground hover:text-blue-300 transition-colors"
               title="Reset panel"
               data-testid={`panel-reset-${id}`}
             >
@@ -255,7 +255,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onMinimize && (
               <button
                 onClick={handleMinimize}
-                className="p-2 text-gray-400 hover:text-blue-300 transition-colors"
+                className="p-2 text-muted-foreground hover:text-blue-300 transition-colors"
                 title={isMinimized ? "Restore" : "Minimize"}
                 data-testid={`panel-minimize-${id}`}
               >
@@ -267,7 +267,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onMaximize && (
               <button
                 onClick={handleMaximize}
-                className="p-2 text-gray-400 hover:text-blue-300 transition-colors"
+                className="p-2 text-muted-foreground hover:text-blue-300 transition-colors"
                 title={isMaximized ? "Restore" : "Maximize"}
                 data-testid={`panel-maximize-${id}`}
               >
@@ -279,7 +279,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onClose && (
               <button
                 onClick={handleClose}
-                className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                className="p-2 text-muted-foreground hover:text-red-400 transition-colors"
                 title="Close panel"
                 data-testid={`panel-close-${id}`}
               >

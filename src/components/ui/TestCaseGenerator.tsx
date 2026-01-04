@@ -225,13 +225,13 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
+    <Card className="h-full flex flex-col bg-card/50 border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-zinc-100">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <FileCode className="h-5 w-5 text-cyan-400" />
           Test Case Generator
         </CardTitle>
-        <CardDescription className="text-zinc-400">
+        <CardDescription className="text-muted-foreground">
           Auto-generate Playwright tests from user feedback
         </CardDescription>
       </CardHeader>
@@ -246,7 +246,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
                   onFocus={() => setShowRecent(true)}
-                  className="bg-zinc-900/50 border-zinc-800 pr-10"
+                  className="bg-card/50 border-border pr-10"
                 />
                 <Button
                   variant="ghost"
@@ -262,8 +262,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
                 {/* Recent items dropdown - shows approved/good feedback */}
                 {showRecent && recentItems.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
-                    <div className="p-2 border-b border-zinc-700 text-xs text-zinc-400 flex items-center gap-2">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
+                    <div className="p-2 border-b border-border text-xs text-muted-foreground flex items-center gap-2">
                       <TestTube className="h-3 w-3 text-cyan-400" />
                       Ready for Test Generation
                       {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
@@ -272,19 +272,19 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                       <button
                         key={item.id}
                         onClick={() => loadFeedbackItem(item.id)}
-                        className="w-full text-left px-3 py-2 hover:bg-zinc-800 transition-colors border-b border-zinc-800/50 last:border-0"
+                        className="w-full text-left px-3 py-2 hover:bg-muted transition-colors border-b border-border/50 last:border-0"
                       >
                         <div className="flex items-center gap-2">
                           {item.status === "approved" && <CheckCheck className="h-3 w-3 text-green-400" />}
                           {item.thumbs_up && <ThumbsUp className="h-3 w-3 text-green-400" />}
                           {item.suggested_correction && <FileCode className="h-3 w-3 text-cyan-400" />}
-                          <span className="text-xs text-zinc-300 truncate flex-1">
+                          <span className="text-xs text-foreground truncate flex-1">
                             {item.query?.substring(0, 60)}...
                           </span>
-                          <span className="text-xs text-zinc-500">{formatTimeAgo(item.created_at)}</span>
+                          <span className="text-xs text-muted-foreground">{formatTimeAgo(item.created_at)}</span>
                         </div>
                         <div className="flex items-center gap-2 mt-1">
-                          <code className="text-[10px] text-zinc-500 font-mono">{item.id.substring(0, 8)}...</code>
+                          <code className="text-[10px] text-muted-foreground font-mono">{item.id.substring(0, 8)}...</code>
                           {item.rating && (
                             <Badge variant="outline" className="text-[10px] h-4 border-green-500/50 text-green-400">
                               {item.rating}/5
@@ -327,7 +327,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
             {/* Quick access hint */}
             {recentItems.length > 0 && !showRecent && (
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-muted-foreground">
                 {recentItems.length} approved responses ready for test generation.
               </p>
             )}
@@ -336,14 +336,14 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
         {/* Feedback info */}
         {feedbackData && !testCode && (
-          <Card className="bg-zinc-900/30 border-zinc-800">
+          <Card className="bg-card/30 border-border">
             <CardHeader>
-              <CardTitle className="text-sm text-zinc-300">Feedback Item</CardTitle>
+              <CardTitle className="text-sm text-foreground">Feedback Item</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div>
-                <span className="text-xs text-zinc-500">Query:</span>
-                <p className="text-sm text-zinc-200 mt-1">{feedbackData.query || feedbackData.user_query || "N/A"}</p>
+                <span className="text-xs text-muted-foreground">Query:</span>
+                <p className="text-sm text-foreground mt-1">{feedbackData.query || feedbackData.user_query || "N/A"}</p>
               </div>
               <div className="flex gap-2 flex-wrap">
                 <Badge
@@ -412,8 +412,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
               </Button>
             </div>
 
-            <ScrollArea className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950/50 p-4">
-              <pre className="text-xs text-zinc-300 font-mono">
+            <ScrollArea className="flex-1 rounded-lg border border-border bg-background/50 p-4">
+              <pre className="text-xs text-foreground font-mono">
                 <code>{testCode}</code>
               </pre>
             </ScrollArea>
@@ -435,8 +435,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
         {/* Empty state */}
         {!feedbackData && !loading && (
-          <div className="flex-1 flex flex-col items-center justify-center text-center text-zinc-500">
-            <FileCode className="h-16 w-16 mb-4 text-zinc-700" />
+          <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground">
+            <FileCode className="h-16 w-16 mb-4 text-muted" />
             <p className="text-lg mb-2">No feedback loaded</p>
             <p className="text-sm">Enter a feedback ID to generate a test case</p>
           </div>

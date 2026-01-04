@@ -44,8 +44,8 @@ const TYPE_COLORS: Record<LatencySegment["type"], { bg: string; text: string; la
     label: "LLM Generation",
   },
   other: {
-    bg: "bg-gray-500",
-    text: "text-gray-500",
+    bg: "bg-muted",
+    text: "text-muted-foreground",
     label: "Other",
   },
 };

@@ -9,13 +9,13 @@ const ComponentPlayground = () => {
   >("primary");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-card to-background p-8">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
           <h1 className="mac-heading text-4xl font-bold text-blue-600 mb-4">
             SIAM UI Component Playground
           </h1>
-          <p className="mac-body text-gray-300">Interactive component testing environment</p>
+          <p className="mac-body text-foreground">Interactive component testing environment</p>
         </header>
 
         {/* RadialProgress Section */}
@@ -26,7 +26,7 @@ const ComponentPlayground = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Component Display */}
-            <div className="bg-gray-800/50 rounded-lg p-8 border border-gray-700">
+            <div className="bg-card/50 rounded-lg p-8 border border-border">
               <div className="flex items-center justify-center min-h-[300px]">
                 <RadialProgress
                   value={progressValue}
@@ -42,14 +42,14 @@ const ComponentPlayground = () => {
             </div>
 
             {/* Controls */}
-            <div className="bg-gray-800/50 rounded-lg p-8 border border-gray-700">
+            <div className="bg-card/50 rounded-lg p-8 border border-border">
               <h3 className="mac-title text-lg font-normal text-blue-600 mb-6">
                 Component Controls
               </h3>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Value: {progressValue}%
                   </label>
                   <input
@@ -59,12 +59,12 @@ const ComponentPlayground = () => {
                     step="1"
                     value={progressValue}
                     onChange={(e) => setProgressValue(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Size: {progressSize}px
                   </label>
                   <input
@@ -74,16 +74,16 @@ const ComponentPlayground = () => {
                     step="10"
                     value={progressSize}
                     onChange={(e) => setProgressSize(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Color</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Color</label>
                   <select
                     value={progressColor}
                     onChange={(e) => setProgressColor(e.target.value as any)}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300"
+                    className="w-full bg-muted border border-border rounded-lg px-4 py-2 text-foreground"
                   >
                     <option value="primary">Primary (Cyan)</option>
                     <option value="secondary">Secondary (Blue)</option>
@@ -131,7 +131,7 @@ const ComponentPlayground = () => {
             System Dashboard Example
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 text-center">
+            <div className="bg-card/50 rounded-lg p-6 border border-border text-center">
               <RadialProgress
                 value={78}
                 size={120}
@@ -142,7 +142,7 @@ const ComponentPlayground = () => {
                 animated={true}
               />
             </div>
-            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 text-center">
+            <div className="bg-card/50 rounded-lg p-6 border border-border text-center">
               <RadialProgress
                 value={62}
                 size={120}
@@ -153,7 +153,7 @@ const ComponentPlayground = () => {
                 animated={true}
               />
             </div>
-            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 text-center">
+            <div className="bg-card/50 rounded-lg p-6 border border-border text-center">
               <RadialProgress
                 value={34}
                 size={120}
@@ -164,7 +164,7 @@ const ComponentPlayground = () => {
                 animated={true}
               />
             </div>
-            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 text-center">
+            <div className="bg-card/50 rounded-lg p-6 border border-border text-center">
               <RadialProgress
                 value={89}
                 size={120}
@@ -178,7 +178,7 @@ const ComponentPlayground = () => {
           </div>
         </section>
 
-        <footer className="text-center text-gray-400 mt-16">
+        <footer className="text-center text-muted-foreground mt-16">
           <p>SIAM UI Component Library • Interactive Testing Environment</p>
         </footer>
       </div>

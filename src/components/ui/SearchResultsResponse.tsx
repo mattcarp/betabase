@@ -112,7 +112,7 @@ const ResultCard: React.FC<{
       case "tutorial":
         return "text-blue-600";
       default:
-        return "text-gray-400";
+        return "text-muted-foreground";
     }
   };
 
@@ -125,7 +125,7 @@ const ResultCard: React.FC<{
       case "confidential":
         return "bg-red-600/20 text-red-300 border-red-500/30";
       default:
-        return "bg-gray-600/20 text-gray-300 border-gray-500/30";
+        return "bg-muted/20 text-foreground border-border";
     }
   };
 
@@ -134,7 +134,7 @@ const ResultCard: React.FC<{
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-lg p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-200 group">
+    <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-lg p-6 border border-border/50 hover:border-border/50 transition-all duration-200 group">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4 flex-1">
@@ -142,11 +142,11 @@ const ResultCard: React.FC<{
           <div className="flex-1 min-w-0">
             <h3
               className="mac-title"
-              className="mac-title font-normal text-gray-100 hover:text-blue-400 cursor-pointer transition-colors truncate"
+              className="mac-title font-normal text-foreground hover:text-blue-400 cursor-pointer transition-colors truncate"
               onClick={() => onOpen(result)}
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.highlighted.title) }}
             />
-            <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
               <span className="capitalize">{result.type.replace("_", " ")}</span>
               <span>•</span>
               <span>{result.source.name}</span>
@@ -180,7 +180,7 @@ const ResultCard: React.FC<{
       {/* Snippet */}
       <div className="mb-4">
         <p
-          className="text-gray-300 text-sm leading-relaxed"
+          className="text-foreground text-sm leading-relaxed"
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.highlighted.snippet) }}
         />
       </div>
@@ -191,14 +191,14 @@ const ResultCard: React.FC<{
           {result.metadata.tags.slice(0, 4).map((tag, index) => (
             <span
               key={index}
-              className="px-2 py-2 bg-gray-700/50 text-gray-300 rounded text-xs flex items-center gap-2"
+              className="px-2 py-2 bg-muted/50 text-foreground rounded text-xs flex items-center gap-2"
             >
               <Tag className="w-2.5 h-2.5" />
               {tag}
             </span>
           ))}
           {result.metadata.tags.length > 4 && (
-            <span className="text-xs text-gray-400 px-2 py-2">
+            <span className="text-xs text-muted-foreground px-2 py-2">
               +{result.metadata.tags.length - 4} more
             </span>
           )}
@@ -208,7 +208,7 @@ const ResultCard: React.FC<{
       {/* Related Topics */}
       {result.relatedTopics && result.relatedTopics.length > 0 && (
         <div className="mb-4">
-          <div className="text-xs text-gray-400 mb-2">Related topics:</div>
+          <div className="text-xs text-muted-foreground mb-2">Related topics:</div>
           <div className="flex flex-wrap gap-2">
             {result.relatedTopics.slice(0, 3).map((topic, index) => (
               <span
@@ -223,8 +223,8 @@ const ResultCard: React.FC<{
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-700/50">
-        <div className="flex items-center gap-4 text-xs text-gray-400">
+      <div className="flex items-center justify-between pt-4 border-t border-border/50">
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
           <span>Modified {result.metadata.lastModified.toLocaleDateString()}</span>
           {result.metadata.author && <span>by {result.metadata.author}</span>}
           {result.metadata.fileSize && <span>{result.metadata.fileSize}</span>}
@@ -233,22 +233,22 @@ const ResultCard: React.FC<{
         <div className="flex items-center gap-2">
           <button
             onClick={() => onOpen(result)}
-            className="p-2.5 hover:bg-gray-700/50 rounded transition-colors"
+            className="p-2.5 hover:bg-muted/50 rounded transition-colors"
             title="View details"
           >
-            <Eye className="w-3.5 h-3.5 text-gray-400" />
+            <Eye className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
           {result.url && (
             <button
               onClick={() => window.open(result.url, "_blank")}
-              className="p-2.5 hover:bg-gray-700/50 rounded transition-colors"
+              className="p-2.5 hover:bg-muted/50 rounded transition-colors"
               title="Open source"
             >
-              <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
+              <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
             </button>
           )}
-          <button className="p-2.5 hover:bg-gray-700/50 rounded transition-colors" title="Download">
-            <Download className="w-3.5 h-3.5 text-gray-400" />
+          <button className="p-2.5 hover:bg-muted/50 rounded transition-colors" title="Download">
+            <Download className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
         </div>
       </div>
@@ -281,7 +281,7 @@ export const SearchResultsResponse: React.FC<{
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-gray-700/50 backdrop-blur-sm">
+    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-border/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
@@ -290,7 +290,7 @@ export const SearchResultsResponse: React.FC<{
           </div>
           <div>
             <h3 className="mac-title">Search Results</h3>
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-muted-foreground">
               <span className="font-medium">"{data.query}"</span> •{" "}
               {data.totalResults.toLocaleString()} results in {data.searchTime}
               ms
@@ -300,7 +300,7 @@ export const SearchResultsResponse: React.FC<{
 
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-700 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-muted/50 hover:bg-muted rounded-lg transition-colors"
         >
           <Filter className="w-4 h-4" />
           <span className="text-sm">Filters</span>
@@ -309,25 +309,25 @@ export const SearchResultsResponse: React.FC<{
 
       {/* Search Strategy & Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">Search Method</div>
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-2">Search Method</div>
           <div className="flex items-center gap-2">
             <span className="text-lg">{getStrategyIcon()}</span>
-            <span className="font-medium text-gray-200 capitalize">
+            <span className="font-medium text-foreground capitalize">
               {data.searchStrategy.method}
             </span>
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">Confidence</div>
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-2">Confidence</div>
           <div className="text-lg font-normal text-green-400">
             {(data.searchStrategy.confidence * 100).toFixed(0)}%
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <div className="text-xs text-gray-400 mb-2">Results Shown</div>
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-2">Results Shown</div>
           <div className="text-lg font-normal text-blue-400">
             {data.resultsShown} of {data.totalResults}
           </div>
@@ -337,7 +337,7 @@ export const SearchResultsResponse: React.FC<{
       {/* Applied Filters */}
       {data.filters.applied.length > 0 && (
         <div className="mb-6">
-          <div className="text-sm text-gray-400 mb-2">Active filters:</div>
+          <div className="text-sm text-muted-foreground mb-2">Active filters:</div>
           <div className="flex flex-wrap gap-2">
             {data.filters.applied.map((filter, index) => (
               <span
@@ -354,7 +354,7 @@ export const SearchResultsResponse: React.FC<{
       {/* Expanded Search Terms */}
       {data.searchStrategy.expandedTerms && data.searchStrategy.expandedTerms.length > 0 && (
         <div className="mb-6">
-          <div className="text-sm text-gray-400 mb-2">Also searching for:</div>
+          <div className="text-sm text-muted-foreground mb-2">Also searching for:</div>
           <div className="flex flex-wrap gap-2">
             {data.searchStrategy.expandedTerms.map((term, index) => (
               <span
@@ -377,13 +377,13 @@ export const SearchResultsResponse: React.FC<{
 
       {/* Suggestions */}
       {data.suggestions && data.suggestions.length > 0 && (
-        <div className="bg-gray-900/50 rounded-lg p-4">
-          <div className="text-gray-300 font-medium mb-4">Try these related searches:</div>
+        <div className="bg-card/50 rounded-lg p-4">
+          <div className="text-foreground font-medium mb-4">Try these related searches:</div>
           <div className="flex flex-wrap gap-2">
             {data.suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className="px-4 py-2 bg-gray-700/50 hover:bg-gray-700 text-gray-300 rounded-lg text-sm transition-colors"
+                className="px-4 py-2 bg-muted/50 hover:bg-muted text-foreground rounded-lg text-sm transition-colors"
               >
                 {suggestion}
               </button>

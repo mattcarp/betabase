@@ -181,13 +181,13 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col bg-zinc-900/50 border-zinc-800">
+    <Card className="h-full flex flex-col bg-card/50 border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-zinc-100">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Edit3 className="h-5 w-5 text-blue-400" />
           Quick Fix Panel
         </CardTitle>
-        <CardDescription className="text-zinc-400">
+        <CardDescription className="text-muted-foreground">
           Edit AI responses and save corrections as training data
         </CardDescription>
       </CardHeader>
@@ -202,7 +202,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
                   onFocus={() => setShowRecent(true)}
-                  className="bg-zinc-900/50 border-zinc-800 pr-10"
+                  className="bg-card/50 border-border pr-10"
                 />
                 <Button
                   variant="ghost"
@@ -218,8 +218,8 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
 
                 {/* Recent items dropdown - only shows negative feedback */}
                 {showRecent && recentItems.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
-                    <div className="p-2 border-b border-zinc-700 text-xs text-zinc-400 flex items-center gap-2">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
+                    <div className="p-2 border-b border-border text-xs text-muted-foreground flex items-center gap-2">
                       <AlertTriangle className="h-3 w-3 text-orange-400" />
                       Responses Needing Correction
                       {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
@@ -228,18 +228,18 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                       <button
                         key={item.id}
                         onClick={() => loadMessage(item.id)}
-                        className="w-full text-left px-3 py-2 hover:bg-zinc-800 transition-colors border-b border-zinc-800/50 last:border-0"
+                        className="w-full text-left px-3 py-2 hover:bg-muted transition-colors border-b border-border/50 last:border-0"
                       >
                         <div className="flex items-center gap-2">
                           <ThumbsDown className="h-3 w-3 text-red-400" />
                           {item.severity === "critical" && <AlertTriangle className="h-3 w-3 text-red-400" />}
-                          <span className="text-xs text-zinc-300 truncate flex-1">
+                          <span className="text-xs text-foreground truncate flex-1">
                             {item.query?.substring(0, 60)}...
                           </span>
-                          <span className="text-xs text-zinc-500">{formatTimeAgo(item.created_at)}</span>
+                          <span className="text-xs text-muted-foreground">{formatTimeAgo(item.created_at)}</span>
                         </div>
                         <div className="flex items-center gap-2 mt-1">
-                          <code className="text-[10px] text-zinc-500 font-mono">{item.id.substring(0, 8)}...</code>
+                          <code className="text-[10px] text-muted-foreground font-mono">{item.id.substring(0, 8)}...</code>
                           {item.rating && (
                             <Badge variant="outline" className="text-[10px] h-4 border-red-500/50 text-red-400">
                               {item.rating}/5
@@ -281,7 +281,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
             
             {/* Quick access hint */}
             {recentItems.length > 0 && !showRecent && (
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-muted-foreground">
                 {recentItems.length} responses need correction. Click the dropdown to view them.
               </p>
             )}
@@ -293,10 +293,10 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
           <>
             {/* Show the original query */}
             {queryText && (
-              <Card className="bg-zinc-900/30 border-zinc-800">
+              <Card className="bg-card/30 border-border">
                 <CardContent className="py-3">
-                  <div className="text-xs text-zinc-500 mb-1">Original Query:</div>
-                  <p className="text-sm text-zinc-200">{queryText}</p>
+                  <div className="text-xs text-muted-foreground mb-1">Original Query:</div>
+                  <p className="text-sm text-foreground">{queryText}</p>
                 </CardContent>
               </Card>
             )}
@@ -304,20 +304,20 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
             <div className="flex-1 grid grid-cols-2 gap-4">
               {/* Original response */}
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-zinc-300 mb-2 flex items-center gap-2">
+                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-orange-400" />
                   Original Response
                 </label>
                 <Textarea
                   value={original}
                   disabled
-                  className="flex-1 bg-zinc-900/30 border-zinc-800 text-zinc-400 font-mono text-xs resize-none"
+                  className="flex-1 bg-card/30 border-border text-muted-foreground font-mono text-xs resize-none"
                 />
               </div>
 
               {/* Corrected response */}
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-zinc-300 mb-2 flex items-center gap-2">
+                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-400" />
                   Corrected Response
                 </label>
@@ -326,7 +326,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                   onChange={(e) => setCorrected(e.target.value)}
                   placeholder="Edit the response to improve it..."
                   className={cn(
-                    "flex-1 bg-zinc-900/50 border-zinc-700 text-zinc-200 font-mono text-xs resize-none",
+                    "flex-1 bg-card/50 border-border text-foreground font-mono text-xs resize-none",
                     corrected !== original && "border-green-500/50 bg-green-500/5"
                   )}
                 />
@@ -334,7 +334,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
             </div>
 
             {/* Action buttons */}
-            <div className="flex gap-2 pt-4 border-t border-zinc-800">
+            <div className="flex gap-2 pt-4 border-t border-border">
               <Button
                 onClick={handleSaveCorrection}
                 disabled={saving || !corrected.trim() || corrected === original}
@@ -388,8 +388,8 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
 
         {/* Empty state */}
         {!loaded && !loading && (
-          <div className="flex-1 flex flex-col items-center justify-center text-center text-zinc-500">
-            <Edit3 className="h-16 w-16 mb-4 text-zinc-700" />
+          <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground">
+            <Edit3 className="h-16 w-16 mb-4 text-muted" />
             <p className="text-lg mb-2">No message loaded</p>
             <p className="text-sm">Enter a message ID above to start editing</p>
           </div>

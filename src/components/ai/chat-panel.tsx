@@ -237,7 +237,7 @@ export function ChatPanel({
                       className={cn(
                         message.role === "user"
                           ? "bg-blue-500 text-white"
-                          : "bg-gray-500 text-white"
+                          : "bg-muted text-foreground"
                       )}
                     />
                     <MessageContent>
@@ -247,7 +247,7 @@ export function ChatPanel({
                 ))}
                 {isLoading && (
                   <Message from="assistant">
-                    <MessageAvatar name="AI" className="bg-gray-500 text-white" />
+                    <MessageAvatar name="AI" className="bg-muted text-foreground" />
                     <MessageContent>
                       <Loader />
                     </MessageContent>

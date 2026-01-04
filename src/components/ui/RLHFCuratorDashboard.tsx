@@ -177,16 +177,16 @@ export function RLHFCuratorDashboard() {
   }, [loadStats]);
 
   return (
-    <div className="h-full flex flex-col bg-zinc-950">
+    <div className="h-full flex flex-col bg-background">
       {/* Header */}
-      <div className="p-6 border-b border-zinc-800/50">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-zinc-100 flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
               <Database className="h-7 w-7 text-purple-400" />
               RLHF Curator Dashboard
             </h1>
-            <p className="text-sm text-zinc-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Collect preference data for DPO fine-tuning
             </p>
           </div>
@@ -256,7 +256,7 @@ export function RLHFCuratorDashboard() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="mx-6 mt-4 bg-zinc-900/50 border border-zinc-800/50">
+        <TabsList className="mx-6 mt-4 bg-card/50 border border-border">
           <TabsTrigger value="queue" className="data-[state=active]:bg-purple-500/20">
             Review Queue
           </TabsTrigger>
@@ -313,9 +313,9 @@ function StatCard({
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <span className={colorClasses[color].split(" ")[0]}>{icon}</span>
-          <span className="text-xs text-zinc-400">{label}</span>
+          <span className="text-xs text-muted-foreground">{label}</span>
         </div>
-        <div className="text-2xl font-bold text-zinc-100">{value}</div>
+        <div className="text-2xl font-bold text-foreground">{value}</div>
       </CardContent>
     </Card>
   );
@@ -426,7 +426,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
   return (
     <div className="grid grid-cols-2 gap-6 h-full">
       {/* Queue List */}
-      <Card className="border-zinc-800/50 bg-zinc-900/30">
+      <Card className="border-border bg-card/30">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
@@ -462,10 +462,10 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
           <ScrollArea className="h-[500px]">
             {loading ? (
               <div className="flex items-center justify-center h-32">
-                <RefreshCw className="h-6 w-6 animate-spin text-zinc-500" />
+                <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
             ) : items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-32 text-zinc-500">
+              <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
                 <CheckCircle className="h-8 w-8 mb-2" />
                 <p>No items to review</p>
               </div>
@@ -479,7 +479,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
                       "p-3 rounded-lg border cursor-pointer transition-all",
                       selectedItem?.id === item.id
                         ? "bg-purple-500/10 border-purple-500/30"
-                        : "bg-zinc-900/50 border-zinc-800/50 hover:border-zinc-700"
+                        : "bg-card/50 border-border hover:border-border"
                     )}
                   >
                     <div className="flex items-start justify-between mb-2">
@@ -491,7 +491,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
                         ) : (
                           <AlertTriangle className="h-4 w-4 text-amber-400" />
                         )}
-                        <span className="text-xs text-zinc-500">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(item.created_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -514,8 +514,8 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
                         )}
                       </div>
                     </div>
-                    <p className="text-sm text-zinc-300 line-clamp-2 mb-1">Q: {item.query}</p>
-                    <p className="text-xs text-zinc-500 line-clamp-1">
+                    <p className="text-sm text-foreground line-clamp-2 mb-1">Q: {item.query}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">
                       A: {item.response?.substring(0, 100)}...
                     </p>
                   </div>
@@ -527,7 +527,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
       </Card>
 
       {/* Detail Panel */}
-      <Card className="border-zinc-800/50 bg-zinc-900/30">
+      <Card className="border-border bg-card/30">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Edit3 className="h-4 w-4 text-purple-400" />
@@ -543,26 +543,26 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
             <div className="space-y-4">
               {/* Original Query */}
               <div>
-                <label className="text-xs font-medium text-zinc-400 mb-1 block">User Query</label>
-                <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                  <p className="text-sm text-zinc-200">{selectedItem.query}</p>
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">User Query</label>
+                <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
+                  <p className="text-sm text-foreground">{selectedItem.query}</p>
                 </div>
               </div>
 
               {/* Original Response (Rejected) */}
               <div>
-                <label className="text-xs font-medium text-zinc-400 mb-1 block flex items-center gap-2">
+                <label className="text-xs font-medium text-muted-foreground mb-1 block flex items-center gap-2">
                   <XCircle className="h-3 w-3 text-rose-400" />
                   Original Response (will be rejected)
                 </label>
                 <div className="p-3 rounded-lg bg-rose-500/5 border border-rose-500/20">
-                  <p className="text-sm text-zinc-300">{selectedItem.response}</p>
+                  <p className="text-sm text-foreground">{selectedItem.response}</p>
                 </div>
               </div>
 
               {/* Correction (Chosen) */}
               <div>
-                <label className="text-xs font-medium text-zinc-400 mb-1 block flex items-center gap-2">
+                <label className="text-xs font-medium text-muted-foreground mb-1 block flex items-center gap-2">
                   <CheckCircle className="h-3 w-3 text-green-400" />
                   Correct Response (will be chosen)
                 </label>
@@ -577,17 +577,17 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
               {/* User Feedback Context */}
               {selectedItem.feedback_text && (
                 <div>
-                  <label className="text-xs font-medium text-zinc-400 mb-1 block">
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">
                     User's Feedback
                   </label>
-                  <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                    <p className="text-sm text-zinc-400 italic">"{selectedItem.feedback_text}"</p>
+                  <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
+                    <p className="text-sm text-muted-foreground italic">"{selectedItem.feedback_text}"</p>
                   </div>
                 </div>
               )}
 
               {/* Actions */}
-              <div className="flex gap-3 pt-4 border-t border-zinc-800/50">
+              <div className="flex gap-3 pt-4 border-t border-border">
                 <Button
                   onClick={handleSaveCorrection}
                   disabled={saving || !correction.trim()}
@@ -612,7 +612,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-zinc-500">
+            <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
               <FileText className="h-12 w-12 mb-4 opacity-50" />
               <p>Select an item to review</p>
               <p className="text-xs mt-1">Click on any feedback item to provide a correction</p>
@@ -695,7 +695,7 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
   };
 
   return (
-    <Card className="border-zinc-800/50 bg-zinc-900/30 h-full">
+    <Card className="border-border bg-card/30 h-full">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
@@ -731,10 +731,10 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
         <ScrollArea className="h-[500px]">
           {loading ? (
             <div className="flex items-center justify-center h-32">
-              <RefreshCw className="h-6 w-6 animate-spin text-zinc-500" />
+              <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : pairs.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-zinc-500">
+            <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
               <Database className="h-8 w-8 mb-2" />
               <p>No preference pairs yet</p>
               <p className="text-xs mt-1">Add corrections to create training data</p>
@@ -744,14 +744,14 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
               {pairs.map((pair) => (
                 <div
                   key={pair.id}
-                  className="p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/50"
+                  className="p-4 rounded-lg border border-border bg-card/50"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-xs">
                         {pair.source_type}
                       </Badge>
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-muted-foreground">
                         Confidence: {(pair.confidence * 100).toFixed(0)}%
                       </span>
                       {pair.curator_verified && (
@@ -767,15 +767,15 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
                         </Badge>
                       )}
                     </div>
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-muted-foreground">
                       {new Date(pair.created_at).toLocaleDateString()}
                     </span>
                   </div>
 
                   {/* Prompt */}
                   <div className="mb-3">
-                    <label className="text-xs font-medium text-zinc-500 mb-1 block">Prompt</label>
-                    <p className="text-sm text-zinc-200 bg-zinc-800/50 p-2 rounded">
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Prompt</label>
+                    <p className="text-sm text-foreground bg-muted/50 p-2 rounded">
                       {pair.prompt}
                     </p>
                   </div>
@@ -787,7 +787,7 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
                         <CheckCircle className="h-3 w-3" />
                         Chosen (Correct)
                       </label>
-                      <p className="text-xs text-zinc-300 bg-green-500/5 border border-green-500/20 p-2 rounded line-clamp-4">
+                      <p className="text-xs text-foreground bg-green-500/5 border border-green-500/20 p-2 rounded line-clamp-4">
                         {pair.chosen}
                       </p>
                     </div>
@@ -796,14 +796,14 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
                         <XCircle className="h-3 w-3" />
                         Rejected (Original)
                       </label>
-                      <p className="text-xs text-zinc-300 bg-rose-500/5 border border-rose-500/20 p-2 rounded line-clamp-4">
+                      <p className="text-xs text-foreground bg-rose-500/5 border border-rose-500/20 p-2 rounded line-clamp-4">
                         {pair.rejected}
                       </p>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 mt-3 pt-3 border-t border-zinc-800/50">
+                  <div className="flex gap-2 mt-3 pt-3 border-t border-border">
                     {!pair.curator_verified && (
                       <Button
                         size="sm"
@@ -919,7 +919,7 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
   return (
     <div className="grid grid-cols-2 gap-6">
       {/* Export Controls */}
-      <Card className="border-zinc-800/50 bg-zinc-900/30">
+      <Card className="border-border bg-card/30">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Download className="h-4 w-4 text-rose-400" />
@@ -933,15 +933,15 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
         <CardContent className="space-y-4">
           {/* Export Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-              <p className="text-xs text-zinc-400 mb-1">Export Ready</p>
+            <div className="p-4 rounded-lg bg-muted/50 border border-border/50">
+              <p className="text-xs text-muted-foreground mb-1">Export Ready</p>
               <p className="text-2xl font-bold text-rose-400">{stats?.exportReady || 0}</p>
-              <p className="text-xs text-zinc-500">verified pairs</p>
+              <p className="text-xs text-muted-foreground">verified pairs</p>
             </div>
-            <div className="p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-              <p className="text-xs text-zinc-400 mb-1">Total Collected</p>
-              <p className="text-2xl font-bold text-zinc-100">{stats?.preferencePairs || 0}</p>
-              <p className="text-xs text-zinc-500">preference pairs</p>
+            <div className="p-4 rounded-lg bg-muted/50 border border-border/50">
+              <p className="text-xs text-muted-foreground mb-1">Total Collected</p>
+              <p className="text-2xl font-bold text-foreground">{stats?.preferencePairs || 0}</p>
+              <p className="text-xs text-muted-foreground">preference pairs</p>
             </div>
           </div>
 
@@ -960,13 +960,13 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
           </Button>
 
           {/* Format Info */}
-          <div className="p-4 rounded-lg bg-zinc-800/30 border border-zinc-700/30">
-            <h4 className="text-sm font-medium text-zinc-300 mb-2">JSONL Format</h4>
-            <pre className="text-xs text-zinc-400 overflow-x-auto">
+          <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
+            <h4 className="text-sm font-medium text-foreground mb-2">JSONL Format</h4>
+            <pre className="text-xs text-muted-foreground overflow-x-auto">
               {`{"prompt": "...", "chosen": "...", "rejected": "..."}
 {"prompt": "...", "chosen": "...", "rejected": "..."}`}
             </pre>
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               Compatible with: Hugging Face TRL, Axolotl, LLaMA-Factory
             </p>
           </div>
@@ -974,7 +974,7 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
       </Card>
 
       {/* Export Preview */}
-      <Card className="border-zinc-800/50 bg-zinc-900/30">
+      <Card className="border-border bg-card/30">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
@@ -998,12 +998,12 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
         <CardContent>
           {exportedData ? (
             <ScrollArea className="h-[400px]">
-              <pre className="text-xs text-zinc-300 font-mono whitespace-pre-wrap break-all">
+              <pre className="text-xs text-foreground font-mono whitespace-pre-wrap break-all">
                 {exportedData}
               </pre>
             </ScrollArea>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-zinc-500">
+            <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
               <Database className="h-12 w-12 mb-4 opacity-50" />
               <p>No export data yet</p>
               <p className="text-xs mt-1">Click export to generate training data</p>

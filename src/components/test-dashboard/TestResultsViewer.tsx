@@ -370,7 +370,7 @@ export const TestResultsViewer: React.FC = () => {
       case "skipped":
         return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-500" />;
+        return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -834,7 +834,7 @@ export const TestResultsViewer: React.FC = () => {
                           <div className="flex items-center justify-between mb-6">
                             <div>
                               <h3 className="text-lg font-light text-white">LLM Semantic Judge</h3>
-                              <p className="text-xs text-zinc-500 mt-1">Evaluated by {selectedResult.semanticScore.model}</p>
+                              <p className="text-xs text-muted-foreground mt-1">Evaluated by {selectedResult.semanticScore.model}</p>
                             </div>
                             <div className="text-right">
                               <div className={cn(
@@ -843,30 +843,30 @@ export const TestResultsViewer: React.FC = () => {
                               )}>
                                 {Math.round(selectedResult.semanticScore.score * 100)}%
                               </div>
-                              <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Similarity Score</p>
+                              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Similarity Score</p>
                             </div>
                           </div>
                           
                           <div className="space-y-4">
                             <div>
-                              <Label className="text-xs text-zinc-500 uppercase tracking-wider">Rationale</Label>
-                              <div className="mt-2 p-4 rounded-lg bg-zinc-950/50 border border-zinc-800 text-sm font-light leading-relaxed text-zinc-300">
+                              <Label className="text-xs text-muted-foreground uppercase tracking-wider">Rationale</Label>
+                              <div className="mt-2 p-4 rounded-lg bg-background/50 border border-border text-sm font-light leading-relaxed text-foreground">
                                 {selectedResult.semanticScore.rationale}
                               </div>
                             </div>
                             
                             <div className="grid grid-cols-3 gap-4">
-                              <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
-                                <p className="text-[10px] text-zinc-500 uppercase mb-1">Factual Accuracy</p>
-                                <p className="text-sm font-medium text-zinc-200">High</p>
+                              <div className="p-3 rounded-lg bg-card/50 border border-border">
+                                <p className="text-[10px] text-muted-foreground uppercase mb-1">Factual Accuracy</p>
+                                <p className="text-sm font-medium text-foreground">High</p>
                               </div>
-                              <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
-                                <p className="text-[10px] text-zinc-500 uppercase mb-1">Tone Consistency</p>
-                                <p className="text-sm font-medium text-zinc-200">94%</p>
+                              <div className="p-3 rounded-lg bg-card/50 border border-border">
+                                <p className="text-[10px] text-muted-foreground uppercase mb-1">Tone Consistency</p>
+                                <p className="text-sm font-medium text-foreground">94%</p>
                               </div>
-                              <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
-                                <p className="text-[10px] text-zinc-500 uppercase mb-1">Citation Quality</p>
-                                <p className="text-sm font-medium text-zinc-200">Verified</p>
+                              <div className="p-3 rounded-lg bg-card/50 border border-border">
+                                <p className="text-[10px] text-muted-foreground uppercase mb-1">Citation Quality</p>
+                                <p className="text-sm font-medium text-foreground">Verified</p>
                               </div>
                             </div>
                           </div>
@@ -886,10 +886,10 @@ export const TestResultsViewer: React.FC = () => {
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground text-center p-8 space-y-4">
-                      <Sparkles className="h-12 w-12 text-zinc-700 opacity-50" />
+                      <Sparkles className="h-12 w-12 text-muted-foreground opacity-50" />
                       <div>
-                        <p className="text-zinc-400">No semantic evaluation available</p>
-                        <p className="text-xs text-zinc-600 mt-1 max-w-xs mx-auto">
+                        <p className="text-muted-foreground">No semantic evaluation available</p>
+                        <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
                           SOTA semantic evaluation uses Gemini 3 Flash to judge response quality against ground truth.
                         </p>
                       </div>

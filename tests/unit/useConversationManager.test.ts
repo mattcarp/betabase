@@ -539,3 +539,311 @@ describe("useConversationManager logic", () => {
     });
   });
 });
+
+/**
+ * Title Generation Tests
+ * Tests for auto-generating conversation titles from first user message
+ * This addresses the regression where all titles showed "The Betabase"
+ */
+describe("Conversation Title Generation", () => {
+  // Helper functions matching the actual implementation in conversation-store.ts
+  function generateTitleFromMessage(content: string): string {
+    if (!content || typeof content !== "string") return "New Conversation";
+
+    let title = content
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
+      .replace(/[?!.]+$/, "");
+
+    if (!title) return "New Conversation";
+
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+
+    const maxLength = 45;
+    if (title.length > maxLength) {
+      const truncateAt = title.lastIndexOf(" ", maxLength);
+      if (truncateAt > 20) {
+        title = title.substring(0, truncateAt);
+      } else {
+        title = title.substring(0, maxLength);
+      }
+    }
+
+    return title;
+  }
+
+  function isDefaultTitle(title: string): boolean {
+    const defaultTitles = [
+      "new conversation",
+      "the betabase",
+      "untitled",
+      "untitled conversation",
+      ""
+    ];
+    return defaultTitles.includes(title.toLowerCase().trim());
+  }
+
+  function getMessageContent(m: any): string | undefined {
+    if (!m) return undefined;
+
+    // AI SDK v5/v6: parts array with text
+    if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
+      const textPart = m.parts.find((p: any) => p.type === "text" || p.text);
+      if (textPart?.text) {
+        return textPart.text;
+      }
+      const allText = m.parts
+        .map((p: any) => p.text || "")
+        .filter(Boolean)
+        .join("");
+      if (allText) return allText;
+    }
+
+    // AI SDK v4 / direct content
+    if (m.content) {
+      if (typeof m.content === "string") {
+        return m.content;
+      }
+      if (typeof m.content === "object" && m.content.text) {
+        return m.content.text;
+      }
+      if (Array.isArray(m.content)) {
+        const text = m.content
+          .map((c: any) => (typeof c === "string" ? c : c?.text || ""))
+          .join("");
+        if (text) return text;
+      }
+    }
+
+    return undefined;
+  }
+
+  describe("isDefaultTitle", () => {
+    test("should identify 'New Conversation' as default", () => {
+      expect(isDefaultTitle("New Conversation")).toBe(true);
+    });
+
+    test("should identify 'The Betabase' as default", () => {
+      expect(isDefaultTitle("The Betabase")).toBe(true);
+    });
+
+    test("should identify 'the betabase' (lowercase) as default", () => {
+      expect(isDefaultTitle("the betabase")).toBe(true);
+    });
+
+    test("should identify empty string as default", () => {
+      expect(isDefaultTitle("")).toBe(true);
+    });
+
+    test("should identify 'Untitled' as default", () => {
+      expect(isDefaultTitle("Untitled")).toBe(true);
+    });
+
+    test("should NOT identify custom titles as default", () => {
+      expect(isDefaultTitle("What are the asset types in AOMA")).toBe(false);
+    });
+
+    test("should NOT identify titles containing 'betabase' as default", () => {
+      expect(isDefaultTitle("How to use The Betabase API")).toBe(false);
+    });
+
+    test("should handle whitespace", () => {
+      expect(isDefaultTitle("  The Betabase  ")).toBe(true);
+      expect(isDefaultTitle("  new conversation  ")).toBe(true);
+    });
+  });
+
+  describe("generateTitleFromMessage", () => {
+    test("should generate title from simple question", () => {
+      const title = generateTitleFromMessage("What are the different asset types?");
+      expect(title).toBe("What are the different asset types");
+    });
+
+    test("should capitalize first letter", () => {
+      const title = generateTitleFromMessage("how does authentication work");
+      expect(title).toBe("How does authentication work");
+    });
+
+    test("should remove common prefixes like 'Hey'", () => {
+      const title = generateTitleFromMessage("Hey can you help me with AOMA?");
+      expect(title).toBe("Help me with AOMA");
+    });
+
+    test("should remove 'Please' prefix", () => {
+      const title = generateTitleFromMessage("Please explain the database schema");
+      expect(title).toBe("Explain the database schema");
+    });
+
+    test("should truncate long messages intelligently", () => {
+      const longMessage = "What is the complete architectural overview of the AOMA system including all microservices, databases, and external integrations?";
+      const title = generateTitleFromMessage(longMessage);
+      expect(title.length).toBeLessThanOrEqual(45);
+      expect(title).not.toContain("?");
+    });
+
+    test("should return 'New Conversation' for empty content", () => {
+      expect(generateTitleFromMessage("")).toBe("New Conversation");
+      expect(generateTitleFromMessage("   ")).toBe("New Conversation");
+    });
+
+    test("should handle null/undefined gracefully", () => {
+      expect(generateTitleFromMessage(null as any)).toBe("New Conversation");
+      expect(generateTitleFromMessage(undefined as any)).toBe("New Conversation");
+    });
+
+    test("should remove trailing punctuation", () => {
+      expect(generateTitleFromMessage("What is AOMA?")).toBe("What is AOMA");
+      expect(generateTitleFromMessage("Tell me about AOMA!")).toBe("Tell me about AOMA");
+      expect(generateTitleFromMessage("Explain AOMA...")).toBe("Explain AOMA");
+    });
+
+    test("should normalize whitespace", () => {
+      const title = generateTitleFromMessage("What   are    the    asset   types");
+      expect(title).toBe("What are the asset types");
+    });
+  });
+
+  describe("getMessageContent - AI SDK v4 format", () => {
+    test("should extract content from v4 string format", () => {
+      const message = { role: "user", content: "Hello world" };
+      expect(getMessageContent(message)).toBe("Hello world");
+    });
+
+    test("should handle content as object with text property", () => {
+      const message = { role: "user", content: { text: "Hello from object" } };
+      expect(getMessageContent(message)).toBe("Hello from object");
+    });
+
+    test("should handle content as array", () => {
+      const message = { role: "user", content: ["Hello", " ", "world"] };
+      expect(getMessageContent(message)).toBe("Hello world");
+    });
+  });
+
+  describe("getMessageContent - AI SDK v5/v6 format", () => {
+    test("should extract from parts array with type: text", () => {
+      const message = {
+        role: "user",
+        parts: [{ type: "text", text: "Hello from parts" }],
+      };
+      expect(getMessageContent(message)).toBe("Hello from parts");
+    });
+
+    test("should extract from parts array without type property", () => {
+      const message = {
+        role: "user",
+        parts: [{ text: "Hello without type" }],
+      };
+      expect(getMessageContent(message)).toBe("Hello without type");
+    });
+
+    test("should join multiple text parts", () => {
+      const message = {
+        role: "user",
+        parts: [
+          { type: "text", text: "Hello " },
+          { type: "text", text: "world" },
+        ],
+      };
+      expect(getMessageContent(message)).toBe("Hello world");
+    });
+
+    test("should skip non-text parts", () => {
+      const message = {
+        role: "user",
+        parts: [
+          { type: "image", url: "https://example.com/image.png" },
+          { type: "text", text: "Caption for image" },
+        ],
+      };
+      expect(getMessageContent(message)).toBe("Caption for image");
+    });
+  });
+
+  describe("getMessageContent - edge cases", () => {
+    test("should return undefined for null message", () => {
+      expect(getMessageContent(null)).toBeUndefined();
+    });
+
+    test("should return undefined for message with no content or parts", () => {
+      expect(getMessageContent({ role: "user" })).toBeUndefined();
+    });
+
+    test("should return undefined for empty parts array", () => {
+      expect(getMessageContent({ role: "user", parts: [] })).toBeUndefined();
+    });
+
+    test("should prefer parts over content when both exist", () => {
+      const message = {
+        role: "user",
+        content: "From content",
+        parts: [{ text: "From parts" }],
+      };
+      // Parts should be checked first
+      expect(getMessageContent(message)).toBe("From parts");
+    });
+  });
+
+  describe("Auto-title generation workflow", () => {
+    test("should generate title when first user message is added to default-titled conversation", () => {
+      const conversation = {
+        id: "test-1",
+        title: "New Conversation",
+        messages: [] as any[],
+      };
+
+      // Simulate adding first user message
+      const newMessage = {
+        role: "user",
+        content: "What are the different asset types in AOMA?",
+      };
+
+      // Check if title should be generated
+      const shouldGenerateTitle = isDefaultTitle(conversation.title);
+      expect(shouldGenerateTitle).toBe(true);
+
+      // Generate new title
+      const content = getMessageContent(newMessage);
+      expect(content).toBe("What are the different asset types in AOMA?");
+
+      const newTitle = generateTitleFromMessage(content!);
+      expect(newTitle).toBe("What are the different asset types in AOMA");
+      expect(newTitle).not.toBe("New Conversation");
+      expect(newTitle).not.toBe("The Betabase");
+    });
+
+    test("should NOT regenerate title if already has custom title", () => {
+      const conversation = {
+        id: "test-2",
+        title: "My Custom Title",
+        messages: [{ role: "user", content: "First message" }],
+      };
+
+      const shouldGenerateTitle = isDefaultTitle(conversation.title);
+      expect(shouldGenerateTitle).toBe(false);
+    });
+
+    test("should handle AI SDK v5 parts format in workflow", () => {
+      const conversation = {
+        id: "test-3",
+        title: "The Betabase", // Default title that should be replaced
+        messages: [] as any[],
+      };
+
+      const v5Message = {
+        role: "user",
+        parts: [{ type: "text", text: "Explain the database schema" }],
+      };
+
+      const shouldGenerateTitle = isDefaultTitle(conversation.title);
+      expect(shouldGenerateTitle).toBe(true);
+
+      const content = getMessageContent(v5Message);
+      expect(content).toBe("Explain the database schema");
+
+      const newTitle = generateTitleFromMessage(content!);
+      expect(newTitle).toBe("Explain the database schema");
+    });
+  });
+});

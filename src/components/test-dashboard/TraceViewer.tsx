@@ -515,24 +515,24 @@ export const TraceViewer: React.FC = () => {
                               Node: {traceSteps[currentStep].agentData.node}
                             </span>
                           </div>
-                          <p className="text-xs text-zinc-300 leading-relaxed italic">
+                          <p className="text-xs text-foreground leading-relaxed italic">
                             "{traceSteps[currentStep].agentData.thought}"
                           </p>
                         </div>
                         
                         <div>
-                          <Label className="text-[10px] text-zinc-500 uppercase tracking-wider">Action taken</Label>
-                          <div className="mt-1 px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-emerald-400 border border-zinc-700">
+                          <Label className="text-[10px] text-muted-foreground uppercase tracking-wider">Action taken</Label>
+                          <div className="mt-1 px-2 py-1 rounded bg-muted text-xs font-mono text-emerald-400 border border-border">
                             {traceSteps[currentStep].agentData.action}()
                           </div>
                         </div>
 
                         {traceSteps[currentStep].agentData.tools && (
                           <div>
-                            <Label className="text-[10px] text-zinc-500 uppercase tracking-wider">Tools utilized</Label>
+                            <Label className="text-[10px] text-muted-foreground uppercase tracking-wider">Tools utilized</Label>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {traceSteps[currentStep].agentData.tools.map((tool, idx) => (
-                                <Badge key={idx} variant="secondary" className="text-[10px] bg-zinc-800 border-zinc-700 text-zinc-400">
+                                <Badge key={idx} variant="secondary" className="text-[10px] bg-muted border-border text-muted-foreground">
                                   {tool}
                                 </Badge>
                               ))}
@@ -540,20 +540,20 @@ export const TraceViewer: React.FC = () => {
                           </div>
                         )}
 
-                        <div className="pt-4 border-t border-zinc-800">
-                          <p className="text-[10px] text-zinc-500 mb-2 uppercase">LangGraph Execution Path</p>
+                        <div className="pt-4 border-t border-border">
+                          <p className="text-[10px] text-muted-foreground mb-2 uppercase">LangGraph Execution Path</p>
                           <div className="flex items-center gap-1 overflow-x-auto pb-2">
                             {["start", "supervisor", "auth_manager", "browser_agent", "end"].map((n, i) => (
                               <React.Fragment key={n}>
                                 <div className={cn(
                                   "px-2 py-1 rounded text-[10px] whitespace-nowrap border",
-                                  traceSteps[currentStep].agentData.node === n 
-                                    ? "bg-purple-500/20 border-purple-500/50 text-purple-300" 
-                                    : "bg-zinc-900 border-zinc-800 text-zinc-600"
+                                  traceSteps[currentStep].agentData.node === n
+                                    ? "bg-purple-500/20 border-purple-500/50 text-purple-300"
+                                    : "bg-card border-border text-muted-foreground"
                                 )}>
                                   {n}
                                 </div>
-                                {i < 4 && <ChevronRight className="h-3 w-3 text-zinc-800 shrink-0" />}
+                                {i < 4 && <ChevronRight className="h-3 w-3 text-border shrink-0" />}
                               </React.Fragment>
                             ))}
                           </div>
@@ -563,7 +563,7 @@ export const TraceViewer: React.FC = () => {
                       <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground text-center p-8">
                         <Network className="h-12 w-12 opacity-20 mb-4" />
                         <p className="text-sm">No agentic data for this step</p>
-                        <p className="text-[10px] text-zinc-600 mt-1">
+                        <p className="text-[10px] text-muted-foreground mt-1">
                           Agent logic is only available for AI-orchestrated multi-agent flows.
                         </p>
                       </div>

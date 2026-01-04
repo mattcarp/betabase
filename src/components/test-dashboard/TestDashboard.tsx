@@ -461,7 +461,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-2 h-8 text-xs border-zinc-700/50 text-zinc-300"
+                className="gap-2 h-8 text-xs border-border text-foreground"
                 onClick={handleRerunFailed}
                 disabled={isRunning || testStats.failed === 0}
               >
@@ -475,7 +475,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           <div className="grid grid-cols-6 gap-2">
             <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
               <CardContent className="p-2">
-                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
                   {isRunning ? "Running" : "Total"}
                 </div>
                 <span className="text-base font-light text-white">
@@ -486,7 +486,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
               <CardContent className="p-2">
-                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <Activity className="h-2.5 w-2.5 text-[var(--mac-primary-blue-400)]" />
                   Executions
                 </div>
@@ -498,7 +498,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
               <CardContent className="p-2">
-                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <CheckCircle className="h-2.5 w-2.5 text-emerald-400" />
                   Pass Rate
                 </div>
@@ -510,7 +510,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
               <CardContent className="p-2">
-                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <XCircle className="h-2.5 w-2.5 text-rose-400" />
                   Failed
                 </div>
@@ -520,11 +520,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
               <CardContent className="p-2">
-                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
-                  <Clock className="h-2.5 w-2.5 text-slate-400" />
+                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
+                  <Clock className="h-2.5 w-2.5 text-muted-foreground" />
                   Duration
                 </div>
-                <span className="text-base font-light text-slate-400">
+                <span className="text-base font-light text-muted-foreground">
                   {formatDuration(testStats.duration)}
                 </span>
               </CardContent>
@@ -532,7 +532,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
               <CardContent className="p-2">
-                <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-0.5 flex items-center gap-1">
+                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <Zap className="h-2.5 w-2.5 text-amber-400" />
                   Status
                 </div>
@@ -578,12 +578,12 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
-                  className="h-6 text-[9px] text-zinc-400 hover:text-white"
+                  className="h-6 text-[9px] text-muted-foreground hover:text-foreground"
                 >
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div className="bg-[var(--mac-surface-elevated)] rounded-lg p-3 max-h-20 overflow-y-auto border border-zinc-800/50">
+              <div className="bg-[var(--mac-surface-elevated)] rounded-lg p-3 max-h-20 overflow-y-auto border border-border">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
                     <div key={index} className="text-[10px] text-neutral-300 font-mono leading-relaxed">

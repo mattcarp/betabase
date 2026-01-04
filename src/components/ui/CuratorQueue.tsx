@@ -370,7 +370,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
         return (
           <Badge
             variant="outline"
-            className="bg-slate-500/10 text-slate-600 border-slate-500/20 text-xs"
+            className="bg-muted/10 text-muted-foreground border-border text-xs"
           >
             Low
           </Badge>

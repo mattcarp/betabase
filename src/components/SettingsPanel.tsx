@@ -112,9 +112,9 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
       className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       data-testid="settings-panel"
     >
-      <div className="bg-gray-800 border border-blue-600 rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
+      <div className="bg-card border border-primary rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-2">
             <Settings className="w-5 h-5 text-blue-600" />
             <h2
@@ -126,7 +126,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
             data-testid="settings-close"
           >
             <X className="w-5 h-5" />
@@ -136,7 +136,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
         {/* Content */}
         <div className="flex-1 flex min-h-0">
           {/* Sidebar */}
-          <div className="w-48 border-r border-gray-700 p-4">
+          <div className="w-48 border-r border-border p-4">
             <nav className="space-y-1">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -148,7 +148,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                       "w-full flex items-center gap-4 px-4 py-2 rounded font-mono text-sm transition-colors",
                       activeTab === tab.id
                         ? "bg-blue-600/20 text-blue-300 border border-blue-600/30"
-                        : "text-gray-300 hover:text-blue-300 hover:bg-gray-700/50"
+                        : "text-foreground hover:text-blue-300 hover:bg-muted/50"
                     )}
                     data-testid={`settings-tab-${tab.id}`}
                   >
@@ -191,7 +191,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-700 flex items-center justify-between">
+        <div className="p-4 border-t border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
               onClick={exportSettings}
@@ -264,13 +264,13 @@ function AppearanceSettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Theme</label>
+          <label className="block text-sm font-medium text-foreground mb-2">Theme</label>
           <select
             value={settings.theme}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateSetting("theme", e.target.value as SiamSettings["theme"])
             }
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="theme-select"
           >
             <option value="matrix">Matrix</option>
@@ -281,13 +281,13 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Color Scheme</label>
+          <label className="block text-sm font-medium text-foreground mb-2">Color Scheme</label>
           <select
             value={settings.colorScheme}
             onChange={(e) =>
               updateSetting("colorScheme", e.target.value as SiamSettings["colorScheme"])
             }
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="colorscheme-select"
           >
             <option value="default">Default</option>
@@ -297,11 +297,11 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Font Size</label>
+          <label className="block text-sm font-medium text-foreground mb-2">Font Size</label>
           <select
             value={settings.fontSize}
             onChange={(e) => updateSetting("fontSize", e.target.value as SiamSettings["fontSize"])}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="fontsize-select"
           >
             <option value="small">Small</option>
@@ -320,14 +320,14 @@ function AppearanceSettings({
           className="mr-2"
           data-testid="animations-checkbox"
         />
-        <label htmlFor="animations" className="text-gray-300">
+        <label htmlFor="animations" className="text-foreground">
           Enable animations and transitions
         </label>
       </div>
 
       {/* MAIN TRANSPARENCY SLIDER - This is the primary one */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="window-opacity" className="font-mono text-sm text-gray-300">
+        <label htmlFor="window-opacity" className="font-mono text-sm text-foreground">
           🔄 Window Transparency: {settings.windowOpacity}%
         </label>
         <div className="flex items-center gap-4">
@@ -339,7 +339,7 @@ function AppearanceSettings({
             step="5"
             value={settings.windowOpacity}
             onChange={(e) => handleOpacityChange(parseInt(e.target.value, 10))}
-            className="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500 slider"
+            className="w-full h-3 bg-muted rounded-lg appearance-none cursor-pointer accent-blue-500 slider"
             data-testid="transparency-slider"
             style={{
               background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${settings.windowOpacity}%, #374151 ${settings.windowOpacity}%, #374151 100%)`,
@@ -376,7 +376,7 @@ function AudioSettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Audio Gain: {settings.audioGain}%
           </label>
           <input
@@ -401,7 +401,7 @@ function AudioSettings({
             className="mr-2"
             data-testid="noise-reduction-checkbox"
           />
-          <label htmlFor="noiseReduction" className="text-gray-300">
+          <label htmlFor="noiseReduction" className="text-foreground">
             Enable noise reduction
           </label>
         </div>
@@ -415,7 +415,7 @@ function AudioSettings({
             className="mr-2"
             data-testid="audio-visualization-checkbox"
           />
-          <label htmlFor="audioVisualization" className="text-gray-300">
+          <label htmlFor="audioVisualization" className="text-foreground">
             Enable audio visualization
           </label>
         </div>
@@ -437,13 +437,13 @@ function RecordingSettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Transcription Language
           </label>
           <select
             value={settings.transcriptionLanguage}
             onChange={(e) => updateSetting("transcriptionLanguage", e.target.value)}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="language-select"
           >
             <option value="en-US">English (US)</option>
@@ -457,7 +457,7 @@ function RecordingSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Max Recording Duration (minutes, 0 = unlimited)
           </label>
           <input
@@ -466,7 +466,7 @@ function RecordingSettings({
             max="480"
             value={settings.maxRecordingDuration}
             onChange={(e) => updateSetting("maxRecordingDuration", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-duration-input"
             suppressHydrationWarning
           />
@@ -483,7 +483,7 @@ function RecordingSettings({
             className="mr-2"
             data-testid="auto-start-checkbox"
           />
-          <label htmlFor="autoStart" className="text-gray-300">
+          <label htmlFor="autoStart" className="text-foreground">
             Auto-start recording on app launch
           </label>
         </div>
@@ -497,7 +497,7 @@ function RecordingSettings({
             className="mr-2"
             data-testid="auto-save-checkbox"
           />
-          <label htmlFor="autoSave" className="text-gray-300">
+          <label htmlFor="autoSave" className="text-foreground">
             Auto-save transcriptions
           </label>
         </div>
@@ -525,7 +525,7 @@ function LayoutSettings({
 
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Left Panel: {settings.panelSizes.left}%
           </label>
           <input
@@ -540,7 +540,7 @@ function LayoutSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Middle Panel: {settings.panelSizes.middle}%
           </label>
           <input
@@ -555,7 +555,7 @@ function LayoutSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Right Panel: {settings.panelSizes.right}%
           </label>
           <input
@@ -580,7 +580,7 @@ function LayoutSettings({
             className="mr-2"
             data-testid="performance-stats-checkbox"
           />
-          <label htmlFor="performanceStats" className="text-gray-300">
+          <label htmlFor="performanceStats" className="text-foreground">
             Show performance statistics
           </label>
         </div>
@@ -594,7 +594,7 @@ function LayoutSettings({
             className="mr-2"
             data-testid="status-bar-checkbox"
           />
-          <label htmlFor="statusBar" className="text-gray-300">
+          <label htmlFor="statusBar" className="text-foreground">
             Show status bar
           </label>
         </div>
@@ -608,7 +608,7 @@ function LayoutSettings({
             className="mr-2"
             data-testid="compact-mode-checkbox"
           />
-          <label htmlFor="compactMode" className="text-gray-300">
+          <label htmlFor="compactMode" className="text-foreground">
             Enable compact mode
           </label>
         </div>
@@ -647,12 +647,12 @@ function ShortcutsSettings({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {shortcuts.map(({ key, label }) => (
           <div key={key} className="flex items-center justify-between">
-            <label className="text-gray-300 text-sm">{label}</label>
+            <label className="text-foreground text-sm">{label}</label>
             <input
               type="text"
               value={settings.shortcuts[key]}
               onChange={(e) => updateNestedSetting("shortcuts", key, e.target.value)}
-              className="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
+              className="w-24 bg-muted border border-border rounded px-2 py-2 text-white text-center font-mono text-sm focus:border-blue-600 focus:outline-none"
               data-testid={`shortcut-${key}`}
               suppressHydrationWarning
             />
@@ -676,7 +676,7 @@ function DataPrivacySettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Max Session History
           </label>
           <input
@@ -685,14 +685,14 @@ function DataPrivacySettings({
             max="1000"
             value={settings.maxSessionHistory}
             onChange={(e) => updateSetting("maxSessionHistory", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="max-sessions-input"
             suppressHydrationWarning
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Session Retention (days)
           </label>
           <input
@@ -701,7 +701,7 @@ function DataPrivacySettings({
             max="365"
             value={settings.sessionRetentionDays}
             onChange={(e) => updateSetting("sessionRetentionDays", parseInt(e.target.value))}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
+            className="w-full bg-muted border border-border rounded px-4 py-2 text-white focus:border-blue-600 focus:outline-none"
             data-testid="retention-days-input"
             suppressHydrationWarning
           />
@@ -718,7 +718,7 @@ function DataPrivacySettings({
             className="mr-2"
             data-testid="local-only-checkbox"
           />
-          <label htmlFor="localOnly" className="text-gray-300">
+          <label htmlFor="localOnly" className="text-foreground">
             Use local storage only (no cloud sync)
           </label>
         </div>
@@ -732,7 +732,7 @@ function DataPrivacySettings({
             className="mr-2"
             data-testid="auto-delete-checkbox"
           />
-          <label htmlFor="autoDelete" className="text-gray-300">
+          <label htmlFor="autoDelete" className="text-foreground">
             Auto-delete old sessions
           </label>
         </div>

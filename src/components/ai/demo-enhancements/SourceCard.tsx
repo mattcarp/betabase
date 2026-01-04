@@ -41,7 +41,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
   return (
     <div
       className={cn(
-        "rounded-lg border border-zinc-700/50 bg-zinc-900/50 backdrop-blur-sm p-3",
+        "rounded-lg border border-border bg-card/50 backdrop-blur-sm p-3",
         isStreaming && "animate-pulse",
         className
       )}
@@ -54,7 +54,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
         >
           {sources.length} source{sources.length !== 1 ? "s" : ""}
         </Badge>
-        {isStreaming && <span className="text-xs text-zinc-400">Retrieving context...</span>}
+        {isStreaming && <span className="text-xs text-muted-foreground">Retrieving context...</span>}
       </div>
 
       {/* Source List */}
@@ -64,14 +64,14 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
             key={idx}
             className={cn(
               "flex items-start gap-2 p-2 rounded-md",
-              "bg-zinc-800/50 border border-zinc-700/30",
-              "transition-all duration-200 hover:bg-zinc-800/70"
+              "bg-muted/50 border border-border",
+              "transition-all duration-200 hover:bg-muted/70"
             )}
           >
-            <div className="text-zinc-400 mt-0.5">{getSourceIcon(source.type)}</div>
+            <div className="text-muted-foreground mt-0.5">{getSourceIcon(source.type)}</div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-zinc-200 truncate">
+                <span className="text-sm text-foreground truncate">
                   {source.title || `Source ${idx + 1}`}
                 </span>
                 {source.score && (
@@ -83,7 +83,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
                         ? "border-green-500/30 text-green-400"
                         : source.score >= 0.6
                           ? "border-yellow-500/30 text-yellow-400"
-                          : "border-zinc-500/30 text-zinc-400"
+                          : "border-border text-muted-foreground"
                     )}
                   >
                     {Math.round(source.score * 100)}%
@@ -91,7 +91,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
                 )}
               </div>
               {source.snippet && (
-                <p className="text-xs text-zinc-400 mt-1 line-clamp-2">{source.snippet}</p>
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{source.snippet}</p>
               )}
               {source.url && (
                 <a
@@ -108,7 +108,7 @@ export function SourceCard({ sources, isStreaming, className }: SourceCardProps)
           </div>
         ))}
         {sources.length > 3 && (
-          <div className="text-xs text-zinc-500 text-center pt-1">
+          <div className="text-xs text-muted-foreground text-center pt-1">
             +{sources.length - 3} more sources
           </div>
         )}

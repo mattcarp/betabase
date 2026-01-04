@@ -1,10 +1,82 @@
-# 🎬 SIAM Demo Script - Beautiful Edition
+# Betabase Demo Script - Official (MC Edit)
+
+## Cache Warm-Up Queries (Run Before Recording)
+
+Run these exact queries within 5 minutes of recording. Cache TTL is 5 minutes - after that, they'll be instant on camera.
+
+```
+What is AOMA?
+```
+
+```
+Show me JIRA tickets related to AOMA migration and the related code commits
+```
+
+```
+Generate a system architecture diagram for AOMA
+```
+
+```
+Does AOMA have a blockchain integration?
+```
+
+---
 
 **Time**: ~4 minutes | **Tone**: Conversational & confident | **Pace**: Medium with pauses
 
 ---
 
-## 🎯 Opening Hook (30 seconds)
+# Preamble
+
+all on localhost except for gemini call
+
+all libraries are MIT or Apache open source
+
+
+
+
+
+## Don't Miss:
+CDTEXT Processing (file - via upload)
+DDP Processing (folder - via upload, ignore files over 20 megs and chedk for DDMS)
+Complex Workflow Process that will show mermaid diagram
+
+* follow on button that will make a nanobana pro diagram (work on prompt)
+
+* Ask tough question about AOMA, and also what's in the upcoming release and how to prepare for it
+
+* As a question that shows off that japanese code highlighting thing
+
+
+
+Curation segue - thumbs down on an answer
+
+​	HITL - should out to keith and jack
+
+​		experience that the model will never no (anecdotal, "water cooler", phone calls, etc.
+
+​		new title: Knowledge Curator (AI)
+
+​		
+
+Testing
+
+​	self healing demo
+
+​	write testi in natural language, convert to playwright test, run it
+
+​	convert above test to human readable (pre-script, steps, expected outcome)
+
+​	show long-scrolling list of BB tests (mention total numbers)
+
+​	
+
+​	
+
+==========================
+## AI Slop:
+
+## Opening Hook (30 seconds)
 
 **Your opening lines:**
 

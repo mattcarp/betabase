@@ -170,12 +170,12 @@ function FlowStep({
           "w-12 h-12 rounded-full flex items-center justify-center transition-all",
           isActive
             ? "bg-purple-500/30 text-purple-400 ring-2 ring-purple-500/50"
-            : "bg-zinc-800/50 text-zinc-400"
+            : "bg-muted/50 text-muted-foreground"
         )}
       >
         {icon}
       </div>
-      <span className="text-xs text-zinc-400 text-center max-w-[80px]">{label}</span>
+      <span className="text-xs text-muted-foreground text-center max-w-[80px]">{label}</span>
     </motion.div>
   );
 }
@@ -189,7 +189,7 @@ function AnimatedArrow({ isActive }: { isActive?: boolean }) {
       transition={{ duration: 1, repeat: Infinity }}
     >
       <ArrowRight
-        className={cn("h-5 w-5 transition-colors", isActive ? "text-purple-400" : "text-zinc-600")}
+        className={cn("h-5 w-5 transition-colors", isActive ? "text-purple-400" : "text-muted-foreground")}
       />
     </motion.div>
   );
@@ -232,10 +232,10 @@ export function FeedbackImpactLive({
   const positiveRate = (stats.positiveCount / stats.totalFeedback) * 100;
 
   return (
-    <Card className={cn("bg-zinc-900/50 border-zinc-800", className)}>
+    <Card className={cn("bg-card/50 border-border", className)}>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-light text-zinc-100 flex items-center gap-2">
+          <CardTitle className="text-lg font-light text-foreground flex items-center gap-2">
             <Activity className="h-5 w-5 text-purple-400" />
             Feedback Impact
             {isLive && (
@@ -259,7 +259,7 @@ export function FeedbackImpactLive({
             {onRefresh && (
               <button
                 onClick={onRefresh}
-                className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
               >
                 <RefreshCw className="h-4 w-4" />
               </button>
@@ -316,8 +316,8 @@ export function FeedbackImpactLive({
         {/* Accuracy Progress */}
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-zinc-400">Current Accuracy</span>
-            <span className="text-lg font-medium text-zinc-100">
+            <span className="text-sm text-muted-foreground">Current Accuracy</span>
+            <span className="text-lg font-medium text-foreground">
               <AnimatedCounter value={stats.currentAccuracy} suffix="%" />
             </span>
           </div>
@@ -330,7 +330,7 @@ export function FeedbackImpactLive({
               title={`Previous: ${stats.previousAccuracy}%`}
             />
           </div>
-          <div className="flex justify-between text-xs text-zinc-500">
+          <div className="flex justify-between text-xs text-muted-foreground">
             <span>Started at {stats.previousAccuracy}%</span>
             <span>+{accuracyImprovement.toFixed(1)}% improvement</span>
           </div>
@@ -377,25 +377,25 @@ export function FeedbackImpactLive({
 
         {/* Queue Status */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-zinc-800/30 rounded-lg p-4 border border-zinc-700/50">
-            <div className="flex items-center gap-2 text-zinc-400 mb-2">
+          <div className="bg-muted/30 rounded-lg p-4 border border-border/50">
+            <div className="flex items-center gap-2 text-muted-foreground mb-2">
               <Clock className="h-4 w-4" />
               <span className="text-sm">Pending Review</span>
             </div>
-            <div className="text-2xl font-light text-zinc-100">{stats.pendingReview}</div>
+            <div className="text-2xl font-light text-foreground">{stats.pendingReview}</div>
           </div>
-          <div className="bg-zinc-800/30 rounded-lg p-4 border border-zinc-700/50">
-            <div className="flex items-center gap-2 text-zinc-400 mb-2">
+          <div className="bg-muted/30 rounded-lg p-4 border border-border/50">
+            <div className="flex items-center gap-2 text-muted-foreground mb-2">
               <CheckCircle className="h-4 w-4 text-green-400" />
               <span className="text-sm">Approved Today</span>
             </div>
-            <div className="text-2xl font-light text-zinc-100">{stats.approvedToday}</div>
+            <div className="text-2xl font-light text-foreground">{stats.approvedToday}</div>
           </div>
         </div>
 
         {/* Recent Corrections with Impact */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-zinc-300 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
             <MessageSquareQuote className="h-4 w-4 text-orange-400" />
             Recent Corrections
           </h4>
@@ -406,12 +406,12 @@ export function FeedbackImpactLive({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex items-start justify-between p-3 rounded-lg bg-zinc-800/30 border border-zinc-700/50"
+                className="flex items-start justify-between p-3 rounded-lg bg-muted/30 border border-border/50"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-zinc-200 truncate">{item.preview}</p>
+                  <p className="text-sm text-foreground truncate">{item.preview}</p>
                   <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-zinc-500">{formatTimestamp(item.timestamp)}</span>
+                    <span className="text-xs text-muted-foreground">{formatTimestamp(item.timestamp)}</span>
                     <Badge
                       variant="outline"
                       className={cn(
@@ -463,7 +463,7 @@ function MetricCard({
   };
 
   return (
-    <div className="bg-zinc-800/30 rounded-lg p-4 border border-zinc-700/50">
+    <div className="bg-muted/30 rounded-lg p-4 border border-border/50">
       <div className="flex items-center justify-between mb-3">
         <div
           className={cn(
@@ -482,10 +482,10 @@ function MetricCard({
           </Badge>
         )}
       </div>
-      <div className="text-2xl font-light text-zinc-100">
+      <div className="text-2xl font-light text-foreground">
         <AnimatedCounter value={value} />
       </div>
-      <div className="text-xs text-zinc-500 mt-1">{label}</div>
+      <div className="text-xs text-muted-foreground mt-1">{label}</div>
     </div>
   );
 }

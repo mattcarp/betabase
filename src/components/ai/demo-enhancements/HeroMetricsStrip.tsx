@@ -73,7 +73,7 @@ export function HeroMetricsStrip({
       <div
         className={cn(
           "inline-flex items-center gap-4 px-3 py-1.5",
-          "bg-zinc-900/70 border border-zinc-700/50 rounded-full",
+          "bg-card/70 border border-border/50 rounded-full",
           "backdrop-blur-sm",
           className
         )}
@@ -86,7 +86,7 @@ export function HeroMetricsStrip({
               <span
                 className={cn(
                   "text-xs font-medium",
-                  metric.highlight ? "text-white" : "text-zinc-300"
+                  metric.highlight ? "text-white" : "text-foreground"
                 )}
               >
                 {metric.value}
@@ -102,8 +102,8 @@ export function HeroMetricsStrip({
     <div
       className={cn(
         "flex items-center justify-center gap-6 px-6 py-3",
-        "bg-gradient-to-r from-zinc-900/80 via-zinc-900/90 to-zinc-900/80",
-        "border-y border-zinc-700/30",
+        "bg-gradient-to-r from-card/80 via-card/90 to-card/80",
+        "border-y border-border/30",
         "backdrop-blur-sm",
         className
       )}
@@ -120,13 +120,13 @@ export function HeroMetricsStrip({
           >
             <Icon className={cn("h-4 w-4", metric.color)} />
             <div className="flex flex-col">
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wide">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
                 {metric.label}
               </span>
               <span
                 className={cn(
                   "text-sm font-medium",
-                  metric.highlight ? "text-emerald-300" : "text-zinc-200"
+                  metric.highlight ? "text-emerald-300" : "text-foreground"
                 )}
               >
                 {metric.value}

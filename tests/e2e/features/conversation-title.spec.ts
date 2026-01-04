@@ -2,7 +2,12 @@ import { test, expect } from "@playwright/test";
 
 /**
  * Test that conversation titles are automatically generated from the first user message.
- * This addresses the issue where all conversations were showing "New Conversation".
+ * This addresses the recurring regression where all conversations show "The Betabase".
+ *
+ * Key requirements:
+ * 1. New conversations start with "New Conversation" title
+ * 2. When user sends first message, title auto-generates from that message
+ * 3. Titles should NOT remain as "The Betabase" or "New Conversation" after messages sent
  */
 test.describe("Conversation Title Auto-Generation", () => {
   test.beforeEach(async ({ page }) => {
@@ -32,6 +37,62 @@ test.describe("Conversation Title Auto-Generation", () => {
     const hasNewConvo = await newConvoTitle.isVisible().catch(() => false);
 
     expect(isEmpty || hasNewConvo).toBeTruthy();
+  });
+
+  test("REGRESSION: sidebar should NOT show 'The Betabase' as conversation title", async ({ page }) => {
+    // This is the core regression test - after sending a message,
+    // the sidebar should show a title derived from the user's message,
+    // NOT "The Betabase" which was a hardcoded fallback
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    // Store a conversation with first user message in localStorage
+    await page.evaluate(() => {
+      const conversations = [{
+        id: "test-regression-1",
+        title: "New Conversation", // Starts as default
+        messages: [{
+          id: "msg-1",
+          role: "user",
+          content: "What are the different asset types in AOMA?",
+          timestamp: new Date().toISOString(),
+        }],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isPinned: false,
+        tags: [],
+      }];
+      localStorage.setItem("siam-conversations", JSON.stringify({
+        state: {
+          conversations,
+          activeConversationId: "test-regression-1",
+        },
+        version: 1,
+      }));
+    });
+
+    // Reload to trigger title regeneration
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(1000); // Allow regeneration to run
+
+    // Check the sidebar - title should NOT be "The Betabase" or "New Conversation"
+    const sidebar = page.locator('[data-sidebar="content"]');
+    await expect(sidebar).toBeVisible();
+
+    // The conversation title in sidebar should contain words from the user's message
+    const titleInSidebar = page.locator('[data-testid="conversation-title"]');
+    if (await titleInSidebar.count() > 0) {
+      const titleText = await titleInSidebar.first().textContent();
+      expect(titleText?.toLowerCase()).not.toBe("the betabase");
+      expect(titleText?.toLowerCase()).not.toBe("new conversation");
+      // Should contain meaningful content from the user query
+      expect(
+        titleText?.toLowerCase().includes("asset") ||
+        titleText?.toLowerCase().includes("aoma") ||
+        titleText?.toLowerCase().includes("types")
+      ).toBeTruthy();
+    }
   });
 
   test("should generate title from first user message", async ({ page }) => {

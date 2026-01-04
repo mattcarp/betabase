@@ -249,7 +249,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             <SiamLogo size="3xl" variant="icon" className="drop-shadow-2xl" />
           </div>
           <h1 className="mac-heading mac-display-text mb-2">The Betabase</h1>
-          <p className="mac-body text-gray-300">yup. it's back.</p>
+          <p className="mac-body text-muted-foreground">yup. it's back.</p>
         </div>
       </div>
       {/* Glass Morphism Card */}
@@ -266,13 +266,13 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 Email Address
               </FieldLabel>
               <div className="relative group">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-blue-400 transition-colors pointer-events-none" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-blue-400 transition-colors pointer-events-none" />
                 <Input
                   {...emailForm.register("email")}
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
-                  className="pl-11 h-12 text-base border-2 border-gray-600 bg-gray-900/50 text-white placeholder:text-gray-500 focus:border-blue-500 focus:bg-gray-800 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 w-full rounded-lg focus:outline-none"
+                  className="pl-11 h-12 text-base border-2 border-border bg-card/50 text-white placeholder:text-muted-foreground focus:border-blue-500 focus:bg-muted transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 w-full rounded-lg focus:outline-none"
                   disabled={isLoading}
                   autoComplete="email"
                   aria-invalid={!!emailForm.formState.errors.email}
@@ -310,9 +310,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
               <h3 className="mac-title text-lg font-normal text-white mb-2">Magic Link Sent!</h3>
-              <p className="text-sm text-gray-300">We've sent a verification code to</p>
+              <p className="text-sm text-muted-foreground">We've sent a verification code to</p>
               <p className="text-sm font-medium text-white mt-2">{currentEmail}</p>
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 Check your email for the 6-digit verification code
               </p>
             </div>
@@ -340,7 +340,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                   id="code"
                   type="text"
                   placeholder="000000"
-                  className="mac-input h-12 text-center text-2xl tracking-[0.5em] font-mono border-2 border-gray-400 bg-gray-900 text-white placeholder:text-gray-500 focus:border-green-400 focus:bg-gray-800 transition-all duration-200"
+                  className="mac-input h-12 text-center text-2xl tracking-[0.5em] font-mono border-2 border-border bg-card text-white placeholder:text-muted-foreground focus:border-green-400 focus:bg-muted transition-all duration-200"
                   disabled={isLoading}
                   maxLength={6}
                   autoComplete="one-time-code"
@@ -389,12 +389,12 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
         )}
 
         {/* Footer */}
-        <div className="mt-8 pt-6 border-t border-gray-600/30">
+        <div className="mt-8 pt-6 border-t border-border/30">
           <div className="text-center space-y-2">
-            <p className="text-xs text-gray-400 font-mono">
+            <p className="text-xs text-muted-foreground font-mono">
               v{buildInfo.appVersion} • Built {getFormattedBuildTime(buildInfo.buildTime)}
             </p>
-            <p className="text-xs text-gray-500">Eat • Me</p>
+            <p className="text-xs text-muted-foreground">Eat • Me</p>
           </div>
         </div>
       </div>

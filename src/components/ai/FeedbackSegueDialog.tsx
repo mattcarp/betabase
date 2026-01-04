@@ -60,27 +60,27 @@ export function FeedbackSegueDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[550px] bg-zinc-900 border-zinc-800">
+      <DialogContent className="sm:max-w-[550px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-zinc-100 flex items-center gap-2">
+          <DialogTitle className="text-foreground flex items-center gap-2">
             <MessageSquarePlus className="h-5 w-5 text-mac-accent-purple-400" />
             Thank You for Your Feedback
           </DialogTitle>
-          <DialogDescription className="text-zinc-400">
+          <DialogDescription className="text-muted-foreground">
             Your input helps us improve The Betabase for everyone.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Context Preview */}
-          <div className="space-y-3 p-3 bg-zinc-800/30 rounded-lg border border-zinc-700/50">
+          <div className="space-y-3 p-3 bg-muted/30 rounded-lg border border-border">
             <div>
-              <span className="text-xs font-medium text-zinc-500">Your question:</span>
-              <p className="text-sm text-zinc-300 line-clamp-2 mt-1">{userQuery}</p>
+              <span className="text-xs font-medium text-muted-foreground">Your question:</span>
+              <p className="text-sm text-foreground line-clamp-2 mt-1">{userQuery}</p>
             </div>
             <div>
-              <span className="text-xs font-medium text-zinc-500">AI response:</span>
-              <p className="text-sm text-zinc-400 line-clamp-3 mt-1">
+              <span className="text-xs font-medium text-muted-foreground">AI response:</span>
+              <p className="text-sm text-muted-foreground line-clamp-3 mt-1">
                 {aiResponse.substring(0, 200)}...
               </p>
             </div>
@@ -88,14 +88,14 @@ export function FeedbackSegueDialog({
 
           {/* Feedback Input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-zinc-300">
+            <label className="text-sm font-medium text-foreground">
               What was the issue with this response?
             </label>
             <Textarea
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
               placeholder="e.g., The response was inaccurate, missing key information, or not helpful..."
-              className="min-h-[100px] bg-zinc-800/50 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="min-h-[100px] bg-muted/50 border-border text-foreground placeholder:text-muted-foreground"
               data-test-id="feedback-textarea"
             />
             <motion.p
@@ -115,7 +115,7 @@ export function FeedbackSegueDialog({
             variant="outline"
             onClick={() => handleSubmit("close")}
             disabled={isSubmitting}
-            className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+            className="flex-1 border-border text-foreground hover:bg-muted hover:text-foreground"
             data-test-id="feedback-close-btn"
           >
             Close
