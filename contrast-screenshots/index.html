@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8"><title>Text Contrast Options</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;padding:2rem}
+h1{text-align:center;font-weight:300;margin-bottom:.5rem}
+.sub{text-align:center;color:#666;margin-bottom:2rem}
+.section{max-width:1600px;margin:0 auto 3rem}
+h2{font-weight:400;margin-bottom:1rem;border-bottom:1px solid #222;padding-bottom:.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.card{background:#111;border-radius:12px;overflow:hidden;border:1px solid #222;transition:.2s}
+.card:hover{border-color:#26c6da;transform:translateY(-2px)}
+.card.current{border-color:#f59e0b}
+.card img{width:100%;cursor:pointer}
+.info{padding:1rem}
+.name{font-weight:500;display:flex;align-items:center;gap:.5rem}
+.swatch{width:18px;height:18px;border-radius:4px;border:1px solid #444}
+.desc{font-size:.85rem;color:#888;margin-top:.25rem}
+.hex{font-family:monospace;font-size:.8rem;color:#26c6da}
+.tag{background:#f59e0b;color:#000;font-size:.65rem;padding:2px 6px;border-radius:3px;font-weight:600}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:1000;cursor:zoom-out}
+.modal.active{display:flex;align-items:center;justify-content:center}
+.modal img{max-width:95%;max-height:95%}
+</style></head><body>
+<h1>Text Color on Teal Background</h1>
+<p class="sub">5 options - which has best contrast?</p>
+<div class="section"><h2>Dark Theme (MAC)</h2><div class="grid">
+    <div class="card current">
+      <img src="dark-white.png" alt="White (Current)" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#ffffff"></span>
+          White (Current)
+          <span class="tag">CURRENT</span>
+        </div>
+        <div class="desc">Current default - pure white</div>
+        <div class="hex">#ffffff</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="dark-dark-teal.png" alt="Dark Teal" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#003d44"></span>
+          Dark Teal
+          
+        </div>
+        <div class="desc">Very dark teal for maximum contrast</div>
+        <div class="hex">#003d44</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="dark-navy.png" alt="Navy Blue" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#0a1628"></span>
+          Navy Blue
+          
+        </div>
+        <div class="desc">Deep navy - high contrast, warm feel</div>
+        <div class="hex">#0a1628</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="dark-black.png" alt="Near Black" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#0f0f0f"></span>
+          Near Black
+          
+        </div>
+        <div class="desc">Almost black - maximum contrast</div>
+        <div class="hex">#0f0f0f</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="dark-cream.png" alt="Warm Cream" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#fffef5"></span>
+          Warm Cream
+          
+        </div>
+        <div class="desc">Slightly warm white - softer look</div>
+        <div class="hex">#fffef5</div>
+      </div>
+    </div></div></div>
+<div class="section"><h2>Light Theme</h2><div class="grid">
+    <div class="card current">
+      <img src="light-white.png" alt="White (Current)" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#ffffff"></span>
+          White (Current)
+          <span class="tag">CURRENT</span>
+        </div>
+        <div class="desc">Current default - pure white</div>
+        <div class="hex">#ffffff</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="light-dark-teal.png" alt="Dark Teal" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#003d44"></span>
+          Dark Teal
+          
+        </div>
+        <div class="desc">Very dark teal for maximum contrast</div>
+        <div class="hex">#003d44</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="light-navy.png" alt="Navy Blue" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#0a1628"></span>
+          Navy Blue
+          
+        </div>
+        <div class="desc">Deep navy - high contrast, warm feel</div>
+        <div class="hex">#0a1628</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="light-black.png" alt="Near Black" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#0f0f0f"></span>
+          Near Black
+          
+        </div>
+        <div class="desc">Almost black - maximum contrast</div>
+        <div class="hex">#0f0f0f</div>
+      </div>
+    </div>
+    <div class="card ">
+      <img src="light-cream.png" alt="Warm Cream" onclick="openModal(this.src)">
+      <div class="info">
+        <div class="name">
+          <span class="swatch" style="background:#fffef5"></span>
+          Warm Cream
+          
+        </div>
+        <div class="desc">Slightly warm white - softer look</div>
+        <div class="hex">#fffef5</div>
+      </div>
+    </div></div></div>
+<div class="modal" id="modal" onclick="closeModal()"><img id="modal-img"></div>
+<script>
+function openModal(src){document.getElementById('modal-img').src=src;document.getElementById('modal').classList.add('active')}
+function closeModal(){document.getElementById('modal').classList.remove('active')}
+document.onkeydown=e=>{if(e.key==='Escape')closeModal()}
+</script></body></html>
