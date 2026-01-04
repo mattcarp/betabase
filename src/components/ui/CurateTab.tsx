@@ -30,6 +30,16 @@ import {
   // Loader2, // Unused
   Eye,
   Lightbulb,
+  ListTodo,
+  GitBranch,
+  BarChart3,
+  Activity,
+  Flame,
+  FlaskConical,
+  TrendingUp,
+  Rocket,
+  Database as DatabaseIcon,
+  Lightbulb as LightbulbIcon,
 } from "lucide-react";
 // Native buttons used instead to avoid React 19 + Radix ref issues
 // import {
@@ -70,8 +80,8 @@ import { ModelRegistryPanel } from "./rlhf-tabs/ModelRegistryPanel";
 import { TrainingDatasetsPanel } from "./rlhf-tabs/TrainingDatasetsPanel";
 import { FineTuningJobsPanel } from "./rlhf-tabs/FineTuningJobsPanel";
 import { ZeitgeistPanel } from "./ZeitgeistPanel";
+import { TestsTab } from "./rlhf-tabs/TestsTab";
 import { cognitoAuth } from "../../services/cognitoAuth";
-import { ListTodo, GitBranch, BarChart3, Activity, Lightbulb as LightbulbIcon, Rocket, Database as DatabaseIcon, TrendingUp, Flame } from "lucide-react";
 
 interface VectorStoreFile {
   id: string;
@@ -600,6 +610,23 @@ export function CurateTab({
             >
               <Flame className="h-4 w-4 mr-2" />
               Hot Topics
+            </button>
+
+            {/* Tests Tab */}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "tests"}
+              onClick={() => setActiveTab("tests")}
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
+                activeTab === "tests"
+                  ? "bg-white/10 text-white border-b-2 border-white"
+                  : "text-[var(--mac-status-connected)] hover:text-white hover:bg-[var(--mac-state-hover)]"
+              )}
+            >
+              <FlaskConical className="h-4 w-4 mr-2" />
+              Tests
             </button>
           </div>
 
@@ -1147,6 +1174,13 @@ export function CurateTab({
           {activeTab === "zeitgeist" && (
             <div role="tabpanel" className="flex-1 overflow-auto mt-4">
               <ZeitgeistPanel />
+            </div>
+          )}
+
+          {/* Tests Tab Content - Blast Radius Demo */}
+          {activeTab === "tests" && (
+            <div role="tabpanel" className="flex-1 overflow-auto mt-4">
+              <TestsTab />
             </div>
           )}
         </div>
