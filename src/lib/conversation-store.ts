@@ -49,8 +49,8 @@ export function generateTitleFromMessage(content: string): string {
     .replace(/\s+/g, " "); // Normalize whitespace
 
   // Remove common prefixes - apply repeatedly to handle compound phrases like "Hey can you"
-  // Note: Keep meaningful phrases like "help me", "show me", "tell me" as they indicate user intent
-  const prefixPattern = /^(hey|hi|hello|please|can you|could you|i need|i want|i'd like to|explain|so)\s+/i;
+  // Note: Keep meaningful action words like "explain", "help me", "show me", "tell me" as they indicate user intent
+  const prefixPattern = /^(hey|hi|hello|please|can you|could you|i need|i want|i'd like to|so|um|uh)\s+/i;
   let prevTitle = "";
   while (prevTitle !== title && prefixPattern.test(title)) {
     prevTitle = title;
@@ -101,7 +101,7 @@ export function isDefaultTitle(title: string): boolean {
  * - AI SDK v4: content as string
  * - Fallback: tries all variations
  */
-function getMessageContent(m: any): string | undefined {
+export function getMessageContent(m: any): string | undefined {
   if (!m) return undefined;
 
   // AI SDK v5/v6: parts array with text
@@ -139,6 +139,7 @@ function getMessageContent(m: any): string | undefined {
 interface ConversationStore {
   conversations: Conversation[];
   activeConversationId: string | null;
+  _hasHydrated: boolean; // True after store has loaded from localStorage
 
   // Actions
   createConversation: (title?: string) => Conversation;
@@ -152,6 +153,7 @@ interface ConversationStore {
   clearAllConversations: () => void;
   removeDuplicateConversations: () => void;
   regenerateDefaultTitles: () => number; // Returns count of updated conversations
+  setHasHydrated: (hydrated: boolean) => void;
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -159,6 +161,9 @@ export const useConversationStore = create<ConversationStore>()(
     (set, get) => ({
       conversations: [],
       activeConversationId: null,
+      _hasHydrated: false,
+
+      setHasHydrated: (hydrated: boolean) => set({ _hasHydrated: hydrated }),
 
       createConversation: (title = "New Conversation") => {
         const newConversation: Conversation = {
@@ -337,6 +342,14 @@ export const useConversationStore = create<ConversationStore>()(
     {
       name: "siam-conversations",
       version: 1,
+      onRehydrateStorage: () => (state) => {
+        // After hydration completes, mark as hydrated and regenerate any default titles
+        // This ensures titles are generated from message content after loading from localStorage
+        if (state) {
+          state.setHasHydrated(true);
+          state.regenerateDefaultTitles();
+        }
+      },
       storage: {
         getItem: (name) => {
           const str = localStorage.getItem(name);

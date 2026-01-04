@@ -195,25 +195,17 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
     createConversation,
     setActiveConversation,
     getConversation,
-    regenerateDefaultTitles,
+    _hasHydrated,
   } = useConversationStore();
 
-  // Regenerate titles for existing conversations that still have default names
-  // This runs once on mount to fix any legacy "New Conversation" entries
+  // Create initial conversation if none exists - ONLY after hydration completes
+  // This prevents race condition where we create a new conversation before localStorage loads
   useEffect(() => {
-    const updated = regenerateDefaultTitles();
-    if (updated > 0) {
-      console.log(`[ChatPage] Regenerated ${updated} conversation titles`);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Create initial conversation if none exists
-  useEffect(() => {
-    if (conversations.length === 0) {
+    if (_hasHydrated && conversations.length === 0) {
       const newConvo = createConversation(); // Let auto-title generate from first message
       setActiveConversation(newConvo.id);
     }
-  }, [conversations.length, createConversation, setActiveConversation]);
+  }, [_hasHydrated, conversations.length, createConversation, setActiveConversation]);
 
   // Load quick knowledge indicators for header badges
   useEffect(() => {

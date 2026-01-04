@@ -7,6 +7,11 @@
  */
 
 import { describe, test, expect } from "vitest";
+import {
+  generateTitleFromMessage,
+  isDefaultTitle,
+  getMessageContent,
+} from "../../src/lib/conversation-store";
 
 // Type definitions matching the hook
 interface Conversation {
@@ -544,81 +549,10 @@ describe("useConversationManager logic", () => {
  * Title Generation Tests
  * Tests for auto-generating conversation titles from first user message
  * This addresses the regression where all titles showed "The Betabase"
+ *
+ * Note: Functions are imported from src/lib/conversation-store.ts
  */
 describe("Conversation Title Generation", () => {
-  // Helper functions matching the actual implementation in conversation-store.ts
-  function generateTitleFromMessage(content: string): string {
-    if (!content || typeof content !== "string") return "New Conversation";
-
-    let title = content
-      .trim()
-      .replace(/\s+/g, " ")
-      .replace(/^(hey|hi|hello|please|can you|could you|i need|i want)\s+/i, "")
-      .replace(/[?!.]+$/, "");
-
-    if (!title) return "New Conversation";
-
-    title = title.charAt(0).toUpperCase() + title.slice(1);
-
-    const maxLength = 45;
-    if (title.length > maxLength) {
-      const truncateAt = title.lastIndexOf(" ", maxLength);
-      if (truncateAt > 20) {
-        title = title.substring(0, truncateAt);
-      } else {
-        title = title.substring(0, maxLength);
-      }
-    }
-
-    return title;
-  }
-
-  function isDefaultTitle(title: string): boolean {
-    const defaultTitles = [
-      "new conversation",
-      "the betabase",
-      "untitled",
-      "untitled conversation",
-      ""
-    ];
-    return defaultTitles.includes(title.toLowerCase().trim());
-  }
-
-  function getMessageContent(m: any): string | undefined {
-    if (!m) return undefined;
-
-    // AI SDK v5/v6: parts array with text
-    if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
-      const textPart = m.parts.find((p: any) => p.type === "text" || p.text);
-      if (textPart?.text) {
-        return textPart.text;
-      }
-      const allText = m.parts
-        .map((p: any) => p.text || "")
-        .filter(Boolean)
-        .join("");
-      if (allText) return allText;
-    }
-
-    // AI SDK v4 / direct content
-    if (m.content) {
-      if (typeof m.content === "string") {
-        return m.content;
-      }
-      if (typeof m.content === "object" && m.content.text) {
-        return m.content.text;
-      }
-      if (Array.isArray(m.content)) {
-        const text = m.content
-          .map((c: any) => (typeof c === "string" ? c : c?.text || ""))
-          .join("");
-        if (text) return text;
-      }
-    }
-
-    return undefined;
-  }
-
   describe("isDefaultTitle", () => {
     test("should identify 'New Conversation' as default", () => {
       expect(isDefaultTitle("New Conversation")).toBe(true);
