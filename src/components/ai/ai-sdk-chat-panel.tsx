@@ -30,6 +30,10 @@ import {
   MicOff,
   Volume2,
   VolumeX,
+  Search,
+  FileSearch,
+  Brain,
+  Lightbulb,
 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
@@ -117,6 +121,68 @@ import {
 } from "../ai-elements/web-preview";
 import { FileUpload } from "../ai-elements/file-upload";
 
+// AI Elements - Previously installed but not used (now implementing)
+import {
+  ChainOfThought,
+  ChainOfThoughtHeader,
+  ChainOfThoughtContent,
+  ChainOfThoughtStep,
+  ChainOfThoughtSpinner,
+  ChainOfThoughtSearchResults,
+  ChainOfThoughtSearchResult,
+} from "../ai-elements/chain-of-thought";
+import { Shimmer } from "../ai-elements/shimmer";
+import {
+  Context,
+  ContextTrigger,
+  ContextContent,
+  ContextContentHeader,
+  ContextContentBody,
+  ContextContentFooter,
+  ContextInputUsage,
+  ContextOutputUsage,
+} from "../ai-elements/context";
+import {
+  Artifact,
+  ArtifactHeader,
+  ArtifactTitle,
+  ArtifactActions,
+  ArtifactAction,
+  ArtifactClose,
+  ArtifactContent,
+} from "../ai-elements/artifact";
+import {
+  Queue,
+  QueueSection,
+  QueueSectionTrigger,
+  QueueSectionLabel,
+  QueueSectionContent,
+  QueueList,
+  QueueItem,
+  QueueItemIndicator,
+  QueueItemContent,
+} from "../ai-elements/queue";
+import {
+  Plan,
+  PlanHeader,
+  PlanTitle,
+  PlanDescription,
+  PlanContent,
+  PlanTrigger,
+  PlanAction,
+} from "../ai-elements/plan";
+// Workflow/React Flow components for experimental System Diagrams and Agent Execution Visualizer
+import { Canvas } from "../ai-elements/canvas";
+import { Node, NodeHeader, NodeTitle, NodeContent } from "../ai-elements/node";
+import { Controls } from "../ai-elements/controls";
+import { Edge } from "../ai-elements/edge";
+import { ReactFlowProvider } from "@xyflow/react";
+import { DDPDisplay } from "../ddp/DDPDisplay";
+import { getTrackOffsets, getLeadoutOffset } from "../../services/ddpParser";
+import { lookupFromDDP, calculateDiscId } from "../../services/musicBrainz";
+import type { ParsedDDP } from "../../types/ddp";
+import type { MusicBrainzLookupResult } from "../../services/musicBrainz";
+
 interface AiSdkChatPanelProps {
   api?: string;
   initialMessages?: any[];
@@ -181,6 +247,11 @@ export function AiSdkChatPanel({
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ fileId: string; filename: string }>>(
     []
   );
+  // DDP parsing state
+  const [parsedDDP, setParsedDDP] = useState<ParsedDDP | null>(null);
+  const [ddpMusicBrainz, setDdpMusicBrainz] = useState<MusicBrainzLookupResult | null>(null);
+  const [isLoadingMusicBrainz, setIsLoadingMusicBrainz] = useState(false);
+
   const [currentProgress, setCurrentProgress] = useState<{
     phase: string;
     status: "pending" | "in-progress" | "completed" | "failed";
@@ -194,6 +265,34 @@ export function AiSdkChatPanel({
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
+
+  // Chain of Thought thinking steps for enhanced loading indicator
+  type ThinkingStep = {
+    label: string;
+    status: "complete" | "active" | "pending";
+    description?: string;
+  };
+  const [thinkingSteps, setThinkingSteps] = useState<ThinkingStep[]>([]);
+
+  // Context token usage tracking for visualization
+  const [tokenUsage, setTokenUsage] = useState<{
+    usedTokens: number;
+    maxOutputTokens: number;
+    inputTokens: number;
+    outputTokens: number;
+  }>({
+    usedTokens: 0,
+    maxOutputTokens: 128000, // Default for Gemini 1.5 Flash
+    inputTokens: 0,
+    outputTokens: 0,
+  });
+
+  // Detect if current query is a planning-type request
+  const [isPlanningQuery, setIsPlanningQuery] = useState(false);
+  // Detect if current query is a diagram/architecture request (EXPERIMENTAL)
+  const [isDiagramQuery, setIsDiagramQuery] = useState(false);
+  // Detect if current query triggers multi-tool agent execution (EXPERIMENTAL)
+  const [isAgentQuery, setIsAgentQuery] = useState(false);
   const [messageDurations, setMessageDurations] = useState<Record<string, number>>(() => {
     // Initialize from sessionStorage to survive remounts
     if (typeof window !== "undefined") {
@@ -544,6 +643,18 @@ export function AiSdkChatPanel({
       text: String(messageText),
     };
 
+    // Detect planning-type queries for Plan component display
+    const planningKeywords = /\b(plan|step-by-step|workflow|procedure|migrate|implement|deploy|process)\b/i;
+    setIsPlanningQuery(planningKeywords.test(String(messageText)));
+
+    // Detect diagram/architecture queries for System Diagram display (EXPERIMENTAL)
+    const diagramKeywords = /\b(diagram|architecture|system|flow|how.*work|data.*flow|structure|component|design)\b/i;
+    setIsDiagramQuery(diagramKeywords.test(String(messageText)));
+
+    // Detect multi-tool agent queries for Agent Execution Visualizer (EXPERIMENTAL)
+    const agentKeywords = /\b(search.*and|find.*and|cross-reference|compare|analyze.*with|jira.*wiki|wiki.*jira|multiple|sources)\b/i;
+    setIsAgentQuery(agentKeywords.test(String(messageText)));
+
     console.log("[SIAM] Sending validated message:", validatedMessage);
 
     // DEMO INTERCEPT: AOMA Upload Question
@@ -728,6 +839,51 @@ export function AiSdkChatPanel({
     };
   }, [isLoading, manualLoading, isProcessing, hasStartedStreaming]);
 
+  // Update thinking steps based on loading progress
+  useEffect(() => {
+    if ((isLoading || manualLoading || isProcessing) && !hasStartedStreaming) {
+      // Progressive thinking steps based on elapsed time
+      const steps: ThinkingStep[] = [];
+
+      if (loadingSeconds >= 0) {
+        steps.push({
+          label: "Understanding your question...",
+          status: loadingSeconds >= 2 ? "complete" : "active",
+          description: "Analyzing intent and context",
+        });
+      }
+
+      if (loadingSeconds >= 2) {
+        steps.push({
+          label: "Searching knowledge base...",
+          status: loadingSeconds >= 5 ? "complete" : "active",
+          description: "Querying AOMA documentation and tickets",
+        });
+      }
+
+      if (loadingSeconds >= 5) {
+        steps.push({
+          label: "Retrieving relevant documents...",
+          status: loadingSeconds >= 8 ? "complete" : "active",
+          description: "Fetching sources and citations",
+        });
+      }
+
+      if (loadingSeconds >= 8) {
+        steps.push({
+          label: "Synthesizing response...",
+          status: "active",
+          description: "Generating comprehensive answer",
+        });
+      }
+
+      setThinkingSteps(steps);
+    } else {
+      // Clear steps when not loading
+      setThinkingSteps([]);
+    }
+  }, [loadingSeconds, isLoading, manualLoading, isProcessing, hasStartedStreaming]);
+
   // Track previous isLoading state to detect when streaming completes
   const prevIsLoadingRef = useRef(isLoading);
 
@@ -763,6 +919,33 @@ export function AiSdkChatPanel({
       }, 100);
     }
   }, [isLoading, messages, messageDurations]);
+
+  // Estimate token usage from messages for Context visualization
+  // Rough estimate: ~4 characters per token for English text
+  useEffect(() => {
+    if (messages.length > 0) {
+      let inputTokens = 0;
+      let outputTokens = 0;
+
+      messages.forEach((msg) => {
+        const content = typeof msg.content === "string" ? msg.content : JSON.stringify(msg.content);
+        const estimatedTokens = Math.ceil(content.length / 4);
+
+        if (msg.role === "user") {
+          inputTokens += estimatedTokens;
+        } else if (msg.role === "assistant") {
+          outputTokens += estimatedTokens;
+        }
+      });
+
+      setTokenUsage({
+        usedTokens: inputTokens + outputTokens,
+        maxOutputTokens: 128000, // Gemini context window
+        inputTokens,
+        outputTokens,
+      });
+    }
+  }, [messages]);
 
   // Create a local state for input since setInput might not exist in v5
   const [localInput, setLocalInput] = useState("");
@@ -1329,6 +1512,49 @@ export function AiSdkChatPanel({
     toast.success(`File "${filename}" is now available in AOMA knowledge base`);
   };
 
+  // DDP parsing handler - receives already-parsed DDP from FileUpload
+  const handleDDPDetected = useCallback(async (parsed: ParsedDDP) => {
+    setParsedDDP(parsed);
+    setDdpMusicBrainz(null);
+    toast.success(`DDP parsed: ${parsed.summary.trackCount} tracks found`);
+
+    // Look up MusicBrainz in the background
+    setIsLoadingMusicBrainz(true);
+    try {
+      let discId: string | undefined;
+      if (parsed.pqEntries.length > 0) {
+        const offsets = getTrackOffsets(parsed.pqEntries);
+        const leadout = getLeadoutOffset(parsed.pqEntries);
+        if (offsets.length > 0 && leadout > 0) {
+          discId = await calculateDiscId(1, offsets.length, leadout, offsets);
+        }
+      }
+
+      const isrcs = parsed.tracks
+        .map(t => t.isrc)
+        .filter((isrc): isrc is string => !!isrc);
+
+      const mbResult = await lookupFromDDP({
+        discId,
+        barcode: parsed.summary.upc,
+        isrcs,
+        artist: parsed.cdText?.albumPerformer,
+        title: parsed.cdText?.albumTitle,
+      });
+
+      setDdpMusicBrainz(mbResult);
+    } catch (error) {
+      console.error('MusicBrainz lookup failed:', error);
+    } finally {
+      setIsLoadingMusicBrainz(false);
+    }
+  }, []);
+
+  const clearDDP = useCallback(() => {
+    setParsedDDP(null);
+    setDdpMusicBrainz(null);
+  }, []);
+
   const handleMessageAction = (action: string, messageId: string) => {
     switch (action) {
       case "copy":
@@ -1489,7 +1715,7 @@ export function AiSdkChatPanel({
                 "prose prose-sm max-w-none",
                 isUser
                   ? "prose-invert [&>*]:text-white"
-                  : "prose-invert [&>*]:text-zinc-100 [&>p]:text-zinc-100 [&>div]:text-zinc-100"
+                  : "prose-invert [&>*]:text-foreground [&>p]:text-foreground [&>div]:text-foreground"
               )}
             >
               {/* Handle AI SDK v5 message parts or fallback to content */}
@@ -1576,7 +1802,7 @@ export function AiSdkChatPanel({
               if (!ragMeta || isUser) return null;
 
               return (
-                <div className="space-y-3 mt-4 pt-3 border-t border-zinc-700/30">
+                <div className="space-y-3 mt-4 pt-3 border-t border-border/30">
                   {/* Confidence Badge with Tooltip */}
                   <div className="flex items-center gap-3">
                     <ConfidenceBadge
@@ -1588,7 +1814,7 @@ export function AiSdkChatPanel({
                     {ragMeta.timeMs && (
                       <Badge
                         variant="outline"
-                        className="bg-zinc-500/10 border-zinc-500/30 text-zinc-400 text-xs"
+                        className="bg-muted/10 border-border/30 text-muted-foreground text-xs"
                       >
                         {ragMeta.timeMs}ms
                       </Badge>
@@ -1690,14 +1916,34 @@ export function AiSdkChatPanel({
 
             {/* PERFORMANCE FIX: REMOVED DUPLICATE PROGRESS INDICATOR - Now only rendered once at line 1538 */}
 
-            {/* Enhanced Code blocks */}
+            {/* Enhanced Code blocks wrapped in Artifact container */}
             {message.code && (
-              <div className="mt-4">
-                <CodeBlock
-                  language={message.codeLanguage || "javascript"}
-                  code={message.code}
-                  className="rounded-lg border border-border/50 shadow-sm"
-                />
+              <div className="mt-4" data-slot="artifact" data-testid="artifact">
+                <Artifact className="border-border/50">
+                  <ArtifactHeader className="ArtifactHeader">
+                    <div className="flex items-center gap-2">
+                      <ArtifactTitle>{message.codeLanguage || "Code"}</ArtifactTitle>
+                    </div>
+                    <ArtifactActions>
+                      <ArtifactAction
+                        icon={Copy}
+                        tooltip="Copy code"
+                        aria-label="copy"
+                        onClick={() => {
+                          navigator.clipboard.writeText(message.code || "");
+                          toast.success("Code copied to clipboard");
+                        }}
+                      />
+                    </ArtifactActions>
+                  </ArtifactHeader>
+                  <ArtifactContent className="p-0">
+                    <CodeBlock
+                      language={message.codeLanguage || "javascript"}
+                      code={message.code}
+                      className="rounded-none border-0 shadow-none"
+                    />
+                  </ArtifactContent>
+                </Artifact>
               </div>
             )}
 
@@ -1964,7 +2210,7 @@ export function AiSdkChatPanel({
 
   return (
     <div
-      className={cn("flex flex-col flex-1 min-h-0", "bg-zinc-950", "overflow-hidden", className)}
+      className={cn("flex flex-col flex-1 min-h-0", "bg-background", "overflow-hidden", className)}
     >
       {/* Modern Header - Only show if showHeader is true */}
       {showHeader && (
@@ -2039,9 +2285,9 @@ export function AiSdkChatPanel({
       />
 
       {/* Main Chat Area */}
-      <div className="flex-1 min-h-0 overflow-y-auto bg-zinc-950">
-        <Conversation className="bg-zinc-950">
-          <ConversationContent className="px-6 py-4 pb-8 bg-zinc-950">
+      <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+        <Conversation className="bg-background">
+          <ConversationContent className="px-6 py-4 pb-8 bg-background">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */
               <motion.div
@@ -2064,7 +2310,7 @@ export function AiSdkChatPanel({
                   <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
                     Welcome to The Betabase
                   </h2>
-                  <p className="text-lg font-light text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-lg font-light text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                     Don't be an asshat.
                   </p>
                 </motion.div>
@@ -2097,7 +2343,7 @@ export function AiSdkChatPanel({
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
+                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-muted/50 border border-border/50 text-foreground hover:bg-muted hover:border-border hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
                               />
                             </motion.div>
                           )
@@ -2123,7 +2369,7 @@ export function AiSdkChatPanel({
                     </motion.div>
                   ))}
 
-                  {/* Loading indicator - appears AFTER messages (below user question, above AI response) */}
+                  {/* Chain of Thought loading indicator - appears AFTER messages (below user question, above AI response) */}
                   {/* CRITICAL: Only show when waiting for response, hide once streaming starts */}
                   {(isLoading || manualLoading || isProcessing) && !hasStartedStreaming && (
                     <motion.div
@@ -2132,16 +2378,210 @@ export function AiSdkChatPanel({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="flex items-center gap-3 p-4 ml-12"
+                      className="p-4 ml-12"
+                      data-slot="chain-of-thought"
                     >
-                      <Loader size={20} className="text-blue-400 animate-spin" />
-                      <span className="text-sm text-muted-foreground">
-                        {loadingSeconds > 5
-                          ? `Searching AOMA knowledge base... (${loadingSeconds}s)`
-                          : loadingSeconds > 0
-                            ? `Thinking... (${loadingSeconds}s)`
-                            : "Thinking..."}
-                      </span>
+                      <ChainOfThought defaultOpen={true}>
+                        <ChainOfThoughtHeader>
+                          <Shimmer duration={2} className="text-sm">
+                            {thinkingSteps.length > 0
+                              ? thinkingSteps[thinkingSteps.length - 1].label
+                              : "Thinking..."}
+                          </Shimmer>
+                        </ChainOfThoughtHeader>
+                        <ChainOfThoughtContent>
+                          {thinkingSteps.map((step, index) => (
+                            <ChainOfThoughtStep
+                              key={index}
+                              icon={
+                                index === 0
+                                  ? Brain
+                                  : index === 1
+                                    ? Search
+                                    : index === 2
+                                      ? FileSearch
+                                      : Sparkles
+                              }
+                              label={step.label}
+                              description={step.description}
+                              status={step.status}
+                              data-slot="chain-of-thought-step"
+                            />
+                          ))}
+                          {loadingSeconds >= 8 && (
+                            <ChainOfThoughtSpinner message={`Synthesizing... (${loadingSeconds}s)`} />
+                          )}
+                        </ChainOfThoughtContent>
+                      </ChainOfThought>
+
+                      {/* Queue display for multi-step operations (appears when searching) */}
+                      {loadingSeconds >= 5 && thinkingSteps.length >= 3 && (
+                        <Queue className="mt-4" data-testid="task-queue">
+                          <QueueSection>
+                            <QueueSectionTrigger>
+                              <QueueSectionLabel
+                                label="tasks in progress"
+                                count={thinkingSteps.length}
+                                icon={<Zap className="w-4 h-4" />}
+                              />
+                            </QueueSectionTrigger>
+                            <QueueSectionContent>
+                              <QueueList>
+                                {thinkingSteps.map((step, idx) => (
+                                  <QueueItem key={idx} className="QueueItem">
+                                    <div className="flex items-center gap-2">
+                                      <QueueItemIndicator
+                                        completed={step.status === "complete"}
+                                        className={step.status === "complete" ? "border-green-500 bg-green-500/20" : ""}
+                                      />
+                                      <QueueItemContent completed={step.status === "complete"}>
+                                        {step.label}
+                                      </QueueItemContent>
+                                    </div>
+                                  </QueueItem>
+                                ))}
+                              </QueueList>
+                            </QueueSectionContent>
+                          </QueueSection>
+                        </Queue>
+                      )}
+
+                      {/* Plan display for planning-type queries */}
+                      {isPlanningQuery && loadingSeconds >= 3 && (
+                        <Plan
+                          defaultOpen={true}
+                          isStreaming={true}
+                          className="mt-4"
+                          data-slot="plan"
+                          data-testid="execution-plan"
+                        >
+                          <PlanHeader>
+                            <div>
+                              <PlanTitle>Generating execution plan...</PlanTitle>
+                              <PlanDescription>
+                                Analyzing requirements and creating step-by-step workflow
+                              </PlanDescription>
+                            </div>
+                            <PlanTrigger data-slot="plan-trigger" />
+                          </PlanHeader>
+                          <PlanContent className="space-y-2 text-sm text-muted-foreground">
+                            {thinkingSteps.map((step, idx) => (
+                              <div key={idx} className="flex items-center gap-2">
+                                <span className={step.status === "complete" ? "text-green-500" : ""}>
+                                  {step.status === "complete" ? "done" : step.status === "active" ? "arrow" : "circle"}
+                                </span>
+                                <span className={step.status === "complete" ? "line-through text-muted-foreground/50" : ""}>
+                                  {step.label}
+                                </span>
+                              </div>
+                            ))}
+                          </PlanContent>
+                        </Plan>
+                      )}
+
+                      {/* EXPERIMENTAL: System Diagram for architecture queries */}
+                      {isDiagramQuery && loadingSeconds >= 4 && (
+                        <div
+                          className="mt-4 h-[300px] rounded-lg border border-border overflow-hidden"
+                          data-testid="system-diagram"
+                        >
+                          <ReactFlowProvider>
+                            <Canvas
+                              nodes={[
+                                {
+                                  id: "user",
+                                  type: "default",
+                                  position: { x: 50, y: 100 },
+                                  data: { label: "User Query" },
+                                  className: "react-flow__node",
+                                },
+                                {
+                                  id: "rag",
+                                  type: "default",
+                                  position: { x: 250, y: 50 },
+                                  data: { label: "RAG Pipeline" },
+                                  className: "react-flow__node",
+                                },
+                                {
+                                  id: "llm",
+                                  type: "default",
+                                  position: { x: 250, y: 150 },
+                                  data: { label: "LLM Processing" },
+                                  className: "react-flow__node",
+                                },
+                                {
+                                  id: "response",
+                                  type: "default",
+                                  position: { x: 450, y: 100 },
+                                  data: { label: "Response" },
+                                  className: "react-flow__node",
+                                },
+                              ]}
+                              edges={[
+                                { id: "e1", source: "user", target: "rag", animated: true },
+                                { id: "e2", source: "rag", target: "llm", animated: true },
+                                { id: "e3", source: "llm", target: "response", animated: true },
+                              ]}
+                              className="react-flow"
+                            >
+                              <Controls className="react-flow__controls" />
+                            </Canvas>
+                          </ReactFlowProvider>
+                        </div>
+                      )}
+
+                      {/* EXPERIMENTAL: Agent Execution Visualizer for multi-tool queries */}
+                      {isAgentQuery && loadingSeconds >= 3 && (
+                        <div
+                          className="mt-4 h-[250px] rounded-lg border border-border overflow-hidden"
+                          data-testid="agent-execution-visualizer"
+                          data-execution="true"
+                        >
+                          <ReactFlowProvider>
+                            <Canvas
+                              nodes={[
+                                {
+                                  id: "start",
+                                  type: "default",
+                                  position: { x: 50, y: 80 },
+                                  data: { label: "Start" },
+                                  className: `react-flow__node ${thinkingSteps[0]?.status === "complete" ? "border-green-500" : thinkingSteps[0]?.status === "active" ? "animate-pulse" : ""}`,
+                                },
+                                {
+                                  id: "jira",
+                                  type: "default",
+                                  position: { x: 200, y: 40 },
+                                  data: { label: "Search Jira" },
+                                  className: `react-flow__node ${thinkingSteps[1]?.status === "complete" ? "border-green-500 complete" : thinkingSteps[1]?.status === "active" ? "animate-pulse running" : ""}`,
+                                },
+                                {
+                                  id: "wiki",
+                                  type: "default",
+                                  position: { x: 200, y: 120 },
+                                  data: { label: "Search Wiki" },
+                                  className: `react-flow__node ${thinkingSteps[2]?.status === "complete" ? "border-green-500 complete" : thinkingSteps[2]?.status === "active" ? "animate-pulse running" : ""}`,
+                                },
+                                {
+                                  id: "synthesize",
+                                  type: "default",
+                                  position: { x: 380, y: 80 },
+                                  data: { label: "Synthesize" },
+                                  className: `react-flow__node ${thinkingSteps[3]?.status === "complete" ? "border-green-500 complete" : thinkingSteps[3]?.status === "active" ? "animate-pulse running" : ""}`,
+                                },
+                              ]}
+                              edges={[
+                                { id: "e1", source: "start", target: "jira", animated: true },
+                                { id: "e2", source: "start", target: "wiki", animated: true },
+                                { id: "e3", source: "jira", target: "synthesize", animated: true },
+                                { id: "e4", source: "wiki", target: "synthesize", animated: true },
+                              ]}
+                              className="react-flow"
+                            >
+                              <Controls className="react-flow__controls" />
+                            </Canvas>
+                          </ReactFlowProvider>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -2165,6 +2605,22 @@ export function AiSdkChatPanel({
               </motion.div>
             )}
 
+            {/* DDP Display - shows parsed DDP data from folder upload */}
+            {parsedDDP && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6"
+              >
+                <DDPDisplay
+                  ddp={parsedDDP}
+                  musicBrainz={ddpMusicBrainz}
+                  isLoadingMusicBrainz={isLoadingMusicBrainz}
+                  onDismiss={clearDDP}
+                />
+              </motion.div>
+            )}
+
             {/* Max Messages Alert */}
             {isMaxMessagesReached && (
               <Alert className="mt-6 border-amber-500/50 bg-amber-500/10">
@@ -2183,7 +2639,7 @@ export function AiSdkChatPanel({
       </div>
 
       {/* Modern Input Area */}
-      <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-zinc-800/50 bg-zinc-950 relative">
+      <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-border/50 bg-background relative">
         {/* Real-Time Transcription Display */}
         {(isRecording || interimTranscript || transcript) && (
           <div className="mb-4 p-4 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
@@ -2206,7 +2662,7 @@ export function AiSdkChatPanel({
                 )}
               </div>
               <div className="flex-1">
-                <div className="text-xs text-gray-400 mb-2">
+                <div className="text-xs text-muted-foreground mb-2">
                   {isRecording ? "Listening..." : "Transcription"}
                 </div>
                 <div className="text-sm text-white">
@@ -2245,12 +2701,13 @@ export function AiSdkChatPanel({
             className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
           />
 
-          <PromptInputToolbar className="border-t border-zinc-800/50 bg-zinc-900/30">
+          <PromptInputToolbar className="border-t border-border/50 bg-card/30">
             <PromptInputTools className="gap-2">
               <FileUpload
                 compact={true}
                 onUploadComplete={handleFileUploadComplete}
                 onUploadError={(error) => toast.error(`Upload failed: ${error}`)}
+                onDDPDetected={handleDDPDetected}
               />
 
               {/* Voice Input Button (Push-to-Talk) */}
@@ -2272,7 +2729,7 @@ export function AiSdkChatPanel({
                           "border-orange-500/30 hover:bg-orange-500/10",
                           "hover:border-orange-500/50 text-orange-400",
                         ]
-                      : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
+                      : ["hover:bg-muted/50 hover:border-border"]
                 )}
                 onMouseDown={(e) => {
                   e.preventDefault();
@@ -2345,7 +2802,7 @@ export function AiSdkChatPanel({
                         "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
                         "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
                       ]
-                    : ["hover:bg-zinc-800/50 hover:border-zinc-700"]
+                    : ["hover:bg-muted/50 hover:border-border"]
                 )}
                 onClick={() => {
                   console.log("🔊 SPEAKER: Button clicked");
@@ -2387,7 +2844,7 @@ export function AiSdkChatPanel({
                 onValueChange={setSelectedModel}
                 disabled={isMaxMessagesReached || isLoading}
               >
-                <PromptInputModelSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-zinc-700/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
+                <PromptInputModelSelectTrigger className="!h-8 !w-[160px] !px-2 !text-xs bg-transparent border-border/50 shrink-0 !shadow-none [&.mac-shimmer]:animate-none">
                   <PromptInputModelSelectValue />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent>
@@ -2413,6 +2870,31 @@ export function AiSdkChatPanel({
                 </div>
               )}
             </PromptInputTools>
+
+            {/* Context Token Usage Visualization */}
+            {(tokenUsage.inputTokens > 0 || tokenUsage.outputTokens > 0) && (
+              <Context
+                usedTokens={tokenUsage.usedTokens}
+                maxOutputTokens={tokenUsage.maxOutputTokens}
+                usage={{
+                  inputTokens: tokenUsage.inputTokens,
+                  outputTokens: tokenUsage.outputTokens,
+                  totalTokens: tokenUsage.usedTokens,
+                }}
+                modelId={selectedModel}
+                data-testid="context-usage"
+              >
+                <ContextTrigger aria-label="context usage" className="!h-8 !px-2 text-xs" />
+                <ContextContent>
+                  <ContextContentHeader />
+                  <ContextContentBody className="space-y-2">
+                    <ContextInputUsage />
+                    <ContextOutputUsage />
+                  </ContextContentBody>
+                  <ContextContentFooter />
+                </ContextContent>
+              </Context>
+            )}
 
             <PromptInputSubmit
               disabled={isMaxMessagesReached || !localInput?.trim()}

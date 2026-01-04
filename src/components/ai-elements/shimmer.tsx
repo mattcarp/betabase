@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "src/lib/utils";
-import { motion, type MotionProps, type HTMLMotionProps } from "motion/react";
+import { motion } from "framer-motion";
 import {
   type CSSProperties,
   memo,

@@ -152,6 +152,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19.1.12",
+    "@xyflow/react": "^12.10.0",
     "ai": "6.0.0-beta.157",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.9",
