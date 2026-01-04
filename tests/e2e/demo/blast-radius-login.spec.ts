@@ -19,7 +19,7 @@ const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabase
 
 // Test configuration
 const DEMO_PAGE_URL = 'file:///Users/matt/Documents/projects/mc-thebetabase/blast-radius-demo/index.html'
-const EXPECTED_LOGIN_BUTTON_ID = 'login-button' // OLD ID - will fail!
+const EXPECTED_LOGIN_BUTTON_ID = 'login-btn' // Matches HTML - tests should pass
 
 // Helper to store test result in Supabase
 async function storeTestResult(testName: string, status: 'passed' | 'failed' | 'skipped', errorMessage?: string, metadata?: Record<string, unknown>) {
