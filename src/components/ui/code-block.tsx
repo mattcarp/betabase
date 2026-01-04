@@ -4,6 +4,7 @@ import { JSX, useEffect, useState, lazy, Suspense, Fragment } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 // Types only - no runtime import to avoid browser issues with process.env
 import type { BundledLanguage, BundledTheme } from "shiki";
@@ -26,12 +27,17 @@ interface CodeBlockProps {
 export function CodeBlock({
   code,
   language = "typescript",
-  theme = "catppuccin-mocha",
+  theme: themeProp,
   showLineNumbers = false,
   className,
   filename,
   onMermaidUpgrade,
 }: CodeBlockProps) {
+  const { theme: currentTheme } = useTheme();
+
+  // Auto-select theme based on current app theme
+  // Use light theme for light mode, dark theme otherwise
+  const theme: BundledTheme = themeProp ?? (currentTheme === "light" ? "github-light" : "catppuccin-mocha");
   // Special handling for mermaid diagrams - render as actual diagram
   if (language === "mermaid") {
     return (
@@ -136,7 +142,7 @@ export function CodeBlock({
     }
 
     highlight();
-  }, [code, language, theme, showLineNumbers]);
+  }, [code, language, theme, showLineNumbers, currentTheme]);
 
   if (isLoading) {
     return (

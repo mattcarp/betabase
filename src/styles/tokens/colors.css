@@ -62,6 +62,8 @@
   --mac-text-secondary: #a3a3a3;
   --mac-text-muted: #737373;
   --mac-text-disabled: #525252;
+  --mac-text-on-teal: var(--mac-teal-900);  /* Dark teal text for teal backgrounds */
+  --mac-text-on-teal-hover: #004d50;  /* Even darker for hover states */
 
   /* ============================================
      BORDER COLORS - Subtle, professional

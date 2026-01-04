@@ -1,0 +1,86 @@
+{
+  "feature": "blast-radius-demo",
+  "created": "2026-01-04T10:26:00.000Z",
+  "status": "planning",
+  "scope": "full-stack",
+  "tasks": [
+    {
+      "id": 1,
+      "phase": "setup",
+      "task": "Create feature branch",
+      "status": "pending",
+      "command": "git checkout -b feat/blast-radius-demo"
+    },
+    {
+      "id": 2,
+      "phase": "design",
+      "task": "Design visualization mockup",
+      "status": "pending",
+      "files": []
+    },
+    {
+      "id": 3,
+      "phase": "api",
+      "task": "Create demo data endpoint",
+      "status": "pending",
+      "files": ["src/app/api/blast-radius/demo/route.ts"]
+    },
+    {
+      "id": 4,
+      "phase": "frontend",
+      "task": "Create BlastRadiusVisualization component",
+      "status": "pending",
+      "files": ["src/components/BlastRadiusVisualization/index.tsx"]
+    },
+    {
+      "id": 5,
+      "phase": "frontend",
+      "task": "Create ImpactSummary panel",
+      "status": "pending",
+      "files": ["src/components/ImpactSummary/index.tsx"]
+    },
+    {
+      "id": 6,
+      "phase": "frontend",
+      "task": "Create demo page",
+      "status": "pending",
+      "files": ["src/app/demo/blast-radius/page.tsx"]
+    },
+    {
+      "id": 7,
+      "phase": "integration",
+      "task": "Wire up visualization to demo data",
+      "status": "pending",
+      "files": []
+    },
+    {
+      "id": 8,
+      "phase": "testing",
+      "task": "Write unit tests for graph algorithms",
+      "status": "pending",
+      "files": []
+    },
+    {
+      "id": 9,
+      "phase": "testing",
+      "task": "Write E2E test with Playwright",
+      "status": "pending",
+      "files": ["tests/e2e/blast-radius-demo.spec.ts"]
+    },
+    {
+      "id": 10,
+      "phase": "review",
+      "task": "Self code review",
+      "status": "pending"
+    },
+    {
+      "id": 11,
+      "phase": "docs",
+      "task": "Update documentation",
+      "status": "pending",
+      "files": ["docs/BLAST-RADIUS-DEMO.md"]
+    }
+  ],
+  "completedCount": 0,
+  "totalCount": 11
+}

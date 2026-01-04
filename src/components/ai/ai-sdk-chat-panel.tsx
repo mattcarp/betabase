@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../../lib/utils";
+import { getMessageContent } from "../../lib/conversation-store";
 import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
@@ -472,7 +473,11 @@ export function AiSdkChatPanel({
     // @ts-ignore - AI SDK v5 still supports api option but types haven't caught up
     api: currentApiEndpoint, // Use the calculated endpoint directly
     id: chatId,
-    messages: (initialMessages || []).filter((m) => m.content != null && m.content !== ""), // CRITICAL: Filter null content
+    messages: (initialMessages || []).filter((m) => {
+      // CRITICAL: Filter null content - support both AI SDK v4 (content) and v5/v6 (parts) formats
+      const content = getMessageContent(m);
+      return content != null && content !== "";
+    }),
     // Pass selected model to API - this enables the model selector to actually work
     body: {
       model: selectedModel,
@@ -2343,7 +2348,7 @@ export function AiSdkChatPanel({
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full text-left justify-start hover:shadow-md hover:scale-105 transition-all duration-200 bg-muted/50 border border-border/50 text-foreground hover:bg-muted hover:border-border hover:text-white backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
+                                className="w-full hover:shadow-md hover:scale-105 transition-all duration-200 backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
                               />
                             </motion.div>
                           )

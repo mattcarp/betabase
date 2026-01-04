@@ -1,304 +1,107 @@
 # Betabase Demo Script - Official (MC Edit)
 
-## Cache Warm-Up Queries (Run Before Recording)
-
-Run these exact queries within 5 minutes of recording. Cache TTL is 5 minutes - after that, they'll be instant on camera.
-
-```
-What is AOMA?
-```
-
-```
-Show me JIRA tickets related to AOMA migration and the related code commits
-```
-
-```
-Generate a system architecture diagram for AOMA
-```
-
-```
-Does AOMA have a blockchain integration?
-```
-
----
-
-**Time**: ~4 minutes | **Tone**: Conversational & confident | **Pace**: Medium with pauses
-
----
-
-# Preamble
-
-all on localhost except for gemini call
-
-all libraries are MIT or Apache open source
 
 
+## Preamble
+
+* all on localhost except for gemini call
+
+* all open source: Apache or MIT, or I wrote it.
+  Multi-tenan (ERD)
+
+* all libraries are MIT or Apache open source
+* Three pillars (quick)
+
+## Main Content
+
+1. Knowledge base with tool calls:
+   Start with hard, but answerable question
+
+2. also what's in the upcoming release and how to prepare for it (maybe see. Jiras)
+
+   2. Diagramming - mermaid to nano banana pro - pick good question/answer candidate ("visual intelligence")
+   3. Tool calling: ask to read a DDP (should parse all files, including the CD text) - ignore files over 20 megs and check for DDPMS.
+   4. Curation segue - thumbs down on an answer
+      1. ask no-hallucination question "Does AOMA have a blockchain integration?"
+
+3. Knowledge Curation with RLHF, HITL
+
+   1. • Management of the knowledge base
+
+      ​	• "Upload proprietary documents"
+
+      ​	• "Delete outdated files"
+
+   2. Show curation cue, how thumbs down in chat produces note in the cue
+
+   3. Mention Human Knowledge vs Knowledge that no LLM could *ever* know (Keith) - anecdotal, "water cooler", phone calls, etc. Also, guardrails that only hums could put on AI.
+
+   4. **If possible,** Tester Mode with moveable ladybug, Switching of testing context depending on which app ladybug moves to (ask claude code to make a feature - will have to use Windsurf or Antigravity)
+
+4. Testing with natural speech to code, code to human-runnable (Prerequisites, teps, expected outcome)
+
+   1. Scroll through long list of human-created tests and results, expand one (pick) (Jack)
+
+   2. Auto-ranking of tests ready for Automation
+
+      1. show one generation
+
+   3. Self Healing with Blast Radius, demo (stand up AOMA-UI?)
+
+      1. Move rename button, self healing fixes the test. Move to the top right: ask for human intervention.
+
+      
+
+## Wrap
+
+* HITL
+
+* New Title: Knowledge Curator of AI (doesn't cost anything to give a fancy title)
 
 
 
-## Don't Miss:
-CDTEXT Processing (file - via upload)
-DDP Processing (folder - via upload, ignore files over 20 megs and chedk for DDMS)
-Complex Workflow Process that will show mermaid diagram
+### Notes for integration:
 
-* follow on button that will make a nanobana pro diagram (work on prompt)
-
-* Ask tough question about AOMA, and also what's in the upcoming release and how to prepare for it
-
-* As a question that shows off that japanese code highlighting thing
-
-
-
-Curation segue - thumbs down on an answer
-
-​	HITL - should out to keith and jack
-
-​		experience that the model will never no (anecdotal, "water cooler", phone calls, etc.
-
-​		new title: Knowledge Curator (AI)
-
-​		
-
-Testing
-
-​	self healing demo
-
-​	write testi in natural language, convert to playwright test, run it
-
-​	convert above test to human readable (pre-script, steps, expected outcome)
-
-​	show long-scrolling list of BB tests (mention total numbers)
-
-​	
-
-​	
+**Three-tier system**: Tier 1 (>90% auto-approved), Tier 2 (60-90% human review), Tier 3 (<60% architect)
 
 ==========================
-## AI Slop:
 
-## Opening Hook (30 seconds)
+## AI Slop - See if You Can Splice It In:
 
-**Your opening lines:**
-
-• "Hi everyone, today I'm showing you SIAM"
-
-• "This is NOT another chatbot"
-
-• "This is enterprise intelligence for Sony Music"
-
-• "What makes it different? Seven key differentiators"
-
-• "Let me show you..."
-
----
-
-## 💬 Demo 1: Baseline Query (45 seconds)
-
-**Query**: `What is AOMA?`
-
-**Your narration:**
-
-• "First, let's establish a baseline"
-
-• "I'll ask: What is AOMA?"
-
-• **[PAUSE - let it respond]**
-
-• "Standard RAG response from proprietary Sony Music documentation"
-
-• "About 50 pages of internal docs"
-
-• "Notice the streaming response and source citations"
-
-• "Nothing special yet... but watch this..."
-
----
-
-## 🔗 Demo 2: Multi-Source Intelligence (45 seconds)
-
-**Query**: `Show me JIRA tickets related to AOMA migration and the related code commits`
-
-**Your narration:**
-
-• "Now here's where it gets interesting"
-
-• **[Start typing slowly]**
-
-• "Show me JIRA tickets... related to AOMA migration... and the related code commits"
-
-• **[PAUSE - let it respond]**
-
-• "Watch what's happening here"
-
-• "It's querying JIRA, Git repositories, and documentation"
-
-• "All simultaneously"
-
-• "Most chatbots: one data source"
-
-• "Ours: unified enterprise intelligence"
-
-• "**Differentiator #1: Multi-source knowledge synthesis**"
-
----
-
-## 📊 Demo 3: Visual Intelligence (45 seconds)
-
-**Query**: `Generate a system architecture diagram for AOMA showing all integration points`
-
-**Your narration:**
-
-• "Next, visual intelligence"
-
-• "Most chatbots: walls of text"
-
-• "Watch this..."
-
-• **[Start typing]**
-
-• "Generate a system architecture diagram..."
-
-• **[PAUSE - wait for diagram to render]**
-
-• "It's not just describing the architecture"
-
-• "It's GENERATING a visual diagram"
-
-• "Mermaid diagrams, system flows, architecture visualizations"
-
-• "Engineers love diagrams, not text walls"
-
-• "**Differentiator #2: Visual diagram generation**"
-
----
-
-## 🔧 Demo 4: Development Context (45 seconds)
-
-**Query**: `What's the current development status of AOMA3 migration?`
-
-**Your narration:**
-
-• "Here's where it gets really interesting"
-
-• "Development context analysis"
-
-• **[Start typing]**
-
-• "What's the current development status of AOMA3 migration?"
-
-• **[PAUSE - let it respond]**
-
-• "Look at what it's doing"
-
-• "It's analyzing JIRA, Git commits, documentation, email discussions"
-
-• "Cross-source synthesis for comprehensive project status"
-
-• "Not 'what does documentation say'"
-
-• "But 'what's ACTUALLY happening across our development pipeline'"
-
-• "**Differentiator #3: Development intelligence**"
-
----
-
-## 🛡️ Demo 5: Anti-Hallucination Test (30 seconds)
-
-**Query**: `Does AOMA have a blockchain integration?`
-
-**Your narration:**
-
-• "Now let's test trustworthiness with a trick question"
-
-• **[Start typing]**
-
-• "Does AOMA have a blockchain integration?"
-
-• "This feature does NOT exist"
-
-• **[PAUSE - let it respond]**
-
-• "Notice: honest 'no information available' response"
-
-• "It doesn't fabricate features"
-
-• "Critical for enterprise trust"
-
-• "You need to know when it doesn't know"
-
-• "**Differentiator #4: Anti-hallucination trust**"
-
----
-
-## 🎯 Strategy Section: Small Language Models (45 seconds)
+## Strategy Section: Small Language Models (45 seconds)
 
 **Transition**: "Now let me explain our strategic approach..."
 
 **Your talking points:**
 
-• "Here's the really interesting part"
+• " Gemini knows: protein folding, quantum physics, medieval history"
 
-• "GPT-4 knows: protein folding, quantum physics, medieval history"
+• "Do Sony Music users need that?"
 
-• "Do Sony Music users need that? No."
-
-• "This creates a massive opportunity for Small Language Models"
+• "This creates an opportunity for Small Language Models"
 
 • "Our solution: Fine-tuned SLM, domain-specific training"
 
-• "Trained on: AOMA, DDEX, Sony Music workflows"
-
-• "The benefits are substantial:"
+• "The benefits are substantial -cost "
   - **Faster response times** - queries that take 20 seconds could take 2 seconds
   - **Lower cost** - fine-tuned small models are 10-20x cheaper to run
   - **More accurate** - domain-specific knowledge, no irrelevant information
 
-• "Our roadmap:"
-  - Current: GPT-4o with RAG (what you're seeing now)
-  - Next: Fine-tuned GPT-4o-mini (faster, cheaper)
-  - Future: Custom SLM (fully optimized)
+• You can see a roadmap, where:
+  - Current: Gemini 3 with RAG
+  - Next: Fine-tuned possible locally hosted, open source model
 
-• "Same intelligence, faster responses, lower cost"
+• "Similar intelligence, faster responses, lower cost"
 
-• "**Differentiator #5: Strategic SLM approach with fine-tuning**"
 
----
 
-## 📁 Demo 6: Curate Tab (45 seconds)
-
-**Action**: Click "Curate" tab
-
-**Your narration:**
-
-• "Let me show you the knowledge management side"
-
-• **[Click Curate tab]**
-
-• "This is where we manage the knowledge base"
-
-• "Upload proprietary documents"
-
-• "Delete outdated files"
-
-• **[HOVER over Dedupe button - GitMerge icon]**
-
-• "This dedupe feature: 85% semantic similarity threshold"
-
-• "Automatically removes duplicate documents"
-
-• "Keeps newest, removes redundant"
-
-• "**Differentiator #6: Semantic deduplication**"
-
----
-
-## 🎬 Closing Recap (15 seconds)
+## Former Closing Recap (15 seconds)
 
 **Your final lines:**
 
 • "Let's recap the seven differentiators:"
 
-• "✅ Unified multi-source knowledge"
+• "✅ Multi-source knowledge with too calls and re-ranking"
 
 • "✅ Visual diagram generation"
 
@@ -310,98 +113,6 @@ Testing
 
 • "✅ Semantic deduplication"
 
-• "✅ And all of this backed by 59 automated Playwright tests"
 
-• "**Differentiator #7: Comprehensive testing**"
 
-• "Questions?"
-
----
-
-## 🚨 Emergency Backup Lines
-
-**If demo is slow:**
-• "While this processes multi-source query..."
-• "Real-time enterprise intelligence takes a moment..."
-• [Use silence - trim in editing]
-
-**If something breaks:**
-• "Let me try that again..."
-• "This is why we have 59 automated tests..."
-• "The key point is..."
-
-**If you make a mistake:**
-• "Actually, let me rephrase that..."
-• "What's important here is..."
-• "Let me show you..."
-
----
-
-## ✨ Charming Transitions
-
-**After baseline demo:**
-• "That's standard RAG... nothing special yet..."
-• "**Now watch this...**"
-
-**After multi-source demo:**
-• "Most chatbots stop at one data source..."
-• "**We're pulling from JIRA, Git, Docs, AND Email simultaneously...**"
-
-**After visual demo:**
-• "Text is fine, but **engineers love diagrams**..."
-• "This actually **generates them on the fly**..."
-
-**Before strategy section:**
-• "Here's the **really interesting part**..."
-• "We're not just using off-the-shelf models..."
-
-**On SLM concept:**
-• "GPT-4 is impressive, but **do Sony Music users need quantum physics**?"
-• "We're building **domain-specific intelligence**..."
-
----
-
-## 📊 Timing Breakdown
-
-| Segment | Time | Content |
-|---------|------|---------|
-| Hook | 0:30 | Problem + intro |
-| Demo 1 | 0:45 | Baseline query |
-| Demo 2 | 0:45 | Multi-source |
-| Demo 3 | 0:45 | Visual diagrams |
-| Demo 4 | 0:45 | Dev context |
-| Demo 5 | 0:30 | Anti-hallucination |
-| Strategy | 0:45 | SLM approach |
-| Curate | 0:45 | Management |
-| Close | 0:15 | Recap |
-| **TOTAL** | **4:15** | With charm buffer |
-
----
-
-## 💪 Confidence Reminders
-
-**Before you hit record:**
-
-• ✅ Deep breath
-• ✅ Smile (you can hear it!)
-• ✅ You know this system inside-out
-• ✅ Descript can fix anything
-• ✅ First take doesn't need to be perfect
-• ✅ Your charm will carry it
-• ✅ This is genuinely innovative work
-
----
-
-## 🎯 What NOT to Say
-
-❌ "Live AOMA system integration"
-❌ "Real-time production monitoring"
-❌ "This connects directly to AOMA"
-
-✅ "Proprietary AOMA documentation"
-✅ "Development intelligence from multiple sources"
-✅ "Strategic approach to enterprise AI"
-
----
-
-**You've got this!** 🎬
+## 

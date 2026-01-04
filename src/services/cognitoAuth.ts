@@ -238,8 +238,9 @@ export class CognitoAuthService {
             };
           }
         }
-      } catch (e) {
-        debugError("Failed to get auth status:", e);
+      } catch {
+        // Silently handle fetch failures - expected when not authenticated or during SSR
+        // No need to log as error since this is normal behavior
       }
     }
     return this.currentUser;

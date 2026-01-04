@@ -411,7 +411,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
   };
 
   return (
-    <div className={cn("flex h-full bg-[var(--mac-surface-bg)]", className)}>
+    <div className={cn("flex h-full bg-background", className)}>
       {/* Session Timeline Sidebar */}
       <SessionTimeline
         interactions={sessionInteractions}
@@ -427,15 +427,15 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
       {/* Main Dashboard Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header with Stats - GOLD STANDARD COMPACT */}
-        <div className="border-b border-white/10 bg-[var(--mac-surface-bg)] p-4">
+        <div className="border-b border-border bg-background p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-1.5 rounded-lg bg-[var(--mac-primary-blue-400)]/10">
-                <Activity className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <Activity className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h1 className="text-lg font-light tracking-tight text-white">Test Dashboard</h1>
-                <p className="text-[10px] text-neutral-500 uppercase tracking-wider">
+                <h1 className="text-lg font-light tracking-tight text-foreground">Test Dashboard</h1>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                   Unified testing and quality assurance platform
                 </p>
               </div>
@@ -449,7 +449,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
                 className={cn(
                   "gap-2 h-8 text-xs",
-                  !isRunning && "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/90"
+                  !isRunning && "bg-primary text-primary-foreground hover:bg-primary/90"
                 )}
               >
                 {isRunning ? (
@@ -473,30 +473,30 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
           {/* Test Statistics Bar - GOLD STANDARD UNIFIED BLUE */}
           <div className="grid grid-cols-6 gap-2">
-            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+            <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
                   {isRunning ? "Running" : "Total"}
                 </div>
-                <span className="text-base font-light text-white">
+                <span className="text-base font-light text-foreground">
                   {isRunning ? testStats.total : historicalStats.totalTests.toLocaleString()}
                 </span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+            <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
-                  <Activity className="h-2.5 w-2.5 text-[var(--mac-primary-blue-400)]" />
+                  <Activity className="h-2.5 w-2.5 text-primary" />
                   Executions
                 </div>
-                <span className="text-base font-light text-[var(--mac-primary-blue-400)]">
+                <span className="text-base font-light text-primary">
                   {isRunning ? testStats.passed + testStats.failed : historicalStats.totalExecutions.toLocaleString()}
                 </span>
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+            <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <CheckCircle className="h-2.5 w-2.5 text-emerald-400" />
@@ -508,7 +508,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+            <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <XCircle className="h-2.5 w-2.5 text-rose-400" />
@@ -518,7 +518,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+            <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <Clock className="h-2.5 w-2.5 text-muted-foreground" />
@@ -530,7 +530,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               </CardContent>
             </Card>
 
-            <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
+            <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 flex items-center gap-1">
                   <Zap className="h-2.5 w-2.5 text-amber-400" />
@@ -583,15 +583,15 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   {useRealTimeStreaming ? "📡 Streaming" : "🔄 Polling"}
                 </Button>
               </div>
-              <div className="bg-[var(--mac-surface-elevated)] rounded-lg p-3 max-h-20 overflow-y-auto border border-border">
+              <div className="bg-muted rounded-lg p-3 max-h-20 overflow-y-auto border border-border">
                 {recentLogs.length > 0 ? (
                   recentLogs.map((log, index) => (
-                    <div key={index} className="text-[10px] text-neutral-300 font-mono leading-relaxed">
+                    <div key={index} className="text-[10px] text-muted-foreground font-mono leading-relaxed">
                       {log}
                     </div>
                   ))
                 ) : (
-                  <div className="text-[10px] text-neutral-500 italic">
+                  <div className="text-[10px] text-muted-foreground/50 italic">
                     {isRunning ? "Waiting for test output..." : "No recent logs"}
                   </div>
                 )}
@@ -602,7 +602,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         {/* Main Content Area */}
         <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col min-h-0">
-          <TabsList className="flex w-full rounded-none border-b border-white/10 bg-[var(--mac-surface-bg)] overflow-x-auto shrink-0">
+          <TabsList className="flex w-full rounded-none border-b border-border bg-background overflow-x-auto shrink-0">
             <TabsTrigger value="home" className="gap-2">
               <Home className="h-4 w-4" />
               Home

@@ -13,7 +13,7 @@ import { getContextAwareRetrieval } from "./contextAwareRetrieval";
 import { getAgenticRAGAgent } from "./agenticRAG/agent";
 import { getSessionStateManager, type RLHFFeedback } from "../lib/sessionStateManager";
 import { getTwoStageRetrieval, type TwoStageRetrievalResult } from "./twoStageRetrieval"; // Import types
-import { getGeminiStructuredReranker } from "./geminiStructuredReranker";
+import { getCohereReranker } from "./cohereReranker";
 import { getHybridRetrievalV2 } from "./hybridRetrievalV2"; // NEW: Hybrid retrieval with RRF
 import { VectorSearchResult } from "../lib/supabase";
 
@@ -58,7 +58,7 @@ export class UnifiedRAGOrchestrator {
   private agenticRAG = getAgenticRAGAgent();
   private sessionManager = getSessionStateManager();
   private twoStageRetrieval = getTwoStageRetrieval();
-  private reranker = getGeminiStructuredReranker();
+  private reranker = getCohereReranker();
   private hybridRetrieval = getHybridRetrievalV2(); // NEW: Hybrid search with RRF
 
   /**

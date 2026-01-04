@@ -209,6 +209,42 @@
   border-color: var(--mac-primary-blue-400);
 }
 
+/* Teal button with dark teal text - for high contrast on teal backgrounds */
+.mac-button-teal {
+  background: linear-gradient(135deg, var(--mac-teal-400) 0%, var(--mac-teal-500) 100%);
+  color: var(--mac-text-on-teal);
+  border: 1px solid var(--mac-teal-600);
+  font-weight: 500;
+}
+
+.mac-button-teal:hover {
+  background: linear-gradient(135deg, var(--mac-teal-300) 0%, var(--mac-teal-400) 100%);
+  color: var(--mac-text-on-teal-hover);
+  border-color: var(--mac-teal-500);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(38, 198, 218, 0.35);
+}
+
+.mac-button-teal:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(38, 198, 218, 0.25);
+}
+
+/* Teal button variant - subtle teal background */
+.mac-button-teal-subtle {
+  background: rgba(38, 198, 218, 0.15);
+  color: var(--mac-teal-400);
+  border: 1px solid rgba(38, 198, 218, 0.3);
+}
+
+.mac-button-teal-subtle:hover {
+  background: linear-gradient(135deg, var(--mac-teal-400) 0%, var(--mac-teal-500) 100%);
+  color: var(--mac-text-on-teal);
+  border-color: var(--mac-teal-500);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(38, 198, 218, 0.35);
+}
+
 /* MAC Form Styles */
 .mac-input {
   display: block;

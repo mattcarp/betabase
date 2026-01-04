@@ -23,7 +23,7 @@ export const Suggestion = ({
   suggestion,
   onClick,
   className,
-  variant = "outline",
+  variant = "teal",
   size = "sm",
   children,
   ...props
@@ -35,8 +35,7 @@ export const Suggestion = ({
   return (
     <Button
       className={cn(
-        "mac-button mac-button-primary",
-        "cursor-pointer rounded-lg px-4 w-full !text-left !justify-start items-start",
+        "cursor-pointer rounded-lg px-4 w-full !text-left !justify-start items-start transition-all duration-200",
         className
       )}
       onClick={handleClick}

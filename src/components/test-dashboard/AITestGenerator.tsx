@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useToast } from "../../hooks/use-toast";
+import { CodeBlock } from "../ui/code-block";
 import {
   generateFeatureName,
   transformToRecordingScript,
@@ -691,13 +692,12 @@ describe('API Integration Tests', () => {
                 </TabsList>
 
                 <TabsContent value="code" className="h-full">
-                  <Card className="mac-card bg-muted/50">
-                    <CardContent className="p-4">
-                      <pre className="text-sm font-mono overflow-x-auto">
-                        <code>{selectedTest.code}</code>
-                      </pre>
-                    </CardContent>
-                  </Card>
+                  <CodeBlock
+                    code={selectedTest.code}
+                    language={selectedTest.language === "typescript" ? "typescript" : selectedTest.language === "python" ? "python" : "javascript"}
+                    showLineNumbers
+                    className="max-h-[500px] overflow-auto rounded-lg"
+                  />
                 </TabsContent>
 
                 <TabsContent value="coverage" className="space-y-4">

@@ -1,4 +1,5 @@
-import { streamText } from "ai";
+import { streamText, wrapLanguageModel } from "ai";
+import { devToolsMiddleware } from "@ai-sdk/devtools";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 // OpenAI removed - using Gemini-only setup
 import { createServerClient } from "@supabase/ssr";
@@ -741,9 +742,16 @@ export async function POST(req: Request) {
     const supportsTemperature = !selectedModel.startsWith("o");
 
     // Gemini-only setup - all models use Google provider
-    const modelProvider = google(selectedModel);
+    // Wrap with DevTools middleware in development for debugging visibility
+    const baseModel = google(selectedModel);
+    const modelProvider = process.env.NODE_ENV === "development"
+      ? wrapLanguageModel({ model: baseModel, middleware: devToolsMiddleware })
+      : baseModel;
 
     console.log(`🤖 Using Google Gemini provider for model: ${selectedModel}`);
+    if (process.env.NODE_ENV === "development") {
+      console.log(`🔧 DevTools middleware enabled - visit http://localhost:3000/api/ai-devtools`);
+    }
 
     // Langfuse: Start LLM generation tracing
     const generationStartTime = Date.now();

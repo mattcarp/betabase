@@ -273,6 +273,66 @@ test.describe("Chat Flow Regression Suite", () => {
   });
 });
 
+// ==========================================================================
+// CRITICAL: Welcome Screen & Suggestions
+// Regression: Welcome screen not showing, suggestions not clickable
+// ==========================================================================
+test.describe("Welcome Screen & Suggestions", () => {
+  test("welcome screen should display on fresh conversation", async ({ page }) => {
+    const chatPage = new ChatPage(page);
+    await chatPage.navigate();
+
+    // Welcome heading should be visible
+    await expect(page.getByRole("heading", { name: /Welcome to The Betabase/i })).toBeVisible({
+      timeout: 10000,
+    });
+
+    // "Try these to get started" section should be visible
+    await expect(page.getByText(/Try these to get started/i)).toBeVisible();
+  });
+
+  test("suggestion buttons should be visible and clickable", async ({ page }) => {
+    const chatPage = new ChatPage(page);
+    await chatPage.navigate();
+
+    // Wait for welcome screen
+    await expect(page.getByRole("heading", { name: /Welcome to The Betabase/i })).toBeVisible({
+      timeout: 10000,
+    });
+
+    // Suggestions should be visible - look for the "Try these" section buttons
+    // Note: 5 suggestions contain "AOMA", 1 mentions "UST features"
+    const aomaButtons = page.locator('button:has-text("AOMA")');
+    const ustButton = page.locator('button:has-text("UST features")');
+
+    await expect(aomaButtons.first()).toBeVisible({ timeout: 5000 });
+    await expect(ustButton).toBeVisible({ timeout: 5000 });
+
+    // Should have 5 AOMA suggestions + 1 UST suggestion = 6 total
+    const aomaCount = await aomaButtons.count();
+    expect(aomaCount).toBe(5);
+  });
+
+  test("suggestion buttons should be interactive", async ({ page }) => {
+    const chatPage = new ChatPage(page);
+    await chatPage.navigate();
+
+    // Wait for welcome screen
+    await expect(page.getByRole("heading", { name: /Welcome to The Betabase/i })).toBeVisible({
+      timeout: 10000,
+    });
+
+    // Verify suggestions are clickable (no errors thrown)
+    const firstSuggestion = page.locator('button:has-text("asset types")').first();
+    await expect(firstSuggestion).toBeVisible();
+    await expect(firstSuggestion).toBeEnabled();
+
+    // Verify button has correct cursor style
+    const cursor = await firstSuggestion.evaluate((el) => getComputedStyle(el).cursor);
+    expect(cursor).toBe("pointer");
+  });
+});
+
 /**
  * Quick Smoke Test for CI
  * Run this subset for fast feedback

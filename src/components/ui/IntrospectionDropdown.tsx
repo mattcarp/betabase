@@ -109,7 +109,7 @@ export function IntrospectionDropdown() {
   };
 
   // Fetch app health status and recent activity traces
-  const fetchIntrospectionData = async () => {
+  const fetchIntrospectionData = async (signal?: AbortSignal) => {
     log("Fetching introspection data...");
     setLoading(true);
     try {
@@ -119,6 +119,7 @@ export function IntrospectionDropdown() {
         headers: {
           "Content-Type": "application/json",
         },
+        signal,
       });
 
       if (response.ok) {
@@ -135,7 +136,11 @@ export function IntrospectionDropdown() {
         log("Failed to fetch introspection data", response.status, response.statusText);
       }
     } catch (error) {
-      console.error("Failed to fetch introspection data:", error);
+      // Silently ignore abort errors and network failures
+      if (error instanceof Error && error.name === "AbortError") {
+        return; // Component unmounted, ignore
+      }
+      // Only log in verbose mode to avoid console noise
       log("Error fetching introspection data", error);
     } finally {
       setLoading(false);
@@ -155,17 +160,23 @@ export function IntrospectionDropdown() {
 
   // Eager load on mount (non-blocking) so status shows green immediately
   useEffect(() => {
-    fetchIntrospectionData();
+    const controller = new AbortController();
+    fetchIntrospectionData(controller.signal);
+    return () => controller.abort();
   }, []);
 
   // Refresh periodically while dropdown is open
   useEffect(() => {
     if (isOpen) {
+      const controller = new AbortController();
       // Refresh immediately when opened (in case data is stale)
-      fetchIntrospectionData();
+      fetchIntrospectionData(controller.signal);
       // Then refresh every 5 seconds while open
-      const interval = setInterval(fetchIntrospectionData, 5000);
-      return () => clearInterval(interval);
+      const interval = setInterval(() => fetchIntrospectionData(controller.signal), 5000);
+      return () => {
+        clearInterval(interval);
+        controller.abort();
+      };
     }
   }, [isOpen]);
 

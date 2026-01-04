@@ -96,15 +96,16 @@ export function isDefaultTitle(title: string): boolean {
 }
 
 /**
- * Extract message content from AI SDK v4, v5, or v6 formats
- * - AI SDK v6/v5: parts[0].text or parts.map(p => p.text).join('')
- * - AI SDK v4: content as string
- * - Fallback: tries all variations
+ * Extract message content from AI SDK v6 format (parts array)
+ * AI SDK v6 uses: parts[].text for text content
+ *
+ * NOTE: v4 format (content string) is no longer supported as of AI SDK 6.0
+ * Use migrateMessageToV6() to convert old messages.
  */
 export function getMessageContent(m: any): string | undefined {
   if (!m) return undefined;
 
-  // AI SDK v5/v6: parts array with text
+  // AI SDK v6: parts array with text
   // Join ALL text parts to support multi-part messages
   if (m.parts && Array.isArray(m.parts) && m.parts.length > 0) {
     const allText = m.parts
@@ -115,25 +116,46 @@ export function getMessageContent(m: any): string | undefined {
     if (allText) return allText;
   }
 
-  // AI SDK v4 / direct content: support string or any truthy content
-  if (m.content) {
-    if (typeof m.content === "string") {
-      return m.content;
-    }
-    // Handle content as object with text property
-    if (typeof m.content === "object" && m.content.text) {
-      return m.content.text;
-    }
-    // Handle content as array (rare but possible)
-    if (Array.isArray(m.content)) {
-      const text = m.content
-        .map((c: any) => (typeof c === "string" ? c : c?.text || ""))
-        .join("");
-      if (text) return text;
-    }
+  // Legacy fallback: convert v4 content to parts on-the-fly
+  // This allows reading old messages but new messages should use parts
+  if (m.content && typeof m.content === "string") {
+    return m.content;
   }
 
   return undefined;
+}
+
+/**
+ * Convert a v4 message (content string) to v6 format (parts array)
+ */
+export function migrateMessageToV6(m: any): any {
+  if (!m) return m;
+
+  // Already v6 format
+  if (m.parts && Array.isArray(m.parts)) {
+    return m;
+  }
+
+  // Convert v4 content to v6 parts
+  if (m.content && typeof m.content === "string") {
+    return {
+      ...m,
+      parts: [{ type: "text", text: m.content }],
+      content: undefined, // Remove legacy field
+    };
+  }
+
+  return m;
+}
+
+/**
+ * Migrate all messages in a conversation to v6 format
+ */
+export function migrateConversationToV6(conv: Conversation): Conversation {
+  return {
+    ...conv,
+    messages: conv.messages.map(migrateMessageToV6),
+  };
 }
 
 interface ConversationStore {
@@ -341,7 +363,7 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: "siam-conversations",
-      version: 1,
+      version: 2, // Bumped for AI SDK v6 migration
       onRehydrateStorage: () => (state) => {
         // After hydration completes, mark as hydrated and regenerate any default titles
         // This ensures titles are generated from message content after loading from localStorage
@@ -372,11 +394,20 @@ export const useConversationStore = create<ConversationStore>()(
                 ...conv,
                 createdAt: parseDate(conv.createdAt, now),
                 updatedAt: parseDate(conv.updatedAt, parseDate(conv.createdAt, now)),
+                // Migrate messages from v4 (content) to v6 (parts) format
                 messages:
-                  conv.messages?.map((msg: any) => ({
-                    ...msg,
-                    timestamp: parseDate(msg.timestamp, now),
-                  })) || [],
+                  conv.messages?.map((msg: any) => {
+                    const migratedMsg = {
+                      ...msg,
+                      timestamp: parseDate(msg.timestamp, now),
+                    };
+                    // Convert v4 content string to v6 parts array
+                    if (msg.content && typeof msg.content === "string" && !msg.parts) {
+                      migratedMsg.parts = [{ type: "text", text: msg.content }];
+                      delete migratedMsg.content;
+                    }
+                    return migratedMsg;
+                  }) || [],
               };
             });
           }

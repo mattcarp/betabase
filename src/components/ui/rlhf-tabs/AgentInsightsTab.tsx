@@ -1,20 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../card";
-import { Badge } from "../badge";
 import { Button } from "../button";
 import { ScrollArea } from "../scroll-area";
 import { 
   Bot, 
-  Search, 
   GitBranch, 
   Activity, 
   Target, 
-  ShieldCheck, 
   Clock,
-  ArrowRight,
-  MessageSquare,
   Zap,
   Info,
   ChevronDown,
@@ -23,31 +18,26 @@ import {
 import { cn } from "../../../lib/utils";
 
 // Flow diagram component for agent decision paths
-const FlowDiagram = ({ chart }: { chart: string }) => {
-  const [svg, setSvg] = useState<string>("");
-
-  useEffect(() => {
-    // Static visualization of agent decision path
-    const mockSvg = `
-      <div class="flow-diagram p-6 bg-card/50 rounded-xl border border-border text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
-        <div class="flex flex-col items-center space-y-4">
-          <div class="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-300">Query: "SACD Sector Specs"</div>
-          <div class="h-8 w-px bg-muted"></div>
-          <div class="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-300">Intent: Knowledge Retrieval</div>
-          <div class="h-8 w-px bg-muted"></div>
-          <div class="flex gap-8">
-            <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Vector Search (0.92)</div>
-            <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Cross-Ref Jira (0.45)</div>
-          </div>
-          <div class="h-8 w-px bg-muted"></div>
-          <div class="p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400">Reranking (Gemini 2.0)</div>
-          <div class="h-8 w-px bg-muted"></div>
-          <div class="p-3 bg-blue-500/20 border border-blue-500/50 rounded-lg font-normal text-blue-300">Final Response Generation</div>
+const FlowDiagram = ({ chart: _chart }: { chart: string }) => {
+  // Static visualization of agent decision path using useMemo for derived data
+  const svg = useMemo(() => `
+    <div class="flow-diagram p-6 bg-card/50 rounded-xl border border-border text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
+      <div class="flex flex-col items-center space-y-4">
+        <div class="p-3 bg-[var(--mac-info-bg)] border border-[var(--mac-info-border)] rounded-lg text-[var(--mac-info)]">Query: "SACD Sector Specs"</div>
+        <div class="h-8 w-px bg-muted"></div>
+        <div class="p-3 bg-[var(--mac-purple-bg)] border border-[var(--mac-purple-border)] rounded-lg text-[var(--mac-purple)]">Intent: Knowledge Retrieval</div>
+        <div class="h-8 w-px bg-muted"></div>
+        <div class="flex gap-8">
+          <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Vector Search (0.92)</div>
+          <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Cross-Ref Jira (0.45)</div>
         </div>
+        <div class="h-8 w-px bg-muted"></div>
+        <div class="p-3 bg-[var(--mac-tier1-bg)] border border-[var(--mac-tier1-border)] rounded-lg text-[var(--mac-tier1)]">Reranking (Gemini 3.0)</div>
+        <div class="h-8 w-px bg-muted"></div>
+        <div class="p-3 bg-[var(--mac-info-bg)] border border-[var(--mac-info-border)] rounded-lg font-normal text-[var(--mac-info)]">Final Response Generation</div>
       </div>
-    `;
-    setSvg(mockSvg);
-  }, [chart]);
+    </div>
+  `, []);
 
   return <div className="w-full flex justify-center" dangerouslySetInnerHTML={{ __html: svg }} />;
 };
@@ -133,13 +123,13 @@ export function AgentInsightsTab() {
             <div className="mt-6 flex justify-between items-center px-2">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5 text-xs text-[var(--mac-text-secondary)]">
-                  <div className="h-2 w-2 rounded-full bg-blue-500"></div> Search
+                  <div className="h-2 w-2 rounded-full bg-[var(--mac-info)]"></div> Search
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-[var(--mac-text-secondary)]">
-                  <div className="h-2 w-2 rounded-full bg-purple-500"></div> Logic
+                  <div className="h-2 w-2 rounded-full bg-[var(--mac-purple)]"></div> Logic
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-[var(--mac-text-secondary)]">
-                  <div className="h-2 w-2 rounded-full bg-green-500"></div> Model
+                  <div className="h-2 w-2 rounded-full bg-[var(--mac-tier1)]"></div> Model
                 </div>
               </div>
               <Button variant="ghost" size="sm" className="h-7 text-[10px] uppercase font-normal tracking-tighter opacity-60 hover:opacity-100 text-[var(--mac-text-secondary)]">
@@ -217,7 +207,7 @@ export function AgentInsightsTab() {
       <Card className="mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)]">
         <CardHeader>
           <CardTitle className="font-light text-lg flex items-center gap-2 text-[var(--mac-text-primary)]">
-            <Zap className="h-5 w-5 text-yellow-500" />
+            <Zap className="h-5 w-5 text-[var(--mac-warning-yellow)]" />
             Tool Orchestration
           </CardTitle>
         </CardHeader>

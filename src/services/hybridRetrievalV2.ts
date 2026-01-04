@@ -15,13 +15,12 @@
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-import { getGeminiStructuredReranker, type RerankingOptions, type RankedDocument } from "./geminiStructuredReranker";
+import { getCohereReranker, type RerankingOptions, type RankedDocument } from "./cohereReranker";
 import {
   reciprocalRankFusion,
   mergeAndDeduplicate,
   createRankingSignals,
   logRRFResults,
-  type RankedDocument as RRFDocument,
 } from "./reciprocalRankFusion";
 import { VectorSearchResult } from "../lib/supabase";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
@@ -93,7 +92,7 @@ export interface HybridRetrievalResult {
  */
 export class HybridRetrievalV2 {
   private vectorService = getSupabaseVectorService();
-  private reranker = getGeminiStructuredReranker();
+  private reranker = getCohereReranker();
 
   /**
    * Execute hybrid retrieval with RRF fusion and optional reranking
@@ -168,11 +167,11 @@ export class HybridRetrievalV2 {
     // ========== STEP 2: Merge & Deduplicate ==========
     const fusionStart = performance.now();
 
-    const allDocuments = mergeAndDeduplicate(vectorResults, keywordResults);
+    const allDocuments = mergeAndDeduplicate(vectorResults as any[], keywordResults as any[]);
     console.log(`   Merged: ${allDocuments.length} unique documents`);
 
     // ========== STEP 3: RRF Fusion ==========
-    const signals = createRankingSignals(vectorResults, keywordResults);
+    const signals = createRankingSignals(vectorResults as any[], keywordResults as any[]);
 
     // Apply weights if not 1.0
     if (vectorWeight !== 1.0 || keywordWeight !== 1.0) {
@@ -216,8 +215,8 @@ export class HybridRetrievalV2 {
         rerankScore: rrfResults[idx].rrfScore,
         rerankReasoning: `RRF score: ${rrfResults[idx].rrfScore.toFixed(4)}`,
         originalRank: idx + 1,
-        originalSimilarity: doc.similarity,
-      }));
+        originalSimilarity: doc.similarity ?? 0,
+      } as RankedDocument));
     } else {
       const rerankStart = performance.now();
 
@@ -232,7 +231,7 @@ export class HybridRetrievalV2 {
 
       const rerankResult = await this.reranker.rerankDocuments(
         query,
-        candidatesForRerank,
+        candidatesForRerank as VectorSearchResult[],
         rerankOptions
       );
 

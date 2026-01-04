@@ -1,6 +1,6 @@
 /* MAC Design System - Sidebar Specific Styles */
 
-/* Glassmorphism for sidebar */
+/* Glassmorphism for sidebar - Dark mode (default) */
 .mac-sidebar {
   background: rgba(20, 20, 20, 0.7) !important;
   backdrop-filter: blur(20px) saturate(180%);
@@ -10,6 +10,12 @@
   border-left: none !important;
   border-bottom: none !important;
   transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light mode sidebar */
+:root[data-theme="light"] .mac-sidebar {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Icon-only collapsed state - target the wrapper div */
@@ -27,7 +33,7 @@
   display: none;
 }
 
-/* Enhanced dropdown with MAC glassmorphism */
+/* Enhanced dropdown with MAC glassmorphism - Dark mode */
 .mac-dropdown {
   background: rgba(30, 30, 30, 0.95) !important;
   backdrop-filter: blur(30px) saturate(200%);
@@ -39,6 +45,15 @@
     inset 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
+/* Light mode dropdown */
+:root[data-theme="light"] .mac-dropdown {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 0 80px rgba(0, 151, 167, 0.05);
+}
+
 .mac-dropdown-item {
   position: relative;
   transition: all 150ms ease-out;
@@ -48,6 +63,10 @@
   background: rgba(74, 158, 255, 0.1);
   color: var(--mac-text-primary);
   padding-left: 12px;
+}
+
+:root[data-theme="light"] .mac-dropdown-item:hover {
+  background: rgba(0, 151, 167, 0.1);
 }
 
 .mac-dropdown-item:hover::before {
@@ -78,6 +97,18 @@
   box-shadow:
     inset 0 0 20px rgba(74, 158, 255, 0.1),
     0 0 40px rgba(74, 158, 255, 0.05);
+}
+
+/* Light mode conversation items */
+:root[data-theme="light"] .mac-conversation-item:hover {
+  background: linear-gradient(90deg, rgba(0, 151, 167, 0.08), transparent);
+}
+
+:root[data-theme="light"] .mac-conversation-item.active {
+  background: linear-gradient(90deg, rgba(0, 151, 167, 0.15), rgba(0, 151, 167, 0.05));
+  box-shadow:
+    inset 0 0 20px rgba(0, 151, 167, 0.1),
+    0 0 40px rgba(0, 151, 167, 0.05);
 }
 
 /* Pinned indicator with glow */

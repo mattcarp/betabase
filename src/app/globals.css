@@ -69,8 +69,11 @@
     --mac-surface-elevated: #ffffff;
     --mac-text-primary: #0f172a;
     --mac-text-secondary: #475569;
+    --mac-text-muted: #94a3b8;
     --mac-utility-border: rgba(0, 0, 0, 0.1);
     --mac-primary-blue-400: #0097a7;
+    --mac-state-hover: rgba(0, 0, 0, 0.05);
+    --mac-border: rgba(0, 0, 0, 0.1);
   }
 
   /* Dark Theme (MAC) */
@@ -127,6 +130,17 @@
     --color-heading: #26c6da;
     --color-primary: #26c6da;
     --color-accent: #00bcd4;
+
+    /* MAC Surface Variables - Dark Mode */
+    --mac-surface-bg: #0a0a0a;
+    --mac-surface-elevated: #141414;
+    --mac-text-primary: #fafafa;
+    --mac-text-secondary: #a3a3a3;
+    --mac-text-muted: #737373;
+    --mac-utility-border: rgba(255, 255, 255, 0.08);
+    --mac-primary-blue-400: #26c6da;
+    --mac-state-hover: rgba(255, 255, 255, 0.05);
+    --mac-border: rgba(255, 255, 255, 0.08);
   }
 }
 

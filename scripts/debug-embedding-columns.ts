@@ -58,7 +58,7 @@ async function main() {
   const { embed } = await import('ai');
   
   const { embedding } = await embed({
-    model: google.textEmbeddingModel('text-embedding-004'),
+    model: google.embeddingModel('text-embedding-004'),
     value: 'Asset Upload Sorting Failed error',
   });
 

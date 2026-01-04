@@ -32,8 +32,8 @@ module.exports = {
         '200': '2',
       },
       colors: {
-        border: "rgba(255, 255, 255, 0.08)", /* MAC Design System: subtle border */
-        input: "rgba(255, 255, 255, 0.12)", /* Slightly more visible for form inputs */
+        border: "hsl(var(--border))", /* Uses CSS variable for theme support */
+        input: "hsl(var(--input))", /* Uses CSS variable for theme support */
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -49,12 +49,12 @@ module.exports = {
           700: "#0097a7",
           800: "#00838f",
           900: "#006064",
-          DEFAULT: "#26c6da",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#141414",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         /* Teal Accent (darker shade for variety) */
         accent: {
@@ -72,20 +72,20 @@ module.exports = {
           foreground: "#ffffff",
         },
         muted: {
-          DEFAULT: "#666666",
-          foreground: "#b3b3b3",
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         destructive: {
-          DEFAULT: "#ff4444",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         popover: {
-          DEFAULT: "#141414",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: "#141414",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
         "mac-surface": {
           bg: "#0a0a0a",

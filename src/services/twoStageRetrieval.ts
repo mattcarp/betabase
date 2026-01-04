@@ -8,10 +8,9 @@
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-// UPGRADED: Using Gemini Structured Reranker with AI SDK v6
-// Uses generateObject() with Zod schema - no JSON parsing failures
-// Option C: Google-only, no Cohere dependency
-import { getGeminiStructuredReranker, type RerankingOptions } from "./geminiStructuredReranker";
+// UPGRADED: Using Cohere Reranker with AI SDK v6 native rerank()
+// Purpose-built model - 4x faster than Gemini, no prompt engineering
+import { getCohereReranker, type RerankingOptions } from "./cohereReranker";
 import { VectorSearchResult } from "../lib/supabase";
 
 export interface TwoStageRetrievalOptions {
@@ -49,7 +48,7 @@ export interface TwoStageRetrievalResult {
 
 export class TwoStageRetrieval {
   private vectorService = getSupabaseVectorService();
-  private reranker = getGeminiStructuredReranker();
+  private reranker = getCohereReranker();
 
   /**
    * Execute two-stage retrieval: Vector Search → Re-ranking

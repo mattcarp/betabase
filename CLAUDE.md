@@ -90,18 +90,27 @@ className="bg-[#1a1a1a]"              // NO! Use bg-background or mac-* class
 style={{ borderColor: '#333' }}       // NO! Inline styles with hardcoded colors
 className="text-gray-400"             // NO! Use text-muted-foreground
 className="text-zinc-500"             // NO! Use text-muted-foreground
+
+// BAD - Inline CSS variable patterns (use semantic Tailwind classes instead)
+className="bg-[var(--mac-surface-elevated)]"  // NO! Use bg-card
+className="text-[var(--mac-primary-blue-400)]" // NO! Use text-primary
+className="border-[var(--mac-utility-border)]" // NO! Use border-border
+className="text-white"                // NO! Use text-foreground (theme-aware)
+className="text-neutral-300"          // NO! Use text-muted-foreground
 ```
 
 ### ALWAYS DO THIS (Use Design System Variables)
 
 ```tsx
-// GOOD - Design system classes
-className="border-border"             // Uses tailwind.config.js rgba value
-className="bg-background"             // Uses CSS variable
-className="text-foreground"           // Uses CSS variable
-className="text-muted-foreground"     // Uses CSS variable
-className="mac-card-static"           // Uses MAC Design System class
-className="border-[var(--mac-border)]" // Uses MAC CSS variable
+// GOOD - Semantic Tailwind classes that respond to theme changes
+className="border-border"             // Theme-aware border
+className="bg-background"             // Theme-aware page background
+className="bg-card"                   // Theme-aware card background
+className="bg-muted"                  // Theme-aware muted background
+className="text-foreground"           // Theme-aware primary text
+className="text-muted-foreground"     // Theme-aware secondary text
+className="text-primary"              // Theme-aware brand/accent color (teal)
+className="mac-card-static"           // MAC Design System class
 ```
 
 ### Border Colors - THE RULE
