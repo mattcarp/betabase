@@ -192,6 +192,16 @@ body {
 .animate-pulse {
   will-change: opacity, transform;
 }
+
+/* Light mode logo filter - inverts dark logo to work on light backgrounds */
+:root[data-theme="light"] .betabase-logo-light-aware img,
+:root[data-theme="light"] .betabase-logo-wrapper img,
+:root[data-theme="light"] .betabase-logo-img,
+:root[data-theme="light"] img[src*="betabase-logo"],
+:root[data-theme="light"] img[alt*="Betabase"],
+:root[data-theme="light"] img[alt*="SIAM"] {
+  filter: invert(1) hue-rotate(180deg) brightness(1.1) !important;
+}
 /* MAC Design System Component Styles */
 
 /* Button Styles */

@@ -36,13 +36,14 @@ export const SiamLogo: React.FC<SiamLogoProps> = ({
 
   const dimensions = variant === "full" ? fullSizeMap[size] : sizeMap[size];
 
+  // Light mode filter is applied via CSS in globals.css targeting .betabase-logo-img
   return (
     <Image
       src="/betabase-logo.webp"
       alt="SIAM Intelligence Platform by The Betabase"
       width={dimensions.w}
       height={dimensions.h}
-      className={`${className} object-contain`}
+      className={`betabase-logo-img ${className} object-contain`}
     />
   );
 };

@@ -34,6 +34,7 @@ export const BetabaseLogo: React.FC<BetabaseLogoProps> = ({
 
   // Using Next.js Image component for optimized loading
   // Image is 400x266 = 1.5037:1 aspect ratio
+  // Light mode filter is applied via CSS in globals.css targeting .betabase-logo-wrapper img
   return (
     <div className={`betabase-logo-wrapper ${sizeClass} ${className}`}>
       <Image
