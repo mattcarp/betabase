@@ -713,7 +713,9 @@ export function AiSdkChatPanel({
     setInput,
     status,
     error,
-  } = chatResult;
+    sendMessage, // AI SDK v5 uses sendMessage instead of append
+  } = chatResult as any;
+
 
   /* 
   // Redundant useEffect removed - onError callback handles notifications
@@ -744,11 +746,17 @@ export function AiSdkChatPanel({
     }
   }, [messages]);
 
-  // Derive isLoading from useChat isLoading, status, or manual loading state
-  const isLoading = chatIsLoading || (status as any) === "loading" || manualLoading;
+  // Derive isLoading from useChat status (AI SDK v6 removed isLoading, use status instead)
+  // Status values: 'submitted' (waiting), 'streaming' (receiving), 'ready', 'error'
+  const isLoading = chatIsLoading || status === "submitted" || status === "streaming" || manualLoading;
 
-  // Detect when assistant starts streaming (to prevent jitter)
+  // Detect when assistant starts streaming using AI SDK v6 status
   useEffect(() => {
+    // AI SDK v6: status === "streaming" means response is being received
+    if (status === "streaming") {
+      setHasStartedStreaming(true);
+    }
+    // Also check messages as fallback for older behavior
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
       // If last message is from assistant and we were processing, streaming has started
@@ -758,7 +766,7 @@ export function AiSdkChatPanel({
         // The onFinish handler will clear everything when done
       }
     }
-  }, [messages, isProcessing, manualLoading]);
+  }, [messages, isProcessing, manualLoading, status]);
 
   // Track loading time with seconds counter
   useEffect(() => {
@@ -1072,162 +1080,35 @@ export function AiSdkChatPanel({
   }, []);
 
   const handleSuggestionClick = (suggestion: string) => {
+    // Hide suggestions panel
     setShowSuggestions(false);
-    if (typeof sendMessage === "function") {
-      // Test toast - remove this after testing
-      if (suggestion.includes("capabilities")) {
-        toast.info("Test Toast", {
-          description: "This is a test notification to verify Sonner is working.",
-        });
-      }
 
-      // Set loading states for progress indicator
-      setManualLoading(true);
-      setIsProcessing(true);
+    // INSERT-ONLY behavior: populate input field, let user submit when ready
+    const trimmedSuggestion = suggestion.trim();
 
-      // Initialize progress tracking for suggestions with context-aware title
-      const getProgressTitle = (message: string) => {
-        // Extract key intent from the message for better task descriptions
-        const lowerMessage = message.toLowerCase();
+    // Set local input state
+    setLocalInput(trimmedSuggestion);
 
-        if (lowerMessage.includes("code") || lowerMessage.includes("implement")) {
-          return "Analyzing code requirements and preparing implementation strategy";
-        } else if (
-          lowerMessage.includes("fix") ||
-          lowerMessage.includes("debug") ||
-          lowerMessage.includes("error")
-        ) {
-          return "Diagnosing issues and formulating solutions";
-        } else if (lowerMessage.includes("analyze") || lowerMessage.includes("review")) {
-          return "Performing comprehensive analysis of your request";
-        } else if (
-          lowerMessage.includes("explain") ||
-          lowerMessage.includes("what") ||
-          lowerMessage.includes("how")
-        ) {
-          return "Researching and preparing detailed explanation";
-        } else if (lowerMessage.includes("test") || lowerMessage.includes("verify")) {
-          return "Setting up test scenarios and validation checks";
-        } else if (lowerMessage.includes("optimize") || lowerMessage.includes("improve")) {
-          return "Analyzing optimization opportunities and best practices";
-        } else if (
-          lowerMessage.includes("create") ||
-          lowerMessage.includes("generate") ||
-          lowerMessage.includes("build")
-        ) {
-          return "Designing architecture and generating components";
-        } else {
-          return "Understanding your request and preparing comprehensive response";
-        }
-      };
-
-      const initialProgress = {
-        phase: "initializing",
-        status: "in-progress" as const,
-        title: getProgressTitle(suggestion),
-        progress: 5,
-      };
-
-      console.log("📊 Setting initial progress from suggestion:", initialProgress);
-      setCurrentProgress(initialProgress);
-
-      // Start progress simulation with more descriptive phases
-      const progressInterval = setInterval(() => {
-        setCurrentProgress((prev) => {
-          if (!prev || (prev.progress || 0) >= 90) {
-            clearInterval(progressInterval);
-            return prev;
-          }
-
-          // Update progress based on phase with more descriptive titles
-          let newProgress = prev.progress || 0;
-          let newPhase = prev.phase;
-          let newTitle = prev.title;
-
-          if ((prev.progress || 0) < 20) {
-            newProgress = (prev.progress || 0) + 5;
-            newPhase = "connecting";
-            newTitle = "Establishing secure connection to AI service and validating credentials";
-          } else if ((prev.progress || 0) < 35) {
-            newProgress = (prev.progress || 0) + 3;
-            newPhase = "parsing";
-            newTitle = "Parsing your request and extracting key requirements";
-          } else if ((prev.progress || 0) < 50) {
-            newProgress = (prev.progress || 0) + 2.5;
-            newPhase = "knowledge-search";
-            newTitle = "Searching AOMA knowledge base for relevant information";
-          } else if ((prev.progress || 0) < 65) {
-            newProgress = (prev.progress || 0) + 2;
-            newPhase = "context-building";
-            newTitle = "Building context from project files and previous interactions";
-          } else if ((prev.progress || 0) < 80) {
-            newProgress = (prev.progress || 0) + 1.5;
-            newPhase = "generating";
-            newTitle = "Generating comprehensive response with AI model";
-          } else {
-            newProgress = Math.min((prev.progress || 0) + 1, 90);
-            newPhase = "formatting";
-            newTitle = "Formatting response with code blocks, citations, and structure";
-          }
-
-          return {
-            ...prev,
-            phase: newPhase,
-            title: newTitle,
-            progress: newProgress,
-          };
-        });
-      }, 1000);
-
-      // Store interval ID for cleanup
-      (window as any).currentProgressInterval = progressInterval;
-
-      // Store the prompt for display
+    // Also set AI SDK input state
+    if (typeof setInput === "function") {
       try {
-        if (typeof window !== "undefined") {
-          const promptData = {
-            text: suggestion.trim(),
-            timestamp: Date.now(),
-          };
-          window.localStorage.setItem(`siam.lastPrompt.${chatId}`, JSON.stringify(promptData));
-          setLastPrompt(suggestion.trim());
-        }
-      } catch {}
-
-      // CRITICAL FIX: Don't set input value before sending - send directly
-      // This prevents the textarea from showing the question text after response
-
-      // Use sendMessage as primary method (AI SDK v5)
-      // Send the message directly without populating the input field first
-      if (typeof sendMessage === "function") {
-        sendMessage({ text: suggestion }); // v5 format - sends without setting input
-      } else if (typeof append === "function") {
-        // Fallback to v4 append if sendMessage not available
-        append({
-          role: "user",
-          content: suggestion,
-        });
-      } else {
-        // Final fallback: set input and trigger form submit
-        setLocalInput(suggestion);
-        if (typeof setInput === "function") {
-          setInput(suggestion);
-        }
-        setTimeout(() => {
-          const form = document.querySelector('form[data-chat-form="true"]') as HTMLFormElement;
-          if (form) {
-            form.requestSubmit();
-            // Clear after submit
-            setTimeout(() => {
-              setLocalInput("");
-              if (typeof setInput === "function") {
-                setInput("");
-              }
-            }, 100);
-          }
-        }, 50);
+        setInput(trimmedSuggestion);
+      } catch (err) {
+        console.warn("[SIAM] setInput failed", err);
       }
     }
+
+    // Focus the input field so user can edit or submit
+    setTimeout(() => {
+      const inputElement = document.querySelector(
+        'textarea[placeholder*="Ask me anything"]'
+      ) as HTMLTextAreaElement;
+      if (inputElement) {
+        inputElement.focus();
+        // Move cursor to end of text
+        inputElement.setSelectionRange(trimmedSuggestion.length, trimmedSuggestion.length);
+      }
+    }, 50);
   };
 
   const handleClear = () => {
@@ -1257,9 +1138,9 @@ export function AiSdkChatPanel({
     URL.revokeObjectURL(url);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (message: { text: string; files: any[] }, e: React.FormEvent) => {
     e.preventDefault();
-    const messageToSend = localInput || "";
+    const messageToSend = message.text || localInput || "";
     if (messageToSend.trim()) {
       // Track query start time for duration calculation
       setQueryStartTime(Date.now());
@@ -1393,22 +1274,20 @@ export function AiSdkChatPanel({
       // Clear local input immediately
       setLocalInput("");
 
-      // Use the AI SDK's append or sendMessage function
+      // Use the AI SDK's sendMessage function (v6 API)
       // This properly handles the streaming response format
       try {
-        if (typeof append === "function") {
+        if (typeof sendMessage === "function") {
+          // AI SDK v6 uses sendMessage({ text: string }) signature
+          await sendMessage({ text: content });
+        } else if (typeof append === "function") {
+          // Fallback to legacy append for older AI SDK versions
           await append({
             role: "user",
             content,
           });
-        } else if (typeof sendMessage === "function") {
-          // Fallback to sendMessage if append not available
-          await sendMessage({
-            role: "user",
-            content,
-          });
         } else {
-          console.error("Neither append nor sendMessage available from useChat");
+          console.error("Neither sendMessage nor append available from useChat");
           throw new Error("Chat API not properly initialized");
         }
 
@@ -1817,6 +1696,7 @@ export function AiSdkChatPanel({
                   size="sm"
                   onClick={() => handleFeedback(message.id, "up")}
                   disabled={feedbackGiven[message.id] !== undefined}
+                  data-testid="thumbs-up"
                   className={cn(
                     "h-7 px-2 transition-colors",
                     feedbackGiven[message.id] === "up"
@@ -1831,6 +1711,7 @@ export function AiSdkChatPanel({
                   size="sm"
                   onClick={() => handleFeedback(message.id, "down")}
                   disabled={feedbackGiven[message.id] !== undefined}
+                  data-testid="thumbs-down"
                   className={cn(
                     "h-7 px-2 transition-colors",
                     feedbackGiven[message.id] === "down"
@@ -1877,7 +1758,7 @@ export function AiSdkChatPanel({
                                 <div>➜</div>
                                 <div className="p-2 border border-blue-500/50 bg-blue-500/10 rounded text-blue-300">AOMA API</div>
                                 <div>➜</div>
-                                <div className="p-2 border border-purple-500/50 bg-purple-500/10 rounded text-purple-300">Vector DB</div>
+                                <div className="p-2 border border-primary-500/50 bg-primary-500/10 rounded text-primary-300">Vector DB</div>
                             </div>
                             <p className="text-muted-foreground text-xs mt-4">Interactive Diagram Visualization Loaded</p>
                         </div>
@@ -2300,8 +2181,8 @@ export function AiSdkChatPanel({
                           Try these to get started
                         </h3>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
-                        {(dynamicSuggestions.length > 0 ? dynamicSuggestions : (suggestions.length > 0 ? suggestions : DEFAULT_SUGGESTIONS)).map(
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto w-full">
+                        {(suggestions.length > 0 ? suggestions : (dynamicSuggestions.length > 0 ? dynamicSuggestions : DEFAULT_SUGGESTIONS)).map(
                           (suggestion, index) => (
                             <motion.div
                               key={index}
@@ -2313,7 +2194,7 @@ export function AiSdkChatPanel({
                               <Suggestion
                                 suggestion={suggestion}
                                 onClick={handleSuggestionClick}
-                                className="w-full hover:shadow-md hover:scale-105 transition-all duration-200 backdrop-blur-sm h-auto whitespace-normal py-4 px-4"
+                                className="w-full hover:shadow-md hover:scale-105 transition-all duration-200 backdrop-blur-sm min-h-[120px] flex items-center whitespace-normal py-4 px-4"
                               />
                             </motion.div>
                           )
