@@ -17,6 +17,7 @@
 
 export { cdtextTool } from './cdtext';
 export { musicbrainzLookupTool } from './musicbrainz';
+export { ddpParseTool, ddpMusicBrainzLookupTool } from './ddp';
 
 // Future tools:
 // export { searchKnowledgeTool } from './searchKnowledge';
@@ -26,10 +27,13 @@ export { musicbrainzLookupTool } from './musicbrainz';
 // Convenience export of all tools as an object
 import { cdtextTool } from './cdtext';
 import { musicbrainzLookupTool } from './musicbrainz';
+import { ddpParseTool, ddpMusicBrainzLookupTool } from './ddp';
 
 export const siamTools = {
   parseCdtext: cdtextTool,
   lookupMusicbrainz: musicbrainzLookupTool,
+  parseDdp: ddpParseTool,
+  ddpMusicBrainzLookup: ddpMusicBrainzLookupTool,
   // searchKnowledge: searchKnowledgeTool,
   // searchJira: searchJiraTool,
   // searchCode: searchCodeTool,

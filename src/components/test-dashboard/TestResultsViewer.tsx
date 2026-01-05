@@ -73,18 +73,25 @@ export const TestResultsViewer: React.FC = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [filterPhotos, setFilterPhotos] = useState(false);
+  const [filterLongTitles, setFilterLongTitles] = useState(false);
 
-  // Fetch test results from Supabase on mount
+  // Fetch test results from Supabase on mount or page change
   useEffect(() => {
-    fetchTestResults();
-  }, []);
+    fetchTestResults(page === 1);
+  }, [page]);
 
-  const fetchTestResults = async () => {
-    setIsLoading(true);
+  const fetchTestResults = async (reset = false) => {
+    if (reset) {
+        setIsLoading(true);
+    }
     try {
-      // Fetch from Supabase
+      // Fetch from Supabase with pagination
       const results = await enhancedSupabaseTestDB.getTestResults({
-        limit: 100,
+        limit: 50,
+        // offset: (page - 1) * 50, // Assuming getTestResults supports offset
       });
 
       // Transform Supabase data to our TestResult format
@@ -104,20 +111,25 @@ export const TestResultsViewer: React.FC = () => {
             }
           : undefined,
         logs: r.console_logs ? [r.console_logs].flat() : [],
-        screenshots: r.screenshot_url ? [r.screenshot_url] : [],
+        screenshots: r.screenshot_url ? [r.screenshot_url] : (r.metadata?.screenshots || []),
         video: r.metadata?.video_url,
       }));
 
+      if (transformedResults.length < 50) {
+        setHasMore(false);
+      }
+
       // If no results from Supabase, use mock data for demo
-      if (transformedResults.length === 0) {
+      if (transformedResults.length === 0 && reset) {
         setTestResults(getMockTestResults());
+        setHasMore(false);
       } else {
-        setTestResults(transformedResults);
+        setTestResults(prev => reset ? transformedResults : [...prev, ...transformedResults]);
       }
     } catch (error) {
       console.error("Error fetching test results:", error);
       // Fall back to mock data on error
-      setTestResults(getMockTestResults());
+      if (reset) setTestResults(getMockTestResults());
     } finally {
       setIsLoading(false);
     }
@@ -242,6 +254,16 @@ export const TestResultsViewer: React.FC = () => {
           r.suite.toLowerCase().includes(query) ||
           r.error?.message.toLowerCase().includes(query)
       );
+    }
+
+    // Photos filter
+    if (filterPhotos) {
+      results = results.filter((r) => r.screenshots && r.screenshots.length > 0);
+    }
+
+    // Long titles filter (> 3 words)
+    if (filterLongTitles) {
+      results = results.filter((r) => r.name.split(/\s+/).filter(Boolean).length > 3);
     }
 
     // Date range filter
@@ -471,6 +493,28 @@ export const TestResultsViewer: React.FC = () => {
                             </SelectContent>
                           </Select>
                         </div>
+                        <div className="space-y-3 pt-2">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-sm cursor-pointer" htmlFor="filter-photos">With Photos</Label>
+                            <input 
+                              type="checkbox" 
+                              id="filter-photos"
+                              checked={filterPhotos}
+                              onChange={(e) => setFilterPhotos(e.target.checked)}
+                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <Label className="text-sm cursor-pointer" htmlFor="filter-long-titles">Long Titles (&gt;3 words)</Label>
+                            <input 
+                              type="checkbox" 
+                              id="filter-long-titles"
+                              checked={filterLongTitles}
+                              onChange={(e) => setFilterLongTitles(e.target.checked)}
+                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                          </div>
+                        </div>
                         <Button
                           variant="outline"
                           size="sm"
@@ -481,6 +525,8 @@ export const TestResultsViewer: React.FC = () => {
                             setSortOrder("desc");
                             setSearchQuery("");
                             setFilter("all");
+                            setFilterPhotos(false);
+                            setFilterLongTitles(false);
                           }}
                         >
                           Reset Filters
@@ -580,7 +626,7 @@ export const TestResultsViewer: React.FC = () => {
                               ) : (
                                 <ChevronRight className="h-4 w-4" />
                               )}
-                              <span className="font-medium">{suite}</span>
+                              <span className="font-normal">{suite}</span>
                             </div>
                             <div className="flex gap-2">
                               <Badge variant="secondary">{stats.total}</Badge>
@@ -646,6 +692,25 @@ export const TestResultsViewer: React.FC = () => {
                         </div>
                       );
                     })}
+                  
+                  {hasMore && !searchQuery && (
+                    <div className="pt-4 pb-8 flex justify-center">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mac-button mac-button-outline w-full max-w-[200px]"
+                        onClick={() => setPage(prev => prev + 1)}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 mr-2" />
+                        )}
+                        Load More Results
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </ScrollArea>
@@ -716,7 +781,7 @@ export const TestResultsViewer: React.FC = () => {
                         <CardContent className="p-4">
                           <h3
                             className="mac-title"
-                            className="mac-title font-medium text-red-500 mb-2"
+                            className="mac-title font-normal text-red-500 mb-2"
                           >
                             Error Message
                           </h3>
@@ -730,7 +795,7 @@ export const TestResultsViewer: React.FC = () => {
                             <CardContent className="p-4">
                               <h3
                                 className="mac-title"
-                                className="mac-title font-medium text-green-500 mb-2"
+                                className="mac-title font-normal text-green-500 mb-2"
                               >
                                 Expected
                               </h3>
@@ -743,7 +808,7 @@ export const TestResultsViewer: React.FC = () => {
                             <CardContent className="p-4">
                               <h3
                                 className="mac-title"
-                                className="mac-title font-medium text-red-500 mb-2"
+                                className="mac-title font-normal text-red-500 mb-2"
                               >
                                 Actual
                               </h3>
@@ -788,7 +853,7 @@ export const TestResultsViewer: React.FC = () => {
                         <div className="flex items-center justify-between mb-4">
                           <h3
                             className="mac-title"
-                            className="mac-title font-medium flex items-center gap-2"
+                            className="mac-title font-normal flex items-center gap-2"
                           >
                             <Terminal className="h-4 w-4" />
                             Console Output
@@ -833,7 +898,7 @@ export const TestResultsViewer: React.FC = () => {
                         <CardContent className="p-6">
                           <div className="flex items-center justify-between mb-6">
                             <div>
-                              <h3 className="text-lg font-light text-white">LLM Semantic Judge</h3>
+                              <h3 className="mac-title">LLM Semantic Judge</h3>
                               <p className="text-xs text-muted-foreground mt-1">Evaluated by {selectedResult.semanticScore.model}</p>
                             </div>
                             <div className="text-right">
@@ -843,7 +908,7 @@ export const TestResultsViewer: React.FC = () => {
                               )}>
                                 {Math.round(selectedResult.semanticScore.score * 100)}%
                               </div>
-                              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Similarity Score</p>
+                              <p className="mac-body text-[10px] text-muted-foreground uppercase tracking-widest">Similarity Score</p>
                             </div>
                           </div>
                           
@@ -857,16 +922,16 @@ export const TestResultsViewer: React.FC = () => {
                             
                             <div className="grid grid-cols-3 gap-4">
                               <div className="p-3 rounded-lg bg-card/50 border border-border">
-                                <p className="text-[10px] text-muted-foreground uppercase mb-1">Factual Accuracy</p>
-                                <p className="text-sm font-medium text-foreground">High</p>
+                                <p className="mac-body text-[10px] text-muted-foreground uppercase mb-1">Factual Accuracy</p>
+                                <p className="text-sm font-normal text-foreground">High</p>
                               </div>
                               <div className="p-3 rounded-lg bg-card/50 border border-border">
-                                <p className="text-[10px] text-muted-foreground uppercase mb-1">Tone Consistency</p>
-                                <p className="text-sm font-medium text-foreground">94%</p>
+                                <p className="mac-body text-[10px] text-muted-foreground uppercase mb-1">Tone Consistency</p>
+                                <p className="text-sm font-normal text-foreground">94%</p>
                               </div>
                               <div className="p-3 rounded-lg bg-card/50 border border-border">
-                                <p className="text-[10px] text-muted-foreground uppercase mb-1">Citation Quality</p>
-                                <p className="text-sm font-medium text-foreground">Verified</p>
+                                <p className="mac-body text-[10px] text-muted-foreground uppercase mb-1">Citation Quality</p>
+                                <p className="text-sm font-normal text-foreground">Verified</p>
                               </div>
                             </div>
                           </div>
@@ -888,7 +953,7 @@ export const TestResultsViewer: React.FC = () => {
                     <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground text-center p-8 space-y-4">
                       <Sparkles className="h-12 w-12 text-muted-foreground opacity-50" />
                       <div>
-                        <p className="text-muted-foreground">No semantic evaluation available</p>
+                        <p className="mac-body text-muted-foreground">No semantic evaluation available</p>
                         <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
                           SOTA semantic evaluation uses Gemini 3 Flash to judge response quality against ground truth.
                         </p>
@@ -931,7 +996,7 @@ export const TestResultsViewer: React.FC = () => {
                       <div className="flex items-center justify-between mb-4">
                         <h3
                           className="mac-title"
-                          className="mac-title font-medium flex items-center gap-2"
+                          className="mac-title font-normal flex items-center gap-2"
                         >
                           <Code className="h-4 w-4" />
                           Test Source

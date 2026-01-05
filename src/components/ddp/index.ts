@@ -6,6 +6,7 @@
 
 export { DDPDisplay } from './DDPDisplay';
 export { DDPUploader } from './DDPUploader';
+export { MusicBrainzResultCard } from './MusicBrainzResultCard';
 
 // Re-export types
 export type { ParsedDDP, DDPTrack, DDPDetectionResult } from '@/types/ddp';

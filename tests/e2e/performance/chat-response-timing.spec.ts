@@ -36,20 +36,36 @@ async function countAIMessages(page: Page): Promise<number> {
 
 // Helper to send a message
 async function sendMessage(page: Page, message: string) {
-  const textarea = page.locator('textarea[placeholder*="Ask"]');
+  const textarea = page.locator('[data-testid="chat-input"]');
   await textarea.fill(message);
   await textarea.press('Enter');
 }
 
 test.describe('Chat Response Timing', () => {
   test.beforeEach(async ({ page }) => {
+    // Set bypass auth cookie for localhost
+    await page.context().addCookies([
+      { name: 'bypass_auth', value: 'true', domain: 'localhost', path: '/' },
+    ]);
+
     await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
 
-    // Wait for chat to be ready
-    await page.waitForSelector('textarea[placeholder*="Ask"]', { timeout: 30000 });
+    // Wait for app to be fully hydrated by checking for branding first
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+
+    // Wait for chat interface to render
+    try {
+      await page.locator('[data-testid="chat-input"]').first()
+        .waitFor({ state: 'visible', timeout: 15000 });
+    } catch {
+      // If still not visible, wait a bit more and try again (heavy load scenario)
+      await page.waitForTimeout(2000);
+      await page.locator('[data-testid="chat-input"]').first()
+        .waitFor({ state: 'visible', timeout: 10000 });
+    }
 
     // Wait a moment for initial load
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
   });
 
   test('should measure response time for different questions', async ({ page }) => {
