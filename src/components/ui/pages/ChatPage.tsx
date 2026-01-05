@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { AiSdkChatPanel } from "../../ai/ai-sdk-chat-panel"; // Re-enabled after fixing zod-to-json-schema dependency
-import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
+// import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
 import { AppSidebar } from "../app-sidebar";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "../sidebar";
 import { RightSidebar } from "../layout/RightSidebar";
@@ -45,6 +45,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
 import { cn } from "../../../lib/utils";
 import { ConnectionStatusIndicator } from "../ConnectionStatusIndicator";
+import { CompactThemeSwitcher } from "../theme-switcher";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
 import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
@@ -56,6 +57,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../tooltip";
+import { DraggableLadybug } from "../../tester/DraggableLadybug";
+import { FeedbackDialog } from "../../tester/FeedbackDialog";
 
 // PERFORMANCE OPTIMIZATION: Dynamic imports for heavy components
 // These components contain charts and heavy dependencies (recharts, etc.)
@@ -167,6 +170,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
   const [knowledgeStatus, setKnowledgeStatus] = useState<"ok" | "degraded" | "unknown">("unknown");
   const [lastKnowledgeRefresh, setLastKnowledgeRefresh] = useState<string>("");
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   // URL hash-based routing for deep linking
   useEffect(() => {
@@ -274,12 +278,12 @@ Be helpful, concise, and professional in your responses.`;
               {/* Brand Identity - Compact on mobile */}
               <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
                 <SiamLogo size="md" variant="icon" className="sm:hidden" />
-                <SiamLogo size="lg" variant="icon" className="hidden sm:block" />
+                <SiamLogo size="xl" variant="icon" className="hidden sm:block" />
                 <div className="hidden sm:block">
-                  <h1 className="mac-heading text-xl font-extralight text-white tracking-tight whitespace-nowrap">
+                  <h1 className="mac-heading">
                     The Betabase
                   </h1>
-                  <p className="text-xs text-foreground font-light whitespace-nowrap">
+                  <p className="text-xs text-muted-foreground font-light whitespace-nowrap">
                     Intelligence Platform
                   </p>
                 </div>
@@ -321,8 +325,8 @@ Be helpful, concise, and professional in your responses.`;
                           side="bottom" 
                           className="bg-muted text-foreground border-border"
                         >
-                          <p className="font-normal">{mode.label}</p>
-                          <p className="text-muted-foreground text-[10px]">{mode.description}</p>
+                          <p className="mac-body font-normal">{mode.label}</p>
+                          <p className="mac-body text-muted-foreground text-[10px]">{mode.description}</p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -364,8 +368,8 @@ Be helpful, concise, and professional in your responses.`;
                           side="bottom" 
                           className="bg-muted text-foreground border-border"
                         >
-                          <p className="font-normal">{mode.label}</p>
-                          <p className="text-muted-foreground text-[10px]">{mode.description}</p>
+                          <p className="mac-body font-normal">{mode.label}</p>
+                          <p className="mac-body text-muted-foreground text-[10px]">{mode.description}</p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -375,6 +379,7 @@ Be helpful, concise, and professional in your responses.`;
 
               {/* Controls - Responsive spacing */}
               <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                <CompactThemeSwitcher />
                 <ConnectionStatusIndicator />
                 <div className="introspection-dropdown-container">
                   <IntrospectionDropdown />
@@ -456,7 +461,7 @@ Be helpful, concise, and professional in your responses.`;
                     key={`${getChatAPIEndpoint()}-${activeConversationId}`} // Force remount when endpoint or conversation changes
                     api={getChatAPIEndpoint()}
                     title={activeConversation?.title || "The Betabase"}
-                    description="yup. it's back."
+                    description="AI-Powered Intelligence Platform"
                     systemPrompt={systemPrompt}
                     suggestions={suggestions}
                     className="flex-1 border-0"
@@ -547,11 +552,10 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "test" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-normal text-foreground flex items-center gap-2">
-                      <TestTube className="h-5 w-5 text-muted-foreground" />
+                    <h2 className="mac-heading">
                       Advanced Testing & Quality Assurance
                     </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       Comprehensive testing suite with historical data, RLHF-generated tests, and
                       live monitoring
                     </p>
@@ -594,11 +598,10 @@ Be helpful, concise, and professional in your responses.`;
               {activeMode === "fix" && (
                 <div className="h-full p-6 space-y-6">
                   <div>
-                    <h2 className="text-lg font-normal text-foreground flex items-center gap-2">
-                      <Wrench className="h-5 w-5 text-muted-foreground" />
+                    <h2 className="mac-heading">
                       Debug & Fix Assistant
                     </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       Analyze responses, make corrections, and generate tests
                     </p>
                   </div>
@@ -631,19 +634,8 @@ Be helpful, concise, and professional in your responses.`;
               )}
 
               {activeMode === "curate" && (
-                <div className="h-full">
-                  <div className="p-6 border-b border-border/50">
-                    <h2 className="mac-heading text-lg font-normal text-foreground flex items-center gap-2">
-                      <Library className="h-5 w-5 text-muted-foreground" />
-                      Knowledge Curation
-                    </h2>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Manage and organize your knowledge base
-                    </p>
-                  </div>
-                  <div className="h-[calc(100%-81px)] p-6">
-                    <CurateTab className="h-full" />
-                  </div>
+                <div className="h-full p-6">
+                  <CurateTab className="h-full" />
                 </div>
               )}
             </div>
@@ -659,6 +651,15 @@ Be helpful, concise, and professional in your responses.`;
           )}
         </div>
       </div>
+      <DraggableLadybug onOpenFeedback={() => setIsFeedbackOpen(true)} />
+      <FeedbackDialog
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+        onSubmit={(data) => {
+          console.log("Feedback submitted:", data);
+          // TODO: Implement actual submission logic
+        }}
+      />
     </SidebarProvider>
   );
 };

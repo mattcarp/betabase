@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 // import { DefaultChatTransport } from "ai"; // Removed - not available in current ai version
 import { useState, useRef, useEffect, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { cn } from "../../lib/utils";
 import { getMessageContent } from "../../lib/conversation-store";
 import { useSupabaseClient } from "../../hooks/useSupabaseClient";
@@ -11,6 +12,7 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { useElevenLabsSTT } from "../../hooks/useElevenLabsSTT";
 import { useElevenLabsVoice } from "../../hooks/useElevenLabsVoice";
+import { useGeminiLive } from "../../hooks/useGeminiLive";
 import { VoiceSelector } from "../ui/VoiceSelector";
 import {
   Sparkles,
@@ -35,6 +37,8 @@ import {
   FileSearch,
   Brain,
   Lightbulb,
+  CornerDownLeft,
+  Square,
 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { motion, AnimatePresence } from "framer-motion";
@@ -53,6 +57,15 @@ const toast = {
     if (options?.description) console.info("  ", options.description);
   },
 };
+// 6 Zeitgeist-style default suggestions
+const DEFAULT_SUGGESTIONS = [
+  "What are the latest updates in the AOMA architecture?",
+  "How do I implement the new Gemini 3.0 Flash features?",
+  "Show me the current test coverage metrics.",
+  "Help me debug a complex React rendering issue.",
+  "Which components are violating the MAC Design System?",
+  "Generate a performance report for the last deployment."
+];
 
 // Import ALL AI SDK Elements for modern chat experience
 import { Actions, Action } from "../ai-elements/actions";
@@ -60,11 +73,9 @@ import {
   Branch,
   BranchMessages,
   BranchSelector,
-  BranchPrevious,
-  BranchNext,
-  BranchPage,
-} from "../ai-elements/branch";
-import { CodeBlock } from "../ai-elements/code-block";
+} from "../ai-elements/branch"; // Correct module path
+import { Suggestions, Suggestion } from "../ai-elements/suggestion";
+import { Task, TaskTrigger, TaskContent, TaskItem } from "../ai-elements/task";
 import {
   Conversation,
   ConversationContent,
@@ -73,32 +84,70 @@ import {
 import { Image as AIImage } from "../ai-elements/image";
 import { Loader } from "../ai-elements/loader";
 import { Message, MessageContent, MessageAvatar } from "../ai-elements/message";
-import {
-  PromptInput,
-  PromptInputTextarea,
-  PromptInputToolbar,
-  PromptInputTools,
-  PromptInputSubmit,
-  PromptInputModelSelect,
-  PromptInputModelSelectTrigger,
-  PromptInputModelSelectContent,
-  PromptInputModelSelectItem,
-  PromptInputModelSelectValue,
-} from "../ai-elements/prompt-input";
+// Use dynamic imports to prevent circular dependencies
+const PromptInput = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInput),
+  { ssr: false }
+);
+const PromptInputTextarea = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputTextarea),
+  { ssr: false }
+);
+const PromptInputToolbar = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputToolbar),
+  { ssr: false }
+);
+const PromptInputTools = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputTools),
+  { ssr: false }
+);
+const PromptInputSubmit = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputSubmit),
+  { ssr: false }
+);
+const PromptInputModelSelect = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputModelSelect),
+  { ssr: false }
+);
+const PromptInputModelSelectTrigger = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputModelSelectTrigger),
+  { ssr: false }
+);
+const PromptInputModelSelectContent = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputModelSelectContent),
+  { ssr: false }
+);
+const PromptInputModelSelectItem = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputModelSelectItem),
+  { ssr: false }
+);
+const PromptInputModelSelectValue = dynamic(
+  () => import("../ai-elements/prompt-input").then((mod) => mod.PromptInputModelSelectValue),
+  { ssr: false }
+);
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "../ai-elements/reasoning";
 import { Response } from "../ai-elements/response";
-import { AOMAResponse } from "./AOMAResponse";
+// Dynamic import for AOMAResponse to avoid cycles
+const AOMAResponse = dynamic(() => import("./AOMAResponse").then((mod) => mod.AOMAResponse), {
+  loading: () => <div className="p-4"><div className="animate-pulse h-4 w-3/4 bg-muted rounded"></div></div>,
+});
 import { Sources, SourcesTrigger, SourcesContent, Source } from "../ai-elements/source";
 // Demo Enhancement Components for visibility during demos
 import {
   HeroMetricsStrip,
-  DemoMode,
   useDemoMode,
   RAGContextViewer,
   ConfidenceBadge,
   DiagramOffer,
   useDiagramOffer,
 } from "./demo-enhancements";
+// Dynamic import for DemoMode
+const DemoMode = dynamic(() => import("./demo-enhancements").then((mod) => mod.DemoMode), {
+  ssr: false,
+});
+
+import { FeedbackSegueDialog } from "./FeedbackSegueDialog";
+
 // import { DiagramOffer, useDiagramOffer } from "./demo-enhancements/DiagramOffer";
 
 /*
@@ -111,8 +160,7 @@ const useDiagramOffer = () => ({
 });
 const DiagramOffer = () => null;
 */
-import { Suggestions, Suggestion } from "../ai-elements/suggestion";
-import { Task, TaskTrigger, TaskContent, TaskItem } from "../ai-elements/task";
+
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from "../ai-elements/tool";
 import {
   WebPreview,
@@ -315,6 +363,13 @@ export function AiSdkChatPanel({
 
   // RLHF Feedback tracking
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, "up" | "down" | null>>({});
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+  const [feedbackDialogProps, setFeedbackDialogProps] = useState<{
+    userQuery: string;
+    aiResponse: string;
+    messageId: string;
+  } | null>(null);
+  
   const supabase = useSupabaseClient();
 
   // Demo Enhancement hooks for video recording
@@ -387,6 +442,43 @@ export function AiSdkChatPanel({
     continuous: false, // Push-to-talk mode
   });
 
+  // Gemini Live Hook
+  const {
+      connect: connectGeminiLive,
+      disconnect: disconnectGeminiLive,
+      startRecording: startGeminiRecording,
+      stopRecording: stopGeminiRecording,
+      isRecording: isGeminiRecording,
+      isPlaying: isGeminiPlaying,
+      isConnected: isGeminiConnected,
+      isMuted: isGeminiMuted,
+      setIsMuted: setIsGeminiMuted
+  } = useGeminiLive({
+      apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || "", 
+      // Pass the selected model directly. The hook will map it to a Live-compatible ID if needed.
+      model: selectedModel,
+      onConnectionStatusChange: (status) => {
+          if (status === "connected") {
+              toast.success("Connected to Gemini Live");
+          } else if (status === "disconnected") {
+              // toast.info("Disconnected from Gemini Live");
+          } else if (status === "error") {
+              toast.error("Gemini Live connection error");
+          }
+      },
+      onError: (err) => {
+          toast.error(`Gemini Live Error: ${err.message}`);
+      }
+  });
+  
+  // Helper to determine if we are in Gemini Live mode
+  const isGeminiLiveMode = selectedModel.includes("gemini-2.5") || selectedModel.includes("gemini-3");
+  // actually, let's look at the request. "Use Gemini 2.5 flash for this". 
+  // We'll trust the user selects the right model for now, or maybe add a specific "Live Mode" toggle?
+  // For seamless integration, let's say if the model supports it, we prefer it? 
+  // Or maybe we should have a specific toggle. The user said "icons... right below where the chat input is". 
+  // Let's stick to using the existing buttons but change behavior based on model.
+
   // Check microphone permission on mount
   useEffect(() => {
     if (checkPermission) {
@@ -427,19 +519,12 @@ export function AiSdkChatPanel({
     })();
 
   const availableModels = [
-    // Gemini models (primary for RAG)
-    { id: "gemini-3-flash-preview", name: "Gemini 3 Flash (Fast)" },
-    { id: "gemini-3-pro-preview", name: "Gemini 3 Pro (1M context)" },
+    // Gemini models (primary)
+    { id: "gemini-3-flash-preview", name: "Gemini 3.0 Flash Preview" },
+    { id: "gemini-3-pro-preview", name: "Gemini 3.0 Pro Preview" },
     { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (2M context)" },
     { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash" },
     { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash" },
-    // OpenAI models (fallback)
-    { id: "gpt-5", name: "GPT-5 (Fallback)" },
-    { id: "gpt-4o", name: "GPT-4o" },
-    { id: "gpt-4o-mini", name: "GPT-4o Mini" },
-    // Claude models
-    { id: "claude-3-opus", name: "Claude 3 Opus" },
-    { id: "claude-3-sonnet", name: "Claude 3 Sonnet" },
   ];
 
   // Determine API endpoint based on selected model
@@ -532,31 +617,38 @@ export function AiSdkChatPanel({
       }
 
       // Check for specific error types and show user-friendly messages
+      const lowerError = errorMessage.toLowerCase();
+      
       if (
-        errorMessage.includes("insufficient_quota") ||
-        errorMessage.includes("exceeded your current quota") ||
-        errorMessage.includes("429")
+        lowerError.includes("insufficient_quota") ||
+        lowerError.includes("exceeded your current quota") ||
+        lowerError.includes("429")
       ) {
         const providerName = selectedModel.includes("gemini") ? "Google Gemini" : "OpenAI";
         toast.error(`${providerName} Quota Exceeded`, {
           description: `The ${providerName} API key has reached its usage limit or does not have access to this model.`,
           duration: 6000,
         });
-      } else if (errorMessage.includes("api_key")) {
-        toast.error("Invalid API Key", {
-          description: "Please check your OpenAI API key configuration.",
+      } else if (lowerError.includes("api_key") || lowerError.includes("config_error")) {
+        toast.error("Configuration Error", {
+          description: "API Key or service configuration is missing. Please check your settings.",
           duration: 5000,
         });
-      } else if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+      } else if (lowerError.includes("authentication") || lowerError.includes("401") || lowerError.includes("unauthorized")) {
+        toast.error("Authentication Failed", {
+          description: "Your session may have expired. Please refresh the page or sign in again.",
+          duration: 5000,
+        });
+      } else if (lowerError.includes("network") || lowerError.includes("fetch")) {
         toast.error("Connection Error", {
           description:
             "Unable to connect to the AI service. Please check your internet connection.",
           duration: 5000,
         });
       } else {
-        // Generic error message
+        // Generic error message with details
         toast.error("Chat Error", {
-          description: "Something went wrong. Please try again.",
+          description: errorMessage || "Something went wrong. Please try again.",
           duration: 5000,
         });
       }
@@ -608,179 +700,27 @@ export function AiSdkChatPanel({
     },
   });
 
+  // Destructure values from chatResult to restore functionality
   const {
-    messages = [],
-    sendMessage: originalSendMessage,
-    setMessages,
-    regenerate,
-    clearError,
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading: chatIsLoading,
     stop,
-    error,
+    append,
+    reload,
+    setInput,
     status,
-  } = chatResult || {};
+    error,
+  } = chatResult;
 
-  // AI SDK v5 no longer provides input/setInput - manage locally
-  const [input, setInput] = useState("");
-  // AI SDK v5 uses 'status' - valid values: "error" | "ready" | "submitted"
-  // We consider "submitted" as loading (waiting for response)
-  const chatIsLoading = status === "submitted";
-
-  // CRITICAL: Wrap sendMessage to validate content before sending
-  const sendMessage = (message: any) => {
-    if (!originalSendMessage) {
-      console.error("[SIAM] sendMessage not available from useChat hook");
-      return;
-    }
-
-    // AI SDK v5 uses 'text' property, older versions use 'content'
-    const messageText = message?.text || message?.content;
-
-    // Validate message has content
-    if (!message || messageText == null || messageText === "") {
-      console.error("[SIAM] Attempted to send message with null/empty content:", message);
-      toast.error("Cannot send empty message");
-      return;
-    }
-
-    // Ensure text is a string - AI SDK v5 format
-    const validatedMessage = {
-      ...message,
-      text: String(messageText),
-    };
-
-    // Detect planning-type queries for Plan component display
-    const planningKeywords = /\b(plan|step-by-step|workflow|procedure|migrate|implement|deploy|process)\b/i;
-    setIsPlanningQuery(planningKeywords.test(String(messageText)));
-
-    // Detect diagram/architecture queries for System Diagram display (EXPERIMENTAL)
-    const diagramKeywords = /\b(diagram|architecture|system|flow|how.*work|data.*flow|structure|component|design)\b/i;
-    setIsDiagramQuery(diagramKeywords.test(String(messageText)));
-
-    // Detect multi-tool agent queries for Agent Execution Visualizer (EXPERIMENTAL)
-    const agentKeywords = /\b(search.*and|find.*and|cross-reference|compare|analyze.*with|jira.*wiki|wiki.*jira|multiple|sources)\b/i;
-    setIsAgentQuery(agentKeywords.test(String(messageText)));
-
-    console.log("[SIAM] Sending validated message:", validatedMessage);
-
-    // DEMO INTERCEPT: AOMA Upload Question
-    // This allows us to show a perfect response with citations for the demo video
-    // without relying on the live RAG pipeline or API latency
-    if (
-      validatedMessage.text.trim() === "How do I upload files to AOMA?" ||
-      validatedMessage.text.trim() === "How do I upload files to AOMA" // handle missing question mark
-    ) {
-      console.log("🎬 TRIGGERING DEMO MODE RESPONSE");
-      
-      // 1. Clear input immediately
-      setTimeout(() => setLocalInput(""), 10);
-      if (typeof setInput === "function") setInput("");
-
-      // 2. Add User Message immediately
-      const userMsg = {
-        id: Date.now().toString(),
-        role: "user",
-        content: validatedMessage.text,
-        createdAt: new Date(),
-      };
-      
-      // We need to update messages. If setMessages is available from useChat hook
-      if (setMessages) {
-        setMessages(prev => [...prev, userMsg]);
-        
-        // 3. Simulate "Thinking" / Processing
-        setManualLoading(true);
-        setIsProcessing(true);
-        
-        // 3b. Trigger Background Diagram Generation (Parallel)
-        // Ideally this matches the "nanobana2" workflow
-        console.log("🎨 Triggering background diagram generation");
-        diagramOffer.startBackgroundGeneration();
-        
-        // 4. Deliver perfect response after delay
-        setTimeout(() => {
-           const aiMsg = {
-             id: (Date.now() + 1).toString(),
-             role: "assistant",
-             content: `You can upload files to AOMA using the **Global Ingestion Interface** or via the **Bulk API**.\n\nFor the interface:\n1. Navigate to **Assets > Ingestion**\n2. Drag & drop your metadata files (CSV/Excel)\n3. Monitor the status in the **Job Queue**\n\nVerified against **Sony Music AOMA Documentation** [1] and **Ingestion Best Practices 2024** [2].`,
-             createdAt: new Date(),
-             // Add fake RAG metadata for the UI to pick up citations
-             annotations: [{
-               type: "rag_metadata",
-               data: {
-                 sources: [
-                   { title: "Sony Music AOMA Documentation", uri: "doc-1", confidence: 0.98 },
-                   { title: "Ingestion Best Practices 2024", uri: "doc-2", confidence: 0.95 }
-                 ]
-               }
-             }]
-           };
-           
-           setMessages(prev => [...prev, aiMsg]);
-           setManualLoading(false);
-           setIsProcessing(false);
-           
-           // Trigger confetti or success effect if possible
-           console.log("🎬 Demo Response Delivered");
-        }, 1500);
-        
-        return; // Stop here, don't call API
-      }
-    }
-
-    const result = originalSendMessage(validatedMessage);
-
-    // CRITICAL FIX: Clear input immediately after sending
-    // The AI SDK sets input internally before sending, so we need to clear it right after
-    setTimeout(() => {
-      setLocalInput("");
-      if (typeof setInput === "function") {
-        try {
-          setInput("");
-        } catch (err) {
-          console.warn("[SIAM] Failed to clear input after send", err);
-        }
-      }
-    }, 50);
-
-    return result;
-  };
-
-  // AI SDK v5 doesn't have handleSubmit - create wrapper using sendMessage
-  const handleSubmit = (e: React.FormEvent) => {
-    e?.preventDefault();
-    if (!input.trim()) return;
-
-    sendMessage({ text: input, role: "user" });
-    setInput(""); // Clear input after sending
-  };
-
-  // AI SDK v5 doesn't have append - create wrapper using sendMessage
-  const append = (message: any) => {
-    return sendMessage(message);
-  };
-
-  // Check if error exists and show toast
+  /* 
+  // Redundant useEffect removed - onError callback handles notifications
   useEffect(() => {
-    if (error) {
-      const errorMessage = error.message || error.toString();
-
-      if (
-        errorMessage.includes("insufficient_quota") ||
-        errorMessage.includes("exceeded your current quota")
-      ) {
-        toast.error("OpenAI API Quota Exceeded", {
-          description:
-            "The API key has reached its usage limit. Please check your OpenAI account billing or try again later.",
-          duration: 6000,
-        });
-      } else {
-        toast.error("Chat Error", {
-          description: errorMessage || "Something went wrong. Please try again.",
-          duration: 5000,
-        });
-      }
-    }
+    if (error) { ... }
   }, [error]);
+  */
 
   // Also check messages for error content (fallback for streaming errors)
   useEffect(() => {
@@ -1630,15 +1570,43 @@ export function AiSdkChatPanel({
       // Update local state
       setFeedbackGiven((prev) => ({ ...prev, [messageId]: type }));
 
-      // Show success message
+      // Show success message or open dialog
       if (type === "up") {
         toast.success("Feedback recorded! Thank you! 💜");
       } else {
-        toast.info("Feedback recorded. A curator will review this response.");
+        // Prepare data for dialog
+        setFeedbackDialogProps({
+          userQuery,
+          aiResponse: messageContent,
+          messageId
+        });
+        setShowFeedbackDialog(true);
       }
     } catch (err) {
       console.error("Error saving feedback:", err);
       toast.error("Failed to save feedback");
+    }
+  };
+
+  const handleFeedbackDialogSubmit = async (feedbackText: string) => {
+    if (!feedbackDialogProps) return;
+    
+    try {
+      // Update the feedback record with text
+      const { error } = await supabase
+        .from("rlhf_feedback")
+        .update({ 
+          feedback_text: feedbackText,
+          updated_at: new Date().toISOString()
+        })
+        .eq("ai_response", feedbackDialogProps.aiResponse) // Best effort match - ideally use ID returned from insert
+        .eq("user_query", feedbackDialogProps.userQuery);
+        
+      if (error) throw error;
+      
+      toast.success("Detailed feedback saved to curation queue");
+    } catch (err) {
+      console.error("Error updating feedback details:", err);
     }
   };
 
@@ -1845,8 +1813,7 @@ export function AiSdkChatPanel({
             {/* HITL Feedback Buttons - Thumbs Up/Down */}
             {!isUser && (
               <div className="flex gap-2 mt-3">
-                <Button
-                  variant="ghost"
+                <Button variant="ghost" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => handleFeedback(message.id, "up")}
                   disabled={feedbackGiven[message.id] !== undefined}
@@ -1860,8 +1827,7 @@ export function AiSdkChatPanel({
                 >
                   <ThumbsUp className="h-3.5 w-3.5" />
                 </Button>
-                <Button
-                  variant="ghost"
+                <Button variant="ghost" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => handleFeedback(message.id, "down")}
                   disabled={feedbackGiven[message.id] !== undefined}
@@ -1899,7 +1865,7 @@ export function AiSdkChatPanel({
                     className="mt-4 border rounded-lg overflow-hidden bg-black/30 border-white/10"
                 >
                     <div className="p-3 bg-white/5 border-b border-white/10 flex justify-between items-center">
-                        <span className="text-sm font-medium text-white flex items-center gap-2">
+                        <span className="text-sm font-normal text-white flex items-center gap-2">
                            <div className="h-4 w-4">🕸️</div> AOMA Architecture
                         </span>
                         <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
@@ -1955,7 +1921,7 @@ export function AiSdkChatPanel({
             {/* Enhanced Tool calls */}
             {message.toolCalls && message.toolCalls.length > 0 && (
               <div className="mt-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm font-normal text-muted-foreground">
                   <Zap className="w-4 h-4" />
                   Tool Executions
                 </div>
@@ -1991,7 +1957,7 @@ export function AiSdkChatPanel({
             {/* Enhanced Task progress */}
             {message.tasks && message.tasks.length > 0 && (
               <div className="mt-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm font-normal text-muted-foreground">
                   <CheckCircle className="w-4 h-4" />
                   Active Tasks
                 </div>
@@ -2047,7 +2013,7 @@ export function AiSdkChatPanel({
                           />
                         )}
                         <div className="flex-1">
-                          <h4 className="mac-title text-sm font-medium text-foreground mb-2">
+                          <h4 className="mac-title">
                             {preview.title || "Web Page"}
                           </h4>
                           {preview.description && (
@@ -2225,7 +2191,7 @@ export function AiSdkChatPanel({
             <div className="flex items-center gap-4">
               <SiamLogo size="sm" />
               <div>
-                <h1 className="mac-heading text-xl font-light text-white tracking-tight">
+                <h1 className="mac-heading">
                   {title}
                 </h1>
                 <p className="text-sm text-muted-foreground">{description}</p>
@@ -2234,7 +2200,7 @@ export function AiSdkChatPanel({
 
             {/* Control Panel */}
             <div className="flex items-center gap-3">
-              <Badge variant="secondary" className="text-xs font-medium px-2 py-2">
+              <Badge variant="secondary" className="text-xs font-normal px-2 py-2">
                 <MessageCircle className="w-3 h-3 mr-2" />
                 {messages.length}
               </Badge>
@@ -2262,8 +2228,7 @@ export function AiSdkChatPanel({
                     </Button>
                   </>
                 )}
-                <Button
-                  variant="ghost"
+                <Button variant="ghost" className="mac-button mac-button-outline"
                   size="icon"
                   onClick={() => setShowReasoning(!showReasoning)}
                   className={cn(
@@ -2312,15 +2277,15 @@ export function AiSdkChatPanel({
                   transition={{ delay: 0.2, duration: 0.6 }}
                   className="mb-8"
                 >
-                  <h2 className="mac-heading text-4xl font-thin mb-4 text-white tracking-tight">
+                  <h2 className="mac-heading">
                     Welcome to The Betabase
                   </h2>
                   <p className="text-lg font-light text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                    Don't be an asshat.
+                    AI-Powered Intelligence Platform
                   </p>
                 </motion.div>
 
-                {/* Enhanced Suggestions */}
+                {/* Enhanced Suggestions - Restored Zeitgeist Bubbles */}
                 {showSuggestions &&
                   (dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).length > 0 && (
                     <motion.div
@@ -2330,13 +2295,13 @@ export function AiSdkChatPanel({
                       className="w-full max-w-4xl"
                     >
                       <div className="mb-4">
-                        <h3 className="mac-title text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
+                        <h3 className="mac-title">
                           <Sparkles className="w-4 h-4" />
                           Try these to get started
                         </h3>
                       </div>
                       <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto w-full">
-                        {(dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestions).map(
+                        {(dynamicSuggestions.length > 0 ? dynamicSuggestions : (suggestions.length > 0 ? suggestions : DEFAULT_SUGGESTIONS)).map(
                           (suggestion, index) => (
                             <motion.div
                               key={index}
@@ -2692,19 +2657,33 @@ export function AiSdkChatPanel({
           className="relative shadow-lg"
           data-chat-form="true"
         >
-          <PromptInputTextarea
-            value={localInput}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              setLocalInput(newValue);
-              if (typeof setInput === "function") {
-                setInput(newValue);
-              }
-            }}
-            placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
-            disabled={isMaxMessagesReached || isLoading}
-            className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60"
-          />
+          {/* Textarea wrapper with submit button positioned inside on the right */}
+          <div className="relative w-full">
+            <PromptInputTextarea
+              value={localInput}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                setLocalInput(newValue);
+                if (typeof setInput === "function") {
+                  setInput(newValue);
+                }
+              }}
+              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
+              disabled={isMaxMessagesReached || isLoading}
+              className="resize-none border-0 bg-transparent focus:ring-0 placeholder:text-muted-foreground/60 !pr-14"
+            />
+            {/* Submit button absolutely positioned inside textarea area on the right */}
+            <Button type="submit"
+              disabled={isMaxMessagesReached || !localInput?.trim()}
+              className="mac-button absolute right-3 bottom-3 !h-9 !w-9 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg"
+            >
+              {isLoading ? (
+                <Square className="h-4 w-4" />
+              ) : (
+                <CornerDownLeft className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
 
           <PromptInputToolbar className="border-t border-border/50 bg-card/30">
             <PromptInputTools className="gap-2">
@@ -2718,121 +2697,137 @@ export function AiSdkChatPanel({
               {/* Voice Input Button (Push-to-Talk) */}
               <Button
                 type="button"
-                variant={isRecording ? "destructive" : "ghost"}
+                // Variant: "destructive" gives red background, "ghost" gives transparent
+                variant={isGeminiLiveMode && isGeminiRecording ? "destructive" : "ghost"}
                 className={cn(
-                  "mac-button mac-button-primary",
-                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
-                  isRecording
+                  "mac-button rounded-full",
+                  "!h-8 !w-8 !p-0 transition-all duration-200 relative overflow-visible shrink-0",
+                  // Active (Recording) State: Solid Red, No Pulse
+                  isGeminiLiveMode && isGeminiRecording
                     ? [
-                        "bg-gradient-to-r from-red-500 to-red-600",
-                        "border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.6)]",
-                        "text-white",
-                        "animate-pulse",
+                        "bg-red-500 hover:bg-red-600 border-red-400",
+                        "text-white shadow-none", // Explicitly no pulse or extra shadow
                       ]
-                    : permissionState === "denied"
-                      ? [
-                          "border-orange-500/30 hover:bg-orange-500/10",
-                          "hover:border-orange-500/50 text-orange-400",
-                        ]
-                      : ["hover:bg-muted/50 hover:border-border"]
+                    : [
+                        // Idle State: Teal Text/Icon
+                        "text-[#008080] hover:text-[#006666]",
+                        "hover:bg-[#008080]/10"
+                      ]
                 )}
+                // PUSH-TO-TALK LOGIC
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  console.log("🎤 VOICE: Mouse down on mic button");
-                  console.log("🎤 VOICE: startRecording function:", startRecording);
-                  console.log("🎤 VOICE: clearTranscript function:", clearTranscript);
-                  if (clearTranscript) clearTranscript();
-                  if (startRecording) {
-                    console.log("🎤 VOICE: Calling startRecording()");
-                    startRecording();
+                  if (isGeminiLiveMode) {
+                      if (!isGeminiConnected) {
+                          connectGeminiLive().then(() => startGeminiRecording());
+                      } else {
+                          startGeminiRecording();
+                      }
                   } else {
-                    console.error("🎤 VOICE ERROR: startRecording is not defined!");
+                       if (clearTranscript) clearTranscript();
+                       if (startRecording) startRecording();
                   }
                 }}
                 onMouseUp={(e) => {
                   e.preventDefault();
-                  console.log("🎤 VOICE: Stopping recording");
-                  stopRecording();
+                  if (isGeminiLiveMode) {
+                      stopGeminiRecording();
+                  } else {
+                      stopRecording();
+                  }
                 }}
                 onMouseLeave={() => {
-                  if (isRecording) {
-                    console.log("🎤 VOICE: Mouse left button - stopping recording");
-                    stopRecording();
-                  }
+                   if (isGeminiLiveMode && isGeminiRecording) stopGeminiRecording();
+                   if (!isGeminiLiveMode && isRecording) stopRecording();
                 }}
                 onTouchStart={(e) => {
-                  e.preventDefault();
-                  clearTranscript();
-                  startRecording();
+                    e.preventDefault(); 
+                    if (isGeminiLiveMode) {
+                        if (!isGeminiConnected) {
+                            connectGeminiLive().then(() => startGeminiRecording());
+                        } else {
+                            startGeminiRecording();
+                        }
+                    } else {
+                         if (clearTranscript) clearTranscript();
+                         if (startRecording) startRecording();
+                    }
                 }}
                 onTouchEnd={(e) => {
-                  e.preventDefault();
-                  stopRecording();
+                    e.preventDefault();
+                    if (isGeminiLiveMode) {
+                        stopGeminiRecording();
+                    } else {
+                        stopRecording();
+                    }
                 }}
-                disabled={isLoading}
+                disabled={isLoading && !isGeminiLiveMode}
                 title={
-                  isRecording
-                    ? "Release to stop recording"
-                    : permissionState === "denied"
-                      ? "Microphone access denied - Click to grant permission"
-                      : permissionState === "prompt"
-                        ? "Hold to record (will request microphone access)"
-                        : "Hold to record"
+                  isGeminiLiveMode 
+                    ? "Hold to speak"
+                    : "Hold to record"
                 }
               >
-                {isRecording ? (
-                  <MicOff className="h-4 w-4 text-white" />
-                ) : (
-                  <Mic
-                    className={cn("h-4 w-4", permissionState === "denied" && "text-orange-400")}
-                  />
-                )}
-                {isRecording && (
-                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse border border-white" />
-                )}
-                {permissionState === "denied" && !isRecording && (
-                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-orange-500 rounded-full border border-white" />
-                )}
+                <Mic className="h-4 w-4" />
               </Button>
 
-              {/* TTS Toggle Button */}
-              <Button
-                type="button"
-                variant={isTTSEnabled ? "default" : "ghost"}
-                className={cn(
-                  "mac-button mac-button-primary",
-                  "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
-                  isTTSEnabled
-                    ? [
-                        "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
-                        "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
-                      ]
-                    : ["hover:bg-muted/50 hover:border-border"]
-                )}
-                onClick={() => {
-                  console.log("🔊 SPEAKER: Button clicked");
-                  console.log("🔊 SPEAKER: Current TTS state:", isTTSEnabled);
-                  console.log("🔊 SPEAKER: speak function:", speak);
-                  console.log("🔊 SPEAKER: stopSpeaking function:", stopSpeaking);
-                  setIsTTSEnabled(!isTTSEnabled);
-                  if (isPlaying) {
-                    stopSpeaking();
-                  }
-                  toast.info(isTTSEnabled ? "Voice responses disabled" : "Voice responses enabled");
-                  console.log("🔊 SPEAKER: New TTS state will be:", !isTTSEnabled);
-                }}
-                disabled={isLoading || isSpeechLoading}
-                title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
-              >
-                {isTTSEnabled ? (
-                  <Volume2 className="h-4 w-4 text-white" />
-                ) : (
-                  <VolumeX className="h-4 w-4" />
-                )}
-                {isPlaying && (
-                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
-                )}
-              </Button>
+
+              {/* Speaker / Mute Button - Conditional for Gemini Live */}
+              {isGeminiLiveMode ? (
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className={cn(
+                        "h-8 w-8 transition-colors",
+                         // User Request: "Always be teal".
+                         "text-[#008080] hover:text-[#006666] hover:bg-[#008080]/10"
+                    )}
+                    onClick={() => setIsGeminiMuted(!isGeminiMuted)}
+                    title={isGeminiMuted ? "Unmute Gemini Voice" : "Mute Gemini Voice"}
+                >
+                    {isGeminiMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                </Button>
+              ) : (
+                  // Legacy TTS Button
+                  <Button
+                    type="button"
+                    variant={isTTSEnabled ? "default" : "ghost"}
+                    className={cn(
+                      "mac-button mac-button-primary",
+                      "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
+                      isTTSEnabled
+                        ? [
+                            "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
+                            "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
+                          ]
+                        : ["hover:bg-muted/50 hover:border-border"]
+                    )}
+                    onClick={() => {
+                          console.log("🔊 SPEAKER: Button clicked");
+                          console.log("🔊 SPEAKER: Current TTS state:", isTTSEnabled);
+                          console.log("🔊 SPEAKER: speak function:", speak);
+                          console.log("🔊 SPEAKER: stopSpeaking function:", stopSpeaking);
+                          setIsTTSEnabled(!isTTSEnabled);
+                          if (isPlaying) {
+                            stopSpeaking();
+                          }
+                          toast.info(isTTSEnabled ? "Voice responses disabled" : "Voice responses enabled");
+                          console.log("🔊 SPEAKER: New TTS state will be:", !isTTSEnabled);
+                    }}
+                    disabled={(isLoading || isSpeechLoading)}
+                    title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
+                  >
+                    {isTTSEnabled ? (
+                      <Volume2 className="h-4 w-4 text-white" />
+                    ) : (
+                      <VolumeX className="h-4 w-4" />
+                    )}
+                    {isPlaying && (
+                      <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
+                    )}
+                  </Button>
+              )}
 
               {/* Voice Selection Dropdown */}
               {isTTSEnabled && (
@@ -2864,8 +2859,7 @@ export function AiSdkChatPanel({
               {uploadedFiles.length > 0 && (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{uploadedFiles.length} file(s) attached</span>
-                  <Button
-                    variant="ghost"
+                  <Button variant="ghost"
                     size="sm"
                     onClick={() => setUploadedFiles([])}
                     className="mac-button mac-button-outline h-6 px-2 text-xs"
@@ -2900,15 +2894,33 @@ export function AiSdkChatPanel({
                 </ContextContent>
               </Context>
             )}
-
-            <PromptInputSubmit
-              disabled={isMaxMessagesReached || !localInput?.trim()}
-              status={isLoading ? "streaming" : undefined}
-              className="!h-8 !w-8 !p-0 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 shrink-0"
-            />
           </PromptInputToolbar>
         </PromptInput>
       </div>
+      
+      {/* Feedback Segue Dialog */}
+      {showFeedbackDialog && feedbackDialogProps && (
+        <FeedbackSegueDialog
+          isOpen={showFeedbackDialog}
+          onClose={() => setShowFeedbackDialog(false)}
+          userQuery={feedbackDialogProps.userQuery}
+          aiResponse={feedbackDialogProps.aiResponse}
+          onSubmitFeedback={handleFeedbackDialogSubmit}
+          onGoToCurationQueue={() => {
+            setShowFeedbackDialog(false);
+            // Use hash navigation to switch tabs
+            if (typeof window !== "undefined") {
+              window.location.hash = "curate";
+            }
+          }}
+          onGoToIntegration={() => {
+             setShowFeedbackDialog(false);
+             if (typeof window !== "undefined") {
+               window.location.hash = "fix";
+             }
+          }}
+        />
+      )}
     </div>
   );
 }
