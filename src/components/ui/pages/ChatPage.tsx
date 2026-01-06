@@ -48,7 +48,6 @@ import { CompactThemeSwitcher } from "../theme-switcher";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
 import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
-import { getKnowledgeSourceCounts } from "../../../services/knowledgeSearchService";
 import { IntrospectionDropdown } from "../IntrospectionDropdown";
 import {
   Tooltip,
@@ -149,9 +148,6 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   }, []);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
-  const [knowledgeCounts, setKnowledgeCounts] = useState<Record<string, number>>({});
-  const [knowledgeStatus, setKnowledgeStatus] = useState<"ok" | "degraded" | "unknown">("unknown");
-  const [lastKnowledgeRefresh, setLastKnowledgeRefresh] = useState<string>("");
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   // URL hash-based routing for deep linking
@@ -214,27 +210,6 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
       }
     }
   }, [_hasHydrated, conversations.length, activeConversationId, createConversation, setActiveConversation, getConversation]);
-
-  // Load quick knowledge indicators for header badges
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const counts = await getKnowledgeSourceCounts();
-        if (!mounted) return;
-        setKnowledgeCounts(counts);
-        const total = Object.values(counts).reduce((a, b) => a + (b || 0), 0);
-        setKnowledgeStatus(total > 0 ? "ok" : "degraded");
-        setLastKnowledgeRefresh(new Date().toLocaleTimeString());
-      } catch {
-        if (!mounted) return;
-        setKnowledgeStatus("degraded");
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   const activeConversation = activeConversationId ? getConversation(activeConversationId) : null;
 
@@ -387,25 +362,6 @@ Be helpful, concise, and professional in your responses.`;
                 <ConnectionStatusIndicator />
                 <div className="introspection-dropdown-container">
                   <IntrospectionDropdown />
-                </div>
-                {/* Knowledge status badges */}
-                <div className="hidden lg:flex items-center gap-2">
-                  <Badge variant="secondary" title="Knowledge status" className="whitespace-nowrap border-0 bg-muted/50 text-muted-foreground">
-                    {knowledgeStatus === "ok"
-                      ? "Knowledge: OK"
-                      : knowledgeStatus === "degraded"
-                        ? "Knowledge: Degraded"
-                        : "Knowledge: Unknown"}
-                  </Badge>
-                  {lastKnowledgeRefresh && (
-                    <Badge
-                      variant="secondary"
-                      className="text-xs whitespace-nowrap border-0 bg-muted/50 text-muted-foreground"
-                      title="Last refresh"
-                    >
-                      updated {lastKnowledgeRefresh}
-                    </Badge>
-                  )}
                 </div>
 
                 {/* Sidebar trigger with MAC styling */}
