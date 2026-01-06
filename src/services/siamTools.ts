@@ -293,15 +293,15 @@ export const getMultiTenantERD = tool({
     }
 
     DIVISION {
-        string name PK "digital-operations, label-services"
+        string name PK "digital-operations, legal, finance"
         string organization FK "sony-music"
         string description
     }
 
     APPLICATION {
-        string name PK "aoma, usm, dam, crm"
+        string name PK "aoma, promo"
         string organization FK "sony-music"
-        string division FK
+        string division FK "digital-operations"
         string description
     }`,
       explanation: "Multiple organizations supported (sony-music, smej). Each organization can have multiple divisions. Each division can have multiple applications. Example shown for sony-music only.",
@@ -311,18 +311,61 @@ export const getMultiTenantERD = tool({
           divisions: [
             {
               name: "digital-operations",
-              applications: ["aoma", "usm", "dam"]
+              applications: ["aoma", "promo"]
             },
             {
-              name: "label-services",
-              applications: ["crm"]
+              name: "legal",
+              applications: []
+            },
+            {
+              name: "finance",
+              applications: []
             }
           ]
         },
         "smej": {
-          note: "Separate organization (Sony Music Japan)"
+          note: "Separate organization (Sony Music Japan) - no details shown"
         }
-      }
+      },
+      nanoBananaProPrompt: `Create a professional multi-tenant architecture infographic in a sketchy, hand-drawn style with soft pastel colors.
+
+LAYOUT (horizontal flow, left to right):
+
+**TIER 1 - ORGANIZATION LEVEL** (top banner)
+- Left side: "SONY MUSIC" in a cloud shape with music note icon, briefcase icon
+- Right side: "SMEJ" in a cloud shape with globe icon
+- Between them: dotted lines with lock icon and red X, labeled "ISOLATED DATA DOMAIN"
+- SMEJ has "..." below it (no further details)
+
+**TIER 2 - DIVISION LEVEL** (middle section, only under Sony Music)
+Three rounded rectangles in a row:
+1. "DIGITAL OPERATIONS" - gear icon, people collaborating icon
+   - Action words around it: MANAGE, PROCESS, DATA FLOW
+2. "LEGAL" - gavel icon, document icon, people reviewing
+   - Action words: COMPLIANCE, REVIEW, AUDIT
+3. "FINANCE" - coins icon, chart icon, people at desk
+   - Action words: REPORTING, BILLING, BUDGETING
+
+**TIER 3 - APPLICATION LEVEL** (bottom, only under Digital Operations)
+Two rounded rectangles:
+1. "AOMA" - rocket icon, database icon
+   - Subtitle: "Advanced Operations Management App"
+   - Action words: UTILIZE, EXECUTE, ANALYZE
+2. "PROMO" - megaphone icon, calendar icon
+   - Subtitle: "Promotional Campaign Manager"
+   - Action words: SCHEDULE, TRACK, OPTIMIZE
+
+STYLE:
+- Soft blue background for entire diagram
+- Cream/beige color for application boxes
+- Light gray for division boxes
+- Dotted connector lines between levels
+- Red X marks showing data isolation between orgs
+- Lock icons for security
+- Small stick figure people icons
+- Sketchy/hand-drawn line style
+- Clean, professional but friendly
+- Title at top: "MULTI-TENANT ENTERPRISE ARCHITECTURE"`
     };
   },
 });
