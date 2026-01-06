@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.89",
+  "version": "0.24.90",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && infisical run --env=dev -- next dev -p 3000",
