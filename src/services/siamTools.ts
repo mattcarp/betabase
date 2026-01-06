@@ -268,13 +268,14 @@ export const getTicketCount = tool({
 // ============================================
 // Tool 7: Get Application ERD
 // ============================================
-export const getApplicationERD = tool({
-  description: `Returns the multi-tenant hierarchy diagram for The Betabase/SIAM application.
+export const getMultiTenantERD = tool({
+  description: `Returns ONLY the multi-tenant hierarchy diagram (3 tables: Organization, Division, Application).
   Use this when the user asks about:
-  - The ERD for this application
-  - Multi-tenant architecture
-  - Organization structure
-  - How tenancy works`,
+  - ERD for multi-tenant architecture
+  - Multi-tenant hierarchy
+  - Tenant structure
+  - Organization/division/application relationships
+  DO NOT use for full application schema - this is ONLY the tenancy structure.`,
   parameters: z.object({}),
   execute: async () => {
     console.log(`🔧 [Tool: getApplicationERD] Returning multi-tenant hierarchy`);
@@ -336,7 +337,7 @@ export const siamTools = {
   searchCommits,
   parseCdtext,
   getTicketCount,
-  getApplicationERD,
+  getMultiTenantERD,
 };
 
 // Type for tool results (useful for client-side)
