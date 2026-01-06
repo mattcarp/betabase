@@ -288,84 +288,83 @@ export const getMultiTenantERD = tool({
     DIVISION ||--o{ APPLICATION : "has many"
 
     ORGANIZATION {
-        string name PK "sony-music, smej"
+        string name PK "sony-music, smej, sony-pictures"
         string description
     }
 
     DIVISION {
-        string name PK "digital-operations, legal, finance"
+        string name PK "digital-operations"
         string organization FK "sony-music"
         string description
     }
 
     APPLICATION {
-        string name PK "aoma, promo"
+        string name PK "aoma, media-conversion, promo"
         string organization FK "sony-music"
         string division FK "digital-operations"
         string description
     }`,
-      explanation: "Multiple organizations supported (sony-music, smej). Each organization can have multiple divisions. Each division can have multiple applications. Example shown for sony-music only.",
+      explanation: "Multiple organizations supported (sony-music, smej, sony-pictures). Each organization can have multiple divisions. Each division can have multiple applications. Example shown for sony-music only.",
       exampleHierarchy: {
-        organizations: ["sony-music", "smej"],
+        organizations: ["sony-music", "smej", "sony-pictures"],
         "sony-music": {
           divisions: [
             {
               name: "digital-operations",
-              applications: ["aoma", "promo"]
-            },
-            {
-              name: "legal",
-              applications: []
-            },
-            {
-              name: "finance",
-              applications: []
+              applications: ["aoma", "media-conversion", "promo"]
             }
           ]
         },
         "smej": {
           note: "Separate organization (Sony Music Japan) - no details shown"
+        },
+        "sony-pictures": {
+          note: "Separate organization - no details shown"
         }
       },
       nanoBananaProPrompt: `Create a professional multi-tenant architecture infographic in a sketchy, hand-drawn style with soft pastel colors.
 
 LAYOUT (horizontal flow, left to right):
 
-**TIER 1 - ORGANIZATION LEVEL** (top banner)
-- Left side: "SONY MUSIC" in a cloud shape with music note icon, briefcase icon
-- Right side: "SMEJ" in a cloud shape with globe icon
-- Between them: dotted lines with lock icon and red X, labeled "ISOLATED DATA DOMAIN"
-- SMEJ has "..." below it (no further details)
+**TIER 1 - ORGANIZATION LEVEL** (top banner, 3 organizations)
+- Left: "SONY MUSIC" in a cloud shape with music note icon, briefcase icon
+- Center: "SMEJ" in a cloud shape with globe icon
+  - Has "..." below it (no further details)
+- Right: "SONY PICTURES" in a cloud shape with film/camera icon
+  - Has "..." below it (no further details)
+- Between all orgs: dotted lines with lock icons and red X marks, labeled "ISOLATED DATA DOMAIN"
 
-**TIER 2 - DIVISION LEVEL** (middle section, only under Sony Music)
-Three rounded rectangles in a row:
-1. "DIGITAL OPERATIONS" - gear icon, people collaborating icon
-   - Action words around it: MANAGE, PROCESS, DATA FLOW
-2. "LEGAL" - gavel icon, document icon, people reviewing
-   - Action words: COMPLIANCE, REVIEW, AUDIT
-3. "FINANCE" - coins icon, chart icon, people at desk
-   - Action words: REPORTING, BILLING, BUDGETING
+**TIER 2 - DIVISION LEVEL** (middle section, ONLY under Sony Music)
+One rounded rectangle:
+- "DIGITAL OPERATIONS" - gear icon, cloud icon, people collaborating icon
+  - Action words around it: MANAGE, PROCESS, DATA FLOW, UTILIZE, EXECUTE
 
 **TIER 3 - APPLICATION LEVEL** (bottom, only under Digital Operations)
-Two rounded rectangles:
+Three rounded rectangles in a row:
 1. "AOMA" - rocket icon, database icon
    - Subtitle: "Advanced Operations Management App"
-   - Action words: UTILIZE, EXECUTE, ANALYZE
-2. "PROMO" - megaphone icon, calendar icon
+   - Action words: ANALYZE, MONITOR, CONTROL
+2. "MEDIA CONVERSION" - video/audio icon, transform arrows
+   - Subtitle: "Asset Format Converter"
+   - Action words: CONVERT, PROCESS, TRANSCODE
+3. "PROMO" - megaphone icon, calendar icon
    - Subtitle: "Promotional Campaign Manager"
    - Action words: SCHEDULE, TRACK, OPTIMIZE
 
 STYLE:
 - Soft blue background for entire diagram
-- Cream/beige color for application boxes
-- Light gray for division boxes
-- Dotted connector lines between levels
-- Red X marks showing data isolation between orgs
-- Lock icons for security
+- Cream/beige color for application boxes (Tier 3)
+- Light gray for division boxes (Tier 2)
+- White/light clouds for organization boxes (Tier 1)
+- Dotted connector lines between levels (only from Sony Music downward)
+- Red X marks showing data isolation between organizations
+- Lock icons for security/isolation
 - Small stick figure people icons
-- Sketchy/hand-drawn line style
-- Clean, professional but friendly
-- Title at top: "MULTI-TENANT ENTERPRISE ARCHITECTURE"`
+- Sketchy/hand-drawn line style throughout
+- Clean, professional but friendly aesthetic
+- Title at top: "MULTI-TENANT ENTERPRISE ARCHITECTURE"
+
+IMPORTANT: Only Sony Music has divisions and applications below it. SMEJ and Sony Pictures stand alone with no connections downward.`
     };
   },
 });
