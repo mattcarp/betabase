@@ -146,7 +146,7 @@ export function CompactThemeSwitcher() {
       {isTransitioning ? (
         <Sparkles className="h-4 w-4 animate-pulse" />
       ) : (
-        <Palette className="h-4 w-4" />
+        <ThemeIcon theme={currentTheme} className="h-4 w-4" />
       )}
     </Button>
   );
