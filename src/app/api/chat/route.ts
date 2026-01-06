@@ -29,6 +29,7 @@ import { traceChat, flushLangfuse } from "@/lib/langfuse";
 import { buildDynamicPrompt } from "@/services/skillLoader";
 // AI SDK Tools - LLM can call these for deterministic operations
 import { cdtextTool } from "@/tools/cdtext";
+import { siamTools } from "@/services/siamTools";
 // Phase 5: Parallel pre-processing REMOVED - depended on intent classifier
 
 // Allow streaming responses up to 60 seconds for AOMA queries
@@ -768,9 +769,10 @@ export async function POST(req: Request) {
       system: enhancedSystemPrompt, // Use system parameter instead of adding to messages array
       // AI SDK Tools - LLM can call these for deterministic operations
       tools: {
-        parseCdtext: cdtextTool, // Parse CD-TEXT binary data from DDP masters
+        ...siamTools, // Knowledge base, Jira, code, commits, ERD tools
+        parseCdtext: cdtextTool, // Parse CD-TEXT binary data from DDP masters (legacy, may be redundant)
       },
-      maxSteps: 3, // Allow tool call + response + follow-up
+      maxSteps: 5, // Allow multiple tool calls for complex queries
       // Only include temperature for models that support it (not o-series)
       ...(supportsTemperature && { temperature: modelSettings.temperature || temperature }),
       // Note: AI SDK handles token limits via the model config, not maxTokens parameter
