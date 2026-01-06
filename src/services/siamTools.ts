@@ -269,16 +269,20 @@ export const getTicketCount = tool({
 // Tool 7: Get Application ERD
 // ============================================
 export const getMultiTenantERD = tool({
-  description: `Returns ONLY the multi-tenant hierarchy diagram (3 tables: Organization, Division, Application).
+  description: `Returns the multi-tenant hierarchy diagram (3 tables: Organization, Division, Application).
   Use this when the user asks about:
-  - ERD for multi-tenant architecture
-  - Multi-tenant hierarchy
+  - ERD / entity relationship diagram
+  - Multi-tenant architecture / hierarchy
   - Tenant structure
   - Organization/division/application relationships
-  DO NOT use for full application schema - this is ONLY the tenancy structure.`,
+
+  IMPORTANT: After calling this tool, you MUST:
+  1. Render the mermaidDiagram field as a Mermaid code block (use \`\`\`mermaid)
+  2. Explain the structure using the explanation field
+  3. Tell the user they can say "make it fancier" to see an enhanced NanoBanana Pro version`,
   parameters: z.object({}),
   execute: async () => {
-    console.log(`🔧 [Tool: getApplicationERD] Returning multi-tenant hierarchy`);
+    console.log(`🔧 [Tool: getMultiTenantERD] Returning multi-tenant hierarchy`);
 
     return {
       title: "Multi-Tenant Hierarchy",

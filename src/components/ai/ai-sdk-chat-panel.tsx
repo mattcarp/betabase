@@ -2587,6 +2587,7 @@ export function AiSdkChatPanel({
 
               {/* Voice Input Button (Toggle Recording) */}
               <Button
+                data-testid="voice-input-button"
                 type="button"
                 // Variant: "destructive" gives red background when recording
                 variant={(isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording) ? "destructive" : "ghost"}
@@ -2618,12 +2619,22 @@ export function AiSdkChatPanel({
                           if (!isGeminiConnected) {
                               console.log("🎤 Connecting to Gemini Live...");
                               toast.info("Connecting to Gemini Live...");
-                              await connectGeminiLive();
-                              console.log("🎤 Starting Gemini recording");
-                              startGeminiRecording();
-                              toast.success("Recording started");
+                              try {
+                                const connected = await connectGeminiLive();
+                                if (connected) {
+                                  console.log("🎤 Connection successful, starting Gemini recording");
+                                  startGeminiRecording();
+                                  toast.success("Recording started");
+                                } else {
+                                  console.error("🎤 Connection failed");
+                                  toast.error("Failed to connect to Gemini Live");
+                                }
+                              } catch (err) {
+                                console.error("🎤 Connection error:", err);
+                                toast.error("Connection error: " + (err instanceof Error ? err.message : "Unknown error"));
+                              }
                           } else {
-                              console.log("🎤 Starting Gemini recording");
+                              console.log("🎤 Starting Gemini recording (already connected)");
                               startGeminiRecording();
                               toast.success("Recording started");
                           }

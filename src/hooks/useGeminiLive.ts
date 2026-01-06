@@ -43,9 +43,19 @@ export function useGeminiLive({
   const isPlayingRef = useRef(false);
   const nextStartTimeRef = useRef(0);
 
-  // Initialize Gemini API
-  const connect = useCallback(async () => {
+  // Track connection ready state
+  const connectionReadyRef = useRef<{ resolve: () => void; reject: (e: Error) => void } | null>(null);
+
+  // Initialize Gemini API - returns Promise that resolves when connection is ready
+  const connect = useCallback(async (): Promise<boolean> => {
     console.log("🔌 Live: Attempting to connect...");
+
+    // Already connected?
+    if (sessionRef.current && isConnected) {
+      console.log("🔌 Live: Already connected, reusing session");
+      return true;
+    }
+
     let currentKey = apiKey;
 
     if (!currentKey) {
@@ -67,12 +77,26 @@ export function useGeminiLive({
     }
 
     if (!currentKey) {
-      const error = new Error("API Key is required. Set NEXT_PUBLIC_GEMINI_API_KEY in .env.local");
+      const error = new Error("API Key is required. Set GEMINI_API_KEY in environment.");
       console.error(error);
       onError?.(error);
-      return;
+      return false;
     }
 
+    // Create a promise that resolves when onopen fires
+    const connectionPromise = new Promise<boolean>((resolve, reject) => {
+      connectionReadyRef.current = {
+        resolve: () => resolve(true),
+        reject: (e: Error) => reject(e)
+      };
+      // Timeout after 15 seconds
+      setTimeout(() => {
+        if (connectionReadyRef.current) {
+          connectionReadyRef.current = null;
+          reject(new Error("Connection timeout after 15 seconds"));
+        }
+      }, 15000);
+    });
 
     try {
       console.log("🔌 Live: Importing GoogleGenAI SDK...");
@@ -88,7 +112,7 @@ export function useGeminiLive({
       }
 
       const ai = new GoogleGenAI({ apiKey: currentKey });
-      
+
       const config = {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
@@ -98,6 +122,8 @@ export function useGeminiLive({
       };
 
       console.log("🔌 Live: Connecting to Gemini session...", liveModel);
+      console.log("🔌 Live: Config:", JSON.stringify(config, null, 2));
+
       // Connect to Gemini Live
       sessionRef.current = await ai.live.connect({
         model: liveModel,
@@ -107,16 +133,22 @@ export function useGeminiLive({
             console.log("🔌 Live: WebSocket Session Opened!");
             setIsConnected(true);
             onConnectionStatusChange?.("connected");
+            // Resolve the connection promise
+            if (connectionReadyRef.current) {
+              connectionReadyRef.current.resolve();
+              connectionReadyRef.current = null;
+            }
           },
           onmessage: async (message: any) => {
-            // console.log("🔌 Live: Message received", Object.keys(message)); // Too spammy?
-            
+            console.log("🔌 Live: Message received", Object.keys(message));
+
             // Handle incoming audio
             if (message.serverContent?.modelTurn?.parts) {
+              console.log("🔌 Live: Processing", message.serverContent.modelTurn.parts.length, "parts");
               for (const part of message.serverContent.modelTurn.parts) {
                 if (part.inlineData?.data) {
                   // Decode base64 and queue
-                //   console.log("🔌 Live: Received audio chunk");
+                  console.log("🔌 Live: Received audio chunk, size:", part.inlineData.data.length);
                   const audioData = base64ToArrayBuffer(part.inlineData.data);
                   queueAudio(audioData);
                 }
@@ -125,31 +157,48 @@ export function useGeminiLive({
                 }
               }
             }
-            
-             if (message.serverContent?.interrupted) {
-                console.log("🔌 Live: Interrupted");
-                clearAudioQueue();
-             }
+
+            if (message.serverContent?.turnComplete) {
+              console.log("🔌 Live: Turn complete");
+            }
+
+            if (message.serverContent?.interrupted) {
+              console.log("🔌 Live: Interrupted");
+              clearAudioQueue();
+            }
           },
           onerror: (err: any) => {
             console.error("🔌 Live: Session Error:", err);
-            onError?.(new Error(err.message || "Unknown Gemini Live error"));
+            const error = new Error(err.message || "Unknown Gemini Live error");
+            onError?.(error);
             onConnectionStatusChange?.("error");
+            setIsConnected(false);
+            // Reject the connection promise
+            if (connectionReadyRef.current) {
+              connectionReadyRef.current.reject(error);
+              connectionReadyRef.current = null;
+            }
           },
           onclose: (e: any) => {
             console.log("🔌 Live: Session Closed:", e);
             setIsConnected(false);
+            sessionRef.current = null;
             onConnectionStatusChange?.("disconnected");
           },
         },
       });
 
+      // Wait for the connection to actually open
+      return await connectionPromise;
+
     } catch (err: any) {
         console.error("🔌 Live: Connection Exception:", err);
         onError?.(err);
         onConnectionStatusChange?.("error");
+        connectionReadyRef.current = null;
+        return false;
     }
-  }, [apiKey, model, systemInstruction, voiceName, onConnectionStatusChange, onError]);
+  }, [apiKey, model, systemInstruction, voiceName, onConnectionStatusChange, onError, isConnected]);
 
   const disconnect = useCallback(async () => {
     console.log("🔌 Live: Disconnecting...");
@@ -220,10 +269,10 @@ export function useGeminiLive({
 
         // Convert float32 [-1, 1] to PCM 16-bit
         const pcmData = float32ToInt16(inputData);
-        
-        // Send to Gemini
-        const base64Audio = arrayBufferToBase64(pcmData);
-        
+
+        // CRITICAL: Pass the underlying ArrayBuffer, not the Int16Array
+        const base64Audio = arrayBufferToBase64(pcmData.buffer);
+
         try {
             sessionRef.current.sendRealtimeInput({
                 audio: {
