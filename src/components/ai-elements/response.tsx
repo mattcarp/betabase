@@ -1,6 +1,7 @@
 "use client";
 
 import { CodeBlock } from "../ui/code-block";
+import { MermaidDiagram } from "./mermaid-diagram";
 import type { /* ComponentProps, */ HTMLAttributes } from "react";
 import { memo, isValidElement } from "react";
 import ReactMarkdown, { type Options } from "react-markdown";
@@ -343,6 +344,16 @@ const components: Options["components"] = {
       code = children;
     }
 
+    // Render Mermaid diagrams using MermaidDiagram component
+    if (language === "mermaid") {
+      return (
+        <div className="my-4">
+          <MermaidDiagram code={code.trim()} enableProUpgrade={true} />
+        </div>
+      );
+    }
+
+    // Render regular code blocks
     return (
       <div className="my-4">
         <CodeBlock
