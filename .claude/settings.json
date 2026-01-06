@@ -438,5 +438,8 @@
       "Bash(systemctl poweroff:*)",
       "Bash(systemctl reboot:*)"
     ]
+  },
+  "enabledPlugins": {
+    "rust-analyzer-lsp@claude-plugins-official": true
   }
 }

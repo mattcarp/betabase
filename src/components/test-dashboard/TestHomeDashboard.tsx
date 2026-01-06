@@ -198,19 +198,19 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
   if (typeof window === 'undefined') return null;
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10 w-full">
+    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-8 w-full">
       {/* GOLD STANDARD: Intelligence Quality Radar + Small Multiples */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Test Intelligence Quality Radar */}
-        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-2xl">
-          <CardHeader className="mac-card pb-2">
-            <CardTitle className="font-light text-lg flex items-center gap-2">
-              <Activity className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-lg">
+          <CardHeader className="p-3 pb-1">
+            <CardTitle className="font-light text-sm flex items-center gap-2">
+              <Activity className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
               Test Intelligence Index
             </CardTitle>
-            <CardDescription className="text-[10px] uppercase tracking-[0.2em] opacity-50">Multi-dimensional test health</CardDescription>
+            <CardDescription className="text-[9px] uppercase tracking-[0.15em] opacity-50">Multi-dimensional test health</CardDescription>
           </CardHeader>
-          <CardContent className="h-[280px] pt-0">
+          <CardContent className="h-[200px] p-2 pt-0">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={testIntelligenceData}>
                 <PolarGrid stroke={TUFTE_COLORS.grid} strokeDasharray="3 3" />
@@ -231,19 +231,19 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
 
         {/* Small Multiples: Test Suite Sparklines (Tufte "Small Multiples") */}
-        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-2xl">
-          <CardHeader className="mac-card pb-2">
-            <CardTitle className="font-light text-lg flex items-center gap-2">
-              <Target className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-lg">
+          <CardHeader className="p-3 pb-1">
+            <CardTitle className="font-light text-sm flex items-center gap-2">
+              <Target className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
               Test Suite Velocity
             </CardTitle>
-            <CardDescription className="text-[10px] uppercase tracking-[0.2em] opacity-50">7-day execution trends</CardDescription>
+            <CardDescription className="text-[9px] uppercase tracking-[0.15em] opacity-50">7-day execution trends</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3 pt-2">
+          <CardContent className="space-y-2 p-3 pt-1">
             {suiteTrends.map((suite, idx) => (
-              <div key={idx} className="flex items-center gap-6 group hover:bg-white/[0.02] p-2 rounded-lg transition-colors">
-                <div className="w-32 text-xs text-muted-foreground font-light">{suite.name}</div>
-                <div className="flex-1 h-8">
+              <div key={idx} className="flex items-center gap-4 group hover:bg-white/[0.02] py-1 px-2 rounded transition-colors">
+                <div className="w-28 text-[11px] text-muted-foreground font-light">{suite.name}</div>
+                <div className="flex-1 h-6">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={suite.data.map((v) => ({ value: v }))}>
                       <Line 
@@ -256,7 +256,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="text-xs text-foreground font-mono w-12 text-right">{suite.data[suite.data.length - 1]} tests</div>
+                <div className="text-[10px] text-foreground font-mono w-12 text-right">{suite.data[suite.data.length - 1]}</div>
               </div>
             ))}
           </CardContent>
@@ -266,8 +266,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* Compact Hero Stats Row - Tufte-inspired density */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
-          <CardContent className="p-3">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Pass Rate</div>
+          <CardContent className="p-2">
+            <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground mb-0.5">Pass Rate</div>
             <div className="flex items-baseline gap-2">
               <span className="text-xl font-light" style={{ color: 'var(--mac-data-success)' }}>
                 {healthMetrics.passRate}%
@@ -280,35 +280,35 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Failing</div>
             <span className="text-xl font-light text-rose-400">{healthMetrics.failingTests}</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Auto-Healed</div>
             <span className="text-xl font-light" style={{ color: 'var(--mac-primary-blue-400)' }}>{healthMetrics.healedToday}</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Need HITL</div>
             <span className="text-xl font-light text-amber-400">{healthMetrics.pendingReview}</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Coverage</div>
             <span className="text-xl font-light text-teal-400">87%</span>
           </CardContent>
         </Card>
 
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Flaky</div>
             <span className="text-xl font-light text-muted-foreground">{healthMetrics.flakyTests}</span>
           </CardContent>
@@ -318,7 +318,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* Historical Test Suite Stats - Tufte-inspired compact banner */}
       {analytics && (
         <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="historical-stats">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -358,7 +358,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* AI Needs Your Expertise - Compact Tufte style */}
       {healthMetrics.pendingReview > 0 && (
         <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="human-needed-banner">
-          <CardContent className="p-3">
+          <CardContent className="p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-[var(--mac-primary-blue-400)]/10">

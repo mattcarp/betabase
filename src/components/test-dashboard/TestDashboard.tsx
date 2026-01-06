@@ -653,8 +653,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
             </TabsTrigger>
           </TabsList>
 
-          <div className="flex-1 relative min-h-0">
-            <TabsContent value="home" className="m-0 p-4 h-full overflow-auto">
+          <div className="flex-1 relative min-h-0 overflow-hidden">
+            <TabsContent value="home" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <TestHomeDashboard
                 onNavigate={setActiveView}
                 testStats={{
@@ -667,19 +667,19 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               />
             </TabsContent>
 
-            <TabsContent value="self-healing" className="m-0 p-0 h-full overflow-auto">
+            <TabsContent value="self-healing" className="m-0 p-0 absolute inset-0 overflow-y-auto">
               <SelfHealingTestViewer />
             </TabsContent>
 
-            <TabsContent value="historical" className="m-0 p-4 h-full">
+            <TabsContent value="historical" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <HistoricalTestExplorer prefetchedData={prefetchedTests} />
             </TabsContent>
 
-            <TabsContent value="unified" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="unified" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <UnifiedResultsDashboard />
             </TabsContent>
 
-            <TabsContent value="execution" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="execution" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <TestExecutionPanel
                 isRunning={isRunning}
                 onRunTests={handleRunTests}
@@ -687,39 +687,39 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               />
             </TabsContent>
 
-            <TabsContent value="results" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="results" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <TestResultsViewer />
             </TabsContent>
 
-            <TabsContent value="manual" className="m-0 p-6 h-full">
+            <TabsContent value="manual" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <ManualTestingPanel />
             </TabsContent>
 
-            <TabsContent value="ai-generate" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="ai-generate" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <AITestGenerator />
             </TabsContent>
 
-            <TabsContent value="trace" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="trace" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <TraceViewer />
             </TabsContent>
 
-            <TabsContent value="coverage" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="coverage" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <CoverageReport />
             </TabsContent>
 
-            <TabsContent value="flaky" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="flaky" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <FlakyTestExplorer />
             </TabsContent>
 
-            <TabsContent value="analytics" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="analytics" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <TestAnalytics />
             </TabsContent>
 
-            <TabsContent value="firecrawl" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="firecrawl" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <FirecrawlPanel />
             </TabsContent>
 
-            <TabsContent value="session-playback" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="session-playback" className="m-0 p-4 absolute inset-0 overflow-y-auto">
               <SessionPlaybackViewer />
             </TabsContent>
           </div>
