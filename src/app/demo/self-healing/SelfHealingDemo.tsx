@@ -26,8 +26,8 @@ function SelfHealingDemoContent() {
     switch (variant) {
       case 1: return { id: "submit-btn", testid: null, className: null, label: "Original Selector" };
       case 2: return { id: "submit-btn", testid: null, className: null, label: "Same ID, New Position" };
-      case 3: return { id: "order-submit-button", testid: "submit-action", className: null, label: "Renamed Selector" };
-      case 4: return { id: null, testid: null, className: "order-submit-btn", label: "No ID, Class Only" };
+      case 3: return { id: "release-submit-button", testid: "submit-action", className: null, label: "Renamed Selector" };
+      case 4: return { id: null, testid: null, className: "release-submit-btn", label: "No ID, Class Only" };
       case 5: return { id: null, testid: null, className: null, label: "aria-label Only" };
       default: return { id: "submit-btn", testid: null, className: null, label: "Original" };
     }
@@ -39,15 +39,15 @@ function SelfHealingDemoContent() {
   const renderButton = () => {
     switch (variant) {
       case 1:
-        return <button id="submit-btn" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800`} onClick={handleSubmit}>Complete Purchase</button>;
+        return <button id="submit-btn" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800`} onClick={handleSubmit}>Submit Release</button>;
       case 2:
-        return <div className="flex flex-col items-end w-full"><button id="submit-btn" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Complete Purchase</button></div>;
+        return <div className="flex flex-col items-end w-full"><button id="submit-btn" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Submit Release</button></div>;
       case 3:
-        return <button id="order-submit-button" data-testid="submit-action" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Complete Purchase</button>;
+        return <button id="release-submit-button" data-testid="submit-action" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Submit Release</button>;
       case 4:
-        return <div className="button-wrapper"><button data-action="submit" className={`mac-button order-submit-btn ${baseClasses} bg-gradient-to-r from-emerald-600 to-emerald-700`} onClick={handleSubmit}>Complete Purchase</button></div>;
+        return <div className="button-wrapper"><button data-action="submit" className={`mac-button release-submit-btn ${baseClasses} bg-gradient-to-r from-emerald-600 to-emerald-700`} onClick={handleSubmit}>Submit Release</button></div>;
       case 5:
-        return <button aria-label="Complete Purchase" className={`mac-button flex items-center gap-3 ${baseClasses} bg-gradient-to-r from-primary-600 to-primary-700`} onClick={handleSubmit}><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Confirm Order</button>;
+        return <button aria-label="Submit Release" className={`mac-button flex items-center gap-3 ${baseClasses} bg-gradient-to-r from-primary-600 to-primary-700`} onClick={handleSubmit}><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Confirm Release</button>;
       default: return null;
     }
   };
@@ -69,26 +69,42 @@ function SelfHealingDemoContent() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-primary-600 rounded-xl flex items-center justify-center">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
             </div>
             <div>
-              <h1 className="mac-heading text-2xl font-normal">TechStore Pro</h1>
-              <p className="text-sm text-muted-foreground">Secure Checkout</p>
+              <h1 className="mac-heading text-2xl font-normal">AOMA Release Portal</h1>
+              <p className="text-sm text-muted-foreground">Digital Release Submission</p>
             </div>
           </div>
         </div>
 
         <div className="bg-card/80 backdrop-blur border border-border/50 rounded-2xl overflow-hidden">
           <div className="p-8">
-            <h2 className="mac-heading text-lg font-normal mb-6">Order Summary</h2>
+            <h2 className="mac-heading text-lg font-normal mb-6">Release Summary</h2>
             <div className="space-y-4 mb-8">
-              <div className="flex justify-between pt-4 text-xl">
-                <span className="font-normal">Total</span>
-                <span className="font-normal text-blue-400">$2,487.59</span>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Artist</span>
+                <span className="text-foreground">Luna Martinez</span>
+              </div>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Album</span>
+                <span className="text-foreground">Midnight Sessions</span>
+              </div>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Tracks</span>
+                <span className="text-foreground">12</span>
+              </div>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Release Date</span>
+                <span className="text-foreground">Jan 24, 2026</span>
+              </div>
+              <div className="flex justify-between pt-4 border-t border-border/30 text-sm">
+                <span className="text-muted-foreground">Territories</span>
+                <span className="text-blue-400">Worldwide</span>
               </div>
             </div>
             <div className="pt-6 border-t border-border/50">{renderButton()}</div>
-            {submitted && <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-sm">Order submitted successfully!</div>}
+            {submitted && <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-sm">Release submitted successfully!</div>}
           </div>
         </div>
 
