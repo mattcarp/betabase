@@ -1,92 +1,76 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Gemini Live Connection", () => {
-  test("should attempt to connect when microphone is clicked", async ({ page }) => {
+  test("push-to-talk: should start recording on pointer down, stop on pointer up", async ({ page }) => {
     // Collect console logs before navigation
     const logs: string[] = [];
-    const errors: string[] = [];
 
     page.on("console", (msg) => {
       const text = msg.text();
-      if (text.includes("Live:") || text.includes("Gemini") || text.includes("🎤") || text.includes("🔌")) {
+      if (text.includes("🎤") || text.includes("🔌") || text.includes("Live:") || text.includes("Gemini")) {
         console.log("Browser log:", text);
         logs.push(text);
       }
     });
 
-    page.on("pageerror", (error) => {
-      errors.push(error.message);
-      console.log("Page error:", error.message);
-    });
-
     // Navigate to the chat page
     await page.goto("http://localhost:3000");
-
-    // Wait for page to fully load
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(2000); // Extra wait for React hydration
+    await page.waitForTimeout(2000);
 
-    // Take initial screenshot
-    await page.screenshot({ path: "tests/e2e/screenshots/gemini-live-before.png" });
-
-    // Look for the voice input button with our new testid
+    // Look for the voice input button
     const voiceButton = page.locator('[data-testid="voice-input-button"]');
     const voiceButtonExists = await voiceButton.count() > 0;
 
-    console.log("Voice button found:", voiceButtonExists);
-
-    if (voiceButtonExists) {
-      console.log("Found voice input button, clicking...");
-
-      // Grant microphone permission
-      await page.context().grantPermissions(["microphone"]);
-
-      // Click the button
-      await voiceButton.click();
-
-      // Wait for connection attempt
-      await page.waitForTimeout(5000);
-
-      // Take screenshot after click
-      await page.screenshot({ path: "tests/e2e/screenshots/gemini-live-after-click.png" });
-
-      // Check logs for connection activity
-      console.log("\n=== Collected Logs ===");
-      logs.forEach(log => console.log(log));
-
-      // Should see connection attempt in logs
-      const hasConnectionAttempt = logs.some(log =>
-        log.includes("Connecting to Gemini") ||
-        log.includes("WebSocket Session Opened") ||
-        log.includes("Live: Attempting to connect")
-      );
-
-      console.log("\nHas connection attempt:", hasConnectionAttempt);
-
-      // Check for specific error messages
-      const hasCredentialsFetch = logs.some(log => log.includes("Fetching credentials"));
-      const hasConnectionError = logs.some(log => log.includes("Connection Exception") || log.includes("Connection Error"));
-
-      console.log("Has credentials fetch:", hasCredentialsFetch);
-      console.log("Has connection error:", hasConnectionError);
-
-      if (errors.length > 0) {
-        console.log("\n=== Page Errors ===");
-        errors.forEach(err => console.log(err));
-      }
-
-      // Log assertion
-      expect(hasConnectionAttempt || hasCredentialsFetch).toBe(true);
-    } else {
-      // Check if page shows auth screen
-      const authScreen = await page.locator('text=Sign In, text=Login, text=Magic Link').count();
-      console.log("Auth screen visible:", authScreen > 0);
-
-      // Take screenshot
-      await page.screenshot({ path: "tests/e2e/screenshots/gemini-live-no-button.png" });
-
+    if (!voiceButtonExists) {
+      await page.screenshot({ path: "tests/e2e/screenshots/push-to-talk-no-button.png" });
       test.skip(true, "Voice button not found - may need authentication");
+      return;
     }
+
+    // Grant microphone permission
+    await page.context().grantPermissions(["microphone"]);
+
+    // Get button bounding box for pointer events
+    const box = await voiceButton.boundingBox();
+    expect(box).toBeTruthy();
+
+    // Simulate PUSH (pointer down) - should start recording
+    console.log("Simulating pointer DOWN (start recording)...");
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+    await page.mouse.down();
+
+    // Wait for recording to start
+    await page.waitForTimeout(3000);
+
+    // Take screenshot while "recording"
+    await page.screenshot({ path: "tests/e2e/screenshots/push-to-talk-recording.png" });
+
+    // Check for push-to-talk START log
+    const hasStartLog = logs.some(log => log.includes("push-to-talk START"));
+    console.log("Has push-to-talk START:", hasStartLog);
+
+    // Simulate RELEASE (pointer up) - should stop recording
+    console.log("Simulating pointer UP (stop recording)...");
+    await page.mouse.up();
+
+    // Wait for stop to process
+    await page.waitForTimeout(1000);
+
+    // Take screenshot after release
+    await page.screenshot({ path: "tests/e2e/screenshots/push-to-talk-released.png" });
+
+    // Check for push-to-talk STOP log
+    const hasStopLog = logs.some(log => log.includes("push-to-talk STOP"));
+    console.log("Has push-to-talk STOP:", hasStopLog);
+
+    // Print all logs
+    console.log("\n=== All Logs ===");
+    logs.forEach(log => console.log(log));
+
+    // Verify push-to-talk behavior
+    expect(hasStartLog).toBe(true);
+    expect(hasStopLog).toBe(true);
   });
 
   test("should verify credentials endpoint returns API key", async ({ request }) => {

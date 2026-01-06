@@ -10,10 +10,7 @@ import { useSupabaseClient } from "../../hooks/useSupabaseClient";
 import { BetabaseLogo as SiamLogo } from "../ui/BetabaseLogo";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { useElevenLabsSTT } from "../../hooks/useElevenLabsSTT";
-import { useElevenLabsVoice } from "../../hooks/useElevenLabsVoice";
 import { useGeminiLive } from "../../hooks/useGeminiLive";
-import { VoiceSelector } from "../ui/VoiceSelector";
 import {
   Sparkles,
   Trash2,
@@ -378,72 +375,7 @@ export function AiSdkChatPanel({
   const diagramOffer = useDiagramOffer();
   // const diagramOffer = { shouldOffer: false, offerDiagram: () => {}, dismissOffer: () => {}, isGenerating: false, startBackgroundGeneration: () => {} }; // Mock
 
-  // Voice feature states - define before using in hooks
-  const [isTTSEnabled, setIsTTSEnabled] = useState(false);
-  const [selectedVoiceId, setSelectedVoiceId] = useState("21m00Tcm4TlvDq8ikWAM"); // Rachel as default
-
-  // Voice integration hooks
-  const {
-    speak,
-    stop: stopSpeaking,
-    isPlaying,
-    isLoading: isSpeechLoading,
-  } = useElevenLabsVoice({
-    voiceConfig: {
-      voiceId: selectedVoiceId,
-    },
-    onError: (error) => {
-      console.error("TTS Error:", error);
-      toast.error(`Voice error: ${error.message}`);
-    },
-  });
-
-  const {
-    isRecording,
-    transcript,
-    interimTranscript,
-    permissionState,
-    startRecording,
-    stopRecording,
-    clearTranscript,
-    checkPermission,
-  } = useElevenLabsSTT({
-    onTranscript: (text, isFinal) => {
-      if (isFinal && text.trim()) {
-        // Set the final transcript as input
-        setLocalInput(text);
-      } else if (!isFinal && interimTranscript) {
-        // Show interim transcript as preview
-        setLocalInput(interimTranscript);
-      }
-    },
-    onError: (error) => {
-      console.error("STT Error:", error);
-
-      // Provide helpful instructions based on error type
-      let toastMessage = error.message;
-      let toastDescription = "";
-
-      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        toastDescription =
-          "Click the 🔒 icon in your browser's address bar to grant microphone access.";
-      } else if (error.name === "NotFoundError") {
-        toastDescription =
-          "Make sure your microphone is connected and not being used by another app.";
-      } else if (error.name === "SecurityError") {
-        toastDescription = "Microphone access requires HTTPS or localhost.";
-      }
-
-      if (toastDescription) {
-        toast.error(toastMessage, { description: toastDescription, duration: 8000 });
-      } else {
-        toast.error(toastMessage);
-      }
-    },
-    continuous: false, // Push-to-talk mode
-  });
-
-  // Gemini Live Hook
+  // Gemini Live Hook - Voice integration (STT + TTS via Gemini 2.5 Flash)
   const {
       connect: connectGeminiLive,
       disconnect: disconnectGeminiLive,
@@ -472,34 +404,8 @@ export function AiSdkChatPanel({
       }
   });
   
-  // Helper to determine if we are in Gemini Live mode
-  const isGeminiLiveMode = selectedModel.includes("gemini-2.5") || selectedModel.includes("gemini-3");
-  // actually, let's look at the request. "Use Gemini 2.5 flash for this". 
-  // We'll trust the user selects the right model for now, or maybe add a specific "Live Mode" toggle?
-  // For seamless integration, let's say if the model supports it, we prefer it? 
-  // Or maybe we should have a specific toggle. The user said "icons... right below where the chat input is". 
-  // Let's stick to using the existing buttons but change behavior based on model.
-
-  // Check microphone permission on mount
-  useEffect(() => {
-    if (checkPermission) {
-      checkPermission();
-    }
-  }, [checkPermission]);
-
-  // Debug logs after hooks are initialized
-  console.log("🎤 STT Hook available:", {
-    isRecording,
-    startRecording: !!startRecording,
-    stopRecording: !!stopRecording,
-    permissionState,
-  });
-  console.log("🔊 TTS Hook available:", {
-    isPlaying,
-    speak: !!speak,
-    stop: !!stopSpeaking,
-    isTTSEnabled,
-  });
+  // Debug: Gemini Live status
+  console.log("🎤 Gemini Live:", { isGeminiConnected, isGeminiRecording, isGeminiPlaying, isGeminiMuted });
 
   // Use conversationId prop or create fallback
   const chatId =
@@ -924,65 +830,6 @@ export function AiSdkChatPanel({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
-
-  // Smart TTS: Filter out code blocks and very long responses
-  const prepareTextForSpeech = useCallback((content: string): string => {
-    let textToSpeak = content;
-
-    // Remove code blocks and replace with descriptive text
-    const codeBlockRegex = /```[\s\S]*?```/g;
-    const codeBlockMatches = content.match(codeBlockRegex);
-    if (codeBlockMatches && codeBlockMatches.length > 0) {
-      textToSpeak = textToSpeak.replace(codeBlockRegex, "[Code block available in the response]");
-    }
-
-    // Remove inline code spans
-    textToSpeak = textToSpeak.replace(/`[^`]+`/g, "");
-
-    // Remove markdown links but keep the text
-    textToSpeak = textToSpeak.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
-
-    // Remove markdown formatting
-    textToSpeak = textToSpeak.replace(/[*_~]/g, "");
-
-    // Remove AOMA citations [1], [2], etc.
-    textToSpeak = textToSpeak.replace(/\[\d+\]/g, "");
-
-    // Check if response is very long (>500 characters after cleaning)
-    if (textToSpeak.length > 500) {
-      // Extract first sentence or up to 200 chars
-      const firstSentence = textToSpeak.match(/^.{1,200}[.!?]/);
-      if (firstSentence) {
-        return (
-          firstSentence[0] + " This is a detailed response. Please read the full text on screen."
-        );
-      } else {
-        return (
-          textToSpeak.substring(0, 200) +
-          "... This is a very long response. Please read the full text on screen."
-        );
-      }
-    }
-
-    return textToSpeak.trim();
-  }, []);
-
-  // Auto-speak AI responses when TTS is enabled
-  useEffect(() => {
-    if (isTTSEnabled && messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
-      if (lastMessage.role === "assistant" && lastMessage.content) {
-        // Only speak if this is a new message (not during streaming)
-        if (!isLoading) {
-          const textToSpeak = prepareTextForSpeech(lastMessage.content);
-          if (textToSpeak.length > 10) {
-            // Only speak if there's meaningful content after filtering
-            speak(textToSpeak);
-          }
-        }
-      }
-    }
-  }, [messages, isTTSEnabled, isLoading, speak, prepareTextForSpeech]);
 
   // Update chatId when conversationId changes
   // NOTE: setMessages is intentionally excluded from deps - it's stable and including it causes infinite loops
@@ -2501,40 +2348,25 @@ export function AiSdkChatPanel({
 
       {/* Modern Input Area */}
       <div className="flex-shrink-0 px-4 pt-4 pb-6 border-t border-border/50 bg-background relative">
-        {/* Real-Time Transcription Display */}
-        {(isRecording || interimTranscript || transcript) && (
+        {/* Gemini Live Recording Indicator */}
+        {isGeminiRecording && (
           <div className="mb-4 p-4 bg-black/30 rounded-lg backdrop-blur-sm border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
-            <div className="flex items-start gap-2">
-              <div className="flex flex-col items-center">
-                <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
-                {isRecording && (
-                  <div className="mt-2 flex flex-col gap-2">
-                    {[...Array(5)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="w-1 bg-red-400 rounded-full mac-audio-bar"
-                        style={{
-                          height: `${Math.random() * 20 + 10}px`,
-                          animationDelay: `${i * 0.1}s`,
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+            <div className="flex items-center gap-3">
+              <div className="h-3 w-3 bg-red-500 rounded-full animate-pulse" />
+              <div className="text-sm text-white">
+                Recording... Release to send
               </div>
-              <div className="flex-1">
-                <div className="text-xs text-muted-foreground mb-2">
-                  {isRecording ? "Listening..." : "Transcription"}
-                </div>
-                <div className="text-sm text-white">
-                  {transcript && <span className="text-white/90">{transcript}</span>}
-                  {interimTranscript && (
-                    <span className="text-white/50 italic ml-2">{interimTranscript}</span>
-                  )}
-                  {!transcript && !interimTranscript && isRecording && (
-                    <span className="text-white/30 italic">Start speaking...</span>
-                  )}
-                </div>
+              <div className="flex gap-1 ml-auto">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-red-400 rounded-full mac-audio-bar"
+                    style={{
+                      height: `${Math.random() * 16 + 8}px`,
+                      animationDelay: `${i * 0.1}s`,
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -2585,162 +2417,84 @@ export function AiSdkChatPanel({
                 onDDPDetected={handleDDPDetected}
               />
 
-              {/* Voice Input Button (Toggle Recording) */}
+              {/* Voice Input Button (Push-to-Talk) - Gemini 2.5 Flash */}
               <Button
                 data-testid="voice-input-button"
                 type="button"
-                // Variant: "destructive" gives red background when recording
-                variant={(isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording) ? "destructive" : "ghost"}
+                variant={isGeminiRecording ? "destructive" : "ghost"}
                 className={cn(
-                  "mac-button rounded-full",
+                  "mac-button rounded-full select-none",
                   "!h-8 !w-8 !p-0 transition-all duration-200 relative overflow-visible shrink-0",
-                  // Active (Recording) State: Solid Red for BOTH modes
-                  (isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording)
-                    ? [
-                        "bg-red-500 hover:bg-red-600 border-red-400",
-                        "text-white shadow-none", // Explicitly no pulse or extra shadow
-                      ]
-                    : [
-                        // Idle State: Teal Text/Icon
-                        "text-primary hover:text-primary/80",
-                        "hover:bg-primary/10"
-                      ]
+                  isGeminiRecording
+                    ? ["bg-red-500 hover:bg-red-600 border-red-400", "text-white shadow-none"]
+                    : ["text-primary hover:text-primary/80", "hover:bg-primary/10"]
                 )}
-                // TOGGLE RECORDING LOGIC
-                onClick={async (e) => {
+                // PUSH-TO-TALK: Hold to record, release to stop
+                onPointerDown={async (e) => {
                   e.preventDefault();
-                  if (isGeminiLiveMode) {
-                      // Gemini Live mode - toggle recording
-                      if (isGeminiRecording) {
-                          console.log("🎤 Stopping Gemini recording");
-                          stopGeminiRecording();
-                          toast.info("Recording stopped");
+                  console.log("🎤 Mic button pressed (push-to-talk START)");
+
+                  // Connect to Gemini Live if not connected
+                  if (!isGeminiConnected) {
+                    console.log("🎤 Connecting to Gemini Live...");
+                    try {
+                      const connected = await connectGeminiLive();
+                      if (connected) {
+                        console.log("🎤 Connection successful, starting recording");
+                        startGeminiRecording();
                       } else {
-                          if (!isGeminiConnected) {
-                              console.log("🎤 Connecting to Gemini Live...");
-                              toast.info("Connecting to Gemini Live...");
-                              try {
-                                const connected = await connectGeminiLive();
-                                if (connected) {
-                                  console.log("🎤 Connection successful, starting Gemini recording");
-                                  startGeminiRecording();
-                                  toast.success("Recording started");
-                                } else {
-                                  console.error("🎤 Connection failed");
-                                  toast.error("Failed to connect to Gemini Live");
-                                }
-                              } catch (err) {
-                                console.error("🎤 Connection error:", err);
-                                toast.error("Connection error: " + (err instanceof Error ? err.message : "Unknown error"));
-                              }
-                          } else {
-                              console.log("🎤 Starting Gemini recording (already connected)");
-                              startGeminiRecording();
-                              toast.success("Recording started");
-                          }
+                        console.error("🎤 Connection failed");
+                        toast.error("Failed to connect to Gemini Live");
                       }
+                    } catch (err) {
+                      console.error("🎤 Connection error:", err);
+                      toast.error("Connection error: " + (err instanceof Error ? err.message : "Unknown error"));
+                    }
                   } else {
-                       // ElevenLabs STT mode - toggle recording
-                       if (isRecording) {
-                           console.log("🎤 Stopping STT recording");
-                           stopRecording();
-                           toast.info("Recording stopped");
-                       } else {
-                           console.log("🎤 Starting STT recording");
-                           if (clearTranscript) clearTranscript();
-                           if (startRecording) {
-                               startRecording();
-                               toast.success("Recording started");
-                           }
-                       }
+                    startGeminiRecording();
                   }
                 }}
-                disabled={isLoading && !isGeminiLiveMode}
-                title={
-                  isGeminiLiveMode
-                    ? (isGeminiRecording ? "Stop recording" : "Start recording")
-                    : (isRecording ? "Stop recording" : "Start recording")
-                }
+                onPointerUp={(e) => {
+                  e.preventDefault();
+                  console.log("🎤 Mic button released (push-to-talk STOP)");
+                  if (isGeminiRecording) {
+                    stopGeminiRecording();
+                  }
+                }}
+                onPointerLeave={() => {
+                  // Stop recording if pointer leaves button while held
+                  if (isGeminiRecording) {
+                    console.log("🎤 Pointer left button while recording - stopping");
+                    stopGeminiRecording();
+                  }
+                }}
+                disabled={isLoading}
+                title="Hold to talk"
               >
-                {((isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording)) ? (
-                  <MicOff className="h-4 w-4" />
-                ) : (
-                  <Mic className="h-4 w-4" />
-                )}
+                {isGeminiRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
               </Button>
 
-
-              {/* Speaker / Mute Button - Conditional for Gemini Live */}
-              {isGeminiLiveMode ? (
-                <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className={cn(
-                        "h-8 w-8 transition-colors",
-                         // Always teal for consistency
-                         "text-primary hover:text-primary/80 hover:bg-primary/10"
-                    )}
-                    onClick={() => {
-                        const newMutedState = !isGeminiMuted;
-                        setIsGeminiMuted(newMutedState);
-                        console.log(`🔊 Speaker ${newMutedState ? "muted" : "unmuted"}`);
-                        toast.info(newMutedState ? "Speaker muted" : "Speaker unmuted");
-                    }}
-                    title={isGeminiMuted ? "Unmute Gemini Voice" : "Mute Gemini Voice"}
-                >
-                    {isGeminiMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                </Button>
-              ) : (
-                  // Legacy TTS Button
-                  <Button
-                    type="button"
-                    variant={isTTSEnabled ? "default" : "ghost"}
-                    className={cn(
-                      "mac-button mac-button-primary",
-                      "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
-                      isTTSEnabled
-                        ? [
-                            "bg-primary text-primary-foreground",
-                            "border-primary/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
-                          ]
-                        : ["text-primary hover:text-primary/80 hover:bg-primary/10"]
-                    )}
-                    onClick={() => {
-                          console.log("🔊 SPEAKER: Button clicked");
-                          console.log("🔊 SPEAKER: Current TTS state:", isTTSEnabled);
-                          console.log("🔊 SPEAKER: speak function:", speak);
-                          console.log("🔊 SPEAKER: stopSpeaking function:", stopSpeaking);
-                          setIsTTSEnabled(!isTTSEnabled);
-                          if (isPlaying) {
-                            stopSpeaking();
-                          }
-                          toast.info(isTTSEnabled ? "Voice responses disabled" : "Voice responses enabled");
-                          console.log("🔊 SPEAKER: New TTS state will be:", !isTTSEnabled);
-                    }}
-                    disabled={(isLoading || isSpeechLoading)}
-                    title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
-                  >
-                    {isTTSEnabled ? (
-                      <Volume2 className="h-4 w-4" />
-                    ) : (
-                      <VolumeX className="h-4 w-4" />
-                    )}
-                    {isPlaying && (
-                      <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
-                    )}
-                  </Button>
-              )}
-
-              {/* Voice Selection Dropdown */}
-              {isTTSEnabled && (
-                <VoiceSelector
-                  selectedVoiceId={selectedVoiceId}
-                  onVoiceSelect={setSelectedVoiceId}
-                  disabled={isLoading || isSpeechLoading}
-                  className="ml-2"
-                />
-              )}
+              {/* Speaker / Mute Button - Gemini Live */}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "h-8 w-8 transition-colors",
+                  isGeminiMuted
+                    ? "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    : "text-primary hover:text-primary/80 hover:bg-primary/10"
+                )}
+                onClick={() => {
+                  const newMutedState = !isGeminiMuted;
+                  setIsGeminiMuted(newMutedState);
+                  console.log(`🔊 Speaker ${newMutedState ? "muted" : "unmuted"}`);
+                  toast.info(newMutedState ? "Speaker muted" : "Speaker unmuted");
+                }}
+                title={isGeminiMuted ? "Unmute voice" : "Mute voice"}
+              >
+                {isGeminiMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              </Button>
 
               <PromptInputModelSelect
                 value={selectedModel}
