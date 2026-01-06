@@ -12,29 +12,20 @@ interface ConnectionStatus {
 }
 
 export const ConnectionStatusIndicator: React.FC = () => {
-  // Force component update with timestamp
   const [statuses, setStatuses] = useState<ConnectionStatus[]>([
     { type: "connecting", service: "Gemini" },
     { type: "connecting", service: "Database" },
   ]);
 
   const [primaryStatus, setPrimaryStatus] = useState<ConnectionStatus["type"]>("connected");
-
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // Simulate connection health checks
   useEffect(() => {
     const checkConnections = async () => {
       const newStatuses: ConnectionStatus[] = [];
 
-      // REMOVED: AOMA-MESH health check - now using direct Supabase vector search
-      // No external MCP server to check - all queries are local/Supabase
-
-      // Check Gemini - try a simple API test
       try {
-        const geminiCheck = await fetch("/api/chat", {
-          method: "GET",
-        });
+        const geminiCheck = await fetch("/api/chat", { method: "GET" });
         newStatuses.push({
           type: geminiCheck.ok ? "connected" : "error",
           service: "Gemini",
@@ -48,11 +39,8 @@ export const ConnectionStatusIndicator: React.FC = () => {
         });
       }
 
-      // Check Database (Supabase) connection via health API
       try {
-        const dbCheck = await fetch("/api/health", {
-          method: "GET",
-        });
+        const dbCheck = await fetch("/api/health", { method: "GET" });
         newStatuses.push({
           type: dbCheck.ok ? "connected" : "disconnected",
           service: "Database",
@@ -69,63 +57,36 @@ export const ConnectionStatusIndicator: React.FC = () => {
 
       setStatuses(newStatuses);
 
-      // Determine primary status
       const hasError = newStatuses.some((s) => s.type === "error");
       const hasDisconnected = newStatuses.some((s) => s.type === "disconnected");
       const hasConnected = newStatuses.some((s) => s.type === "connected");
       const allConnecting = newStatuses.every((s) => s.type === "connecting");
 
-      if (hasError) {
-        setPrimaryStatus("error");
-      } else if (hasDisconnected) {
-        setPrimaryStatus("disconnected");
-      } else if (allConnecting) {
-        setPrimaryStatus("connecting");
-      } else if (hasConnected) {
-        setPrimaryStatus("connected");
-      } else {
-        setPrimaryStatus("disconnected");
-      }
+      if (hasError) setPrimaryStatus("error");
+      else if (hasDisconnected) setPrimaryStatus("disconnected");
+      else if (allConnecting) setPrimaryStatus("connecting");
+      else if (hasConnected) setPrimaryStatus("connected");
+      else setPrimaryStatus("disconnected");
     };
 
-    // Initial check
     // DISABLED: Causing Fast Refresh crash when API routes compile on first call
     // checkConnections();
-
-    // Periodic health checks every 2 minutes (reduced frequency for performance)
-    // DISABLED: Same reason as above
     // const interval = setInterval(checkConnections, 120000);
-
     // return () => clearInterval(interval);
   }, []);
 
   const getStatusIcon = (status: ConnectionStatus["type"]) => {
     switch (status) {
       case "connected":
-        return <Wifi className="h-3 w-3" />;
+        return <Wifi className="h-3.5 w-3.5" />;
       case "disconnected":
-        return <WifiOff className="h-3 w-3" />;
+        return <WifiOff className="h-3.5 w-3.5" />;
       case "connecting":
-        return <Cloud className="h-3 w-3 animate-pulse" />;
+        return <Cloud className="h-3.5 w-3.5 animate-pulse" />;
       case "error":
-        return <AlertTriangle className="h-3 w-3" />;
+        return <AlertTriangle className="h-3.5 w-3.5" />;
       default:
-        return <CloudOff className="h-3 w-3" />;
-    }
-  };
-
-  const getStatusColor = (status: ConnectionStatus["type"]) => {
-    switch (status) {
-      case "connected":
-        return "text-green-500";
-      case "disconnected":
-        return "text-red-500";
-      case "connecting":
-        return "text-yellow-500";
-      case "error":
-        return "text-orange-500";
-      default:
-        return "text-muted-foreground";
+        return <CloudOff className="h-3.5 w-3.5" />;
     }
   };
 
@@ -142,6 +103,36 @@ export const ConnectionStatusIndicator: React.FC = () => {
     }
   };
 
+  const getStatusDescription = (status: ConnectionStatus["type"]) => {
+    switch (status) {
+      case "connected":
+        return "All systems operational";
+      case "disconnected":
+        return "Service unavailable";
+      case "error":
+        return "Connection error detected";
+      case "connecting":
+        return "Establishing connection";
+      default:
+        return "Unknown status";
+    }
+  };
+
+  const getStatusLabel = (status: ConnectionStatus["type"]) => {
+    switch (status) {
+      case "connected":
+        return "Online";
+      case "disconnected":
+        return "Offline";
+      case "error":
+        return "Error";
+      case "connecting":
+        return "Connecting";
+      default:
+        return "Unknown";
+    }
+  };
+
   const connectedCount = statuses.filter((s) => s.type === "connected").length;
   const totalCount = statuses.length;
 
@@ -151,26 +142,27 @@ export const ConnectionStatusIndicator: React.FC = () => {
       onMouseEnter={() => setShowDropdown(true)}
       onMouseLeave={() => setShowDropdown(false)}
     >
+      {/* Trigger Badge - MAC Design System compliant */}
       <Badge
         variant={primaryStatus === "connected" ? "default" : "secondary"}
         className={cn(
-          "text-xs flex items-center gap-2 cursor-pointer transition-all duration-200",
+          "text-xs flex items-center gap-2 cursor-pointer transition-colors",
           primaryStatus === "connected"
-            ? "motiff-status-connected bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
+            ? "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20"
             : primaryStatus === "connecting"
-              ? "motiff-status-connecting bg-yellow-500/10 border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20"
-              : "motiff-status-disconnected bg-white/5 border-orange-400/30 text-orange-300 hover:bg-white/10"
+              ? "bg-muted border-border text-muted-foreground hover:bg-muted/80"
+              : "bg-destructive/10 border-destructive/20 text-destructive hover:bg-destructive/20"
         )}
       >
         <div
           className={cn(
-            "h-2 w-2 rounded-full animate-pulse",
-            getStatusColor(primaryStatus),
+            "h-2 w-2 rounded-full",
+            primaryStatus === "connecting" && "animate-pulse",
             primaryStatus === "connected"
-              ? "bg-green-500"
+              ? "bg-primary"
               : primaryStatus === "connecting"
-                ? "bg-yellow-500"
-                : "bg-red-500"
+                ? "bg-muted-foreground"
+                : "bg-destructive"
           )}
         />
         <span>
@@ -179,30 +171,24 @@ export const ConnectionStatusIndicator: React.FC = () => {
         <span className="hidden lg:inline">{getPrimaryStatusText()}</span>
       </Badge>
 
-      {/* MAC Design System Status Popup */}
+      {/* MAC Design System Compliant Dropdown */}
       {showDropdown && (
         <div
-          className="absolute top-full right-0 mt-4 min-w-[22rem] animate-in fade-in slide-in-from-top-2 duration-300 rounded-xl shadow-2xl border border-white/20"
-          style={{
-            zIndex: 99999,
-            background:
-              "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-          }}
+          className={cn(
+            "absolute top-full right-0 mt-1 min-w-[280px] z-50",
+            "rounded-md border border-border bg-popover text-popover-foreground shadow-md",
+            "animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200"
+          )}
         >
-          <div className="p-6 space-y-4">
-            {/* Header with visual flair */}
-            <div className="flex items-center justify-between border-b border-white/20 pb-4">
-              <div className="flex items-center gap-2">
-                <div className="mac-floating-orb h-2 w-2" />
-                <h3 className="mac-title">
-                  System Health
-                </h3>
-              </div>
-              <div className="text-xs font-[300] text-white/70">
+          <div className="p-4 space-y-3">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <h3 className="text-sm font-semibold text-foreground">
+                System Health
+              </h3>
+              <span className="text-xs text-muted-foreground">
                 {connectedCount}/{totalCount} Online
-              </div>
+              </span>
             </div>
 
             {/* Service Status Cards */}
@@ -211,128 +197,64 @@ export const ConnectionStatusIndicator: React.FC = () => {
                 <div
                   key={index}
                   className={cn(
-                    "group relative overflow-hidden rounded-lg p-4 transition-all duration-300",
-                    "hover:scale-[1.02] hover:shadow-lg cursor-pointer",
+                    "rounded-md border bg-card p-3 transition-colors",
                     status.type === "connected"
-                      ? "bg-green-500/20 hover:bg-green-500/30 border border-green-500/40"
-                      : status.type === "error"
-                        ? "bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40"
-                        : status.type === "disconnected"
-                          ? "bg-red-500/20 hover:bg-red-500/30 border border-red-500/40"
-                          : "bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40"
+                      ? "border-primary/30 hover:bg-primary/5"
+                      : status.type === "error" || status.type === "disconnected"
+                        ? "border-destructive/30 hover:bg-destructive/5"
+                        : "border-border hover:bg-muted/50"
                   )}
                 >
-                  {/* Status gradient overlay */}
-                  <div
-                    className={cn(
-                      "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-                      "bg-gradient-to-r",
-                      status.type === "connected"
-                        ? "from-green-500/5 to-transparent"
-                        : status.type === "error"
-                          ? "from-orange-500/5 to-transparent"
-                          : status.type === "disconnected"
-                            ? "from-red-500/5 to-transparent"
-                            : "from-yellow-500/5 to-transparent"
-                    )}
-                  />
-
-                  <div className="relative flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                     {/* Service Info */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                       <div
                         className={cn(
-                          "flex items-center justify-center h-8 w-8 rounded-lg",
+                          "flex items-center justify-center h-8 w-8 rounded-md",
                           status.type === "connected"
-                            ? "bg-green-500/20"
-                            : status.type === "error"
-                              ? "bg-orange-500/20"
-                              : status.type === "disconnected"
-                                ? "bg-red-500/20"
-                                : "bg-yellow-500/20"
+                            ? "bg-primary/10 text-primary"
+                            : status.type === "error" || status.type === "disconnected"
+                              ? "bg-destructive/10 text-destructive"
+                              : "bg-muted text-muted-foreground"
                         )}
                       >
-                        {React.cloneElement(getStatusIcon(status.type) as React.ReactElement, {
-                          className: cn(
-                            "h-4 w-4",
-                            status.type === "connected"
-                              ? "text-green-400"
-                              : status.type === "error"
-                                ? "text-orange-400"
-                                : status.type === "disconnected"
-                                  ? "text-red-400"
-                                  : "text-yellow-400"
-                          ),
-                        })}
+                        {getStatusIcon(status.type)}
                       </div>
                       <div>
-                        <div className="text-sm font-[400] text-white">{status.service}</div>
-                        <div className="text-xs font-[200] text-white/60">
-                          {status.type === "connected"
-                            ? "All systems operational"
-                            : status.type === "disconnected"
-                              ? "Service unavailable"
-                              : status.type === "error"
-                                ? "Connection error detected"
-                                : "Establishing connection"}
+                        <div className="text-sm font-medium text-foreground">
+                          {status.service}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {getStatusDescription(status.type)}
                         </div>
                       </div>
                     </div>
 
-                    {/* Status Badge */}
+                    {/* Status Indicator */}
                     <div className="flex items-center gap-2">
                       <div
                         className={cn(
-                          "relative h-2 w-2 rounded-full",
-                          status.type === "connected" || status.type === "connecting"
-                            ? "animate-pulse"
-                            : ""
+                          "h-2 w-2 rounded-full",
+                          (status.type === "connected" || status.type === "connecting") &&
+                            "animate-pulse",
+                          status.type === "connected"
+                            ? "bg-primary"
+                            : status.type === "error" || status.type === "disconnected"
+                              ? "bg-destructive"
+                              : "bg-muted-foreground"
                         )}
-                      >
-                        <div
-                          className={cn(
-                            "absolute inset-0 rounded-full blur-sm",
-                            status.type === "connected"
-                              ? "bg-green-400"
-                              : status.type === "error"
-                                ? "bg-orange-400"
-                                : status.type === "disconnected"
-                                  ? "bg-red-400"
-                                  : "bg-yellow-400"
-                          )}
-                        />
-                        <div
-                          className={cn(
-                            "relative h-full w-full rounded-full",
-                            status.type === "connected"
-                              ? "bg-green-500"
-                              : status.type === "error"
-                                ? "bg-orange-500"
-                                : status.type === "disconnected"
-                                  ? "bg-red-500"
-                                  : "bg-yellow-500"
-                          )}
-                        />
-                      </div>
+                      />
                       <span
                         className={cn(
-                          "text-xs font-[300] uppercase tracking-wider",
+                          "text-xs font-medium uppercase tracking-wide",
                           status.type === "connected"
-                            ? "text-green-400"
-                            : status.type === "error"
-                              ? "text-orange-400"
-                              : status.type === "disconnected"
-                                ? "text-red-400"
-                                : "text-yellow-400"
+                            ? "text-primary"
+                            : status.type === "error" || status.type === "disconnected"
+                              ? "text-destructive"
+                              : "text-muted-foreground"
                         )}
                       >
-                        {status.type === "connected"
-                          ? "Online"
-                          : status.type === "disconnected"
-                            ? "Offline"
-                            : status.type === "error"
-                              ? "Error"
-                              : "Connecting"}
+                        {getStatusLabel(status.type)}
                       </span>
                     </div>
                   </div>
@@ -342,9 +264,9 @@ export const ConnectionStatusIndicator: React.FC = () => {
 
             {/* Footer with timestamp */}
             {statuses[0]?.lastChecked && (
-              <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
-                <div className="h-1 w-1 rounded-full bg-white/50 animate-pulse" />
-                <span className="text-xs font-[200] text-white/50 tracking-wide">
+              <div className="flex items-center justify-center gap-2 pt-2 border-t border-border">
+                <div className="h-1 w-1 rounded-full bg-muted-foreground/50 animate-pulse" />
+                <span className="text-xs text-muted-foreground">
                   Last checked {statuses[0].lastChecked.toLocaleTimeString()}
                 </span>
               </div>
