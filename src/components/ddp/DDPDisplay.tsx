@@ -77,22 +77,22 @@ function AlbumHeader({ ddp }: { ddp: ParsedDDP }) {
           <Disc3 className="h-6 w-6 text-primary" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-foreground">
+          <h2 className="mac-heading">
             {summary.albumTitle || 'Untitled Album'}
           </h2>
           {summary.performer && (
-            <p className="text-muted-foreground">{summary.performer}</p>
+            <p className="mac-body text-muted-foreground">{summary.performer}</p>
           )}
         </div>
       </div>
 
       <p className="text-sm text-muted-foreground leading-relaxed">
         This DDP (Disc Description Protocol) master contains{' '}
-        <span className="font-medium text-foreground">{summary.trackCount} tracks</span>
+        <span className="font-normal text-foreground">{summary.trackCount} tracks</span>
         {summary.totalDuration && (
           <>
             {' '}with a total duration of{' '}
-            <span className="font-medium text-foreground">{formatDuration(summary.totalDuration)}</span>
+            <span className="font-normal text-foreground">{formatDuration(summary.totalDuration)}</span>
           </>
         )}
         .{' '}
@@ -132,8 +132,8 @@ function TrackListing({ tracks }: { tracks: DDPTrack[] }) {
   if (tracks.length === 0) return null;
 
   return (
-    <Card className="border-border">
-      <CardHeader className="pb-3">
+    <Card className="mac-card border-border">
+      <CardHeader className="mac-card pb-3">
         <div className="flex items-center gap-2">
           <Music2 className="h-4 w-4 text-muted-foreground" />
           <CardTitle className="text-base">Track Listing</CardTitle>
@@ -157,7 +157,7 @@ function TrackListing({ tracks }: { tracks: DDPTrack[] }) {
                   <TableCell className="font-mono text-muted-foreground">
                     {track.number.toString().padStart(2, '0')}
                   </TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-normal">
                     {track.title || <span className="text-muted-foreground italic">Untitled</span>}
                   </TableCell>
                   <TableCell>
@@ -187,13 +187,13 @@ function DDPFilesTable({ files }: { files: ParsedDDP['summary']['files'] }) {
   if (files.length === 0) return null;
 
   return (
-    <Card className="border-border">
-      <CardHeader className="pb-3">
+    <Card className="mac-card border-border">
+      <CardHeader className="mac-card pb-3">
         <div className="flex items-center gap-2">
           <FileText className="h-4 w-4 text-muted-foreground" />
           <CardTitle className="text-base">DDP Files</CardTitle>
         </div>
-        <CardDescription>Components of this DDP master</CardDescription>
+        <CardDescription className="mac-card">Components of this DDP master</CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="rounded-md border border-border">
@@ -240,8 +240,8 @@ function MusicBrainzResults({
 }) {
   if (isLoading) {
     return (
-      <Card className="border-border">
-        <CardHeader className="pb-3">
+      <Card className="mac-card border-border">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-center gap-2">
             <Database className="h-4 w-4 text-muted-foreground" />
             <CardTitle className="text-base">From MusicBrainz</CardTitle>
@@ -261,8 +261,8 @@ function MusicBrainzResults({
 
   if (!result.success || result.releases.length === 0) {
     return (
-      <Card className="border-border">
-        <CardHeader className="pb-3">
+      <Card className="mac-card border-border">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-center gap-2">
             <Database className="h-4 w-4 text-muted-foreground" />
             <CardTitle className="text-base">From MusicBrainz</CardTitle>
@@ -282,8 +282,8 @@ function MusicBrainzResults({
   const artists = release.artistCredit?.map(a => a.name).join(', ') || 'Unknown Artist';
 
   return (
-    <Card className="border-border">
-      <CardHeader className="pb-3">
+    <Card className="mac-card border-border">
+      <CardHeader className="mac-card pb-3">
         <div className="flex items-center gap-2">
           <Database className="h-4 w-4 text-muted-foreground" />
           <CardTitle className="text-base">From MusicBrainz</CardTitle>
@@ -291,7 +291,7 @@ function MusicBrainzResults({
             via {result.source}
           </Badge>
         </div>
-        <CardDescription>
+        <CardDescription className="mac-card">
           Additional metadata from the MusicBrainz database
         </CardDescription>
       </CardHeader>
@@ -299,12 +299,12 @@ function MusicBrainzResults({
         {/* Release Info */}
         <div className="space-y-2">
           <div className="flex items-baseline gap-2">
-            <span className="text-lg font-semibold">{release.title}</span>
+            <span className="text-lg font-normal">{release.title}</span>
             {release.date && (
               <span className="text-muted-foreground">({release.date.substring(0, 4)})</span>
             )}
           </div>
-          <p className="text-muted-foreground">{artists}</p>
+          <p className="mac-body text-muted-foreground">{artists}</p>
         </div>
 
         {/* Metadata Grid */}
@@ -382,7 +382,7 @@ export function DDPDisplay({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 shrink-0"
+            className="mac-button h-8 w-8 shrink-0"
             onClick={onDismiss}
             title="Dismiss"
           >

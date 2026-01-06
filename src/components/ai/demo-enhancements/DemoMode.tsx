@@ -80,7 +80,7 @@ export function DemoMode({ onQuerySelect, isActive = false, onToggle, className 
   const categoryColors = {
     auth: "bg-blue-500/10 border-blue-500/30 text-blue-400",
     lifecycle: "bg-green-500/10 border-green-500/30 text-green-400",
-    api: "bg-purple-500/10 border-purple-500/30 text-purple-400",
+    api: "bg-primary-500/10 border-primary-500/30 text-primary-400",
     diagram: "bg-orange-500/10 border-orange-500/30 text-orange-400",
   };
 
@@ -99,7 +99,7 @@ export function DemoMode({ onQuerySelect, isActive = false, onToggle, className 
         )}
       >
         <Presentation className="h-4 w-4" />
-        <span className="text-xs font-medium">Demo Mode</span>
+        <span className="text-xs font-normal">Demo Mode</span>
         {isActive && (
           <Badge variant="secondary" className="ml-1 bg-white/20 text-white text-[10px]">
             ON
@@ -112,14 +112,14 @@ export function DemoMode({ onQuerySelect, isActive = false, onToggle, className 
         <>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2 border-border text-foreground">
+              <Button variant="outline" size="sm" className="mac-button gap-2 border-border text-foreground">
                 <MessageSquare className="h-3.5 w-3.5" />
                 <span className="text-xs">Queries</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-0 bg-card border-border" align="start">
               <div className="p-3 border-b border-border">
-                <div className="text-sm font-medium text-foreground">Demo Queries</div>
+                <div className="text-sm font-normal text-foreground">Demo Queries</div>
                 <p className="text-xs text-muted-foreground mt-1">
                   Pre-cached queries for smooth recording
                 </p>
@@ -159,11 +159,10 @@ export function DemoMode({ onQuerySelect, isActive = false, onToggle, className 
           </Popover>
 
           {/* Quick Next Button */}
-          <Button
-            variant="ghost"
+          <Button variant="ghost"
             size="sm"
             onClick={handleNext}
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+            className="mac-button mac-button-outline h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
             title="Next demo query"
           >
             <SkipForward className="h-4 w-4" />

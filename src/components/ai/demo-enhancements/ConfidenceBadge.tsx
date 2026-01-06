@@ -88,7 +88,7 @@ export function ConfidenceBadge({
     <Badge
       variant="outline"
       className={cn(
-        "gap-1.5 px-2 py-0.5 font-medium transition-all duration-200",
+        "gap-1.5 px-2 py-0.5 font-normal transition-all duration-200",
         bgClass,
         borderClass,
         textClass,
@@ -114,7 +114,7 @@ export function ConfidenceBadge({
         <TooltipTrigger asChild>{badge}</TooltipTrigger>
         <TooltipContent side="top" className="max-w-xs bg-card border-border">
           <div className="space-y-1">
-            <div className={cn("font-medium", textClass)}>{label}</div>
+            <div className={cn("font-normal", textClass)}>{label}</div>
             <p className="text-xs text-muted-foreground">{description}</p>
             {strategy && (
               <div className="text-xs text-muted-foreground pt-1 border-t border-border mt-2">

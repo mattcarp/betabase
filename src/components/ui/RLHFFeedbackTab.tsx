@@ -136,12 +136,12 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
       exit={{ opacity: 0, y: -20 }}
       className="mb-4"
     >
-      <Card className="border-border bg-card/30 backdrop-blur-sm">
-        <CardHeader className="pb-3">
+      <Card className="mac-card border-border bg-card/30 backdrop-blur-sm">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Lightbulb className="h-4 w-4 text-purple-400" />
+                <Lightbulb className="h-4 w-4 text-primary-400" />
                 <span className="text-xs text-muted-foreground">
                   {new Date(item.timestamp).toLocaleString()}
                 </span>
@@ -152,7 +152,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                   </Badge>
                 )}
               </div>
-              <CardTitle className="text-base font-medium text-foreground">{item.query}</CardTitle>
+              <CardTitle className="text-base font-normal text-foreground">{item.query}</CardTitle>
             </div>
           </div>
         </CardHeader>
@@ -165,11 +165,11 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
             >
               {item.response}
             </div>
-            <Button
-              variant="ghost"
+            <Button className="mac-button"
+              variant="ghost" className="mac-button mac-button-outline"
               size="sm"
               onClick={() => setExpanded(!expanded)}
-              className="mt-2 text-xs text-purple-400 hover:text-purple-300"
+              className="mt-2 text-xs text-primary-400 hover:text-primary-300"
             >
               {expanded ? "Show less" : "Show more"}
             </Button>
@@ -179,7 +179,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           {!item.feedbackSubmitted && (
             <div className="flex items-center gap-2 pt-2 border-t border-border">
               <span className="text-xs text-muted-foreground mr-2">Quick feedback:</span>
-              <Button
+              <Button className="mac-button"
                 size="sm"
                 variant={feedbackType === "thumbs_up" ? "default" : "outline"}
                 onClick={() => handleQuickFeedback("thumbs_up")}
@@ -189,7 +189,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                 <ThumbsUp className="h-3.5 w-3.5 mr-1" />
                 Helpful
               </Button>
-              <Button
+              <Button className="mac-button"
                 size="sm"
                 variant={feedbackType === "thumbs_down" ? "destructive" : "outline"}
                 onClick={() => handleQuickFeedback("thumbs_down")}
@@ -203,7 +203,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
               {/* Star Rating */}
               <div className="flex items-center gap-1 ml-2">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <button
+                  <button className="mac-button"
                     key={star}
                     onClick={() => setRating(star)}
                     className="transition-transform hover:scale-110"
@@ -223,7 +223,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                     size="sm"
                     onClick={handleRatingFeedback}
                     disabled={submitting}
-                    className="ml-2 h-7 text-xs"
+                    className="mac-button ml-2 h-7 text-xs"
                   >
                     Submit
                   </Button>
@@ -235,8 +235,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           {/* Retrieved Documents */}
           {expanded && item.retrievedDocs.length > 0 && (
             <div className="space-y-2 pt-4 border-t border-border">
-              <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-purple-400" />
+              <h4 className="mac-title">
+                <Sparkles className="h-4 w-4 text-primary-400" />
                 Retrieved Documents ({item.retrievedDocs.length})
               </h4>
               <div className="space-y-2">
@@ -268,7 +268,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                     </div>
                     {!item.feedbackSubmitted && (
                       <div className="flex gap-1">
-                        <Button
+                        <Button className="mac-button"
                           size="sm"
                           variant={docRelevance[doc.id] === true ? "default" : "ghost"}
                           onClick={() => toggleDocRelevance(doc.id, true)}
@@ -276,7 +276,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
                         >
                           <Check className="h-4 w-4" />
                         </Button>
-                        <Button
+                        <Button className="mac-button"
                           size="sm"
                           variant={docRelevance[doc.id] === false ? "destructive" : "ghost"}
                           onClick={() => toggleDocRelevance(doc.id, false)}
@@ -295,8 +295,8 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
           {/* Detailed Feedback */}
           {expanded && !item.feedbackSubmitted && (
             <div className="space-y-2 pt-4 border-t border-border">
-              <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
-                <Edit3 className="h-4 w-4 text-purple-400" />
+              <h4 className="mac-title">
+                <Edit3 className="h-4 w-4 text-primary-400" />
                 Detailed Feedback
               </h4>
               <Textarea
@@ -308,7 +308,7 @@ function FeedbackCard({ item, onSubmitFeedback }: FeedbackCardProps) {
               <Button
                 onClick={handleDetailedFeedback}
                 disabled={submitting || !correction.trim()}
-                className="w-full"
+                className="mac-button w-full"
               >
                 Submit Detailed Feedback
               </Button>
@@ -452,8 +452,8 @@ export function RLHFFeedbackTab() {
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-              <Lightbulb className="h-6 w-6 text-purple-400" />
+            <h2 className="mac-heading">
+              <Lightbulb className="h-6 w-6 text-primary-400" />
               RLHF Feedback Queue
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -461,7 +461,7 @@ export function RLHFFeedbackTab() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Badge variant="outline" className="text-sm bg-purple-500/10 border-purple-500/30">
+            <Badge variant="outline" className="text-sm bg-primary-400/10 border-primary-400/30">
               {stats.pending} pending
             </Badge>
             <Badge variant="outline" className="text-sm bg-green-500/10 border-green-500/30">

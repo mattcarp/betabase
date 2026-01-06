@@ -1,8 +1,8 @@
 "use client";
 
-import { Alert, AlertDescription } from "src/components/ui/alert";
-import { Button } from "src/components/ui/button";
-import { cn } from "src/lib/utils";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Button } from "../ui/button";
+import { cn } from "../../lib/utils";
 import type { ToolUIPart } from "ai";
 import {
   type ComponentProps,
@@ -178,5 +178,5 @@ export const ConfirmationActions = ({
 export type ConfirmationActionProps = ComponentProps<typeof Button>;
 
 export const ConfirmationAction = (props: ConfirmationActionProps) => (
-  <Button className="h-8 px-3 text-sm" type="button" {...props} />
+  <Button className="mac-button h-8 px-3 text-sm" type="button" {...props} />
 );

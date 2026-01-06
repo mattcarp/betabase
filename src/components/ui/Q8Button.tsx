@@ -85,12 +85,12 @@ export function Q8Button({ context, className, onFeedbackSubmit }: Q8ButtonProps
             className={cn(
               "relative flex items-center justify-center",
               "w-8 h-8 rounded-full",
-              "bg-gradient-to-br from-purple-500/20 to-blue-500/20",
-              "border border-purple-500/30",
-              "text-purple-400 text-xs font-semibold",
-              "hover:from-purple-500/40 hover:to-blue-500/40",
-              "hover:border-purple-400/50",
-              "hover:text-purple-300",
+              "bg-gradient-to-br from-primary-400/20 to-primary-500/20",
+              "border border-primary-400/30",
+              "text-primary-400 text-xs font-normal",
+              "hover:from-primary-400/40 hover:to-primary-500/40",
+              "hover:border-primary-400/50",
+              "hover:text-primary-300",
               "transition-all duration-200",
               "cursor-pointer",
               "backdrop-blur-sm",
@@ -129,7 +129,7 @@ export function Q8Button({ context, className, onFeedbackSubmit }: Q8ButtonProps
             {/* Pulse animation on hover */}
             {isHovered && !showConfirm && (
               <motion.div
-                className="absolute inset-0 rounded-full bg-purple-500/20"
+                className="absolute inset-0 rounded-full bg-primary-400/20"
                 initial={{ scale: 1, opacity: 0.5 }}
                 animate={{ scale: 1.5, opacity: 0 }}
                 transition={{ duration: 0.6, repeat: Infinity }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat, DefaultChatTransport } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk/react";
 import { useState, useEffect } from "react";
 import { cn } from "../../lib/utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
@@ -99,9 +99,7 @@ export function ChatPanel({
         }
       },
 
-      transport: new DefaultChatTransport({
-        api: api
-      })
+      transport: undefined
     });
 
   // Hide suggestions after first message
@@ -154,9 +152,9 @@ export function ChatPanel({
   const isMaxMessagesReached = maxMessages ? messages.length >= maxMessages : false;
 
   return (
-    <Card className={cn("flex flex-col h-full", className)}>
+    <Card className={cn("mac-card", "flex flex-col h-full", className)}>
       {showHeader && (
-        <CardHeader className="px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
+        <CardHeader className="mac-card px-4 py-3 border-b bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -179,13 +177,13 @@ export function ChatPanel({
               )}
 
               {allowClear && messages.length > 0 && (
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleClear}>
+                <Button size="icon" variant="ghost" className="mac-button h-8 w-8" onClick={handleClear}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
 
               {allowExport && messages.length > 0 && (
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleExport}>
+                <Button size="icon" variant="ghost" className="mac-button h-8 w-8" onClick={handleExport}>
                   <Download className="h-4 w-4" />
                 </Button>
               )}
@@ -208,7 +206,7 @@ export function ChatPanel({
                   <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2" />
                 </div>
 
-                <h3 className="text-lg font-normal mb-2">Welcome to {title}</h3>
+                <h3 className="mac-title">Welcome to {title}</h3>
                 <p className="text-sm text-muted-foreground mb-6 max-w-md">
                   I'm here to help you with your questions. You can ask me anything or choose from
                   the suggestions below.
@@ -261,8 +259,7 @@ export function ChatPanel({
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
-                  <Button
-                    variant="link"
+                  <Button variant="link" className="mac-button"
                     size="sm"
                     onClick={() => reload()}
                     className="ml-2 h-auto p-0"

@@ -6,8 +6,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "src/components/ui/card";
-import { cn } from "src/lib/utils";
+} from "../ui/card";
+import { cn } from "../../lib/utils";
 import { Handle, Position } from "@xyflow/react";
 import type { ComponentProps } from "react";
 
@@ -19,8 +19,7 @@ export type NodeProps = ComponentProps<typeof Card> & {
 };
 
 export const Node = ({ handles, className, ...props }: NodeProps) => (
-  <Card
-    className={cn(
+  <Card className={cn("mac-card", 
       "node-container relative size-full h-auto w-sm gap-0 rounded-md p-0",
       className
     )}
@@ -43,17 +42,17 @@ export const NodeHeader = ({ className, ...props }: NodeHeaderProps) => (
 
 export type NodeTitleProps = ComponentProps<typeof CardTitle>;
 
-export const NodeTitle = (props: NodeTitleProps) => <CardTitle {...props} />;
+export const NodeTitle = (props: NodeTitleProps) => <CardTitle {...props} / className="mac-card">;
 
 export type NodeDescriptionProps = ComponentProps<typeof CardDescription>;
 
 export const NodeDescription = (props: NodeDescriptionProps) => (
-  <CardDescription {...props} />
+  <CardDescription {...props} / className="mac-card">
 );
 
 export type NodeActionProps = ComponentProps<typeof CardAction>;
 
-export const NodeAction = (props: NodeActionProps) => <CardAction {...props} />;
+export const NodeAction = (props: NodeActionProps) => <CardAction {...props} / className="mac-card">;
 
 export type NodeContentProps = ComponentProps<typeof CardContent>;
 

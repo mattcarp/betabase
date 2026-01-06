@@ -130,12 +130,12 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
 
   if (pendingAttempts.length === 0) {
     return (
-      <Card className="border-white/10 bg-black/20">
+      <Card className="mac-card border-white/10 bg-black/20">
         <CardContent className="py-12">
           <div className="text-center space-y-4">
             <CheckCircle className="h-16 w-16 mx-auto text-green-400 opacity-50" />
             <div>
-              <h3 className="text-lg font-light text-white">All Caught Up</h3>
+              <h3 className="mac-title">All Caught Up</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 No healing attempts require your attention right now.
               </p>
@@ -147,8 +147,8 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
   }
 
   return (
-    <Card className="border-white/10 bg-black/20">
-      <CardHeader className="pb-3">
+    <Card className="mac-card border-white/10 bg-black/20">
+      <CardHeader className="mac-card pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 font-light text-lg">
             <AlertTriangle className="h-5 w-5 text-amber-400" />
@@ -188,7 +188,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                 key={tier}
                 variant={filterTier === tier ? "default" : "ghost"}
                 size="sm"
-                className="h-7 text-xs"
+                className="mac-button h-7 text-xs"
                 onClick={() => setFilterTier(tier)}
               >
                 {tier === "all" ? "All" : `Tier ${tier}`}
@@ -211,7 +211,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="mac-card">
         <ScrollArea className="h-[500px] pr-4">
           <div className="space-y-3">
             {sortedAttempts.map((attempt, index) => {
@@ -224,7 +224,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                   className={cn(
                     "rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md group",
                     "bg-black/20 hover:bg-black/30",
-                    selectedId === attempt.id && "ring-2 ring-purple-500 bg-purple-500/5"
+                    selectedId === attempt.id && "ring-2 ring-primary-500 bg-primary-500/5"
                   )}
                   onClick={() => onSelectAttempt(attempt)}
                 >
@@ -235,7 +235,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                         {index + 1}
                       </div>
                       <div>
-                        <h4 className="text-sm font-light text-white">{attempt.testName}</h4>
+                        <h4 className="mac-title">{attempt.testName}</h4>
                         <p className="text-xs text-muted-foreground mt-0.5">{attempt.testFile}</p>
                       </div>
                     </div>
@@ -256,7 +256,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                   <div className="flex items-center gap-4">
                     {/* Impact */}
                     {attempt.similarTestsAffected > 0 && (
-                      <div className="flex items-center gap-1.5 text-purple-400">
+                      <div className="flex items-center gap-1.5 text-primary-400">
                         <Layers className="h-3.5 w-3.5" />
                         <span className="text-xs">
                           {attempt.similarTestsAffected} similar test
@@ -294,7 +294,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                         <Button
                           variant="outline"
                           size="sm"
-                          className={cn("h-7 text-xs hover:opacity-80", getTierStyles(1))}
+                          className={cn("mac-button", "h-7 text-xs hover:opacity-80", getTierStyles(1))}
                           onClick={(e) => {
                             e.stopPropagation();
                             onQuickApprove(attempt.id);
@@ -307,7 +307,7 @@ export const SelfHealingPriorityQueue: React.FC<SelfHealingPriorityQueueProps> =
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 text-xs group-hover:bg-purple-500/10 group-hover:text-purple-400"
+                        className="mac-button h-7 text-xs group-hover:bg-primary-500/10 group-hover:text-primary-400"
                       >
                         Review Now
                         <ChevronRight className="h-3 w-3 ml-1" />

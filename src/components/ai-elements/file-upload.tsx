@@ -165,8 +165,15 @@ export function FileUpload({
         });
 
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || "Upload failed");
+          let errorMessage = `Upload failed (${response.status})`;
+          try {
+            const error = await response.json();
+            errorMessage = error.error || error.message || errorMessage;
+          } catch {
+            // Response body was empty or not JSON - use status text
+            errorMessage = response.statusText || errorMessage;
+          }
+          throw new Error(errorMessage);
         }
 
         const result = await response.json();
@@ -251,7 +258,7 @@ export function FileUpload({
         {uploadQueue.length > 0 && (
           <div className="absolute bottom-full mb-2 right-0 w-80 bg-background border rounded-lg shadow-lg p-4 space-y-2 max-h-60 overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Uploads</span>
+              <span className="text-sm font-normal">Uploads</span>
               {uploadQueue.some((f) => f.status === "completed") && (
                 <Button
                   variant="ghost"
@@ -272,8 +279,7 @@ export function FileUpload({
                   {item.status === "completed" && <Check className="h-3 w-3 text-green-500" />}
                   {item.status === "error" && <AlertCircle className="h-3 w-3 text-red-500" />}
                   <span className="text-xs flex-1 truncate">{item.file.name}</span>
-                  <Button
-                    variant="ghost"
+                  <Button variant="ghost" 
                     size="sm"
                     onClick={() => removeFile(item.id)}
                     className="h-5 w-5 p-0 mac-button mac-button-outline"
@@ -385,7 +391,7 @@ export function FileUpload({
 
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium truncate">{item.file.name}</span>
+                      <span className="text-sm font-normal truncate">{item.file.name}</span>
                       <span className="text-xs text-muted-foreground">
                         {formatFileSize(item.file.size)}
                       </span>
@@ -423,8 +429,7 @@ export function FileUpload({
                     )}
                   </div>
 
-                  <Button
-                    variant="ghost"
+                  <Button variant="ghost" 
                     size="sm"
                     onClick={() => removeFile(item.id)}
                     className="h-8 w-8 p-0 mac-button mac-button-outline"

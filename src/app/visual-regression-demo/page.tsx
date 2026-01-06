@@ -216,10 +216,10 @@ export default function VisualRegressionDemoPage() {
     <div className="min-h-screen bg-background text-white p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-2xl">Visual Regression Testing Tool Demo</CardTitle>
-            <p className="text-muted-foreground mt-2">
+            <p className="mac-body text-muted-foreground mt-2">
               Comprehensive visual regression testing with side-by-side comparison, diff
               highlighting, and approval workflow.
             </p>
@@ -239,7 +239,7 @@ export default function VisualRegressionDemoPage() {
         ) : (
           /* Detail View */
           <div className="space-y-4">
-            <Button variant="outline" onClick={() => setSelectedComparison(null)} className="mb-4">
+            <Button variant="outline" className="mac-button mac-button-outline" onClick={() => setSelectedComparison(null)} className="mac-button mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Gallery
             </Button>
@@ -255,11 +255,11 @@ export default function VisualRegressionDemoPage() {
         )}
 
         {/* Documentation */}
-        <Card>
-          <CardHeader>
+        <Card className="mac-card">
+          <CardHeader className="mac-card">
             <CardTitle className="text-lg">Features</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>✅ Side-by-side image comparison with draggable slider</li>
               <li>

@@ -61,8 +61,8 @@ services:
       - key: MAILGUN_FROM_EMAIL
         sync: false
 
-    # Auto-deploy from main branch
-    autoDeploy: true
+    # Auto-deploy DISABLED - localhost only
+    autoDeploy: false
     branch: main
 
     # Force redeploy - YOLO MODE ACTIVATED

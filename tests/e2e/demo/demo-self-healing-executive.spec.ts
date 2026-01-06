@@ -35,8 +35,11 @@ test.describe('Self-Healing Demo - Step 1: Dashboard @demo @self-healing @execut
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Step 1: Navigate to Testing Tab -> Home', async ({ page }) => {
@@ -132,8 +135,11 @@ test.describe('Self-Healing Demo - Step 2: Self-Healing Queue @demo @self-healin
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Step 2: Navigate to Self-Healing tab/queue', async ({ page }) => {
@@ -250,8 +256,11 @@ test.describe('Self-Healing Demo - Step 3: Tier 1 Auto-Approved @demo @self-heal
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Step 3: Click on Tier 1 healing attempt (97% confidence)', async ({ page }) => {
@@ -355,8 +364,11 @@ test.describe('Self-Healing Demo - Step 4: Tier 2 Human Review @demo @self-heali
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Step 4: Tier 2 shows Pending Review status (84% confidence)', async ({ page }) => {
@@ -426,8 +438,11 @@ test.describe('Self-Healing Demo - Step 5: Tier 3 Architect Required @demo @self
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Step 5: Tier 3 shows Expert Review warning (62% confidence)', async ({ page }) => {
@@ -492,8 +507,11 @@ test.describe('Self-Healing Demo - Step 6: Impact Metrics @demo @self-healing @e
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Step 6: Navigate to Analytics/Metrics tab', async ({ page }) => {
@@ -575,8 +593,11 @@ test.describe('Self-Healing Demo - Full Walkthrough @demo @self-healing @executi
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Full Walkthrough: All 6 steps without console errors', async ({ page }) => {

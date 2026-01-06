@@ -74,19 +74,19 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--mac-accent-purple-400);
+    background: var(--mac-accent-primary-400);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--mac-accent-purple-600);
+    background: var(--mac-accent-primary-600);
   }
 }
 
 @layer components {
   /* MAC Professional Glass Effect */
   .mac-glass {
-    background: rgba(20, 20, 20, 0.7);
+    background: var(--mac-surface-card);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -97,7 +97,7 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 1px;
+    height: 0.0625rem;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   }
 

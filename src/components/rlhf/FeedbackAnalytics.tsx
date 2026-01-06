@@ -15,18 +15,18 @@
 
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { cn } from "../../lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
   ThumbsUp,
   ThumbsDown,
@@ -96,7 +96,7 @@ const CATEGORY_COLORS: Record<FeedbackCategory, string> = {
   relevance: "bg-blue-500",
   completeness: "bg-green-500",
   clarity: "bg-yellow-500",
-  helpfulness: "bg-purple-500",
+  helpfulness: "bg-primary-500",
   safety: "bg-pink-500",
   formatting: "bg-indigo-500",
   citations: "bg-cyan-500",
@@ -269,14 +269,14 @@ export function FeedbackAnalytics({
     subtitle?: string,
     color?: string
   ) => (
-    <Card className="bg-card/50 border-border">
+    <Card className="mac-card bg-card/50 border-border">
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className={cn("p-2 rounded-lg", color || "bg-purple-500/20")}>{icon}</div>
+            <div className={cn("p-2 rounded-lg", color || "bg-primary-500/20")}>{icon}</div>
             <div>
               <p className="text-sm text-muted-foreground">{title}</p>
-              <p className="text-2xl font-bold text-foreground">{value}</p>
+              <p className="mac-body text-2xl font-normal text-foreground">{value}</p>
               {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
             </div>
           </div>
@@ -389,7 +389,7 @@ export function FeedbackAnalytics({
               </div>
               <span className="text-sm text-foreground">{item.level}</span>
             </div>
-            <p className="text-2xl font-bold text-foreground">{item.count}</p>
+            <p className="mac-body text-2xl font-normal text-foreground">{item.count}</p>
             <p className="text-xs text-muted-foreground">
               {((item.count / totalSeverity) * 100).toFixed(1)}% of issues
             </p>
@@ -412,7 +412,7 @@ export function FeedbackAnalytics({
             transition={{ duration: 0.5, delay: index * 0.03 }}
             className={cn(
               "flex-1 rounded-t",
-              index >= metrics.trendsLastDays.length - 7 ? "bg-purple-500" : "bg-purple-500/40"
+              index >= metrics.trendsLastDays.length - 7 ? "bg-primary-500" : "bg-primary-500/40"
             )}
             title={`Day ${index + 1}: ${value} feedback items`}
           />
@@ -435,7 +435,7 @@ export function FeedbackAnalytics({
             className="space-y-2"
           >
             <div className="flex items-center justify-between text-sm">
-              <span className="text-foreground font-medium">{day.date}</span>
+              <span className="text-foreground font-normal">{day.date}</span>
               <div className="flex items-center gap-3 text-xs">
                 <span className="text-green-400 flex items-center gap-1">
                   <ThumbsUp className="h-3 w-3" /> {day.positive}
@@ -474,13 +474,13 @@ export function FeedbackAnalytics({
 
   const renderCuratorMetrics = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card className="bg-card/50 border-border">
+      <Card className="mac-card bg-card/50 border-border">
         <CardContent className="pt-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center p-3 rounded-full bg-green-500/20 mb-3">
               <CheckCircle className="h-6 w-6 text-green-400" />
             </div>
-            <p className="text-3xl font-bold text-foreground">
+            <p className="mac-body text-3xl font-normal text-foreground">
               {(metrics.curatorApprovalRate * 100).toFixed(0)}%
             </p>
             <p className="text-sm text-muted-foreground">Approval Rate</p>
@@ -489,13 +489,13 @@ export function FeedbackAnalytics({
         </CardContent>
       </Card>
 
-      <Card className="bg-card/50 border-border">
+      <Card className="mac-card bg-card/50 border-border">
         <CardContent className="pt-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center p-3 rounded-full bg-blue-500/20 mb-3">
               <Clock className="h-6 w-6 text-blue-400" />
             </div>
-            <p className="text-3xl font-bold text-foreground">
+            <p className="mac-body text-3xl font-normal text-foreground">
               {metrics.avgReviewTimeHours.toFixed(1)}h
             </p>
             <p className="text-sm text-muted-foreground">Avg Review Time</p>
@@ -504,13 +504,13 @@ export function FeedbackAnalytics({
         </CardContent>
       </Card>
 
-      <Card className="bg-card/50 border-border">
+      <Card className="mac-card bg-card/50 border-border">
         <CardContent className="pt-6">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center p-3 rounded-full bg-purple-500/20 mb-3">
-              <Users className="h-6 w-6 text-purple-400" />
+            <div className="inline-flex items-center justify-center p-3 rounded-full bg-primary-500/20 mb-3">
+              <Users className="h-6 w-6 text-primary-400" />
             </div>
-            <p className="text-3xl font-bold text-foreground">
+            <p className="mac-body text-3xl font-normal text-foreground">
               {Math.round(metrics.totalFeedback * metrics.curatorApprovalRate)}
             </p>
             <p className="text-sm text-muted-foreground">DPO-Ready Examples</p>
@@ -556,7 +556,7 @@ export function FeedbackAnalytics({
                 style={{
                   backgroundColor:
                     metric.color === "purple"
-                      ? "#a855f7"
+                      ? "#26c6da"
                       : metric.color === "blue"
                         ? "#3b82f6"
                         : metric.color === "green"
@@ -571,7 +571,7 @@ export function FeedbackAnalytics({
         <div className="pt-4 border-t border-border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-foreground">Training Ready</p>
+              <p className="text-sm font-normal text-foreground">Training Ready</p>
               <p className="text-xs text-muted-foreground">Minimum 500 high-quality pairs needed</p>
             </div>
             <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Ready</Badge>
@@ -586,9 +586,9 @@ export function FeedbackAnalytics({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <BarChart3 className="h-6 w-6 text-purple-400" />
+          <BarChart3 className="h-6 w-6 text-primary-400" />
           <div>
-            <h2 className="text-xl font-semibold text-foreground">Feedback Analytics</h2>
+            <h2 className="mac-heading">Feedback Analytics</h2>
             <p className="text-sm text-muted-foreground">RLHF feedback collection and quality metrics</p>
           </div>
         </div>
@@ -611,7 +611,7 @@ export function FeedbackAnalytics({
             variant="outline"
             size="icon"
             onClick={handleRefresh}
-            className="border-border"
+            className="mac-button border-border"
             disabled={loading}
           >
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
@@ -638,7 +638,7 @@ export function FeedbackAnalytics({
         {renderMetricCard(
           "Total Feedback",
           metrics.totalFeedback.toLocaleString(),
-          <Activity className="h-5 w-5 text-purple-400" />,
+          <Activity className="h-5 w-5 text-primary-400" />,
           weekOverWeekChange,
           "All time submissions"
         )}
@@ -691,14 +691,14 @@ export function FeedbackAnalytics({
 
         <TabsContent value="overview" className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-card/50 border-border">
-              <CardHeader>
+            <Card className="mac-card bg-card/50 border-border">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-purple-400" />
+                  <TrendingUp className="h-5 w-5 text-primary-400" />
                   Feedback Trend
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 {renderTrendChart()}
                 <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
                   <span>14 days ago</span>
@@ -707,38 +707,38 @@ export function FeedbackAnalytics({
               </CardContent>
             </Card>
 
-            <Card className="bg-card/50 border-border">
-              <CardHeader>
+            <Card className="mac-card bg-card/50 border-border">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-blue-400" />
                   Daily Breakdown
                 </CardTitle>
               </CardHeader>
-              <CardContent>{renderDailyBreakdown()}</CardContent>
+              <CardContent className="mac-card">{renderDailyBreakdown()}</CardContent>
             </Card>
           </div>
         </TabsContent>
 
         <TabsContent value="categories" className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-card/50 border-border">
-              <CardHeader>
+            <Card className="mac-card bg-card/50 border-border">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <PieChart className="h-5 w-5 text-green-400" />
                   Category Distribution
                 </CardTitle>
               </CardHeader>
-              <CardContent>{renderCategoryChart()}</CardContent>
+              <CardContent className="mac-card">{renderCategoryChart()}</CardContent>
             </Card>
 
-            <Card className="bg-card/50 border-border">
-              <CardHeader>
+            <Card className="mac-card bg-card/50 border-border">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5 text-orange-400" />
                   Severity Breakdown
                 </CardTitle>
               </CardHeader>
-              <CardContent>{renderSeverityChart()}</CardContent>
+              <CardContent className="mac-card">{renderSeverityChart()}</CardContent>
             </Card>
           </div>
         </TabsContent>
@@ -748,14 +748,14 @@ export function FeedbackAnalytics({
         </TabsContent>
 
         <TabsContent value="dpo" className="mt-4">
-          <Card className="bg-card/50 border-border">
-            <CardHeader>
+          <Card className="mac-card bg-card/50 border-border">
+            <CardHeader className="mac-card">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-purple-400" />
+                <Lightbulb className="h-5 w-5 text-primary-400" />
                 DPO Training Data Quality
               </CardTitle>
             </CardHeader>
-            <CardContent>{renderDPOQuality()}</CardContent>
+            <CardContent className="mac-card">{renderDPOQuality()}</CardContent>
           </Card>
         </TabsContent>
       </Tabs>

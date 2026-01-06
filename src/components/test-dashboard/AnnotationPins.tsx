@@ -93,7 +93,7 @@ export const AnnotationPins: React.FC<AnnotationPinsProps> = ({
         >
           {/* Pin marker */}
           <button
-            className={cn(
+            className={cn("mac-button", 
               "relative flex items-center justify-center w-6 h-6 rounded-full",
               "border-2 border-background shadow-md transition-all",
               "hover:scale-125 hover:z-10",

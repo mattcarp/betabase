@@ -57,7 +57,7 @@ export const ToolHeader = ({ className, type, state, ...props }: ToolHeaderProps
   >
     <div className="flex items-center gap-2">
       <WrenchIcon className="size-4 text-muted-foreground" />
-      <span className="font-medium text-sm">{type}</span>
+      <span className="font-normal text-sm">{type}</span>
       {getStatusBadge(state)}
     </div>
     <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
@@ -83,8 +83,7 @@ export type ToolInputProps = ComponentProps<"div"> & {
 export const ToolInput = ({ className, input, ...props }: ToolInputProps) => (
   <div className={cn("space-y-2 overflow-hidden p-4", className)} {...props}>
     <h4
-      className="mac-title"
-      className="mac-title font-medium text-muted-foreground text-xs uppercase tracking-wide"
+      className="mac-title font-normal text-muted-foreground text-xs uppercase tracking-wide"
     >
       Parameters
     </h4>
@@ -107,8 +106,7 @@ export const ToolOutput = ({ className, output, errorText, ...props }: ToolOutpu
   return (
     <div className={cn("space-y-2 p-4", className)} {...props}>
       <h4
-        className="mac-title"
-        className="mac-title font-medium text-muted-foreground text-xs uppercase tracking-wide"
+        className="mac-title font-normal text-muted-foreground text-xs uppercase tracking-wide"
       >
         {errorText ? "Error" : "Result"}
       </h4>

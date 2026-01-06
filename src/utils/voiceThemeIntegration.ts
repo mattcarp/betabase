@@ -3,12 +3,21 @@
  * Helper utilities for voice-controlled theme switching with ElevenLabs
  */
 
-import type { ThemeName } from "../contexts/ThemeContext";
+// Theme name type (local definition to avoid import chain issues)
+type ThemeName = "light" | "mac" | "jarvis" | "aoma";
 
 /**
  * Theme keywords for voice recognition
  */
 const THEME_KEYWORDS: Record<ThemeName, string[]> = {
+  light: [
+    "light",
+    "light mode",
+    "light theme",
+    "day mode",
+    "bright",
+    "white theme",
+  ],
   mac: [
     "mac",
     "mac design",
@@ -108,6 +117,7 @@ export const VOICE_THEME_COMMANDS = [
  */
 export function getThemeConfirmationMessage(theme: ThemeName): string {
   const messages: Record<ThemeName, string> = {
+    light: "Switching to light mode",
     mac: "Switching to MAC Design System theme",
     jarvis: "Activating JARVIS HUD interface",
     aoma: "Applying AOMA corporate theme",

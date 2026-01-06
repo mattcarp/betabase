@@ -103,7 +103,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
+          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-normal">
             J
           </div>
           <div>
@@ -118,7 +118,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
             <h3 className="mac-title">{data.summary}</h3>
           </div>
         </div>
-        <div className={`text-sm font-medium ${priorityColors[data.priority] || "text-muted-foreground"}`}>
+        <div className={`text-sm font-normal ${priorityColors[data.priority] || "text-muted-foreground"}`}>
           {data.priority}
         </div>
       </div>
@@ -141,7 +141,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
           {data.labels.map((label, index) => (
             <span
               key={index}
-              className="px-2 py-2 bg-purple-600/20 text-purple-300 rounded text-xs border border-purple-500/30"
+              className="px-2 py-2 bg-primary-400/20 text-primary-300 rounded text-xs border border-primary-400/30"
             >
               {label}
             </span>
@@ -163,7 +163,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
             {data.comments.map((comment, index) => (
               <div key={index} className="bg-muted/50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-blue-400 text-sm font-medium">{comment.author}</span>
+                  <span className="text-blue-400 text-sm font-normal">{comment.author}</span>
                   <span className="text-muted-foreground text-xs">
                     {comment.created.toLocaleDateString()}
                   </span>
@@ -245,7 +245,7 @@ const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({ response
             </span>
           </div>
           {data.executable && (
-            <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs rounded transition-colors">
+            <button className="mac-button px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs rounded transition-colors">
               Run
             </button>
           )}
@@ -294,14 +294,14 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
             <h4 className="mac-title">{widget.title}</h4>
             {/* Widget content based on type */}
             {widget.type === "metric" && (
-              <div className="text-2xl font-bold text-blue-400">
+              <div className="text-2xl font-normal text-blue-400">
                 {widget.data.value}
                 <span className="text-sm text-muted-foreground ml-2">{widget.data.unit}</span>
               </div>
             )}
             {widget.type === "status" && (
               <div
-                className={`inline-flex px-4 py-2 rounded-full text-sm font-medium ${
+                className={`inline-flex px-4 py-2 rounded-full text-sm font-normal ${
                   widget.data.status === "healthy"
                     ? "bg-green-600/20 text-green-300 border border-green-500/30"
                     : widget.data.status === "warning"

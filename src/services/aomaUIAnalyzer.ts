@@ -61,7 +61,7 @@ export class AomaUIAnalyzer {
     const testableFeatures: string[] = [];
     const userFlows: Record<string, any> = {};
 
-    const buttonMatches = htmlStr.match(/<button[^>]*>.*?<\/button>/gi) || [];
+    const buttonMatches = htmlStr.match(/<button className="mac-button"[^>]*>.*?<\/button>/gi) || [];
     elements.buttons = buttonMatches.map((btn: string) => {
       const text = btn.replace(/<[^>]*>/g, "").trim();
       const id = btn.match(/id="([^"]+)"/)?.[1];
@@ -82,7 +82,7 @@ export class AomaUIAnalyzer {
     const formMatches = htmlStr.match(/<form[^>]*>.*?<\/form>/gis) || [];
     elements.forms = formMatches.length;
 
-    const inputMatches = htmlStr.match(/<input[^>]*>/gi) || [];
+    const inputMatches = htmlStr.match(/<input className="mac-input"[^>]*>/gi) || [];
     elements.inputs = inputMatches.map((input: string) => {
       const type = input.match(/type="([^"]+)"/)?.[1] || "text";
       const name = input.match(/name="([^"]+)"/)?.[1];

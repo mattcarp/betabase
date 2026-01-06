@@ -6,17 +6,17 @@
   /* Base Panel */
   --jarvis-panel-bg-start: rgba(255, 255, 255, 0.08);
   --jarvis-panel-bg-end: rgba(255, 255, 255, 0.02);
-  --jarvis-panel-border: rgba(255, 255, 255, 0.1);
+  --jarvis-panel-border: var(--mac-utility-border);
   --jarvis-panel-blur: 12px;
   --jarvis-panel-radius: 16px;
-  --jarvis-shadow-color: rgba(0, 0, 0, 0.37);
-  --jarvis-inset-shadow-color: rgba(255, 255, 255, 0.1);
+  --jarvis-shadow-color: var(--mac-utility-shadow);
+  --jarvis-inset-shadow-color: var(--mac-utility-border);
 
   /* Dark Panel */
   --jarvis-panel-dark-bg-start: rgba(0, 0, 0, 0.6);
   --jarvis-panel-dark-bg-end: rgba(0, 0, 0, 0.8);
   --jarvis-panel-dark-blur: 15px;
-  --jarvis-panel-dark-border: rgba(0, 255, 255, 0.2);
+  --jarvis-panel-dark-border: var(--mac-info-bg);
   --jarvis-panel-dark-radius: 20px;
   --jarvis-panel-dark-shadow: rgba(0, 255, 255, 0.2);
   --jarvis-panel-dark-inset-shadow: rgba(0, 255, 255, 0.1);
@@ -24,7 +24,7 @@
   /* Active Panel */
   --jarvis-panel-active-bg-start: rgba(0, 255, 255, 0.1);
   --jarvis-panel-active-bg-end: rgba(0, 128, 255, 0.05);
-  --jarvis-panel-active-border: rgba(0, 255, 255, 0.4);
+  --jarvis-panel-active-border: var(--mac-info-border);
   --jarvis-panel-active-shadow1: rgba(0, 255, 255, 0.3);
   --jarvis-panel-active-shadow2: rgba(0, 255, 255, 0.1);
   --jarvis-panel-active-inset-shadow: rgba(0, 255, 255, 0.2);
@@ -33,12 +33,12 @@
   --jarvis-floating-panel-bg-start: rgba(0, 20, 40, 0.9);
   --jarvis-floating-panel-bg-end: rgba(0, 10, 20, 0.95);
   --jarvis-floating-panel-blur: 20px;
-  --jarvis-floating-panel-border: rgba(0, 255, 255, 0.3);
+  --jarvis-floating-panel-border: var(--mac-info-border);
   --jarvis-floating-panel-radius: 24px;
   --jarvis-floating-panel-shadow1: rgba(0, 255, 255, 0.1);
   --jarvis-floating-panel-shadow2: rgba(0, 0, 0, 0.3);
   --jarvis-floating-panel-inset-shadow: rgba(0, 255, 255, 0.2);
-  --jarvis-floating-panel-hover-border: rgba(0, 255, 255, 0.5);
+  --jarvis-floating-panel-hover-border: var(--mac-accent-primary-400);
   --jarvis-floating-panel-hover-shadow1: rgba(0, 255, 255, 0.15);
   --jarvis-floating-panel-hover-shadow2: rgba(0, 0, 0, 0.4);
   --jarvis-floating-panel-hover-inset-shadow: rgba(0, 255, 255, 0.3);
@@ -49,24 +49,24 @@
     rgba(0, 255, 255, 0.1) 0%,
     transparent 70%
   );
-  --jarvis-hud-element-border: rgba(0, 255, 255, 0.4);
+  --jarvis-hud-element-border: var(--mac-info-border);
   --jarvis-hud-element-radius: 12px;
   --jarvis-hud-scan-bg: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
 
   /* Circular Progress */
-  --jarvis-circular-progress-base-border: rgba(0, 255, 255, 0.2);
-  --jarvis-circular-progress-active-color: rgba(0, 255, 255, 0.8);
+  --jarvis-circular-progress-base-border: var(--mac-info-bg);
+  --jarvis-circular-progress-active-color: var(--mac-accent-primary-400);
 
   /* Buttons */
   --jarvis-button-bg-start: rgba(0, 255, 255, 0.1);
   --jarvis-button-bg-end: rgba(0, 128, 255, 0.05);
   --jarvis-button-blur: 10px;
-  --jarvis-button-border: rgba(0, 255, 255, 0.3);
+  --jarvis-button-border: var(--mac-info-border);
   --jarvis-button-radius: 12px;
   --jarvis-button-text-color: var(--jarvis-cyan);
   --jarvis-button-hover-bg-start: rgba(0, 255, 255, 0.2);
   --jarvis-button-hover-bg-end: rgba(0, 128, 255, 0.1);
-  --jarvis-button-hover-border: rgba(0, 255, 255, 0.6);
+  --jarvis-button-hover-border: var(--mac-accent-primary-400);
   --jarvis-button-hover-shadow1: rgba(0, 255, 255, 0.3);
   --jarvis-button-hover-inset-shadow: rgba(0, 255, 255, 0.1);
 
@@ -242,7 +242,7 @@
   border: 1px solid var(--jarvis-button-border);
   border-radius: var(--jarvis-button-radius);
   color: var(--jarvis-button-text-color);
-  padding: 12px 24px;
+  padding: 1rem 1.5rem;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;

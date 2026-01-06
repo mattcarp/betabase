@@ -53,13 +53,9 @@ export default defineConfig({
 
     // Performance - use threads for parallel execution
     pool: "threads",
-    poolOptions: {
-      threads: {
-        singleThread: false,
-        minThreads: 1,
-        maxThreads: 4,
-      },
-    },
+    // Vitest 4: poolOptions moved to top-level
+    minWorkers: 1,
+    maxWorkers: 4,
 
     // UI - beautiful test interface
     ui: true,

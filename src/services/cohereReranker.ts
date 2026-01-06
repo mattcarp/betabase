@@ -98,12 +98,15 @@ export class CohereReranker {
 
     try {
       // Call Cohere rerank API via AI SDK
-      const { results } = await rerank({
-        model: cohere.reranker("rerank-v3.5"),
-        query,
-        documents: documentsWithRank.map(doc => doc.content),
-        topN: Math.min(topK * 2, documents.length), // Get more than topK for RLHF filtering
-      });
+      // TEMPORARY FIX: @ai-sdk/cohere v2.0.22 does not support reranker(). 
+      // Force fallback to vector similarity.
+      // const { results } = await rerank({
+      //   model: cohere.reranker("rerank-v3.5"),
+      //   query,
+      //   documents: documentsWithRank.map(doc => doc.content),
+      //   topN: Math.min(topK * 2, documents.length), // Get more than topK for RLHF filtering
+      // });
+      throw new Error("Cohere reranker not supported in installed SDK version");
 
       console.log(`✅ Cohere returned ${results.length} ranked results`);
 

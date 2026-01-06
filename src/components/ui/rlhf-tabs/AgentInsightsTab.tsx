@@ -99,7 +99,7 @@ export function AgentInsightsTab() {
         <InsightCard 
           title="Final Confidence" 
           value="91.4%" 
-          icon={<Target className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />} 
+          icon={<Target className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />} 
         />
         <InsightCard 
           title="Execution Time" 
@@ -110,15 +110,15 @@ export function AgentInsightsTab() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Decision Flowchart */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader>
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card">
             <CardTitle className="font-light text-xl flex items-center gap-2 text-[var(--mac-text-primary)]">
               <Activity className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
               Agent Decision Path
             </CardTitle>
             <CardDescription className="font-light text-[var(--mac-text-secondary)]">Visual flowchart of AI's logical progression</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <FlowDiagram chart="graph TD; A-->B; B-->C; C-->D;" />
             <div className="mt-6 flex justify-between items-center px-2">
               <div className="flex items-center gap-4">
@@ -132,7 +132,7 @@ export function AgentInsightsTab() {
                   <div className="h-2 w-2 rounded-full bg-[var(--mac-tier1)]"></div> Model
                 </div>
               </div>
-              <Button variant="ghost" size="sm" className="h-7 text-[10px] uppercase font-normal tracking-tighter opacity-60 hover:opacity-100 text-[var(--mac-text-secondary)]">
+              <Button variant="ghost" size="sm" className="mac-button h-7 text-[10px] uppercase font-normal tracking-tighter opacity-60 hover:opacity-100 text-[var(--mac-text-secondary)]">
                 Export Decision Log
               </Button>
             </div>
@@ -140,10 +140,10 @@ export function AgentInsightsTab() {
         </Card>
 
         {/* Detailed Decision Logs */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader>
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card">
             <CardTitle className="font-light text-xl flex items-center gap-2 text-[var(--mac-text-primary)]">
-              <Bot className="h-5 w-5 text-[var(--mac-accent-purple-400)]" />
+              <Bot className="h-5 w-5 text-[var(--mac-accent-primary-400)]" />
               Reasoning Chains
             </CardTitle>
             <CardDescription className="font-light text-[var(--mac-text-secondary)]">Step-by-step breakdown of decisions</CardDescription>
@@ -168,13 +168,13 @@ export function AgentInsightsTab() {
                           {d.step}
                         </div>
                         <div>
-                          <h4 className="text-sm font-normal">{d.action}</h4>
-                          <p className="text-[10px] text-[var(--mac-text-secondary)]">{d.tool}</p>
+                          <h4 className="mac-title">{d.action}</h4>
+                          <p className="mac-body text-[10px] text-[var(--mac-text-secondary)]">{d.tool}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="text-[10px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Confidence</p>
+                          <p className="mac-body text-[10px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Confidence</p>
                           <p className={cn(
                             "text-xs font-normal",
                             d.confidence > 0.9 ? "text-[var(--mac-status-connected)]" : "text-[var(--mac-status-warning-text)]"
@@ -204,14 +204,14 @@ export function AgentInsightsTab() {
       </div>
 
       {/* Tool Usage Breakdown */}
-      <Card className="mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)]">
-        <CardHeader>
+      <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)]">
+        <CardHeader className="mac-card">
           <CardTitle className="font-light text-lg flex items-center gap-2 text-[var(--mac-text-primary)]">
             <Zap className="h-5 w-5 text-[var(--mac-warning-yellow)]" />
             Tool Orchestration
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <ToolIcon label="Search" count={124} />
             <ToolIcon label="Rerank" count={89} />
@@ -228,11 +228,11 @@ export function AgentInsightsTab() {
 
 function InsightCard({ title, value, icon }: { title: string, value: string, icon: React.ReactNode }) {
   return (
-    <Card className="mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)]">
+    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)]">
       <CardContent className="p-4 flex items-center justify-between">
         <div className="space-y-1">
-          <p className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
-          <h4 className="text-xl font-light text-[var(--mac-text-primary)]">{value}</h4>
+          <p className="mac-body text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
+          <h4 className="mac-title">{value}</h4>
         </div>
         <div className="p-2 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)]">
           {icon}
@@ -245,7 +245,7 @@ function InsightCard({ title, value, icon }: { title: string, value: string, ico
 function ToolIcon({ label, count }: { label: string, count: number }) {
   return (
     <div className="text-center p-3 rounded-xl bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)] hover:border-[var(--mac-primary-blue-400)]/30 transition-all duration-300">
-      <p className="text-[10px] font-normal text-[var(--mac-text-secondary)] uppercase mb-1">{label}</p>
+      <p className="mac-body text-[10px] font-normal text-[var(--mac-text-secondary)] uppercase mb-1">{label}</p>
       <p className="text-lg font-light text-[var(--mac-text-primary)]">{count}</p>
     </div>
   );

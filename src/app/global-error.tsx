@@ -29,7 +29,7 @@ export default function GlobalError({
           padding: "2rem",
         }}
       >
-        <h1 style={{ fontSize: "2rem", margin: 0, fontWeight: 300 }}>Something went wrong</h1>
+        <h1  className="mac-heading"style={{ fontSize: "2rem", margin: 0, fontWeight: 300 }}>Something went wrong</h1>
         <p
           style={{
             fontSize: "1rem",

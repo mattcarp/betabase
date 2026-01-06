@@ -75,9 +75,9 @@ export function RAGContextViewer({
     agentic: {
       label: "Agentic RAG",
       description: "Self-correcting multi-step reasoning with confidence checks",
-      color: "text-purple-400",
-      bgColor: "bg-purple-500/10",
-      borderColor: "border-purple-500/30",
+      color: "text-primary-400",
+      bgColor: "bg-primary-500/10",
+      borderColor: "border-primary-500/30",
     },
   };
 
@@ -89,7 +89,7 @@ export function RAGContextViewer({
         <Button
           variant="ghost"
           size="sm"
-          className={cn(
+          className={cn("mac-button", 
             "w-full justify-between px-3 py-2 h-auto",
             "bg-card/50 border border-border rounded-lg",
             "hover:bg-muted/50 transition-all duration-200",
@@ -131,7 +131,7 @@ export function RAGContextViewer({
               <Database className="h-4 w-4 text-emerald-400" />
               <div>
                 <div className="text-xs text-muted-foreground">Vector Database</div>
-                <div className="text-sm font-medium text-foreground">
+                <div className="text-sm font-normal text-foreground">
                   {totalVectors.toLocaleString()} vectors
                 </div>
               </div>
@@ -143,7 +143,7 @@ export function RAGContextViewer({
                 <Clock className="h-4 w-4 text-yellow-400" />
                 <div>
                   <div className="text-xs text-muted-foreground">Search Time</div>
-                  <div className="text-sm font-medium text-foreground">{searchTimeMs}ms</div>
+                  <div className="text-sm font-normal text-foreground">{searchTimeMs}ms</div>
                 </div>
               </div>
             )}
@@ -154,7 +154,7 @@ export function RAGContextViewer({
                 <Layers className="h-4 w-4 text-blue-400" />
                 <div>
                   <div className="text-xs text-muted-foreground">Re-ranked</div>
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm font-normal text-foreground">
                     {initialDocs} → {finalDocs} docs
                   </div>
                 </div>
@@ -164,10 +164,10 @@ export function RAGContextViewer({
             {/* Agent Steps (for agentic RAG) */}
             {agentSteps !== undefined && agentSteps > 0 && (
               <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-md">
-                <Zap className="h-4 w-4 text-purple-400" />
+                <Zap className="h-4 w-4 text-primary-400" />
                 <div>
                   <div className="text-xs text-muted-foreground">Agent Steps</div>
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm font-normal text-foreground">
                     {agentSteps} iteration{agentSteps !== 1 ? "s" : ""}
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export function RAGContextViewer({
           {/* Retrieved Documents */}
           {documents.length > 0 && (
             <div className="space-y-2">
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-xs text-muted-foreground font-normal">
                 Retrieved Documents ({documents.length})
               </div>
               <div className="space-y-1 max-h-48 overflow-y-auto">

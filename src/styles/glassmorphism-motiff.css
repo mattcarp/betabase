@@ -11,7 +11,7 @@
 
   /* Glassmorphism Variables */
   --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border: var(--mac-utility-border);
   --glass-blur: 20px;
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 
@@ -38,19 +38,19 @@
   right: 0;
   bottom: 0;
   z-index: 50;
-  background: rgba(10, 16, 32, 0.93);
+  background: var(--mac-surface-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   pointer-events: none;
   text-align: center;
   font-family: "JetBrains Mono", "Fira Mono", "Menlo", monospace;
   font-size: 1rem;
-  color: #b5c6e0;
+  color: var(--mac-text-secondary);
   letter-spacing: 0.05em;
   padding-bottom: 0.25rem;
   padding-top: 0.25rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 44rem) {
   .siam-version-footer {
     font-size: 0.75rem;
     padding-bottom: 1.5rem;
@@ -88,8 +88,8 @@
 
 /* Glassmorphism Hover Effects */
 .glass-panel:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--mac-utility-border);
+  border-color: var(--mac-utility-border-elevated);
   transition: all var(--transition-medium);
 }
 
@@ -123,7 +123,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 0.125rem;
   background: linear-gradient(
     90deg,
     var(--motiff-primary),
@@ -163,14 +163,14 @@
 .message-bubble.user {
   @apply ml-auto;
   background: linear-gradient(135deg, var(--motiff-primary), var(--motiff-accent));
-  color: #000;
+  color: var(--mac-surface-bg);
   border: 1px solid rgba(0, 229, 255, 0.3);
 }
 
 .message-bubble.assistant {
   @apply mr-auto;
   background: var(--glass-medium);
-  color: #fff;
+  color: var(--mac-text-primary);
   border: 1px solid var(--glass-border);
 }
 
@@ -195,12 +195,12 @@
 .waveform {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 0.125rem;
   height: 32px;
 }
 
 .waveform-bar {
-  width: 3px;
+  width: 0.1875rem;
   background: var(--waveform-color);
   border-radius: 2px;
   transition: height var(--transition-fast);
@@ -236,14 +236,14 @@
 }
 
 .smart-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--mac-text-muted);
 }
 
 /* Quick Reply Chips */
 .quick-reply {
   @apply glass-panel-light rounded-full px-4 py-2 text-sm;
   border: 1px solid var(--glass-border);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--mac-text-secondary);
   cursor: pointer;
   transition: all var(--transition-medium);
 }
@@ -280,8 +280,8 @@
 
 .live-indicator::before {
   content: "";
-  width: 6px;
-  height: 6px;
+  width: 0.5rem;
+  height: 0.5rem;
   background: var(--motiff-green);
   border-radius: 50%;
 }
@@ -329,7 +329,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border: var(--mac-utility-border-elevated);
     --glass-light: rgba(255, 255, 255, 0.05);
     --glass-medium: rgba(255, 255, 255, 0.1);
     --glass-heavy: rgba(255, 255, 255, 0.15);
@@ -348,12 +348,12 @@
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
   .glass-panel {
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--mac-utility-shadow);
     border: 2px solid #fff;
   }
 
   .motiff-border-primary {
-    border-color: #00e5ff;
-    border-width: 2px;
+    border-color: var(--mac-accent-primary-400);
+    border-width: 0.125rem;
   }
 }

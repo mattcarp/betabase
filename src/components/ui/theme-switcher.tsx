@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTheme, type ThemeName } from "../../contexts/ThemeContext";
+import { useTheme } from "../ClientRoot";
+
+// Theme name type
+type ThemeName = "light" | "mac" | "jarvis" | "aoma";
 import { Palette, Check, Sparkles, Sun, Moon, Cpu, Building2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -38,7 +41,7 @@ export function ThemeSwitcher() {
         <Button
           variant="ghost"
           size="sm"
-          className={cn(
+          className={cn("mac-button", 
             "w-full justify-start gap-2 text-sm font-normal",
             "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
             isTransitioning && "opacity-50 cursor-wait"
@@ -76,7 +79,7 @@ export function ThemeSwitcher() {
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                   <ThemeIcon theme={theme.id} />
-                  <span className="font-medium">{theme.name}</span>
+                  <span className="font-normal">{theme.name}</span>
                 </div>
                 {isActive && <Check className="h-4 w-4 text-green-500" />}
               </div>
@@ -137,7 +140,7 @@ export function CompactThemeSwitcher() {
       size="icon"
       onClick={cycleTheme}
       disabled={isTransitioning}
-      className={cn("h-8 w-8", isTransitioning && "opacity-50 cursor-wait")}
+      className={cn("mac-button", "h-8 w-8", isTransitioning && "opacity-50 cursor-wait")}
       title={`Current: ${currentThemeInfo?.name}. Click to switch.`}
     >
       {isTransitioning ? (
@@ -162,13 +165,13 @@ interface ThemePreviewCardProps {
   isActive: boolean;
   onSelect: (theme: ThemeName) => void;
 }
-
 export function ThemePreviewCard({ theme, isActive, onSelect }: ThemePreviewCardProps) {
   return (
-    <button
+    <button 
       onClick={() => onSelect(theme.id)}
       className={cn(
-        "relative flex flex-col gap-3 p-4 rounded-lg border-2 transition-all",
+        "mac-button",
+        "relative flex flex-col gap-3 p-4 rounded-lg border-2 transition-all w-full",
         "hover:scale-105 hover:shadow-lg",
         isActive ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/50"
       )}
@@ -191,7 +194,7 @@ export function ThemePreviewCard({ theme, isActive, onSelect }: ThemePreviewCard
       {/* Theme Info */}
       <div className="text-left">
         <div className="flex items-center justify-between">
-          <h3 className="font-normal">{theme.name}</h3>
+          <h3 className="mac-title">{theme.name}</h3>
           {isActive && <Check className="h-5 w-5 text-green-500" />}
         </div>
         <p className="text-sm text-muted-foreground mt-1">{theme.description}</p>

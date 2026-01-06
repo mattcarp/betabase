@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
 import { Play, FileVideo, BookOpen } from "lucide-react";
 
 interface EmptyStateProps {
@@ -13,9 +13,9 @@ export function EmptyState({ onGetStarted }: EmptyStateProps) {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
       <Card className="mac-card max-w-2xl w-full">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-purple-500/10 flex items-center justify-center">
-            <FileVideo className="h-8 w-8 text-purple-400" />
+        <CardHeader className="mac-card text-center">
+          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary-500/10 flex items-center justify-center">
+            <FileVideo className="h-8 w-8 text-primary-400" />
           </div>
           <CardTitle className="mac-heading text-2xl">No Sessions Yet</CardTitle>
           <CardDescription className="mac-body text-base mt-2">
@@ -26,8 +26,8 @@ export function EmptyState({ onGetStarted }: EmptyStateProps) {
         <CardContent className="space-y-6">
           {/* Getting Started Guide */}
           <div className="space-y-4">
-            <h3 className="mac-title text-lg font-light flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-purple-400" />
+            <h3 className="mac-title">
+              <BookOpen className="h-5 w-5 text-primary-400" />
               Getting Started
             </h3>
 
@@ -90,11 +90,11 @@ interface StepProps {
 function Step({ number, title, description }: StepProps) {
   return (
     <div className="flex gap-4 items-start">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-sm font-light text-purple-300">
+      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center text-sm font-light text-primary-300">
         {number}
       </div>
       <div className="flex-1 pt-0.5">
-        <h4 className="text-sm font-light text-white">{title}</h4>
+        <h4 className="mac-title">{title}</h4>
         <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
       </div>
     </div>

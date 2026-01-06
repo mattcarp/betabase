@@ -53,10 +53,10 @@ export function RAGComparisonCard() {
   };
 
   return (
-    <Card className="bg-card/50 border-border">
-      <CardHeader>
+    <Card className="mac-card bg-card/50 border-border">
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <GitCompare className="h-5 w-5 text-purple-400" />
+          <GitCompare className="h-5 w-5 text-primary-400" />
           Basic vs Advanced RAG Comparison
         </CardTitle>
         <CardDescription className="text-muted-foreground">
@@ -66,16 +66,17 @@ export function RAGComparisonCard() {
       <CardContent className="space-y-4">
         {/* Test Query Input */}
         <div className="flex gap-2">
-          <Input
+          <Input className="mac-input"
             placeholder="Enter test query..."
             value={testQuery}
             onChange={(e) => setTestQuery(e.target.value)}
             className="flex-1 bg-card/50 border-border"
           />
           <Button
+            variant="teal-solid"
             onClick={runComparison}
             disabled={loading || !testQuery.trim()}
-            className="gap-2 bg-purple-600 hover:bg-purple-700"
+            className="gap-2"
           >
             {loading ? (
               <>
@@ -97,8 +98,8 @@ export function RAGComparisonCard() {
             {/* Summary Cards */}
             <div className="grid grid-cols-2 gap-4">
               {/* Basic RAG */}
-              <Card className="bg-card/30 border-border">
-                <CardHeader>
+              <Card className="mac-card bg-card/30 border-border">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-sm text-foreground flex items-center gap-2">
                     <FileText className="h-4 w-4 text-muted-foreground" />
                     Basic RAG
@@ -124,10 +125,10 @@ export function RAGComparisonCard() {
               </Card>
 
               {/* Advanced RAG */}
-              <Card className="bg-card/30 border-purple-500/30 ring-1 ring-purple-500/20">
-                <CardHeader>
+              <Card className="mac-card bg-card/30 border-primary-400/30 ring-1 ring-primary-400/20">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-sm text-foreground flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-purple-400" />
+                    <Lightbulb className="h-4 w-4 text-primary-400" />
                     Advanced RAG
                   </CardTitle>
                 </CardHeader>
@@ -154,7 +155,7 @@ export function RAGComparisonCard() {
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground">Documents:</span>
-                    <Badge className="ml-2 bg-purple-500/20 text-purple-300">
+                    <Badge className="ml-2 bg-primary-400/20 text-primary-300">
                       <FileText className="h-3 w-3 mr-1" />
                       {comparison.advanced.documentCount}
                     </Badge>
@@ -185,19 +186,19 @@ export function RAGComparisonCard() {
 
             {/* Advantages */}
             {comparison.comparison.advancedAdvantages.length > 0 && (
-              <Card className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border-purple-500/30">
-                <CardHeader>
+              <Card className="mac-card bg-gradient-to-br from-primary-700/20 to-primary-400/10 border-primary-400/30">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-sm text-foreground flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-purple-400" />
+                    <TrendingUp className="h-4 w-4 text-primary-400" />
                     Advanced RAG Advantages
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   <ul className="space-y-2">
                     {comparison.comparison.advancedAdvantages.map(
                       (advantage: string, idx: number) => (
                         <li key={idx} className="text-xs text-foreground flex items-start gap-2">
-                          <span className="text-purple-400 mt-0.5">✓</span>
+                          <span className="text-primary-400 mt-0.5">✓</span>
                           <span>{advantage}</span>
                         </li>
                       )
@@ -208,11 +209,11 @@ export function RAGComparisonCard() {
             )}
 
             {/* Document Overlap Analysis */}
-            <Card className="bg-card/30 border-border">
-              <CardHeader>
+            <Card className="mac-card bg-card/30 border-border">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-sm text-foreground">Document Overlap Analysis</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Shared Documents:</span>
@@ -228,7 +229,7 @@ export function RAGComparisonCard() {
                   </div>
                   <div className="w-full bg-muted rounded-full h-2 mt-3">
                     <div
-                      className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-primary-400 to-primary-500 h-2 rounded-full transition-all duration-500"
                       style={{ width: `${comparison.comparison.documentOverlapPercent}%` }}
                     />
                   </div>

@@ -1,0 +1,915 @@
+
+Running 864 tests using 4 workers
+
+[NETWORK ERROR] 429 https://o187573.ingest.us.sentry.io/api/1308293/envelope/?sentry_version=7&sentry_key=b1bac1ebe14d4dc59df277f49d2e98da&sentry_client=sentry.javascript.nextjs%2F10.32.1
+[CONSOLE ERROR CAPTURED] Failed to load resource: the server responded with a status of 429 ()
+  ✘    3 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:112:9 › AI Elements Implementation › Shimmer Effect › shows shimmer animation on loading text (33.3s)
+  ✘    1 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:64:9 › AI Elements Implementation › Chain of Thought › chain of thought shows step progression (33.0s)
+  ✘    2 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:34:9 › AI Elements Implementation › Chain of Thought › shows chain of thought during query processing instead of basic spinner (33.2s)
+  ✘    4 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:88:9 › AI Elements Implementation › Chain of Thought › chain of thought is collapsible (32.9s)
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[CONSOLE ERROR CAPTURED] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13) The above error occurred in the <ClientPageRoot> component. It was handled by the <ErrorBoundaryHandler> error boundary.
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[CONSOLE ERROR CAPTURED] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13) The above error occurred in the <ClientPageRoot> component. It was handled by the <ErrorBoundaryHandler> error boundary.
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[CONSOLE ERROR CAPTURED] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13) The above error occurred in the <ClientPageRoot> component. It was handled by the <ErrorBoundaryHandler> error boundary.
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643566022:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565680:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13) The above error occurred in the <ClientPageRoot> component. It was handled by the <ErrorBoundaryHandler> error boundary.
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:866:29)
+    at http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:145:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:144:67)
+    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1767643565881:381:50)
+    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:113:34)
+    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:82:31)
+    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2113:20)
+    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2813:11)
+    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2808:7)
+    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3011:15)
+    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:3275:13)
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+[CONSOLE ERROR CAPTURED] Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+========== ERROR SUMMARY ==========
+
+Console Errors (6):
+  1. [console.error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+     URL: http://localhost:3000/
+  2. [console.error] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.j
+     URL: http://localhost:3000/
+  3. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  4. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  5. [console.error] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  6. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+
+===================================
+
+
+========== ERROR SUMMARY ==========
+
+Console Errors (9):
+  1. [console.error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+     URL: http://localhost:3000/
+  2. [console.error] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.j
+     URL: http://localhost:3000/
+  3. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  4. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  5. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  6. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  7. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  8. [console.error] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  9. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+
+===================================
+
+
+========== ERROR SUMMARY ==========
+
+Console Errors (6):
+  1. [console.error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+     URL: http://localhost:3000/
+  2. [console.error] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.j
+     URL: http://localhost:3000/
+  3. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  4. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  5. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  6. [console.error] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+
+===================================
+
+
+========== ERROR SUMMARY ==========
+
+Console Errors (6):
+  1. [console.error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+     URL: http://localhost:3000/
+  2. [console.error] %o
+
+%s ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.j
+     URL: http://localhost:3000/
+  3. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  4. [console.error] Application error: ChunkLoadError: Loading chunk app/page failed.
+(error: http://localhost:3000/_next/static/chunks/app/page.js)
+    at __webpack_require__.f.j (http://localhost:3000/_next/static/chun
+     URL: http://localhost:3000/
+  5. [console.error] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+  6. [console.error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+     URL: http://localhost:3000/
+
+===================================
+
+  ✘    7 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:159:9 › AI Elements Implementation › Context Token Visualization › shows token usage indicator in toolbar (37.5s)
+  ✘    5 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:132:9 › AI Elements Implementation › Shimmer Effect › shimmer text updates based on loading phase (37.5s)
+  ✘    8 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:206:9 › AI Elements Implementation › Artifact Container › wraps generated code in artifact container (37.4s)
+  ✘    6 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:178:9 › AI Elements Implementation › Context Token Visualization › context hover shows usage breakdown (37.6s)
+  ✘   10 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:296:9 › AI Elements Implementation › Plan Display › shows execution plan for planning-type queries (314ms)
+  ✘    9 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:277:9 › AI Elements Implementation › Queue Display › queue items show completion status (299ms)
+  ✘   12 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:252:9 › AI Elements Implementation › Queue Display › shows task queue during multi-step operations (334ms)
+  ✘   11 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:230:9 › AI Elements Implementation › Artifact Container › artifact has title and actions (369ms)
+  ✘   14 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:346:9 › AI Elements Implementation › EXPERIMENTAL: System Diagrams › system diagram is interactive (zoom/pan) (334ms)
+  ✘   15 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:397:9 › AI Elements Implementation › EXPERIMENTAL: Agent Execution Visualizer › execution visualizer shows completion status (305ms)
+  ✘   13 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:320:9 › AI Elements Implementation › EXPERIMENTAL: System Diagrams › renders interactive system diagram for architecture queries (297ms)
+  ✘   16 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:369:9 › AI Elements Implementation › EXPERIMENTAL: Agent Execution Visualizer › shows execution flow during multi-tool queries (323ms)
+
+Gallery: screenshots/ai-elements-gallery.html
+
+
+Gallery: screenshots/ai-elements-gallery.html
+
+  ✘   18 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:444:9 › AI Elements Implementation › Streaming Still Works › response streams correctly with new components (322ms)
+  ✘   20 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:28:7 › AI Elements Visual Documentation › 01 - Chat Interface Overview (313ms)
+  ✘   19 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:61:7 › AI Elements Visual Documentation › 04 - Sidebar and Navigation (332ms)
+  ✘   17 [chromium] › tests/e2e/ai-elements-implementation.spec.ts:416:9 › AI Elements Implementation › No Loader2 Spinner Regression › does NOT show basic Loader2 spinner as primary loading indicator (336ms)
+
+Gallery: screenshots/ai-elements-gallery.html
+
+
+Gallery: screenshots/ai-elements-gallery.html
+
+
+Gallery: screenshots/ai-elements-gallery.html
+
+  ✘   23 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:91:7 › AI Elements Visual Documentation › 07 - Tab Navigation (300ms)
+  ✘   24 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:119:7 › AI Elements Visual Documentation › 10 - Mobile Viewport (286ms)
+
+Gallery: screenshots/ai-elements-gallery.html
+
+  ✘   22 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:35:7 › AI Elements Visual Documentation › 02 - Chat Input Area (319ms)
+  ✘   21 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:71:7 › AI Elements Visual Documentation › 05 - Model Selector (343ms)
+
+Gallery: screenshots/ai-elements-gallery.html
+
+
+Gallery: screenshots/ai-elements-gallery.html
+
+
+Gallery: screenshots/ai-elements-gallery.html
+
+
+Gallery: screenshots/ai-elements-gallery.html
+
+  ✘   27 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:101:7 › AI Elements Visual Documentation › 08 - Quick Actions Panel (244ms)
+  ✘   25 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:127:7 › AI Elements Visual Documentation › 11 - Tablet Viewport (321ms)
+  ✘   28 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:51:7 › AI Elements Visual Documentation › 03 - Suggested Questions (279ms)
+  ✘   26 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:81:7 › AI Elements Visual Documentation › 06 - Header Status Bar (319ms)
+
+Gallery: screenshots/ai-elements-gallery.html
+
+  ✘   29 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:111:7 › AI Elements Visual Documentation › 09 - Voice Controls (186ms)
+  ✘   32 [chromium] › tests/e2e/api/knowledge-api.spec.ts:27:9 › Knowledge API › POST /v1/knowledge/query › returns results with similarity scores (324ms)
+  ✘   31 [chromium] › tests/e2e/api/knowledge-api.spec.ts:14:9 › Knowledge API › Health Check › GET /health returns healthy status (329ms)
+
+Gallery: screenshots/ai-elements-gallery.html
+
+  ✘   30 [chromium] › tests/e2e/ai-elements-screenshots.spec.ts:135:7 › AI Elements Visual Documentation › 12 - Wide Desktop Viewport (172ms)
+  ✘   34 [chromium] › tests/e2e/api/knowledge-api.spec.ts:70:9 › Knowledge API › POST /v1/knowledge/query › excludes synthesis when synthesize=false (321ms)
+  ✘   33 [chromium] › tests/e2e/api/knowledge-api.spec.ts:55:9 › Knowledge API › POST /v1/knowledge/query › includes synthesis when synthesize=true (default) (327ms)
+  ✘   35 [chromium] › tests/e2e/api/knowledge-api.spec.ts:85:9 › Knowledge API › POST /v1/knowledge/query › filters by source type (323ms)
+  ✘   36 [chromium] › tests/e2e/api/knowledge-api.spec.ts:102:9 › Knowledge API › POST /v1/knowledge/query › caching works - second identical query is fast (318ms)
+  ✘   37 [chromium] › tests/e2e/api/knowledge-api.spec.ts:129:9 › Knowledge API › POST /v1/knowledge/query › returns 400 for missing query (323ms)
+  ✘   38 [chromium] › tests/e2e/api/knowledge-api.spec.ts:139:9 › Knowledge API › POST /v1/knowledge/query › returns 400 for empty query (322ms)
+  ✘   39 [chromium] › tests/e2e/api/knowledge-api.spec.ts:146:9 › Knowledge API › POST /v1/knowledge/query › respects limit parameter (320ms)
+  ✘   40 [chromium] › tests/e2e/api/knowledge-api.spec.ts:160:9 › Knowledge API › POST /v1/knowledge/query › enforces max limit of 20 (318ms)
+  ✘   43 [chromium] › tests/e2e/api/knowledge-api.spec.ts:176:9 › Knowledge API › 404 Handler › returns helpful error for unknown routes (342ms)
+  ✘   41 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:27:9 › Chat Flow Regression Suite › Form Rendering › chat form should render with all essential elements (267ms)
+  ✘   42 [chromium] › tests/e2e/critical-paths/auth.spec.ts:12:7 › Critical Auth Paths @critical › Magic link login flow (276ms)
+  -   45 [chromium] › tests/e2e/critical-paths/auth.spec.ts:42:7 › Critical Auth Paths @critical › Multiple valid email domains accepted
+  -   46 [chromium] › tests/e2e/critical-paths/auth.spec.ts:72:7 › Critical Auth Paths @critical › Invalid email shows error
+  -   47 [chromium] › tests/e2e/critical-paths/auth.spec.ts:99:7 › Critical Auth Paths @critical › Auth bypass works in development
+  -   48 [chromium] › tests/e2e/critical-paths/auth.spec.ts:136:7 › Critical Auth Paths @critical › Logout flow works correctly
+  -   49 [chromium] › tests/e2e/critical-paths/auth.spec.ts:155:7 › Critical Auth Paths @critical › Session persistence across page reloads
+  ✘   44 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:31:9 › Chat Flow Regression Suite › Form Rendering › chat input should be enabled and focusable (249ms)
+  ✘   52 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:64:9 › Chat Flow Regression Suite › Message Sending › clicking send button should send message (313ms)
+  ✘   50 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:41:9 › Chat Flow Regression Suite › Form Rendering › send button should be visible (367ms)
+  ✘   51 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:52:9 › Chat Flow Regression Suite › Message Sending › typing in input and pressing Enter should send message (345ms)
+  ✘   53 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:77:9 › Chat Flow Regression Suite › Message Sending › input should clear after sending (264ms)
+  ✘   55 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:113:9 › Chat Flow Regression Suite › AI Response › AI should respond to a simple question (296ms)
+  ✘   54 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:92:9 › Chat Flow Regression Suite › Message Sending › empty message should not send (313ms)
+  ✘   56 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:125:9 › Chat Flow Regression Suite › AI Response › AI message element should have correct structure (295ms)
+  ✘   57 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:145:9 › Chat Flow Regression Suite › Message History › messages should persist in order (286ms)
+  ✘   58 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:168:9 › Chat Flow Regression Suite › Message History › user and AI messages should alternate correctly (335ms)
+  ✘   59 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:186:9 › Chat Flow Regression Suite › Error Handling › UI should not crash on malformed input (377ms)
+  ✘   61 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:208:9 › Chat Flow Regression Suite › Error Handling › page should not have console errors on load (342ms)
+  ✘   60 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:241:9 › Chat Flow Regression Suite › Keyboard Navigation › Enter should send message (not Shift+Enter) (357ms)
+  ✘   62 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:253:9 › Chat Flow Regression Suite › Keyboard Navigation › Shift+Enter should create newline, not send (383ms)
+  ✘   64 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:294:7 › Welcome Screen & Suggestions › suggestion buttons should be visible and clickable (315ms)
+  ✘   65 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:316:7 › Welcome Screen & Suggestions › suggestion buttons should be interactive (331ms)
+  ✘   63 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:281:7 › Welcome Screen & Suggestions › welcome screen should display on fresh conversation (415ms)
+  ✘   66 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:341:7 › Chat Quick Smoke @smoke › chat form renders correctly (445ms)
+  ✘   67 [chromium] › tests/e2e/critical-paths/chat-flow-regression.spec.ts:347:7 › Chat Quick Smoke @smoke › can type in chat input (367ms)
+  ✘   68 [chromium] › tests/e2e/critical-paths/chat.spec.ts:46:7 › Critical Chat Paths @critical › Can send a chat message (470ms)
+  ✘   69 [chromium] › tests/e2e/critical-paths/chat.spec.ts:14:7 › Critical Chat Paths @critical › Chat interface loads correctly (479ms)
+  ✘   71 [chromium] › tests/e2e/critical-paths/chat.spec.ts:153:7 › Critical Chat Paths @critical › Voice input button is accessible (467ms)
+  ✘   72 [chromium] › tests/e2e/critical-paths/chat.spec.ts:120:7 › Critical Chat Paths @critical › New chat button creates fresh session (439ms)
+  ✘   70 [chromium] › tests/e2e/critical-paths/chat.spec.ts:98:7 › Critical Chat Paths @critical › Chat history persists across page reload (558ms)
+  ✘   73 [chromium] › tests/e2e/critical-paths/chat.spec.ts:195:7 › Critical Chat Paths @critical › Code blocks render with syntax highlighting (479ms)
+  ✘   74 [chromium] › tests/e2e/critical-paths/core-user-flows.spec.ts:17:7 › Critical Path: Core User Flows › Authentication: login -> session -> logout (325ms)
+  ✘   76 [chromium] › tests/e2e/critical-paths/core-user-flows.spec.ts:49:7 › Critical Path: Core User Flows › Chat: send and receive message baseline (336ms)
+  ✘   75 [chromium] › tests/e2e/critical-paths/core-user-flows.spec.ts:32:7 › Critical Path: Core User Flows › Navigation: tabs and routing (336ms)
+  ✘   77 [chromium] › tests/e2e/critical-paths/core-user-flows.spec.ts:40:7 › Critical Path: Core User Flows › File Upload: single file happy path (387ms)
+  ✘   81 [chromium] › tests/e2e/ddp-parser.spec.ts:19:7 › DDP Parser › should display DDP uploader with title and description (298ms)
+  ✘   78 [chromium] › tests/e2e/critical-paths/file-upload.spec.ts:190:7 › Critical File Upload Paths @critical › File size validation works (408ms)
+  ✘   79 [chromium] › tests/e2e/critical-paths/file-upload.spec.ts:96:7 › Critical File Upload Paths @critical › Drag and drop upload works (409ms)
+  ✘   80 [chromium] › tests/e2e/critical-paths/file-upload.spec.ts:33:7 › Critical File Upload Paths @critical › File upload UI is accessible (396ms)
+  ✘   82 [chromium] › tests/e2e/ddp-parser.spec.ts:32:7 › DDP Parser › should show info card explaining DDP (336ms)
+  ✘   83 [chromium] › tests/e2e/critical-paths/file-upload.spec.ts:145:7 › Critical File Upload Paths @critical › Multiple file upload works (441ms)
+  ✘   85 [chromium] › tests/e2e/critical-paths/file-upload.spec.ts:60:7 › Critical File Upload Paths @critical › Can upload a text file (359ms)
+  ✘   84 [chromium] › tests/e2e/critical-paths/file-upload.spec.ts:217:7 › Critical File Upload Paths @critical › Can delete uploaded files (375ms)
+  ✘   86 [chromium] › tests/e2e/ddp-parser.spec.ts:38:7 › DDP Parser › should have folder input with webkitdirectory attribute (354ms)
+  ✘   87 [chromium] › tests/e2e/ddp-parser.spec.ts:50:7 › DDP Parser › should show tips section (310ms)
+  ✘   88 [chromium] › tests/e2e/ddp-parser.spec.ts:44:7 › DDP Parser › should have multiple file input (295ms)
+  ✘   89 [chromium] › tests/e2e/ddp-parser.spec.ts:61:7 › DDP Parser - File Upload › should detect and parse DDP files correctly (320ms)
+  ✘   92 [chromium] › tests/e2e/ddp-parser.spec.ts:136:7 › DDP Display Component › should have accessible upload buttons (345ms)
+  ✘   90 [chromium] › tests/e2e/ddp-parser.spec.ts:88:7 › DDP Parser - File Upload › should show ISRC codes from parsed DDP (317ms)
+  ✘   91 [chromium] › tests/e2e/ddp-parser.spec.ts:106:7 › DDP Parser - File Upload › should show DDP files table (385ms)
+  ✓   93 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:95:7 › AOMA Login Flow - Blast Radius Demo › login button should exist with correct test ID (1.9s)
+  ✓   97 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:208:7 › AOMA Login Flow - Blast Radius Demo › login redirects to dashboard (711ms)
+  ✓   95 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:165:7 › AOMA Login Flow - Blast Radius Demo › password input should exist (1.5s)
+  ✓   94 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:148:7 › AOMA Login Flow - Blast Radius Demo › username input should exist (1.5s)
+  ✓   96 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:182:7 › AOMA Login Flow - Blast Radius Demo › can fill and submit login form (1.8s)
+  ✘  101 [chromium] › tests/e2e/demo/capture-screenshots.spec.ts:6:7 › Self-Healing UI Screenshots › capture UI screenshots (132ms)
+  ✓   98 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:229:7 › AOMA Login Flow - Blast Radius Demo › can access settings after login (661ms)
+🚀 Starting Chat Feature tests
+  ✓  100 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:267:7 › AOMA Login Flow - Blast Radius Demo › can logout after login (682ms)
+  ✓   99 [chromium] › tests/e2e/demo/blast-radius-login.spec.ts:248:7 › AOMA Login Flow - Blast Radius Demo › can view reports after login (686ms)
+  -  103 [chromium] › tests/e2e/demo/chat-feature.example.spec.ts:120:10 › SIAM Chat Feature › Advanced Features › should support file uploads @slow
+🚀 Starting Chat Feature tests
+✅ Chat Feature tests completed
+  ✘  102 [chromium] › tests/e2e/demo/chat-feature.example.spec.ts:62:9 › SIAM Chat Feature › Basic Functionality › should load chat interface @e2e (216ms)
+✅ Chat Feature tests completed
+  ✘  105 [chromium] › tests/e2e/demo/curate-pillar.spec.ts:20:7 › Curate Pillar @demo › Curate tab is accessible from main navigation (181ms)
+  ✘  104 [chromium] › tests/e2e/demo/chat-feature.example.spec.ts:90:9 › SIAM Chat Feature › Basic Functionality › should handle empty messages gracefully (206ms)
+🚀 Starting Chat Feature tests
+  ✘  106 [chromium] › tests/e2e/demo/capture-test-tab.spec.ts:6:7 › Capture Test Tab Screenshot › capture test dashboard after MAC fix (237ms)
+🚀 Starting Chat Feature tests
+✅ Chat Feature tests completed
+  ✘  107 [chromium] › tests/e2e/demo/chat-feature.example.spec.ts:76:9 › SIAM Chat Feature › Basic Functionality › should send and receive messages @regression (314ms)
+  ✘  108 [chromium] › tests/e2e/demo/curate-pillar.spec.ts:26:7 › Curate Pillar @demo › Curate Tab renders with Queue as default (265ms)
+✅ Chat Feature tests completed
+  ✘  109 [chromium] › tests/e2e/demo/chat-feature.example.spec.ts:105:9 › SIAM Chat Feature › Advanced Features › should handle markdown in messages @visual (326ms)
+  ✘  110 [chromium] › tests/e2e/demo/curate-pillar.spec.ts:44:7 › Curate Pillar @demo › CuratorQueue shows review items (265ms)
+  ✘  111 [chromium] › tests/e2e/demo/curate-pillar.spec.ts:67:7 › Curate Pillar @demo › Files tab renders file list (357ms)
+  ✘  112 [chromium] › tests/e2e/demo/curate-pillar.spec.ts:90:7 › Curate Pillar @demo › RLHF tab is accessible (307ms)
+  ✘  113 [chromium] › tests/e2e/demo/curate-pillar.spec.ts:113:7 › Curate Pillar @demo › Can navigate between Curate tabs without errors (265ms)
+  ✘  114 [chromium] › tests/e2e/demo/ddp-tool-check.spec.ts:18:7 › DDP Tool Calling @ddp › Should parse CD-TEXT hex data using tool (229ms)
+  ✘  116 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:88:7 › Demo Script Beautiful - Opening Hook @demo @beautiful › Opening: Chat interface is visible and ready (335ms)
+  ✘  115 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:121:7 › Demo Script Beautiful - Demo 1: Baseline Query @demo @beautiful › Demo 1: "What is AOMA?" - Standard RAG baseline (307ms)
+  ✘  117 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:154:7 › Demo Script Beautiful - Demo 1: Baseline Query @demo @beautiful › Demo 1: Response includes streaming and citations (263ms)
+  ✘  118 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:192:7 › Demo Script Beautiful - Demo 2: Multi-Source Intelligence @demo @beautiful › Demo 2: JIRA + Git multi-source query - Differentiator #1 (239ms)
+  ✘  119 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:297:7 › Demo Script Beautiful - Demo 4: Development Context @demo @beautiful › Demo 4: Development status query - Differentiator #3 (304ms)
+  ✘  121 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:349:7 › Demo Script Beautiful - Demo 5: Anti-Hallucination @demo @beautiful › Demo 5: Blockchain trick question - Differentiator #4 (293ms)
+  ✘  120 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:240:7 › Demo Script Beautiful - Demo 3: Visual Intelligence @demo @beautiful › Demo 3: System architecture diagram - Differentiator #2 (266ms)
+  ✘  122 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:417:7 › Demo Script Beautiful - Demo 6: Curate Tab @demo @beautiful › Demo 6: Navigate to Curate tab - Differentiator #6 (247ms)
+  ✘  123 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:431:7 › Demo Script Beautiful - Demo 6: Curate Tab @demo @beautiful › Demo 6: Curate tab has Upload functionality (262ms)
+  ✘  124 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:447:7 › Demo Script Beautiful - Demo 6: Curate Tab @demo @beautiful › Demo 6: Curate tab has Delete functionality (284ms)
+  ✘  125 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:463:7 › Demo Script Beautiful - Demo 6: Curate Tab @demo @beautiful › Demo 6: Curate tab has Dedupe functionality (GitMerge icon) (241ms)
+  ✘  126 [chromium] › tests/e2e/demo/demo-beautiful-script.spec.ts:496:7 › Demo Script Beautiful - Closing Recap @demo @beautiful › Closing: Navigate all tabs without console errors (270ms)
+  -  130 [chromium] › tests/e2e/demo/demo-gaps.spec.ts:57:8 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-02: Chat offers diagram for architecture questions
+  ✘  127 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:32:7 › Demo Enhancement Components › should load chat interface without console errors (230ms)
+  -  131 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:49:7 › Demo Enhancement Components › should display Demo Mode toggle in header
+  -  132 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:57:7 › Demo Enhancement Components › should toggle Demo Mode on/off
+  -  133 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:74:7 › Demo Enhancement Components › should display HeroMetricsStrip with vector count
+  -  134 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:84:7 › Demo Enhancement Components › should display welcome screen with suggestions
+  -  135 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:95:7 › Demo Enhancement Components › should accept text input in chat
+  -  136 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:106:7 › Demo Enhancement Components › should send message and show progress indicator
+  -  137 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:132:7 › Demo Enhancement Components › should make API call when sending message
+  -  138 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:155:7 › Demo Enhancement Components › should show connection status indicator
+  -  139 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:165:7 › Demo Enhancement Components › should have voice buttons visible
+  -  140 [chromium] › tests/e2e/demo/demo-mc-edit-gaps.spec.ts:134:8 › MC Edit Demo Gaps @demo @gaps › GAP-002: Verify Tester Mode "Ladybug" UI
+  ✘  128 [chromium] › tests/e2e/demo/demo-enhancements.spec.ts:184:7 › Chat Response Quality › should receive valid response from chat API (234ms)
+  ✘  129 [chromium] › tests/e2e/demo/demo-gaps.spec.ts:33:7 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-01: Nano Banana Pro Page loads and generates ERD (198ms)
+  ✘  142 [chromium] › tests/e2e/demo/demo-mc-edit-gaps.spec.ts:151:7 › MC Edit Demo Gaps @demo @gaps › GAP-003: Verify Self-Healing "Blast Radius" Controls (354ms)
+  ✘  141 [chromium] › tests/e2e/demo/demo-mc-edit-gaps.spec.ts:83:7 › MC Edit Demo Gaps @demo @gaps › GAP-001: Verification of Feedback Loop (Chat -> Curate) (341ms)
+  ✘  143 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:88:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-001: App loads on localhost (300ms)
+  ✘  144 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:95:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-002: Welcome screen renders (272ms)
+  ✘  145 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:112:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-010: Hard but answerable question (268ms)
+  ✘  146 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:160:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation (300ms)
+  ✘  147 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:129:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-011: Upcoming release info (JIRAs) (319ms)
+  ✘  148 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:196:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-022: DDP parsing tool call (237ms)
+  ✘  151 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:277:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-031: Thumbs down feedback flow (363ms)
+  ✘  149 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:213:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-023: DDP Advanced Parsing (CD-TEXT, DDPMS) (380ms)
+  ✘  150 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:244:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-030: Blockchain trick question (430ms)
+  ✘  152 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:310:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-040: Navigate to Curate tab (282ms)
+  ✘  153 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:345:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-043: Curation queue renders (319ms)
+  ✘  154 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:332:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-042: Delete functionality visible (356ms)
+  ✘  156 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:367:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-050: Navigate to Test tab (355ms)
+  ✘  155 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:319:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-041: Upload area visible (381ms)
+  ✘  157 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:376:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-051: Test list scrollable (332ms)
+  ✘  158 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:409:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-054: Self-healing tab (337ms)
+  ✘  159 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:396:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-053: Auto-ranking visible (356ms)
+  ✘  160 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:427:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-058: Self-Healing Blast Radius (333ms)
+  ✘  162 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:573:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-040: Curation Segue (250ms)
+  ✘  163 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:549:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-057: Three-Tier Ranking System (324ms)
+  ✘  164 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:450:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-055: Ladybug Tester Mode visible (301ms)
+  ✘  161 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:522:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-056: Ladybug Context Switching (TDD/FAILING) (307ms)
+  ✘  165 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:621:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-060: Three-pillar navigation (285ms)
+  ✘  167 [chromium] › tests/e2e/demo/demo-readiness-test.spec.ts:114:7 › Demo Readiness - Chat & Curate › Chat: Response should not hang around after completion (297ms)
+  ✘  168 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:652:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-061: Screenshot capture all tabs (335ms)
+  ✘  166 [chromium] › tests/e2e/demo/demo-readiness-test.spec.ts:41:7 › Demo Readiness - Chat & Curate › Chat: Progress indicator should appear ABOVE response, not below (325ms)
+  ✘  169 [chromium] › tests/e2e/demo/demo-readiness-test.spec.ts:159:7 › Demo Readiness - Chat & Curate › Chat: Multiple messages should display cleanly (366ms)
+  ✘  171 [chromium] › tests/e2e/demo/demo-readiness-test.spec.ts:198:7 › Demo Readiness - Chat & Curate › Curate: Tab should be accessible and error-free (352ms)
+  ✘  170 [chromium] › tests/e2e/demo/demo-readiness-test.spec.ts:246:7 › Demo Readiness - Chat & Curate › Curate: All tabs should navigate without errors (340ms)
+  ✘  172 [chromium] › tests/e2e/demo/demo-readiness-test.spec.ts:278:7 › Demo Readiness - Chat & Curate › Visual: Take demo screenshots for all key views (325ms)
+  ✘  176 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:149:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: Progress indicator shows intent classification and re-ranking (309ms)
+  ✘  175 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:109:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: "What is AOMA?" - Standard RAG query (323ms)
+  ✘  173 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:130:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: Multi-source query - JIRA + Git integration (353ms)
+  ✘  174 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:81:7 › Demo Scenarios - Opening & Chat Pillar @demo › Opening: Chat responds to "What are the different asset types in AOMA?" (323ms)
+  ✘  180 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:242:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: Anti-hallucination - Blockchain trick question (358ms)
+  ✘  179 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:224:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: Dev context - Current development status (326ms)
+  ✘  178 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:205:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: ERD/Infographic generation for multi-tenant architecture (378ms)
+  ✘  177 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:177:7 › Demo Scenarios - Opening & Chat Pillar @demo › Chat: Diagram generation - System architecture (328ms)
+  ✘  181 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:292:7 › Demo Scenarios - Curate Pillar @demo › Curate: Tab accessible with Upload/Delete/Dedupe buttons (367ms)
+  ✘  184 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:366:7 › Demo Scenarios - Curate Pillar @demo › Curate: Navigate to Curation Queue (366ms)
+  ✘  183 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:399:7 › Demo Scenarios - Test Pillar @demo › Test: Dashboard shows key metrics (executions, pass rate, auto-healed) (337ms)
+  ✘  182 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:322:7 › Demo Scenarios - Curate Pillar @demo › Curate: Thumbs down feedback flow (328ms)
+  ✘  187 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:445:7 › Demo Scenarios - Test Pillar @demo › Test: Search for specific test ID 49524 (Wav Duration Mismatch) (350ms)
+  ✘  186 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:421:7 › Demo Scenarios - Test Pillar @demo › Test: Historical sub-tab navigation (334ms)
+  ✘  185 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:475:7 › Demo Scenarios - Test Pillar @demo › Test: AI Analysis button and results (ID 49524) (311ms)
+  ✘  188 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:517:7 › Demo Scenarios - Test Pillar @demo › Test: Search for ID 83168 and Generate Script (264ms)
+  ✘  189 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:602:7 › Demo Scenarios - Full Workflow @demo › Full Demo: Navigate all three pillars without errors (364ms)
+  ✘  190 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:640:7 › Demo Scenarios - Full Workflow @demo › Full Demo: Capture all tab screenshots for demo prep (323ms)
+  ✘  192 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:42:7 › Self-Healing Demo - Step 1: Dashboard @demo @self-healing @executive › Step 1: Navigate to Testing Tab -> Home (378ms)
+  ✘  191 [chromium] › tests/e2e/demo/demo-scenarios-comprehensive.spec.ts:559:7 › Demo Scenarios - Test Pillar @demo › Test: Self-Healing tab renders healing queue (386ms)
+  ✘  194 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:72:7 › Self-Healing Demo - Step 1: Dashboard @demo @self-healing @executive › Step 1: Dashboard shows Failing tests count (278ms)
+  ✘  193 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:55:7 › Self-Healing Demo - Step 1: Dashboard @demo @self-healing @executive › Step 1: Dashboard shows Pass Rate metric (273ms)
+  ✘  195 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:89:7 › Self-Healing Demo - Step 1: Dashboard @demo @self-healing @executive › Step 1: Dashboard shows Self-Healed count (249ms)
+  ✘  196 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:106:7 › Self-Healing Demo - Step 1: Dashboard @demo @self-healing @executive › Step 1: Dashboard shows HITL items count (208ms)
+  ✘  198 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:169:7 › Self-Healing Demo - Step 2: Self-Healing Queue @demo @self-healing @executive › Step 2: Queue shows stats bar (Total, Auto-Healed, Pending, Success Rate) (258ms)
+  ✘  197 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:139:7 › Self-Healing Demo - Step 2: Self-Healing Queue @demo @self-healing @executive › Step 2: Navigate to Self-Healing tab/queue (282ms)
+  ✘  200 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:217:7 › Self-Healing Demo - Step 2: Self-Healing Queue @demo @self-healing @executive › Step 2: Queue shows confidence scores (269ms)
+  ✘  199 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:193:7 › Self-Healing Demo - Step 2: Self-Healing Queue @demo @self-healing @executive › Step 2: Queue shows tier badges (Tier 1, Tier 2, Tier 3) (288ms)
+  ✘  201 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:297:7 › Self-Healing Demo - Step 3: Tier 1 Auto-Approved @demo @self-healing @executive › Step 3: Tier 1 detail shows selector change (231ms)
+  ✘  202 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:257:7 › Self-Healing Demo - Step 3: Tier 1 Auto-Approved @demo @self-healing @executive › Step 3: Click on Tier 1 healing attempt (97% confidence) (279ms)
+  ✘  203 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:322:7 › Self-Healing Demo - Step 3: Tier 1 Auto-Approved @demo @self-healing @executive › Step 3: Tier 1 shows AI Reasoning (262ms)
+  ✘  204 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:362:7 › Self-Healing Demo - Step 4: Tier 2 Human Review @demo @self-healing @executive › Step 4: Tier 2 shows Pending Review status (84% confidence) (253ms)
+  ✘  205 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:388:7 › Self-Healing Demo - Step 4: Tier 2 Human Review @demo @self-healing @executive › Step 4: Tier 2 shows Approve/Reject buttons (359ms)
+  ✘  206 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:433:7 › Self-Healing Demo - Step 5: Tier 3 Architect Required @demo @self-healing @executive › Step 5: Tier 3 shows Expert Review warning (62% confidence) (348ms)
+  ✘  207 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:459:7 › Self-Healing Demo - Step 5: Tier 3 Architect Required @demo @self-healing @executive › Step 5: Tier 3 shows complex timing/async change (244ms)
+  ✘  208 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:499:7 › Self-Healing Demo - Step 6: Impact Metrics @demo @self-healing @executive › Step 6: Navigate to Analytics/Metrics tab (248ms)
+  ✘  210 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:547:7 › Self-Healing Demo - Step 6: Impact Metrics @demo @self-healing @executive › Step 6: Shows Time Saved metrics (332ms)
+  ✘  211 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:582:7 › Self-Healing Demo - Full Walkthrough @demo @self-healing @executive › Full Walkthrough: All 6 steps without console errors (334ms)
+  ✘  209 [chromium] › tests/e2e/demo/demo-self-healing-executive.spec.ts:524:7 › Self-Healing Demo - Step 6: Impact Metrics @demo @self-healing @executive › Step 6: Shows Healing Trends Chart (14-day view) (341ms)
+
+🔐 Authenticating with production via Mailinator...
+  📧 Using test email: siam-audit-1767643664105@mailinator.com
+
+🔐 Authenticating with production via Mailinator...
+  📧 Using test email: siam-audit-1767643664756@mailinator.com
+
+🔐 Authenticating with production via Mailinator...
+  📧 Using test email: siam-audit-1767643664870@mailinator.com
+
+🔐 Authenticating with production via Mailinator...
+  📧 Using test email: siam-audit-1767643664888@mailinator.com
+  ❌ Authentication failed: page.fill: Test timeout of 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('input[type="email"]')[22m
+
+    at [90m/Users/matt/Documents/projects/mc-thebetabase/[39mtests/e2e/demo/fiona-design-audit.spec.ts:100:20 {
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts'[39m,
+      line: [33m100[39m,
+      column: [33m20[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m`Fill "siam-audit-1767643664105@mailinator.com" locator('input[type="email"]')`[39m,
+    apiName: [32m'page.fill'[39m,
+    params: {
+      selector: [32m'input[type="email"]'[39m,
+      value: [32m'siam-audit-1767643664105@mailinator.com'[39m,
+      timeout: [33m0[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@39'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@39'[39m,
+      _title: [32m`Fill "siam-audit-1767643664105@mailinator.com" locator('input[type="email"]')`[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1767643784008[39m,
+    error: {
+      message: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m,
+      stack: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m +
+        [32m'\n'[39m +
+        [32m'    at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts:100:20'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+  ✘  212 [chromium] › tests/e2e/demo/fiona-design-audit.spec.ts:124:7 › Fiona Design Audit - MAC Design System Compliance › Phase 1: Visual UI/UX Scoring - Screenshot Capture (2.0m)
+
+🔐 Authenticating with production via Mailinator...
+  📧 Using test email: siam-audit-1767643784684@mailinator.com
+  ❌ Authentication failed: page.fill: Test timeout of 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('input[type="email"]')[22m
+
+    at [90m/Users/matt/Documents/projects/mc-thebetabase/[39mtests/e2e/demo/fiona-design-audit.spec.ts:100:20 {
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts'[39m,
+      line: [33m100[39m,
+      column: [33m20[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m`Fill "siam-audit-1767643664756@mailinator.com" locator('input[type="email"]')`[39m,
+    apiName: [32m'page.fill'[39m,
+    params: {
+      selector: [32m'input[type="email"]'[39m,
+      value: [32m'siam-audit-1767643664756@mailinator.com'[39m,
+      timeout: [33m0[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@39'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@39'[39m,
+      _title: [32m`Fill "siam-audit-1767643664756@mailinator.com" locator('input[type="email"]')`[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1767643784697[39m,
+    error: {
+      message: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m,
+      stack: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m +
+        [32m'\n'[39m +
+        [32m'    at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts:100:20'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+  ✘  213 [chromium] › tests/e2e/demo/fiona-design-audit.spec.ts:284:7 › Fiona Design Audit - MAC Design System Compliance › Phase 3: Typography Weight Audit (2.0m)
+  ❌ Authentication failed: page.fill: Test timeout of 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('input[type="email"]')[22m
+
+    at [90m/Users/matt/Documents/projects/mc-thebetabase/[39mtests/e2e/demo/fiona-design-audit.spec.ts:100:20 {
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts'[39m,
+      line: [33m100[39m,
+      column: [33m20[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m`Fill "siam-audit-1767643664870@mailinator.com" locator('input[type="email"]')`[39m,
+    apiName: [32m'page.fill'[39m,
+    params: {
+      selector: [32m'input[type="email"]'[39m,
+      value: [32m'siam-audit-1767643664870@mailinator.com'[39m,
+      timeout: [33m0[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@39'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@39'[39m,
+      _title: [32m`Fill "siam-audit-1767643664870@mailinator.com" locator('input[type="email"]')`[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1767643784796[39m,
+    error: {
+      message: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m,
+      stack: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m +
+        [32m'\n'[39m +
+        [32m'    at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts:100:20'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+  ❌ Authentication failed: page.fill: Test timeout of 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('input[type="email"]')[22m
+
+    at [90m/Users/matt/Documents/projects/mc-thebetabase/[39mtests/e2e/demo/fiona-design-audit.spec.ts:100:20 {
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts'[39m,
+      line: [33m100[39m,
+      column: [33m20[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m`Fill "siam-audit-1767643664888@mailinator.com" locator('input[type="email"]')`[39m,
+    apiName: [32m'page.fill'[39m,
+    params: {
+      selector: [32m'input[type="email"]'[39m,
+      value: [32m'siam-audit-1767643664888@mailinator.com'[39m,
+      timeout: [33m0[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@39'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@39'[39m,
+      _title: [32m`Fill "siam-audit-1767643664888@mailinator.com" locator('input[type="email"]')`[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1767643784824[39m,
+    error: {
+      message: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m,
+      stack: [32m'Error: page.fill: Test timeout of 120000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m`\x1B[2m  - waiting for locator('input[type="email"]')\x1B[22m\n`[39m +
+        [32m'\n'[39m +
+        [32m'    at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/fiona-design-audit.spec.ts:100:20'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+  ✘  215 [chromium] › tests/e2e/demo/fiona-design-audit.spec.ts:320:7 › Fiona Design Audit - MAC Design System Compliance › Phase 4: MAC Class Usage Audit (2.0m)
+  ✘  214 [chromium] › tests/e2e/demo/fiona-design-audit.spec.ts:260:7 › Fiona Design Audit - MAC Design System Compliance › Phase 2: Responsive Testing (2.0m)
+🚀 Starting Fiona's Triple Testing Orchestration
+
+📱 BrowserBase: Testing with natural language...
+
+🎯 Playwright: Functional validation...
+  ✘  217 [chromium] › tests/e2e/demo/fiona-unified-testing-example.spec.ts:12:7 › SIAM Authentication - Triple Validation › Complete authentication flow with all three MCP servers (2ms)
+🌩️  Starting BrowserBase cloud session...
+🖥️  Starting Playwright local testing...
+📸 Starting TestSprite visual capture...
+  ✘  218 [chromium] › tests/e2e/demo/fiona-unified-testing-example.spec.ts:122:7 › SIAM Authentication - Triple Validation › Parallel execution pattern for maximum efficiency (2ms)
+  ✘  219 [chromium] › tests/e2e/demo/silly-questions-demo.spec.ts:11:7 › Silly Questions Demo - Anti-Hallucination Testing › Question 1: Does AOMA have a teleportation feature? (226ms)
+  ✘  220 [chromium] › tests/e2e/demo/silly-questions-demo.spec.ts:33:7 › Silly Questions Demo - Anti-Hallucination Testing › Question 2: Can AOMA predict lottery numbers? (255ms)
+  ✘  221 [chromium] › tests/e2e/demo/silly-questions-demo.spec.ts:53:7 › Silly Questions Demo - Anti-Hallucination Testing › Question 3: Does AOMA have a coffee brewing integration? (258ms)
+  ✘  222 [chromium] › tests/e2e/demo/silly-questions-demo.spec.ts:73:7 › Silly Questions Demo - Anti-Hallucination Testing › Question 4: Can AOMA write poetry? (228ms)
+  ✘  223 [chromium] › tests/e2e/demo/silly-questions-demo.spec.ts:93:7 › Silly Questions Demo - Anti-Hallucination Testing › Question 5: Does AOMA support time travel workflows? (254ms)
+  ✘  224 [chromium] › tests/e2e/demo/silly-questions-demo.spec.ts:113:7 › Silly Questions Demo - Anti-Hallucination Testing › Question 6: THE PRESENTATION QUESTION - Teleportation (223ms)
+  ✘  225 [chromium] › tests/e2e/demo/test-pillar.spec.ts:20:7 › Test Pillar @demo › Test tab is accessible from main navigation (212ms)
+  ✘  226 [chromium] › tests/e2e/demo/test-pillar.spec.ts:26:7 › Test Pillar @demo › Test Dashboard renders with Home tab as default (244ms)
+  ✘  227 [chromium] › tests/e2e/demo/test-pillar.spec.ts:46:7 › Test Pillar @demo › Home Dashboard shows key metrics (231ms)
+  ✘  228 [chromium] › tests/e2e/demo/test-pillar.spec.ts:69:7 › Test Pillar @demo › Self-Healing tab renders healing queue (231ms)
+  ✘  229 [chromium] › tests/e2e/demo/test-pillar.spec.ts:92:7 › Test Pillar @demo › Can navigate between Test tabs without errors (193ms)
+  ✘  230 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:136:7 › Exhaustive Design Review › 01. Header - Brand Identity & Logo (229ms)
+  ✘  231 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:154:7 › Exhaustive Design Review › 02. Header - Navigation Tabs (Desktop) (264ms)
+  ✘  232 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:195:7 › Exhaustive Design Review › 03. Header - Mobile Navigation (230ms)
+  ✘  233 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:224:7 › Exhaustive Design Review › 04. Header - Control Buttons (193ms)
+  ✘  234 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:263:7 › Exhaustive Design Review › 05. Chat Mode - Welcome Screen (191ms)
+  ✘  235 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:295:7 › Exhaustive Design Review › 06. Chat Mode - Message Input (216ms)
+  ✘  236 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:327:7 › Exhaustive Design Review › 07. Chat Mode - Sidebar (188ms)
+  ✘  237 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:355:7 › Exhaustive Design Review › 08. Test Mode - All Sub-tabs (231ms)
+  ✘  238 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:389:7 › Exhaustive Design Review › 09. Fix Mode - All Sub-tabs (229ms)
+  ✘  239 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:414:7 › Exhaustive Design Review › 10. Curate Mode (190ms)
+  ✘  240 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:440:7 › Exhaustive Design Review › 11. HUD Mode (189ms)
+  ✘  241 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:463:7 › Exhaustive Design Review › 12. Right Sidebar - Knowledge Panel (190ms)
+  ✘  242 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:498:7 › Exhaustive Design Review › 13. Forms and Inputs - Comprehensive Check (181ms)
+  ✘  243 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:525:7 › Exhaustive Design Review › 14. Buttons - Comprehensive States (187ms)
+  ✘  244 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:558:7 › Exhaustive Design Review › 15. Color Compliance Check (186ms)
+  ✘  245 [chromium] › tests/e2e/design-review/exhaustive-design-audit.spec.ts:591:7 › Exhaustive Design Review › 16. Generate Design Audit Report (198ms)
+
+ Starting Visual Design Audit...
+
+1. Loading homepage...
+  ✘  246 [chromium] › tests/e2e/design-review/visual-audit-with-validation.spec.ts:186:7 › Visual Design Audit with Validation › Complete visual audit of all pages and tabs (181ms)
+  ✘  247 [chromium] › tests/e2e/features/ai-chat.spec.ts:27:7 › SIAM AI Chat Interface › should load the chat interface (186ms)
+  ✘  248 [chromium] › tests/e2e/features/ai-chat.spec.ts:40:7 › SIAM AI Chat Interface › should display all navigation tabs (187ms)
+  ✘  249 [chromium] › tests/e2e/features/ai-chat.spec.ts:49:7 › SIAM AI Chat Interface › should show AI chat panel in Chat tab (187ms)
+  ✘  250 [chromium] › tests/e2e/features/ai-chat.spec.ts:82:7 › SIAM AI Chat Interface › should switch between tabs (196ms)
+  ✘  251 [chromium] › tests/e2e/features/ai-chat.spec.ts:104:7 › SIAM AI Chat Interface › should allow typing in chat input (186ms)
+  ✘  252 [chromium] › tests/e2e/features/ai-chat.spec.ts:117:7 › SIAM AI Chat Interface › should display suggestions in chat (176ms)
+  ✘  253 [chromium] › tests/e2e/features/ai-chat.spec.ts:149:7 › SIAM AI Chat Interface › should have responsive sidebar toggle (184ms)
+  ✘  254 [chromium] › tests/e2e/features/ai-chat.spec.ts:162:7 › SIAM AI Chat Interface › should display proper UI styling and animations (168ms)
+  ✘  255 [chromium] › tests/e2e/features/ai-chat.spec.ts:178:7 › SIAM AI Chat Functionality › should send a message and receive response (179ms)
+  ✘  256 [chromium] › tests/e2e/features/auth-flow.spec.ts:12:7 › SIAM Authentication Flow › Emergency login page loads (196ms)
+  ✘  257 [chromium] › tests/e2e/features/auth-flow.spec.ts:18:7 › SIAM Authentication Flow › Can submit email for magic link (180ms)
+  ✘  258 [chromium] › tests/e2e/features/auth-flow.spec.ts:34:7 › SIAM Authentication Flow › Main app page eventually loads without hydration errors (178ms)
+  ✘  259 [chromium] › tests/e2e/features/chat-followup.spec.ts:4:7 › Chat Follow-up Questions › should handle two consecutive questions without hanging (190ms)
+  ✘  260 [chromium] › tests/e2e/features/conversation-title.spec.ts:22:7 › Conversation Title Auto-Generation › should display New Conversation for empty conversations (174ms)
+  -  261 [chromium] › tests/e2e/features/conversation-title.spec.ts:40:7 › Conversation Title Auto-Generation › REGRESSION: sidebar should NOT show 'The Betabase' as conversation title
+  -  262 [chromium] › tests/e2e/features/conversation-title.spec.ts:117:7 › Conversation Title Auto-Generation › should generate title from first user message
+  -  263 [chromium] › tests/e2e/features/conversation-title.spec.ts:160:7 › Conversation Title Auto-Generation › localStorage should persist conversation titles
+  -  264 [chromium] › tests/e2e/features/conversation-title.spec.ts:209:7 › Conversation Title Auto-Generation › title generation handles AI SDK v5/v6 parts format
+🚨 CRITICAL TEST: Checking Curate tab upload functionality
+  ✘  265 [chromium] › tests/e2e/features/critical-curate-functionality.spec.ts:11:7 › CRITICAL: Curate Tab Functionality › MUST have file upload capability - FAIL if missing (181ms)
+  ✘  266 [chromium] › tests/e2e/features/critical-curate-functionality.spec.ts:80:7 › CRITICAL: Curate Tab Functionality › MUST show AOMA knowledge base context (206ms)
+  ✘  267 [chromium] › tests/e2e/features/critical-curate-functionality.spec.ts:101:7 › CRITICAL: Curate Tab Functionality › MUST NOT show console errors (193ms)
+  ✘  268 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:51:7 › Curate Tab - Phase 1: Functional Testing › 1.1 - Page Load and Initial State (186ms)
+  ✘  269 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:71:7 › Curate Tab - Phase 1: Functional Testing › 1.2 - Tab Navigation (199ms)
+  ✘  270 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:88:7 › Curate Tab - Phase 1: Functional Testing › 1.3 - File Upload - Drag & Drop Detection (181ms)
+  ✘  271 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:102:7 › Curate Tab - Phase 1: Functional Testing › 1.4 - File Upload - Click to Browse (184ms)
+  ✘  272 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:124:7 › Curate Tab - Phase 1: Functional Testing › 1.5 - Search Functionality (195ms)
+  ✘  273 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:153:7 › Curate Tab - Phase 1: Functional Testing › 1.6 - File Selection (180ms)
+  ✘  274 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:180:7 › Curate Tab - Phase 1: Functional Testing › 1.7 - Delete Confirmation Dialog (197ms)
+  ✘  275 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:209:7 › Curate Tab - Phase 1: Functional Testing › 1.8 - Refresh Files (202ms)
+  ✘  276 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:228:7 › Curate Tab - Phase 1: Functional Testing › 1.9 - Deduplicate Button (187ms)
+  ✘  277 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:250:7 › Curate Tab - Phase 1: Functional Testing › 1.10 - Console Errors Check (196ms)
+  ✘  278 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:285:7 › Curate Tab - Phase 2: UX & Interaction Quality › 2.1 - Upload Progress Feedback (197ms)
+  ✘  279 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:302:7 › Curate Tab - Phase 2: UX & Interaction Quality › 2.2 - Empty State Messaging (189ms)
+  ✘  280 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:320:7 › Curate Tab - Phase 2: UX & Interaction Quality › 2.3 - Hover Effects and Visual Feedback (186ms)
+  ✘  281 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:337:7 › Curate Tab - Phase 2: UX & Interaction Quality › 2.4 - Tab Transition Smoothness (188ms)
+  ✘  282 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:359:7 › Curate Tab - Phase 2: UX & Interaction Quality › 2.5 - File Type Icon Display (196ms)
+  ✘  283 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:376:7 › Curate Tab - Phase 3: Accessibility › 3.1 - Keyboard Navigation (210ms)
+  ✘  284 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:386:7 › Curate Tab - Phase 3: Accessibility › 3.2 - ARIA Labels and Roles (178ms)
+  ✘  285 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:399:7 › Curate Tab - Phase 4: Performance › 4.1 - Page Load Performance (182ms)
+  ✘  286 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:415:7 › Curate Tab - Phase 4: Performance › 4.2 - File List Rendering Performance (191ms)
+  ✘  287 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:435:7 › Curate Tab - Phase 5: Error Handling › 5.1 - Invalid File Upload (193ms)
+  ✘  288 [chromium] › tests/e2e/features/curate-tab-comprehensive-test.spec.ts:451:7 › Curate Tab - Phase 5: Error Handling › 5.2 - Network Error Simulation (186ms)
+🚀 Testing SIAM Curate tab...
+  ✘  289 [chromium] › tests/e2e/features/curate-tab-test.spec.ts:5:7 › SIAM Curate Tab File Upload Investigation › examine Curate tab interface for file upload functionality (196ms)
+  ✘  290 [chromium] › tests/e2e/features/dashboard-integration-test.spec.ts:9:7 › Dashboard Integration Tests › should demonstrate dashboard connectivity (188ms)
+  ✘  291 [chromium] › tests/e2e/features/dashboard-integration-test.spec.ts:34:7 › Dashboard Integration Tests › should validate navigation functionality (188ms)
+  ✘  292 [chromium] › tests/e2e/features/dashboard-integration-test.spec.ts:54:7 › Dashboard Integration Tests › should handle API connectivity (211ms)
+  ✘  293 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:24:7 › ElevenLabs Conversational AI Integration › should display ConversationalAI component (204ms)
+  ✘  294 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:36:7 › ElevenLabs Conversational AI Integration › should show agent ID warning when not configured (201ms)
+  ✘  295 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:47:7 › ElevenLabs Conversational AI Integration › should have toggle conversation button (188ms)
+  ✘  296 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:55:7 › ElevenLabs Conversational AI Integration › should show mode indicator (187ms)
+  ✘  297 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:64:7 › ElevenLabs Conversational AI Integration › should display transcription sections (190ms)
+  ✘  298 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:72:7 › ElevenLabs Conversational AI Integration › should establish WebSocket connection (223ms)
+  ✘  299 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:114:7 › ElevenLabs Conversational AI Integration › should handle interrupt during AI speech (215ms)
+  ✘  300 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:147:7 › ElevenLabs Conversational AI Integration › should display audio level indicators when connected (194ms)
+  ✘  301 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:161:7 › ElevenLabs Conversational AI Integration › should show conversation state transitions (205ms)
+  ✘  302 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:174:7 › ElevenLabs Conversational AI Integration › should handle errors gracefully (210ms)
+  ✘  303 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:191:7 › ElevenLabs Conversational AI Integration › should display debug info in development mode (217ms)
+  ✘  304 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:200:7 › ElevenLabs Conversational AI Integration › should have proper accessibility attributes (225ms)
+  ✘  305 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:210:7 › ElevenLabs Conversational AI Integration › should check for console errors (205ms)
+  ✘  306 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:241:7 › ElevenLabs API Integration › should have valid conversation token endpoint (325ms)
+  ✘  307 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:262:7 › ElevenLabs API Integration › should reject conversation token request without agent ID (323ms)
+  ✘  308 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:277:7 › Performance › should load ConversationalAI component quickly (208ms)
+  ✘  309 [chromium] › tests/e2e/features/elevenlabs-conversation-integration.spec.ts:289:7 › Performance › should not have memory leaks on mount/unmount (210ms)
+  ✘  310 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:16:9 › Enhanced Curate Tab - Comprehensive Tests › Dashboard Tab - Management Evil Charts › should display executive KPI cards (214ms)
+  ✘  311 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:34:9 › Enhanced Curate Tab - Comprehensive Tests › Dashboard Tab - Management Evil Charts › should display document processing trends (221ms)
+  ✘  312 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:47:9 › Enhanced Curate Tab - Comprehensive Tests › Dashboard Tab - Management Evil Charts › should show quality metrics heatmap (215ms)
+  ✘  313 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:60:9 › Enhanced Curate Tab - Comprehensive Tests › Files Tab - Core Functionality › should preserve file upload and delete functionality (196ms)
+  ✘  314 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:85:9 › Enhanced Curate Tab - Comprehensive Tests › Files Tab - Core Functionality › should support file selection and bulk operations (212ms)
+  ✘  315 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:100:9 › Enhanced Curate Tab - Comprehensive Tests › Insights Tab - AI-Powered Analysis › should display deduplication insights (210ms)
+  ✘  316 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:114:9 › Enhanced Curate Tab - Comprehensive Tests › Insights Tab - AI-Powered Analysis › should show knowledge gaps analysis (219ms)
+  ✘  317 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:128:9 › Enhanced Curate Tab - Comprehensive Tests › Insights Tab - AI-Powered Analysis › should display quality improvements suggestions (230ms)
+  ✘  318 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:141:9 › Enhanced Curate Tab - Comprehensive Tests › Curators Tab - Gamification & Leaderboard › should display curator leaderboard (194ms)
+  ✘  319 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:158:9 › Enhanced Curate Tab - Comprehensive Tests › Curators Tab - Gamification & Leaderboard › should show department analytics (214ms)
+  ✘  320 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:171:9 › Enhanced Curate Tab - Comprehensive Tests › Curators Tab - Gamification & Leaderboard › should display achievements section (189ms)
+  ✘  321 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:184:9 › Enhanced Curate Tab - Comprehensive Tests › Analytics Tab - Performance Metrics › should display upload velocity chart (208ms)
+  ✘  322 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:202:9 › Enhanced Curate Tab - Comprehensive Tests › Analytics Tab - Performance Metrics › should show storage efficiency metrics (203ms)
+  ✘  323 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:215:9 › Enhanced Curate Tab - Comprehensive Tests › Analytics Tab - Performance Metrics › should display compliance status (191ms)
+  ✘  324 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:230:9 › Enhanced Curate Tab - Comprehensive Tests › Upload Tab - File Management › should preserve FileUpload component functionality (187ms)
+  ✘  325 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:247:9 › Enhanced Curate Tab - Comprehensive Tests › Responsive Design › should adapt to mobile viewport (191ms)
+  ✘  326 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:266:9 › Enhanced Curate Tab - Comprehensive Tests › Responsive Design › should work on tablet viewport (204ms)
+  ✘  327 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:277:9 › Enhanced Curate Tab - Comprehensive Tests › Data Integrity › should handle empty states gracefully (180ms)
+  ✘  328 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:289:9 › Enhanced Curate Tab - Comprehensive Tests › Data Integrity › should display loading states (197ms)
+  ✘  329 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:310:9 › Enhanced Curate Tab - Comprehensive Tests › Accessibility › should have proper ARIA labels (178ms)
+  ✘  330 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:321:9 › Enhanced Curate Tab - Comprehensive Tests › Accessibility › should support keyboard navigation (220ms)
+  ✘  331 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:336:7 › Integration with SIAM Core Features › should integrate with existing SIAM navigation (207ms)
+  ✘  332 [chromium] › tests/e2e/features/enhanced-curate-tab.spec.ts:346:7 › Integration with SIAM Core Features › should maintain consistent styling with MAC design system (195ms)
+  ✘  333 [chromium] › tests/e2e/features/gemini-2.5-pro-validation.spec.ts:22:7 › Gemini 2.5 Pro Chat Validation › should have Gemini 2.5 Pro as default model (196ms)
+  ✘  334 [chromium] › tests/e2e/features/gemini-2.5-pro-validation.spec.ts:32:7 › Gemini 2.5 Pro Chat Validation › should send a basic query and receive response from Gemini (196ms)
+  ✘  335 [chromium] › tests/e2e/features/gemini-2.5-pro-validation.spec.ts:60:7 › Gemini 2.5 Pro Chat Validation › should handle AOMA-specific query (201ms)
+  ✘  336 [chromium] › tests/e2e/features/gemini-2.5-pro-validation.spec.ts:85:7 › Gemini 2.5 Pro Chat Validation › should measure response time with Gemini 2.5 Pro (207ms)
+  ✘  337 [chromium] › tests/e2e/features/gemini-25-pro-chat.spec.ts:24:7 › Gemini 2.5 Pro Chat Integration › should have Gemini 2.5 Pro as default model (205ms)
+  ✘  338 [chromium] › tests/e2e/features/gemini-25-pro-chat.spec.ts:48:7 › Gemini 2.5 Pro Chat Integration › should successfully send a message and receive Gemini response (190ms)
+  ✘  339 [chromium] › tests/e2e/features/gemini-25-pro-chat.spec.ts:109:7 › Gemini 2.5 Pro Chat Integration › should handle model switching between Gemini and OpenAI (192ms)
+  ✘  340 [chromium] › tests/e2e/features/gemini-25-pro-chat.spec.ts:163:7 › Gemini 2.5 Pro Chat Integration › should verify Gemini 2.5 Pro has 2M context capability (199ms)
+  ✘  341 [chromium] › tests/e2e/features/gemini-25-pro-chat.spec.ts:189:7 › Gemini 2.5 Pro Chat Integration › should successfully query with AOMA context (195ms)
+--- Phase 1: Dashboard ---
+  ✘  342 [chromium] › tests/e2e/features/historical-explorer-refinement.spec.ts:3:5 › capture-visual-refinement (210ms)
+  ✘  343 [chromium] › tests/e2e/features/introspection-cost-display.spec.ts:20:7 › Introspection Cost Display › should display cost for LLM traces in dropdown (202ms)
+  ✘  344 [chromium] › tests/e2e/features/introspection-cost-display.spec.ts:65:7 › Introspection Cost Display › should display cost in trace detail modal (198ms)

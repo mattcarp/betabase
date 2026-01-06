@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "src/components/ui/button";
+import { Button } from "../ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "src/components/ui/collapsible";
-import { ScrollArea } from "src/components/ui/scroll-area";
-import { cn } from "src/lib/utils";
+} from "../ui/collapsible";
+import { ScrollArea } from "../ui/scroll-area";
+import { cn } from "../../lib/utils";
 import { ChevronDownIcon, PaperclipIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 
@@ -124,14 +124,13 @@ export const QueueItemAction = ({
   className,
   ...props
 }: QueueItemActionProps) => (
-  <Button
-    className={cn(
+  <Button className={cn("mac-button", 
       "size-auto rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-muted-foreground/10 hover:text-foreground group-hover:opacity-100",
       className
     )}
     size="icon"
     type="button"
-    variant="ghost"
+    variant="ghost" className="mac-button mac-button-outline"
     {...props}
   />
 );
@@ -214,8 +213,8 @@ export const QueueSectionTrigger = ({
 }: QueueSectionTriggerProps) => (
   <CollapsibleTrigger asChild>
     <button
-      className={cn(
-        "group flex w-full items-center justify-between rounded-md bg-muted/40 px-3 py-2 text-left font-medium text-muted-foreground text-sm transition-colors hover:bg-muted",
+      className={cn("mac-button", 
+        "group flex w-full items-center justify-between rounded-md bg-muted/40 px-3 py-2 text-left font-normal text-muted-foreground text-sm transition-colors hover:bg-muted",
         className
       )}
       type="button"

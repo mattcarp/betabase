@@ -58,7 +58,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <FileText className="h-3 w-3 text-yellow-700 dark:text-yellow-300" />
-            <span className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">Note</span>
+            <span className="text-xs text-yellow-700 dark:text-yellow-300 font-normal">Note</span>
           </div>
           <div className="flex items-center gap-2">
             {isEditing ? (

@@ -92,7 +92,7 @@ export const TestAnalytics: React.FC = () => {
     { name: "Unit Tests", value: 45, color: "var(--mac-primary-blue-400)" },
     { name: "Integration", value: 25, color: "var(--mac-success-green)" },
     { name: "E2E", value: 15, color: "var(--mac-warning-yellow)" },
-    { name: "API", value: 10, color: "var(--mac-accent-purple-400)" },
+    { name: "API", value: 10, color: "var(--mac-accent-primary-400)" },
     { name: "Performance", value: 5, color: "var(--mac-error-red)" },
   ];
 
@@ -150,13 +150,13 @@ export const TestAnalytics: React.FC = () => {
       <div className="grid grid-cols-6 gap-4">
         <Card className="mac-card">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
               <Clock className="h-4 w-4" />
               Avg Execution
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-bold">{keyMetrics.avgExecutionTime}</div>
+            <div className="text-2xl font-normal">{keyMetrics.avgExecutionTime}</div>
             <Badge className="bg-green-500/20 text-green-500 mt-2">
               <TrendingDown className="h-3 w-3 mr-2" />
               -15%
@@ -166,13 +166,13 @@ export const TestAnalytics: React.FC = () => {
 
         <Card className="mac-card">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
               <Target className="h-4 w-4" />
               Pass Rate
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-bold">{keyMetrics.avgPassRate}</div>
+            <div className="text-2xl font-normal">{keyMetrics.avgPassRate}</div>
             <Badge className="bg-green-500/20 text-green-500 mt-2">
               <TrendingUp className="h-3 w-3 mr-2" />
               +2.3%
@@ -182,26 +182,26 @@ export const TestAnalytics: React.FC = () => {
 
         <Card className="mac-card">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Tests/Day
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-bold">{keyMetrics.testsPerDay}</div>
+            <div className="text-2xl font-normal">{keyMetrics.testsPerDay}</div>
             <Badge className="bg-blue-500/20 text-blue-500 mt-2">Stable</Badge>
           </CardContent>
         </Card>
 
         <Card className="mac-card">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
               <Zap className="h-4 w-4" />
               MTTR
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-bold">{keyMetrics.mttr}</div>
+            <div className="text-2xl font-normal">{keyMetrics.mttr}</div>
             <Badge className="bg-green-500/20 text-green-500 mt-2">
               <TrendingDown className="h-3 w-3 mr-2" />
               -0.5h
@@ -211,26 +211,26 @@ export const TestAnalytics: React.FC = () => {
 
         <Card className="mac-card">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
               <Award className="h-4 w-4" />
               Efficiency
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-bold">{keyMetrics.testEfficiency}</div>
+            <div className="text-2xl font-normal">{keyMetrics.testEfficiency}</div>
             <Badge className="bg-yellow-500/20 text-yellow-500 mt-2">Good</Badge>
           </CardContent>
         </Card>
 
         <Card className="mac-card">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
               <Package className="h-4 w-4" />
               Automation
             </CardTitle>
           </CardHeader>
           <CardContent className="mac-card">
-            <div className="text-2xl font-bold">{keyMetrics.automationRate}</div>
+            <div className="text-2xl font-normal">{keyMetrics.automationRate}</div>
             <Badge className="bg-green-500/20 text-green-500 mt-2">
               <TrendingUp className="h-3 w-3 mr-2" />
               +5%
@@ -374,7 +374,7 @@ export const TestAnalytics: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div>
-                        <p className="mac-body font-medium">{suite.suite}</p>
+                        <p className="mac-body font-normal">{suite.suite}</p>
                         <p className="text-sm text-muted-foreground">{suite.tests} tests</p>
                       </div>
                     </div>
@@ -382,7 +382,7 @@ export const TestAnalytics: React.FC = () => {
                     <div className="flex items-center gap-8">
                       <div className="text-center">
                         <p className="text-sm text-muted-foreground">Avg Duration</p>
-                        <p className="mac-body font-medium">{suite.avgDuration}s</p>
+                        <p className="mac-body font-normal">{suite.avgDuration}s</p>
                       </div>
 
                       <div className="text-center">

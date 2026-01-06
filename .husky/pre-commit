@@ -3,3 +3,11 @@
 
 # Run prettier on staged files
 npx lint-staged
+
+# Run CodeRabbit check
+./scripts/run-coderabbit.sh
+
+# Run Critical Regression Tests
+echo "Running Zeitgeist Landing Page Regression Test..."
+npx playwright test tests/e2e/regression/zeitgeist_landing.spec.ts
+

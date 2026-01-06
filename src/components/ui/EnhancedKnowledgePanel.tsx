@@ -113,11 +113,10 @@ export function EnhancedKnowledgePanel({
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              className="mac-input"
+              className="mac-input pl-9"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search code, docs, JIRA..."
-              className="pl-9"
               disabled={isSearching}
               data-test-id="enhanced-knowledge-input"
             />
@@ -165,54 +164,49 @@ export function EnhancedKnowledgePanel({
           </div>
 
           <Button
-            className="mac-button mac-button-primary"
+            className="mac-button mac-button-primary text-xs"
             size="sm"
             variant={strategy === "rapid" ? "default" : "outline"}
             onClick={() => setStrategy("rapid")}
-            className="text-xs"
           >
             <Zap className="h-3 w-3 mr-2" /> Rapid
           </Button>
           <Button
-            className="mac-button mac-button-primary"
+            className="mac-button mac-button-primary text-xs"
             size="sm"
             variant={strategy === "focused" ? "default" : "outline"}
             onClick={() => setStrategy("focused")}
-            className="text-xs"
           >
             <Target className="h-3 w-3 mr-2" /> Focused
           </Button>
           <Button
-            className="mac-button mac-button-primary"
+            className="mac-button mac-button-primary text-xs"
             size="sm"
             variant={strategy === "comprehensive" ? "default" : "outline"}
             onClick={() => setStrategy("comprehensive")}
-            className="text-xs"
           >
             <ListChecks className="h-3 w-3 mr-2" /> Comprehensive
           </Button>
 
           <div className="ml-auto flex items-center gap-2">
             <Input
-              className="mac-input"
+              className="mac-input h-8 w-20 text-xs"
               type="number"
               min={0.5}
               max={0.95}
               step={0.01}
               value={threshold}
               onChange={(e) => setThreshold(Number(e.target.value))}
-              className="h-8 w-20 text-xs"
               aria-label="Relevance threshold"
             />
             <Input
-              className="mac-input"
+              className="mac-input h-8 w-16 text-xs"
               type="number"
               min={3}
               max={25}
               step={1}
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
-              className="h-8 w-16 text-xs"
               aria-label="Result limit"
             />
           </div>

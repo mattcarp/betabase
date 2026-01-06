@@ -89,9 +89,8 @@ export async function POST(req: Request) {
       apiKey: process.env.GOOGLE_API_KEY,
     });
 
-    // Build diagram generation prompt based on type
     // Clean, modern infographic style - leveraging Gemini's full capabilities
-    const diagramStyle = `
+    const cleanStyle = `
 Style: Clean, modern explanatory infographic
 - Professional, polished appearance with clear visual hierarchy
 - Sharp, precise lines and shapes - not hand-drawn or wobbly
@@ -100,7 +99,7 @@ Style: Clean, modern explanatory infographic
 - Generous whitespace, nothing cluttered
 - Colors: Refined palette on dark background
   - Primary accent: Yellow (#FACC15) - Nano Banana Yellow
-  - Secondary: Soft purple (#A855F7)
+  - Secondary: Soft teal (#26c6da)
   - Tertiary: Soft cyan (#22D3EE)
   - Background: Dark (#1e1e2e)
   - Text: White or light gray (#f5f5f5)
@@ -108,28 +107,53 @@ Style: Clean, modern explanatory infographic
 - Goal: maximum clarity and comprehension, minimal cognitive load
 - NOT corporate clip-art, NOT hand-drawn sketchy, just CLEAR and HELPFUL`;
 
+    // Sketchy, hand-drawn "Nano Banana" style
+    const sketchyStyle = `
+Style: Professional hand-drawn whiteboard sketch (Nano Banana Style)
+- Aesthetic: High-quality "architectural sketch" or "whiteboard session" look
+- Lines: Rough, organic, marker-like strokes (not perfect vectors)
+- Shapes: Imperfect circles and boxes, slightly wobbly but clear
+- Typography: Hand-lettered style font (clean and readable, like Excalidraw)
+- Layout: Informal but logical, like a well-planned brainstorming session
+- Colors: Dark mode whiteboard
+  - Primary accent: Yellow (#FACC15) - Nano Banana Yellow (highlighter style)
+  - Secondary: Chalk white/gray
+  - Background: Dark slate/charcoal (#1e1e2e)
+- Think: Engineering manager explaining a system on a whiteboard
+- Goal: Approachable, "work in progress" feel, emphasizes concept over polish`;
+
+    // Determine style based on prompt keywords
+    const lowerPrompt = prompt.toLowerCase();
+    const sketchyKeywords = ["sketch", "hand-drawn", "whiteboard", "draft", "concept", "nano banana", "informal"];
+    const useSketchyStyle = sketchyKeywords.some(keyword => lowerPrompt.includes(keyword));
+
+    const selectedStyle = useSketchyStyle ? sketchyStyle : cleanStyle;
+    const styleName = useSketchyStyle ? "Nano Banana Sketch" : "Clean Modern";
+
+    console.log(`[API] Selected Diagram Style: ${styleName}`);
+
     const diagramPrompt =
       type === "workflow"
-        ? `Create a clean, professional workflow diagram showing the step-by-step process for: ${prompt}
+        ? `Create a ${useSketchyStyle ? "hand-drawn style" : "clean, professional"} workflow diagram showing the step-by-step process for: ${prompt}
 
          ${context ? `Context: ${context}` : ""}
 
-         ${diagramStyle}
+         ${selectedStyle}
 
          Workflow-specific:
-         - Clear directional flow with polished arrows
+         - Clear directional flow with ${useSketchyStyle ? "hand-drawn" : "polished"} arrows
          - Numbered steps in logical sequence
          - Decision points clearly marked
          - Success path highlighted in yellow, alternate paths in secondary colors
          - Easy to follow at a glance`
-        : `Create a clean, professional explainer diagram visualizing: ${prompt}
+        : `Create a ${useSketchyStyle ? "hand-drawn style" : "clean, professional"} explainer diagram visualizing: ${prompt}
 
          ${context ? `Context: ${context}` : ""}
 
-         ${diagramStyle}
+         ${selectedStyle}
 
          Explainer-specific:
-         - Show relationships between concepts with clean connecting lines
+         - Show relationships between concepts with ${useSketchyStyle ? "sketchy" : "clean"} connecting lines
          - Use simple, recognizable icons or shapes
          - Group related concepts with visual proximity or containers
          - Brief, readable labels - no walls of text

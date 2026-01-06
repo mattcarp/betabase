@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "src/components/ui/button";
+import { Button } from "../ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "src/components/ui/tooltip";
-import { cn } from "src/lib/utils";
+} from "../ui/tooltip";
+import { cn } from "../../lib/utils";
 import { type LucideIcon, XIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes } from "react";
 
@@ -48,7 +48,7 @@ export const ArtifactClose = ({
   ...props
 }: ArtifactCloseProps) => (
   <Button
-    className={cn(
+    className={cn("mac-button", 
       "size-8 p-0 text-muted-foreground hover:text-foreground",
       className
     )}
@@ -66,7 +66,7 @@ export type ArtifactTitleProps = HTMLAttributes<HTMLParagraphElement>;
 
 export const ArtifactTitle = ({ className, ...props }: ArtifactTitleProps) => (
   <p
-    className={cn("font-medium text-foreground text-sm", className)}
+    className={cn("font-normal text-foreground text-sm", className)}
     {...props}
   />
 );
@@ -107,7 +107,7 @@ export const ArtifactAction = ({
 }: ArtifactActionProps) => {
   const button = (
     <Button
-      className={cn(
+      className={cn("mac-button", 
         "size-8 p-0 text-muted-foreground hover:text-foreground",
         className
       )}

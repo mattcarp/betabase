@@ -43,47 +43,47 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-light text-white mb-2">
+          <h1 className="mac-heading text-3xl font-light text-white mb-2">
             🍌 Nano Banana Pro Test Lab
           </h1>
-          <p className="text-muted-foreground">
+          <p className="mac-body text-muted-foreground">
             Testing Gemini image generation for META DEMO - the system creating its own demo slides!
           </p>
         </div>
 
         {/* Quick Test Buttons */}
         <div className="grid grid-cols-3 gap-4">
-          <Button
+          <Button className="mac-button"
             onClick={() => setActivePrompt(demoPrompts.erd)}
             variant="outline"
             className="h-auto py-4 flex-col items-start gap-2"
           >
-            <span className="font-medium">🏢 Multi-Tenant ERD</span>
+            <span className="font-normal">🏢 Multi-Tenant ERD</span>
             <span className="text-xs text-muted-foreground">The Betabase architecture</span>
           </Button>
           
-          <Button
+          <Button className="mac-button"
             onClick={() => setActivePrompt(demoPrompts.rlhf)}
             variant="outline"
             className="h-auto py-4 flex-col items-start gap-2"
           >
-            <span className="font-medium">🔄 RLHF Loop</span>
+            <span className="font-normal">🔄 RLHF Loop</span>
             <span className="text-xs text-muted-foreground">Feedback cycle diagram</span>
           </Button>
           
-          <Button
+          <Button className="mac-button"
             onClick={() => setActivePrompt(demoPrompts.selfHealing)}
             variant="outline"
             className="h-auto py-4 flex-col items-start gap-2"
           >
-            <span className="font-medium">🛡️ Self-Healing</span>
+            <span className="font-normal">🛡️ Self-Healing</span>
             <span className="text-xs text-muted-foreground">4-step process + tiers</span>
           </Button>
         </div>
 
         {/* Custom Prompt */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground">
+          <label className="text-sm font-normal text-muted-foreground">
             Or write your own prompt:
           </label>
           <Textarea
@@ -92,7 +92,7 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
             placeholder="Create a hand-drawn style infographic showing..."
             className="min-h-[120px] bg-card border-border text-foreground"
           />
-          <Button
+          <Button className="mac-button"
             onClick={() => setActivePrompt(customPrompt)}
             disabled={!customPrompt.trim()}
             className="w-full"
@@ -105,8 +105,8 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
         {activePrompt && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-medium text-white">Generated Infographic:</h2>
-              <Button
+              <h2 className="mac-heading text-xl font-normal text-white">Generated Infographic:</h2>
+              <Button className="mac-button"
                 onClick={() => setActivePrompt('')}
                 variant="ghost"
                 size="sm"
@@ -138,7 +138,7 @@ Connect with arrows. Use traffic light colors (green/yellow/red) prominently.`
         {/* Instructions */}
         {!activePrompt && (
           <div className="p-6 bg-card/50 rounded-lg border border-border">
-            <h3 className="text-lg font-medium text-white mb-3">🎬 How To Use For Demo:</h3>
+            <h3 className="mac-title text-lg font-normal text-white mb-3">🎬 How To Use For Demo:</h3>
             <ol className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <strong className="text-foreground">1. Test the 3 demo prompts above</strong> - Make sure they generate beautiful infographics

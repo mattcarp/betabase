@@ -62,7 +62,7 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
       technical: "bg-blue-500/20 text-blue-300 border-blue-500/30",
       error: "bg-red-500/20 text-red-300 border-red-500/30",
       feature: "bg-green-500/20 text-green-300 border-green-500/30",
-      integration: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+      integration: "bg-primary-400/20 text-primary-300 border-primary-400/30",
       process: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
       security: "bg-orange-500/20 text-orange-300 border-orange-500/30",
       performance: "bg-pink-500/20 text-pink-300 border-pink-500/30",
@@ -77,7 +77,7 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
   };
 
   return (
-    <button
+    <button className="mac-button"
       onClick={() => onClick?.(topic)}
       className={cn(
         "inline-flex items-center gap-2 rounded-full border transition-all",
@@ -89,7 +89,7 @@ export const TopicBadge: React.FC<TopicBadgeProps> = ({
       title={`Score: ${topic.score.toFixed(2)} | Documents: ${topic.documentIds.length}`}
     >
       <Hash className="h-3 w-3 opacity-60" />
-      <span className="font-medium">{topic.term}</span>
+      <span className="font-normal">{topic.term}</span>
       {showScore && (
         <span className="opacity-60 text-[0.7em]">{(topic.score * 100).toFixed(0)}</span>
       )}
@@ -186,10 +186,10 @@ export const TrendingTopics: React.FC<TrendingTopicsProps> = ({
           onClick={() => onTopicClick?.(topic)}
         >
           <div className="flex items-center gap-4">
-            <span className="text-lg font-bold text-muted-foreground">#{index + 1}</span>
+            <span className="text-lg font-normal text-muted-foreground">#{index + 1}</span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-foreground">{topic.term}</span>
+                <span className="font-normal text-foreground">{topic.term}</span>
                 <TrendingUp className="h-3 w-3 text-green-400" />
               </div>
               <div className="text-xs text-muted-foreground">
@@ -233,7 +233,7 @@ export const TopicClusters: React.FC<TopicClustersProps> = ({
           onClick={() => onClusterClick?.(cluster)}
         >
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center justify-between">
+            <CardTitle className="text-sm font-normal flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <Circle className="h-4 w-4 text-muted-foreground" />
                 {cluster.name}
@@ -301,7 +301,7 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
       label: "Clusters",
       value: totalClusters,
       icon: Circle,
-      color: "text-purple-400",
+      color: "text-primary-400",
     },
     {
       label: "Documents",
@@ -321,7 +321,7 @@ export const TopicStats: React.FC<TopicStatsProps> = ({
               <Icon className={cn("h-4 w-4", stat.color)} />
               <span className="text-xs text-muted-foreground">{stat.label}</span>
             </div>
-            <div className="text-2xl font-bold text-foreground">{stat.value.toLocaleString()}</div>
+            <div className="text-2xl font-normal text-foreground">{stat.value.toLocaleString()}</div>
           </div>
         );
       })}

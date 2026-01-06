@@ -123,8 +123,7 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
         <div className="flex flex-col gap-3 animate-in fade-in duration-500">
           <p className="text-sm text-muted-foreground">Would you like me to generate a diagram?</p>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
+            <Button variant="outline" className="mac-button mac-button-outline"
               size="sm"
               onClick={() => generateDiagram("explainer")}
               className={cn(
@@ -137,8 +136,7 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
               <Presentation className="h-4 w-4 text-amber-400" />
               <span className="text-sm">Explainer</span>
             </Button>
-            <Button
-              variant="outline"
+            <Button variant="outline" className="mac-button mac-button-outline"
               size="sm"
               onClick={() => generateDiagram("workflow")}
               className={cn(
@@ -160,14 +158,14 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
         <div
           className={cn(
             "overflow-hidden transition-all duration-500 ease-out rounded-lg border",
-            "border-purple-500/30 bg-[#1e1e2e]"
+            "border-primary-500/30 bg-[#1e1e2e]"
           )}
         >
           {/* Diagram header with controls */}
-          <div className="flex items-center justify-between p-3 border-b border-purple-500/20">
+          <div className="flex items-center justify-between p-3 border-b border-primary-500/20">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-400" />
-              <span className="text-sm font-medium text-purple-300">Nano Banana Pro Diagram</span>
+              <Sparkles className="h-4 w-4 text-primary-400" />
+              <span className="text-sm font-normal text-primary-300">Nano Banana Pro Diagram</span>
               <span
                 className={cn(
                   "flex items-center gap-1 text-xs px-2 py-0.5 rounded-full",
@@ -192,22 +190,21 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
             <div className="flex items-center gap-1">
               {diagramState.status === "ready" && (
                 <>
-                  <Button variant="ghost" size="icon" onClick={zoomOut} className="h-7 w-7">
+                  <Button variant="ghost" size="icon" onClick={zoomOut} className="mac-button h-7 w-7">
                     <ZoomOut className="h-4 w-4" />
                   </Button>
                   <span className="text-xs text-muted-foreground min-w-[3rem] text-center">
                     {Math.round(zoom * 100)}%
                   </span>
-                  <Button variant="ghost" size="icon" onClick={zoomIn} className="h-7 w-7">
+                  <Button variant="ghost" size="icon" onClick={zoomIn} className="mac-button h-7 w-7">
                     <ZoomIn className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={downloadDiagram} className="h-7 w-7">
+                  <Button variant="ghost" size="icon" onClick={downloadDiagram} className="mac-button h-7 w-7">
                     <Download className="h-4 w-4" />
                   </Button>
                 </>
               )}
-              <Button
-                variant="ghost"
+              <Button variant="ghost" className="mac-button mac-button-outline"
                 size="icon"
                 onClick={() => setShowDiagram(false)}
                 className="h-7 w-7"
@@ -221,7 +218,7 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
           <div className="p-4 min-h-[300px] flex items-center justify-center">
             {diagramState.status === "generating" && (
               <div className="flex flex-col items-center gap-3 text-muted-foreground">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-primary-400" />
                 <p className="text-sm">Generating diagram with Nano Banana Pro...</p>
               </div>
             )}
@@ -230,7 +227,12 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
               <div className="flex flex-col items-center gap-3 text-red-400">
                 <p className="text-sm">Failed to generate diagram</p>
                 <p className="text-xs text-muted-foreground">{diagramState.error}</p>
-                <Button variant="outline" size="sm" onClick={() => generateDiagram(diagramType)}>
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateDiagram(diagramType)}
+                >
                   Try Again
                 </Button>
               </div>
@@ -254,18 +256,17 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
 
       {/* Collapsed diagram indicator */}
       {!showDiagram && diagramState.status === "ready" && (
-        <Button
-          variant="outline"
+        <Button variant="outline" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => setShowDiagram(true)}
           className={cn(
             "group flex items-center gap-2 self-start transition-all duration-300",
-            "border-purple-500/30 hover:border-purple-500/60",
-            "bg-gradient-to-r from-purple-500/5 to-pink-500/5",
-            "hover:from-purple-500/10 hover:to-pink-500/10"
+            "border-primary-500/30 hover:border-primary-500/60",
+            "bg-gradient-to-r from-primary-500/5 to-pink-500/5",
+            "hover:from-primary-500/10 hover:to-pink-500/10"
           )}
         >
-          <Sparkles className="h-4 w-4 text-purple-400 group-hover:animate-pulse" />
+          <Sparkles className="h-4 w-4 text-primary-400 group-hover:animate-pulse" />
           <span className="text-sm">Show diagram</span>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </Button>
@@ -298,7 +299,7 @@ export function ResponseWithDiagram({ children, className, ...props }: ResponseP
  * COMMON ELEMENTS:
  * - Background: Dark (#1e1e2e) for reduced eye strain
  * - Primary: Yellow (#FACC15) - Nano Banana Yellow, attention, highlights
- * - Secondary: Purple (#A855F7) - connections, relationships
+ * - Secondary: Teal (#26c6da) - connections, relationships
  * - Tertiary: Cyan (#22D3EE) - accents, secondary paths
  * - Text: White (#FFFFFF) for maximum contrast
  */
@@ -306,7 +307,7 @@ export const DIAGRAM_STYLE_GUIDE = {
   model: "gemini-3-pro-image-preview", // Nano Banana Pro
   colors: {
     primary: "#FACC15", // Nano Banana Yellow
-    secondary: "#A855F7", // Purple
+    secondary: "#26c6da", // Teal
     tertiary: "#22D3EE", // Cyan
     background: "#1e1e2e", // Dark Surface
     text: "#FFFFFF", // White

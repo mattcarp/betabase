@@ -8,8 +8,8 @@ export default function TestElevenLabsPage() {
     <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-light mb-2">Voice AI Testing Interface</h1>
-          <p className="text-muted-foreground">
+          <h1 c className="mac-heading"lassName="mac-heading text-3xl font-light mb-2">Voice AI Testing Interface</h1>
+          <p className="mac-body text-muted-foreground">
             Test the integrated voice conversation system with knowledge base access
           </p>
           <div className="mt-4 p-4 bg-card rounded-lg border border-border">
@@ -25,7 +25,7 @@ export default function TestElevenLabsPage() {
 
         <div className="border border-border rounded-lg overflow-hidden">
           <div className="bg-card px-6 py-3 border-b border-border">
-            <h2 className="text-lg font-light">Conversational AI Interface</h2>
+            <h2 c className="mac-heading"lassName="mac-heading text-lg font-light">Conversational AI Interface</h2>
           </div>
           <div className="p-6 bg-background">
             <ConversationalAI
@@ -43,7 +43,7 @@ export default function TestElevenLabsPage() {
         </div>
 
         <div className="mt-8 p-6 bg-card rounded-lg border border-border">
-          <h3 className="text-lg font-light mb-4">Testing Instructions</h3>
+          <h3 c className="mac-title"lassName="mac-title text-lg font-light mb-4">Testing Instructions</h3>
           <ol className="space-y-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
               <span className="text-blue-400">1.</span>

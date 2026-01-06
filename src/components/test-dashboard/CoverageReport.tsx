@@ -170,7 +170,7 @@ export const CoverageReport: React.FC = () => {
         {Object.entries(coverageData).map(([key, data]) => (
           <Card className="mac-card" key={key}>
             <CardHeader className="mac-card pb-4">
-              <CardTitle className="text-sm font-medium capitalize flex items-center gap-2">
+              <CardTitle className="text-sm font-normal capitalize flex items-center gap-2">
                 {key === "branches" && <GitBranch className="h-4 w-4" />}
                 {key === "functions" && <FileCode className="h-4 w-4" />}
                 {key === "statements" && <CheckCircle className="h-4 w-4" />}
@@ -181,7 +181,7 @@ export const CoverageReport: React.FC = () => {
             <CardContent className="mac-card">
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
-                  <span className={cn("text-2xl font-bold", getCoverageColor(data.percentage))}>
+                  <span className={cn("text-2xl font-normal", getCoverageColor(data.percentage))}>
                     {data.percentage}%
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -289,10 +289,9 @@ export const CoverageReport: React.FC = () => {
                 </div>
               </div>
 
-              <Button
-                aria-label="Download"
+              <Button aria-label="Download"
                 className="w-full mac-button mac-button-outline"
-                variant="outline"
+                variant="outline" className="mac-button mac-button-outline"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export Coverage Report
@@ -375,7 +374,7 @@ export const CoverageReport: React.FC = () => {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
                                 <File className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-sm font-medium truncate">
+                                <span className="text-sm font-normal truncate">
                                   {file.path.split("/").pop()}
                                 </span>
                               </div>
@@ -406,7 +405,7 @@ export const CoverageReport: React.FC = () => {
                     <CardTitle className="text-lg">{selectedFile.path.split("/").pop()}</CardTitle>
                     <p className="text-sm text-muted-foreground mt-2">{selectedFile.path}</p>
                   </div>
-                  <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                  <Button className="mac-button mac-button-outline" variant="outline" className="mac-button mac-button-outline" size="sm">
                     <FileCode className="h-4 w-4 mr-2" />
                     View Source
                   </Button>

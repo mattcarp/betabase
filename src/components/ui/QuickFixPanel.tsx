@@ -181,8 +181,8 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col bg-card/50 border-border">
-      <CardHeader>
+    <Card className="mac-card h-full flex flex-col bg-card/50 border-border">
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2 text-foreground">
           <Edit3 className="h-5 w-5 text-blue-400" />
           Quick Fix Panel
@@ -197,7 +197,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
           <div className="space-y-3">
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Input
+                <Input className="mac-input"
                   placeholder="Enter message or feedback ID..."
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
@@ -207,7 +207,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                  className="mac-button absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
                   onClick={() => {
                     setShowRecent(!showRecent);
                     if (!showRecent) loadRecentItems();
@@ -225,7 +225,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                       {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
                     </div>
                     {recentItems.map((item) => (
-                      <button
+                      <button className="mac-button"
                         key={item.id}
                         onClick={() => loadMessage(item.id)}
                         className="w-full text-left px-3 py-2 hover:bg-muted transition-colors border-b border-border/50 last:border-0"
@@ -264,7 +264,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                   </div>
                 )}
               </div>
-              <Button onClick={() => loadMessage()} disabled={loading || !searchId.trim()} className="gap-2">
+              <Button className="mac-button" onClick={() => loadMessage()} disabled={loading || !searchId.trim()} className="mac-button gap-2">
                 {loading ? (
                   <>
                     <RefreshCw className="h-4 w-4 animate-spin" />
@@ -293,7 +293,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
           <>
             {/* Show the original query */}
             {queryText && (
-              <Card className="bg-card/30 border-border">
+              <Card className="mac-card bg-card/30 border-border">
                 <CardContent className="py-3">
                   <div className="text-xs text-muted-foreground mb-1">Original Query:</div>
                   <p className="text-sm text-foreground">{queryText}</p>
@@ -304,20 +304,19 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
             <div className="flex-1 grid grid-cols-2 gap-4">
               {/* Original response */}
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                <label className="text-sm font-normal text-foreground mb-2 flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-orange-400" />
                   Original Response
                 </label>
-                <Textarea
-                  value={original}
+                <Textarea value={original}
                   disabled
-                  className="flex-1 bg-card/30 border-border text-muted-foreground font-mono text-xs resize-none"
+                  className="mac-input flex-1 bg-card/30 border-border text-muted-foreground font-mono text-xs resize-none"
                 />
               </div>
 
               {/* Corrected response */}
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                <label className="text-sm font-normal text-foreground mb-2 flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-400" />
                   Corrected Response
                 </label>
@@ -338,7 +337,7 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
               <Button
                 onClick={handleSaveCorrection}
                 disabled={saving || !corrected.trim() || corrected === original}
-                className="flex-1 gap-2 bg-green-600 hover:bg-green-700"
+                className="mac-button flex-1 gap-2 bg-green-600 hover:bg-green-700"
               >
                 {saving ? (
                   <>
@@ -356,13 +355,13 @@ export function QuickFixPanel({ messageId }: QuickFixPanelProps) {
                 variant="outline"
                 onClick={handleReset}
                 disabled={corrected === original}
-                className="gap-2"
+                className="mac-button gap-2"
               >
                 <RefreshCw className="h-4 w-4" />
                 Reset
               </Button>
-              <Button
-                variant="outline"
+              <Button className="mac-button"
+                variant="outline" className="mac-button mac-button-outline"
                 onClick={() => {
                   setLoaded(false);
                   setSearchId("");

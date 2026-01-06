@@ -248,7 +248,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
           <div className="betabase-logo-wrapper mb-6">
             <SiamLogo size="3xl" variant="icon" className="drop-shadow-2xl" />
           </div>
-          <h1 className="mac-heading mac-display-text mb-2">The Betabase</h1>
+          <h1 className="mac-heading">The Betabase</h1>
           <p className="mac-body text-muted-foreground">yup. it's back.</p>
         </div>
       </div>
@@ -262,17 +262,16 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             suppressHydrationWarning
           >
             <Field>
-              <FieldLabel htmlFor="email" className="block text-white text-sm font-medium mb-2">
+              <FieldLabel htmlFor="email" className="block text-white text-sm font-normal mb-2">
                 Email Address
               </FieldLabel>
               <div className="relative group">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-blue-400 transition-colors pointer-events-none" />
-                <Input
-                  {...emailForm.register("email")}
+                <Input {...emailForm.register("email")}
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
-                  className="pl-11 h-12 text-base border-2 border-border bg-card/50 text-white placeholder:text-muted-foreground focus:border-blue-500 focus:bg-muted transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 w-full rounded-lg focus:outline-none"
+                  className="mac-input pl-11 h-12 text-base border-2 border-border bg-card/50 text-white placeholder:text-muted-foreground focus:border-blue-500 focus:bg-muted transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 w-full rounded-lg focus:outline-none"
                   disabled={isLoading}
                   autoComplete="email"
                   aria-invalid={!!emailForm.formState.errors.email}
@@ -309,9 +308,9 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             {/* Success Message */}
             <div className="text-center p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl border border-green-500/20 backdrop-blur-sm">
               <CheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
-              <h3 className="mac-title text-lg font-normal text-white mb-2">Magic Link Sent!</h3>
+              <h3 className="mac-title">Magic Link Sent!</h3>
               <p className="text-sm text-muted-foreground">We've sent a verification code to</p>
-              <p className="text-sm font-medium text-white mt-2">{currentEmail}</p>
+              <p className="text-sm font-normal text-white mt-2">{currentEmail}</p>
               <p className="text-xs text-muted-foreground mt-2">
                 Check your email for the 6-digit verification code
               </p>
@@ -319,7 +318,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
             {/* Dev Code Display */}
             {devCode && (
               <div className="text-center p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-xl border border-orange-500/20 backdrop-blur-sm">
-                <p className="text-sm text-orange-300 font-medium">
+                <p className="text-sm text-orange-300 font-normal">
                   Development Code:{" "}
                   <span className="font-mono text-lg text-orange-200">{devCode}</span>
                 </p>
@@ -332,7 +331,7 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
               suppressHydrationWarning
             >
               <Field>
-                <FieldLabel htmlFor="code" className="block text-white text-sm font-medium mb-2">
+                <FieldLabel htmlFor="code" className="block text-white text-sm font-normal mb-2">
                   Verification Code
                 </FieldLabel>
                 <Input
@@ -372,15 +371,14 @@ export const MagicLinkLoginForm: React.FC<MagicLinkLoginFormProps> = ({ onLoginS
                 )}
               </Button>
 
-              <Button
-                type="button"
-                variant="ghost"
+              <Button type="button"
+                variant="ghost" className="mac-button mac-button-outline"
                 onClick={() => {
                   setStep("email");
                   setDevCode("");
                   codeForm.reset();
                 }}
-                className="mac-button mac-button-outline w-full h-10 text-sm font-medium"
+                className="mac-button mac-button-outline w-full h-10 text-sm font-normal"
               >
                 Use a different email
               </Button>

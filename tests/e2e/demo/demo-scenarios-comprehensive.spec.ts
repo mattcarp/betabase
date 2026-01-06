@@ -74,8 +74,11 @@ test.describe('Demo Scenarios - Opening & Chat Pillar @demo', () => {
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Opening: Chat responds to "What are the different asset types in AOMA?"', async ({ page }) => {
@@ -285,8 +288,11 @@ test.describe('Demo Scenarios - Curate Pillar @demo', () => {
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Curate: Tab accessible with Upload/Delete/Dedupe buttons', async ({ page }) => {
@@ -392,8 +398,11 @@ test.describe('Demo Scenarios - Test Pillar @demo', () => {
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Test: Dashboard shows key metrics (executions, pass rate, auto-healed)', async ({ page }) => {
@@ -595,8 +604,11 @@ test.describe('Demo Scenarios - Full Workflow @demo', () => {
     }
 
     await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Wait for app to be fully hydrated
+    await page.locator('text=The Betabase').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1000);
   });
 
   test('Full Demo: Navigate all three pillars without errors', async ({ page }) => {

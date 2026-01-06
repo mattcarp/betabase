@@ -60,14 +60,19 @@ export function TestsTab() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [healingAttempts, setHealingAttempts] = useState<SelfHealingAttempt[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [runningTests, setRunningTests] = useState(false);
   const [selectedHealing, setSelectedHealing] = useState<SelfHealingAttempt | null>(null);
 
   // Load test results from Supabase
   const loadTestResults = useCallback(async () => {
-    if (!supabase) return;
+    if (!supabase) {
+      setLoadError("Database connection not configured");
+      return;
+    }
     
     setLoading(true);
+    setLoadError(null);
     try {
       const { data: results, error: resultsError } = await supabase
         .from("test_results")
@@ -87,8 +92,9 @@ export function TestsTab() {
       if (healingError) throw healingError;
       setHealingAttempts(healing || []);
     } catch (error) {
-      console.error("Failed to load test results:", error);
-      toast.error("Failed to load test results");
+      // Set user-friendly error state instead of aggressive toast
+      console.warn("⚠️ TEST RESULTS: Tables not available:", error);
+      setLoadError("Test results unavailable - tables may not be configured yet");
     } finally {
       setLoading(false);
     }
@@ -183,7 +189,7 @@ export function TestsTab() {
       {/* Header with Run Button */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="text-lg font-light text-[var(--mac-text-primary)]">
+          <h2 className="mac-heading">
             Test Results
           </h2>
           <Badge 
@@ -237,7 +243,7 @@ export function TestsTab() {
       <div className="flex-1 grid grid-cols-2 gap-4 min-h-0">
         {/* Test Results List */}
         <Card className="mac-card overflow-hidden">
-          <CardHeader className="py-3 px-4 border-b border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card py-3 px-4 border-b border-[var(--mac-utility-border)]">
             <CardTitle className="text-sm font-light flex items-center gap-2">
               <Zap className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
               Recent Test Runs
@@ -245,7 +251,19 @@ export function TestsTab() {
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[400px]">
-              {testResults.length === 0 ? (
+              {loadError ? (
+                <div className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted/30 mb-4">
+                    <AlertTriangle className="h-6 w-6 text-amber-400/70" />
+                  </div>
+                  <p className="text-sm font-light text-[var(--mac-text-secondary)] mb-2">
+                    {loadError}
+                  </p>
+                  <p className="text-xs text-[var(--mac-text-muted)]">
+                    This feature requires database tables to be set up
+                  </p>
+                </div>
+              ) : testResults.length === 0 ? (
                 <div className="p-8 text-center text-[var(--mac-text-muted)] font-light">
                   No test results yet. Run the blast radius demo to see results.
                 </div>
@@ -262,12 +280,12 @@ export function TestsTab() {
 
         {/* Self-Healing Suggestions */}
         <Card className="mac-card overflow-hidden">
-          <CardHeader className="py-3 px-4 border-b border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card py-3 px-4 border-b border-[var(--mac-utility-border)]">
             <CardTitle className="text-sm font-light flex items-center gap-2">
-              <Wand2 className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
+              <Wand2 className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />
               Self-Healing Suggestions
               {stats.pendingHealing > 0 && (
-                <Badge className="bg-purple-500/20 text-purple-400 border-purple-400/30">
+                <Badge className="bg-primary-400/20 text-primary-400 border-primary-400/30">
                   {stats.pendingHealing} pending
                 </Badge>
               )}
@@ -275,7 +293,16 @@ export function TestsTab() {
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[400px]">
-              {healingAttempts.length === 0 ? (
+              {loadError ? (
+                <div className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted/30 mb-4">
+                    <Wand2 className="h-6 w-6 text-primary-400/50" />
+                  </div>
+                  <p className="text-xs text-[var(--mac-text-muted)]">
+                    Self-healing requires test tables to be configured
+                  </p>
+                </div>
+              ) : healingAttempts.length === 0 ? (
                 <div className="p-8 text-center text-[var(--mac-text-muted)] font-light">
                   No self-healing suggestions yet.
                 </div>
@@ -300,15 +327,14 @@ export function TestsTab() {
 
       {/* Selected Healing Detail */}
       {selectedHealing && (
-        <Card className="mac-card border-purple-400/30">
-          <CardHeader className="py-3 px-4 border-b border-[var(--mac-utility-border)]">
+        <Card className="mac-card border-primary-400/30">
+          <CardHeader className="mac-card py-3 px-4 border-b border-[var(--mac-utility-border)]">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-light flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-yellow-400" />
                 Healing Analysis: {selectedHealing.test_name}
               </CardTitle>
-              <Button
-                variant="ghost"
+              <Button variant="ghost" className="mac-button mac-button-outline"
                 size="sm"
                 onClick={() => setSelectedHealing(null)}
                 className="h-6 w-6 p-0"
@@ -320,13 +346,13 @@ export function TestsTab() {
           <CardContent className="p-4 space-y-4">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-[var(--mac-text-muted)] font-light mb-1">Old Selector</p>
+                <p className="mac-body text-[var(--mac-text-muted)] font-light mb-1">Old Selector</p>
                 <code className="block p-2 bg-red-500/10 border border-red-400/30 rounded text-red-400 font-mono text-xs">
                   {selectedHealing.old_selector}
                 </code>
               </div>
               <div>
-                <p className="text-[var(--mac-text-muted)] font-light mb-1">Suggested New Selector</p>
+                <p className="mac-body text-[var(--mac-text-muted)] font-light mb-1">Suggested New Selector</p>
                 <code className="block p-2 bg-green-500/10 border border-green-400/30 rounded text-green-400 font-mono text-xs">
                   {selectedHealing.new_selector}
                 </code>
@@ -334,7 +360,7 @@ export function TestsTab() {
             </div>
             
             <div>
-              <p className="text-[var(--mac-text-muted)] font-light mb-1">AI Analysis</p>
+              <p className="mac-body text-[var(--mac-text-muted)] font-light mb-1">AI Analysis</p>
               <p className="text-[var(--mac-text-primary)] font-light text-sm bg-[var(--mac-surface-card)] p-3 rounded border border-[var(--mac-utility-border)]">
                 {selectedHealing.healing_rationale}
               </p>
@@ -357,17 +383,15 @@ export function TestsTab() {
               
               {selectedHealing.status === "pending" && (
                 <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  <Button size="sm"
+                    variant="outline" className="mac-button mac-button-outline"
                     onClick={() => rejectHealing(selectedHealing)}
                     className="text-red-400 border-red-400/30 hover:bg-red-400/10"
                   >
                     <X className="h-4 w-4 mr-1" />
                     Reject
                   </Button>
-                  <Button
-                    size="sm"
+                  <Button size="sm"
                     onClick={() => approveHealing(selectedHealing)}
                     className="bg-green-500/20 text-green-400 border border-green-400/30 hover:bg-green-400/30"
                   >
@@ -401,7 +425,7 @@ function StatCard({
     green: "text-green-400",
     red: "text-red-400",
     yellow: "text-yellow-400",
-    purple: "text-purple-400",
+    purple: "text-primary-400",
   };
 
   return (
@@ -483,14 +507,14 @@ function HealingSuggestionRow({
     <div 
       className={cn(
         "p-3 hover:bg-[var(--mac-state-hover)] transition-colors cursor-pointer",
-        isSelected && "bg-purple-500/10 border-l-2 border-purple-400"
+        isSelected && "bg-primary-400/10 border-l-2 border-primary-400"
       )}
       onClick={onSelect}
       data-test-id="healing-suggestion-row"
     >
       <div className="flex items-center gap-3">
-        <div className="p-1.5 rounded bg-purple-500/10">
-          <Wand2 className="h-4 w-4 text-purple-400" />
+        <div className="p-1.5 rounded bg-primary-400/10">
+          <Wand2 className="h-4 w-4 text-primary-400" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-light text-[var(--mac-text-primary)] truncate">
@@ -506,16 +530,14 @@ function HealingSuggestionRow({
           </Badge>
           {healing.status === "pending" && (
             <>
-              <Button
-                variant="ghost"
+              <Button variant="ghost" className="mac-button mac-button-outline"
                 size="sm"
                 onClick={(e) => { e.stopPropagation(); onReject(); }}
                 className="h-7 w-7 p-0 text-red-400 hover:bg-red-400/10"
               >
                 <X className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
+              <Button variant="ghost" className="mac-button mac-button-outline"
                 size="sm"
                 onClick={(e) => { e.stopPropagation(); onApprove(); }}
                 className="h-7 w-7 p-0 text-green-400 hover:bg-green-400/10"

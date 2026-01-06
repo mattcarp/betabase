@@ -80,7 +80,7 @@ export function ProfessionalProgress({
       {(label || showValue) && (
         <div className="flex items-center justify-between">
           {label && (
-            <span className={cn(sizes.text, "font-medium text-foreground")}>
+            <span className={cn(sizes.text, "font-normal text-foreground")}>
               {label}
             </span>
           )}

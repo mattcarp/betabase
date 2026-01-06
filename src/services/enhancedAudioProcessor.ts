@@ -12,7 +12,7 @@
  */
 
 import { /* audioProcessor, AudioFeatures, */ AudioMetrics } from "./realTimeAudioProcessor"; // audioProcessor and AudioFeatures unused
-import { getElevenLabsApiKey, getOpenAIApiKey } from "@/config/apiKeys";
+import { getElevenLabsApiKey, getOpenAIApiKey } from "../config/apiKeys";
 
 // Types for the enhanced pipeline
 export interface VoiceIsolationResult {

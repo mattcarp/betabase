@@ -128,9 +128,8 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
 
     if (viewMode === "grid") {
       return (
-        <Card
-          key={comparison.id}
-          className={cn(
+        <Card key={comparison.id}
+          className={cn("mac-card", 
             "cursor-pointer transition-all hover:shadow-lg",
             statusDisplay.borderColor,
             statusDisplay.bgColor
@@ -159,7 +158,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
 
             {/* Info */}
             <div>
-              <h4 className="text-sm font-medium truncate">{comparison.testName}</h4>
+              <h4 className="mac-title">{comparison.testName}</h4>
               <div className="flex items-center justify-between mt-1">
                 <span className="text-xs text-muted-foreground">
                   {comparison.metadata?.timestamp
@@ -179,9 +178,8 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
     } else {
       // List view
       return (
-        <Card
-          key={comparison.id}
-          className={cn("cursor-pointer transition-all hover:shadow-md", statusDisplay.borderColor)}
+        <Card key={comparison.id}
+          className={cn("mac-card", "cursor-pointer transition-all hover:shadow-md", statusDisplay.borderColor)}
           onClick={() => onSelectComparison(comparison)}
         >
           <CardContent className="p-4">
@@ -197,7 +195,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium truncate">{comparison.testName}</h4>
+                <h4 className="mac-title">{comparison.testName}</h4>
                 <div className="flex items-center gap-2 mt-1">
                   <StatusIcon className={cn("h-3 w-3", statusDisplay.color)} />
                   <span className="text-xs text-muted-foreground capitalize">
@@ -238,17 +236,28 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
   return (
     <div className={cn("space-y-4", className)}>
       {/* Header */}
-      <Card>
-        <CardHeader>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">{testResult.testName}</CardTitle>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
+                <Button
+                  className="mac-button mac-button-outline"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                >
                   <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
                 </Button>
                 {onExport && (
-                  <Button variant="outline" size="sm" onClick={onExport}>
+                  <Button
+                    className="mac-button mac-button-outline"
+                    variant="outline"
+                    size="sm"
+                    onClick={onExport}
+                  >
                     <Download className="h-4 w-4" />
                   </Button>
                 )}
@@ -258,19 +267,19 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
             {/* Statistics */}
             <div className="grid grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold">{stats.total}</div>
+                <div className="text-2xl font-normal">{stats.total}</div>
                 <div className="text-xs text-muted-foreground">Total</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-500">{stats.pending}</div>
+                <div className="text-2xl font-normal text-yellow-500">{stats.pending}</div>
                 <div className="text-xs text-muted-foreground">Pending</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-500">{stats.approved}</div>
+                <div className="text-2xl font-normal text-green-500">{stats.approved}</div>
                 <div className="text-xs text-muted-foreground">Approved</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-red-500">{stats.rejected}</div>
+                <div className="text-2xl font-normal text-red-500">{stats.rejected}</div>
                 <div className="text-xs text-muted-foreground">Rejected</div>
               </div>
             </div>
@@ -279,7 +288,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
+                <Input className="mac-input"
                   placeholder="Search tests..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -304,7 +313,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
                 </SelectContent>
               </Select>
               <div className="flex gap-1 border rounded-md">
-                <Button
+                <Button className="mac-button"
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("grid")}
@@ -312,7 +321,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
                 >
                   <Grid3x3 className="h-4 w-4" />
                 </Button>
-                <Button
+                <Button className="mac-button"
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
@@ -329,7 +338,7 @@ export const VisualRegressionGallery: React.FC<VisualRegressionGalleryProps> = (
       {/* Gallery */}
       <ScrollArea className="h-[600px]">
         {filteredComparisons.length === 0 ? (
-          <Card>
+          <Card className="mac-card">
             <CardContent className="flex items-center justify-center h-[400px] text-muted-foreground">
               No comparisons found matching your filters
             </CardContent>

@@ -16,7 +16,7 @@
  */
 
 import crypto from "crypto";
-import { supabase, DEFAULT_APP_CONTEXT } from "@/lib/supabase";
+import { supabase, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 // import { openai } from "@ai-sdk/openai";
 // import { embed } from "ai";
 

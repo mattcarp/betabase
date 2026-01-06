@@ -2,7 +2,7 @@
 
 import { JSX, useEffect, useState, lazy, Suspense, Fragment } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Loader2 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -188,7 +188,7 @@ function CopyButton({ code }: { code: string }) {
   return (
     <button
       onClick={handleCopy}
-      className={cn(
+      className={cn("mac-button", 
         "absolute right-2 top-2 rounded-md p-2 text-muted-foreground opacity-0 transition-all",
         "hover:bg-muted hover:text-foreground",
         "group-hover:opacity-100",

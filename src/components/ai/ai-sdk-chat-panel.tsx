@@ -312,6 +312,7 @@ export function AiSdkChatPanel({
   const [manualLoading, setManualLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Simpler loading state
   const [hasStartedStreaming, setHasStartedStreaming] = useState(false); // Track if response has started
+  const expectedAssistantMessagesRef = useRef(0); // Track expected count for new response detection
   const [loadingSeconds, setLoadingSeconds] = useState(0); // Track seconds elapsed during loading
   const [pendingRagMetadata, setPendingRagMetadata] = useState<any>(null); // RAG metadata from response headers
 
@@ -750,20 +751,21 @@ export function AiSdkChatPanel({
   // Status values: 'submitted' (waiting), 'streaming' (receiving), 'ready', 'error'
   const isLoading = chatIsLoading || status === "submitted" || status === "streaming" || manualLoading;
 
-  // Detect when assistant starts streaming using AI SDK v6 status
+  // Detect when assistant ACTUALLY starts streaming content for a NEW response
+  // We only hide the chain of thought when we SEE NEW assistant content, not just status change
   useEffect(() => {
-    // AI SDK v6: status === "streaming" means response is being received
-    if (status === "streaming") {
-      setHasStartedStreaming(true);
-    }
-    // Also check messages as fallback for older behavior
-    if (messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
-      // If last message is from assistant and we were processing, streaming has started
-      if (lastMessage?.role === "assistant" && (isProcessing || manualLoading)) {
+    const assistantMessages = messages.filter((m) => m.role === "assistant");
+    const currentAssistantCount = assistantMessages.length;
+
+    // Only trigger when we have MORE assistant messages than expected (new response started)
+    if (
+      currentAssistantCount > expectedAssistantMessagesRef.current &&
+      (isProcessing || manualLoading || status === "streaming")
+    ) {
+      const lastAssistant = assistantMessages[assistantMessages.length - 1];
+      // Wait for actual content to appear
+      if (lastAssistant?.content && lastAssistant.content.length > 0) {
         setHasStartedStreaming(true);
-        // Don't clear loading states immediately - let the progress indicator continue
-        // The onFinish handler will clear everything when done
       }
     }
   }, [messages, isProcessing, manualLoading, status]);
@@ -1142,6 +1144,14 @@ export function AiSdkChatPanel({
     e.preventDefault();
     const messageToSend = message.text || localInput || "";
     if (messageToSend.trim()) {
+      // CRITICAL: Reset streaming state BEFORE starting new message
+      // This ensures chain of thought shows for subsequent questions
+      setHasStartedStreaming(false);
+
+      // Track the current number of assistant messages so we can detect when a NEW one appears
+      const currentAssistantCount = messages.filter((m) => m.role === "assistant").length;
+      expectedAssistantMessagesRef.current = currentAssistantCount;
+
       // Track query start time for duration calculation
       setQueryStartTime(Date.now());
 
@@ -2575,81 +2585,77 @@ export function AiSdkChatPanel({
                 onDDPDetected={handleDDPDetected}
               />
 
-              {/* Voice Input Button (Push-to-Talk) */}
+              {/* Voice Input Button (Toggle Recording) */}
               <Button
                 type="button"
-                // Variant: "destructive" gives red background, "ghost" gives transparent
-                variant={isGeminiLiveMode && isGeminiRecording ? "destructive" : "ghost"}
+                // Variant: "destructive" gives red background when recording
+                variant={(isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording) ? "destructive" : "ghost"}
                 className={cn(
                   "mac-button rounded-full",
                   "!h-8 !w-8 !p-0 transition-all duration-200 relative overflow-visible shrink-0",
-                  // Active (Recording) State: Solid Red, No Pulse
-                  isGeminiLiveMode && isGeminiRecording
+                  // Active (Recording) State: Solid Red for BOTH modes
+                  (isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording)
                     ? [
                         "bg-red-500 hover:bg-red-600 border-red-400",
                         "text-white shadow-none", // Explicitly no pulse or extra shadow
                       ]
                     : [
                         // Idle State: Teal Text/Icon
-                        "text-[#008080] hover:text-[#006666]",
-                        "hover:bg-[#008080]/10"
+                        "text-primary hover:text-primary/80",
+                        "hover:bg-primary/10"
                       ]
                 )}
-                // PUSH-TO-TALK LOGIC
-                onMouseDown={(e) => {
+                // TOGGLE RECORDING LOGIC
+                onClick={async (e) => {
                   e.preventDefault();
                   if (isGeminiLiveMode) {
-                      if (!isGeminiConnected) {
-                          connectGeminiLive().then(() => startGeminiRecording());
+                      // Gemini Live mode - toggle recording
+                      if (isGeminiRecording) {
+                          console.log("🎤 Stopping Gemini recording");
+                          stopGeminiRecording();
+                          toast.info("Recording stopped");
                       } else {
-                          startGeminiRecording();
+                          if (!isGeminiConnected) {
+                              console.log("🎤 Connecting to Gemini Live...");
+                              toast.info("Connecting to Gemini Live...");
+                              await connectGeminiLive();
+                              console.log("🎤 Starting Gemini recording");
+                              startGeminiRecording();
+                              toast.success("Recording started");
+                          } else {
+                              console.log("🎤 Starting Gemini recording");
+                              startGeminiRecording();
+                              toast.success("Recording started");
+                          }
                       }
                   } else {
-                       if (clearTranscript) clearTranscript();
-                       if (startRecording) startRecording();
+                       // ElevenLabs STT mode - toggle recording
+                       if (isRecording) {
+                           console.log("🎤 Stopping STT recording");
+                           stopRecording();
+                           toast.info("Recording stopped");
+                       } else {
+                           console.log("🎤 Starting STT recording");
+                           if (clearTranscript) clearTranscript();
+                           if (startRecording) {
+                               startRecording();
+                               toast.success("Recording started");
+                           }
+                       }
                   }
-                }}
-                onMouseUp={(e) => {
-                  e.preventDefault();
-                  if (isGeminiLiveMode) {
-                      stopGeminiRecording();
-                  } else {
-                      stopRecording();
-                  }
-                }}
-                onMouseLeave={() => {
-                   if (isGeminiLiveMode && isGeminiRecording) stopGeminiRecording();
-                   if (!isGeminiLiveMode && isRecording) stopRecording();
-                }}
-                onTouchStart={(e) => {
-                    e.preventDefault(); 
-                    if (isGeminiLiveMode) {
-                        if (!isGeminiConnected) {
-                            connectGeminiLive().then(() => startGeminiRecording());
-                        } else {
-                            startGeminiRecording();
-                        }
-                    } else {
-                         if (clearTranscript) clearTranscript();
-                         if (startRecording) startRecording();
-                    }
-                }}
-                onTouchEnd={(e) => {
-                    e.preventDefault();
-                    if (isGeminiLiveMode) {
-                        stopGeminiRecording();
-                    } else {
-                        stopRecording();
-                    }
                 }}
                 disabled={isLoading && !isGeminiLiveMode}
                 title={
-                  isGeminiLiveMode 
-                    ? "Hold to speak"
-                    : "Hold to record"
+                  isGeminiLiveMode
+                    ? (isGeminiRecording ? "Stop recording" : "Start recording")
+                    : (isRecording ? "Stop recording" : "Start recording")
                 }
               >
-                <Mic className="h-4 w-4" />
+                {((isGeminiLiveMode && isGeminiRecording) || (!isGeminiLiveMode && isRecording)) ? (
+                  <MicOff className="h-4 w-4" />
+                ) : (
+                  <Mic className="h-4 w-4" />
+                )}
               </Button>
 
 
@@ -2661,10 +2667,15 @@ export function AiSdkChatPanel({
                     size="icon"
                     className={cn(
                         "h-8 w-8 transition-colors",
-                         // User Request: "Always be teal".
-                         "text-[#008080] hover:text-[#006666] hover:bg-[#008080]/10"
+                         // Always teal for consistency
+                         "text-primary hover:text-primary/80 hover:bg-primary/10"
                     )}
-                    onClick={() => setIsGeminiMuted(!isGeminiMuted)}
+                    onClick={() => {
+                        const newMutedState = !isGeminiMuted;
+                        setIsGeminiMuted(newMutedState);
+                        console.log(`🔊 Speaker ${newMutedState ? "muted" : "unmuted"}`);
+                        toast.info(newMutedState ? "Speaker muted" : "Speaker unmuted");
+                    }}
                     title={isGeminiMuted ? "Unmute Gemini Voice" : "Mute Gemini Voice"}
                 >
                     {isGeminiMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
@@ -2679,10 +2690,10 @@ export function AiSdkChatPanel({
                       "!h-8 !w-8 !p-0 transition-all duration-300 relative overflow-visible shrink-0",
                       isTTSEnabled
                         ? [
-                            "bg-gradient-to-r from-emerald-500/80 to-teal-600/80",
-                            "border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
+                            "bg-primary text-primary-foreground",
+                            "border-primary/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
                           ]
-                        : ["hover:bg-muted/50 hover:border-border"]
+                        : ["text-primary hover:text-primary/80 hover:bg-primary/10"]
                     )}
                     onClick={() => {
                           console.log("🔊 SPEAKER: Button clicked");
@@ -2700,7 +2711,7 @@ export function AiSdkChatPanel({
                     title={isTTSEnabled ? "Disable voice responses" : "Enable voice responses"}
                   >
                     {isTTSEnabled ? (
-                      <Volume2 className="h-4 w-4 text-white" />
+                      <Volume2 className="h-4 w-4" />
                     ) : (
                       <VolumeX className="h-4 w-4" />
                     )}

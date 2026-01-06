@@ -43,7 +43,12 @@ Each requirement follows this structure:
 
 ### REQ-002: Multi-Source Query Synthesis
 - **Acceptance Criteria**:
-  - Demo queries from `DEMO-MASTER-PLAN.md` execute successfully
+  - Demo queries from `DEMO-MASTER-PLAN.md` execute successfully:
+    1. "What is AOMA?"
+    2. "Show me JIRA tickets related to AOMA migration and the related code commits"
+    3. "Generate a system architecture diagram for AOMA showing all integration points"
+    4. "What's the current development status of AOMA3 migration?"
+    5. "Does AOMA have a blockchain integration?"
   - Response includes citations from multiple sources
   - Source attribution visible in UI
 - **Feature Link**: F007 (Multi-Source RAG)

@@ -65,7 +65,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
         <Input
           ref={ref}
           type="password"
-          className={cn(
+          className={cn("mac-input", 
             "transition-all duration-200",
             Object.values(requirements).every((r) => r) &&
               password.length > 0 &&
@@ -96,7 +96,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
                   >
                     {met ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
                   </div>
-                  <span className={cn("transition-all duration-200", met && "font-medium")}>
+                  <span className={cn("transition-all duration-200", met && "font-normal")}>
                     {label}
                   </span>
                 </div>

@@ -16,10 +16,10 @@
 
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Textarea } from "../ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -27,8 +27,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+} from "../ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import {
   ThumbsUp,
   ThumbsDown,
@@ -302,8 +302,8 @@ export function FeedbackModal({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
+                  <Button className="mac-button"
+                    variant="ghost" className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => handleQuickFeedback(true)}
                     disabled={isSubmitting || thumbsUp !== null}
@@ -323,8 +323,8 @@ export function FeedbackModal({
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
+                  <Button className="mac-button"
+                    variant="ghost" className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => handleQuickFeedback(false)}
                     disabled={isSubmitting || thumbsUp !== null}
@@ -344,8 +344,8 @@ export function FeedbackModal({
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
+                  <Button className="mac-button"
+                    variant="ghost" className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => setIsExpanded(!isExpanded)}
                     className="h-8 px-3 hover:bg-muted/50"
@@ -386,10 +386,10 @@ export function FeedbackModal({
     <div className="space-y-6 p-4 bg-card/50 rounded-lg border border-border">
       {/* Star Rating */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">Rate this response</label>
+        <label className="text-sm font-normal text-foreground">Rate this response</label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
-            <button
+            <button className="mac-button"
               key={star}
               onClick={() => setRating(star)}
               className="p-1 transition-transform hover:scale-110"
@@ -409,7 +409,7 @@ export function FeedbackModal({
 
       {/* Issue Categories */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">What aspects need improvement?</label>
+        <label className="text-sm font-normal text-foreground">What aspects need improvement?</label>
         <div className="flex flex-wrap gap-2">
           {CATEGORY_CONFIG.map((cat) => (
             <TooltipProvider key={cat.id}>
@@ -421,7 +421,7 @@ export function FeedbackModal({
                     className={cn(
                       "cursor-pointer transition-all",
                       categories.includes(cat.id)
-                        ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
+                        ? "bg-primary-500/20 text-primary-400 border-primary-500/50"
                         : "bg-muted/50 text-muted-foreground border-border hover:border-border"
                     )}
                   >
@@ -439,7 +439,7 @@ export function FeedbackModal({
       {/* Severity */}
       {categories.length > 0 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Issue severity</label>
+          <label className="text-sm font-normal text-foreground">Issue severity</label>
           <div className="flex gap-2">
             {SEVERITY_CONFIG.map((sev) => (
               <TooltipProvider key={sev.id}>
@@ -466,7 +466,7 @@ export function FeedbackModal({
 
       {/* Free-text Feedback */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">Additional comments (optional)</label>
+        <label className="text-sm font-normal text-foreground">Additional comments (optional)</label>
         <Textarea
           value={feedbackText}
           onChange={(e) => setFeedbackText(e.target.value)}
@@ -477,7 +477,7 @@ export function FeedbackModal({
 
       {/* Suggested Correction */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground flex items-center gap-2">
+        <label className="text-sm font-normal text-foreground flex items-center gap-2">
           <Edit3 className="h-4 w-4 text-blue-400" />
           Suggest a better response (helps train the AI)
         </label>
@@ -496,14 +496,14 @@ export function FeedbackModal({
       {/* Document Relevance Marking */}
       {documentsMarked.length > 0 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Were these sources relevant?</label>
+          <label className="text-sm font-normal text-foreground">Were these sources relevant?</label>
           <div className="space-y-2">
             {documentsMarked.map((doc, idx) => (
               <div
                 key={doc.documentId}
                 className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg"
               >
-                <button
+                <button className="mac-button"
                   onClick={() => {
                     const updated = [...documentsMarked];
                     updated[idx] = { ...doc, relevant: !doc.relevant };
@@ -517,7 +517,7 @@ export function FeedbackModal({
                   {doc.relevant ? <CheckCircle className="h-5 w-5" /> : <X className="h-5 w-5" />}
                 </button>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-foreground truncate">{doc.title}</div>
+                  <div className="text-sm font-normal text-foreground truncate">{doc.title}</div>
                   <div className="text-xs text-muted-foreground line-clamp-2">{doc.snippet}</div>
                 </div>
               </div>
@@ -528,8 +528,8 @@ export function FeedbackModal({
 
       {/* Submit Button */}
       <div className="flex justify-end gap-2 pt-2">
-        <Button
-          variant="outline"
+        <Button className="mac-button"
+          variant="outline" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => setIsExpanded(false)}
           className="border-border"
@@ -540,7 +540,7 @@ export function FeedbackModal({
           size="sm"
           onClick={handleSubmitDetailed}
           disabled={isSubmitting}
-          className="bg-purple-600 hover:bg-purple-500"
+          className="mac-button bg-primary-600 hover:bg-primary-500"
         >
           {isSubmitting ? (
             <>Submitting...</>
@@ -565,7 +565,7 @@ export function FeedbackModal({
       <DialogContent className="sm:max-w-[600px] bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-foreground flex items-center gap-2">
-            <MessageSquarePlus className="h-5 w-5 text-purple-400" />
+            <MessageSquarePlus className="h-5 w-5 text-primary-400" />
             Provide Feedback
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
@@ -580,7 +580,7 @@ export function FeedbackModal({
             className="flex flex-col items-center justify-center py-8"
           >
             <CheckCircle className="h-12 w-12 text-green-400 mb-4" />
-            <h3 className="text-lg font-medium text-foreground">Thank You!</h3>
+            <h3 className="mac-title">Thank You!</h3>
             <p className="text-sm text-muted-foreground">Your feedback has been recorded.</p>
           </motion.div>
         ) : (
@@ -588,11 +588,11 @@ export function FeedbackModal({
             {/* Context Preview */}
             <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border/50">
               <div>
-                <span className="text-xs font-medium text-muted-foreground">Your question:</span>
+                <span className="text-xs font-normal text-muted-foreground">Your question:</span>
                 <p className="text-sm text-foreground line-clamp-2">{userQuery}</p>
               </div>
               <div>
-                <span className="text-xs font-medium text-muted-foreground">AI response:</span>
+                <span className="text-xs font-normal text-muted-foreground">AI response:</span>
                 <p className="text-sm text-muted-foreground line-clamp-3">
                   {aiResponse.substring(0, 200)}...
                 </p>

@@ -56,7 +56,7 @@ const topicData = [
 
 const sourceWeights = [
   { source: "Knowledge", weight: 15, color: "var(--mac-primary-blue-400)" },
-  { source: "Jira", weight: 8, color: "var(--mac-accent-purple-400)" },
+  { source: "Jira", weight: 8, color: "var(--mac-accent-primary-400)" },
   { source: "Git", weight: -3, color: "var(--mac-status-error-text)" },
   { source: "Email", weight: 2, color: "var(--mac-text-secondary)" },
 ];
@@ -83,7 +83,7 @@ export function ReinforcementDashboardTab() {
           title="Training Batches" 
           value="12" 
           delta="+2" 
-          icon={<Lightbulb className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />} 
+          icon={<Lightbulb className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />} 
         />
         <MetricCard 
           title="Feedback Loop" 
@@ -101,8 +101,8 @@ export function ReinforcementDashboardTab() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quality Timeline */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2">
-          <CardHeader>
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2">
+          <CardHeader className="mac-card">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="font-light text-xl flex items-center gap-2">
@@ -161,10 +161,10 @@ export function ReinforcementDashboardTab() {
         </Card>
 
         {/* Top Improved Topics */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader>
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card">
             <CardTitle className="font-light text-xl flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[var(--mac-accent-purple-400)]" />
+              <Sparkles className="h-5 w-5 text-[var(--mac-accent-primary-400)]" />
               Top Gains
             </CardTitle>
             <CardDescription className="font-light">Topics with highest quality improvement</CardDescription>
@@ -194,8 +194,8 @@ export function ReinforcementDashboardTab() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Source Weights */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader>
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card">
             <CardTitle className="font-light text-lg flex items-center gap-2">
               <Shield className="h-5 w-5 text-[var(--mac-text-secondary)]" />
               Source Reinforcement Weights
@@ -227,14 +227,14 @@ export function ReinforcementDashboardTab() {
         </Card>
 
         {/* Leaderboard & Stats */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader>
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card">
             <CardTitle className="font-light text-lg flex items-center gap-2">
               <Users className="h-5 w-5 text-[var(--mac-text-secondary)]" />
               Curator Contributions
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="space-y-3">
               <LeaderboardRow name="matt@betabase.com" count={42} badge="🏆 Master" isMe />
               <LeaderboardRow name="claudette@agent.ai" count={38} badge="🥇 Expert" />
@@ -249,12 +249,12 @@ export function ReinforcementDashboardTab() {
 
 function MetricCard({ title, value, delta, icon }: { title: string, value: string, delta: string, icon: React.ReactNode }) {
   return (
-    <Card className="mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)] hover:border-[var(--mac-utility-border-elevated)] transition-all duration-300">
+    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)] hover:border-[var(--mac-utility-border-elevated)] transition-all duration-300">
       <CardContent className="p-4 flex items-center justify-between">
         <div className="space-y-1">
-          <p className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
+          <p className="mac-body text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
           <div className="flex items-baseline gap-2">
-            <h4 className="text-xl font-light text-[var(--mac-text-primary)]">{value}</h4>
+            <h4 className="mac-title">{value}</h4>
             <span className={cn(
               "text-[10px] font-normal",
               delta.startsWith("+") ? "text-[var(--mac-status-connected)]" : delta === "Stable" ? "text-[var(--mac-text-muted)]" : "text-[var(--mac-status-error-text)]"
@@ -283,12 +283,12 @@ function LeaderboardRow({ name, count, badge, isMe = false }: { name: string, co
         </div>
         <div className="min-w-0">
           <p className="text-sm font-light text-[var(--mac-text-primary)] truncate">{name}</p>
-          <p className="text-[10px] text-[var(--mac-text-secondary)]">{badge}</p>
+          <p className="mac-body text-[10px] text-[var(--mac-text-secondary)]">{badge}</p>
         </div>
       </div>
       <div className="text-right">
         <p className="text-sm font-light text-[var(--mac-primary-blue-400)]">{count}</p>
-        <p className="text-[9px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Corrections</p>
+        <p className="mac-body text-[9px] uppercase text-[var(--mac-text-muted)] tracking-tighter">Corrections</p>
       </div>
     </div>
   );

@@ -123,7 +123,7 @@ export function AIInsightsDashboard({
       sentiment: "text-green-400 bg-green-400/10 border-green-400/30",
       topic: "text-blue-400 bg-blue-400/10 border-blue-400/30",
       action: "text-yellow-400 bg-yellow-400/10 border-yellow-400/30",
-      summary: "text-purple-400 bg-purple-400/10 border-purple-400/30",
+      summary: "text-primary-400 bg-primary-400/10 border-primary-400/30",
     };
     return colors[type];
   };
@@ -137,7 +137,7 @@ export function AIInsightsDashboard({
             <TrendingUp className="w-4 h-4 text-green-400" />
             <span className="text-xs font-mono text-muted-foreground">SENTIMENT</span>
           </div>
-          <div className="text-lg font-bold text-green-400">{sentiment.positive.toFixed(0)}%</div>
+          <div className="text-lg font-normal text-green-400">{sentiment.positive.toFixed(0)}%</div>
           <div className="text-xs text-muted-foreground">Positive</div>
         </div>
 
@@ -146,7 +146,7 @@ export function AIInsightsDashboard({
             <Target className="w-4 h-4 text-blue-600" />
             <span className="text-xs font-mono text-muted-foreground">TOPICS</span>
           </div>
-          <div className="text-lg font-bold text-blue-600">{keyTopics.length}</div>
+          <div className="text-lg font-normal text-blue-600">{keyTopics.length}</div>
           <div className="text-xs text-muted-foreground">Identified</div>
         </div>
 
@@ -155,16 +155,16 @@ export function AIInsightsDashboard({
             <Lightbulb className="w-4 h-4 text-yellow-400" />
             <span className="text-xs font-mono text-muted-foreground">ACTIONS</span>
           </div>
-          <div className="text-lg font-bold text-yellow-400">{actionItems.length}</div>
+          <div className="text-lg font-normal text-yellow-400">{actionItems.length}</div>
           <div className="text-xs text-muted-foreground">Suggested</div>
         </div>
 
         <div className="bg-muted/60 border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Clock className="w-4 h-4 text-purple-400" />
+            <Clock className="w-4 h-4 text-primary-400" />
             <span className="text-xs font-mono text-muted-foreground">DURATION</span>
           </div>
-          <div className="text-lg font-bold text-purple-400">
+          <div className="text-lg font-normal text-primary-400">
             {Math.floor(Math.random() * 45 + 5)}m
           </div>
           <div className="text-xs text-muted-foreground">Active</div>
@@ -175,7 +175,7 @@ export function AIInsightsDashboard({
       <div className="bg-muted/60 border border-border rounded-lg p-4">
         <div className="flex items-center gap-2 mb-4">
           <Lightbulb className="w-5 h-5 text-blue-600" />
-          <h3 className="mac-title" className="mac-title text-lg font-bold text-blue-600 font-mono">
+          <h3 className="mac-title text-lg font-normal text-blue-600 font-mono">
             AI Insights
           </h3>
           {isRecording && (
@@ -229,7 +229,7 @@ export function AIInsightsDashboard({
         <div className="bg-muted/60 border border-border rounded-lg p-4">
           <h3
             className="mac-title"
-            className="mac-title text-sm font-bold text-blue-600 font-mono mb-4"
+            className="mac-title text-sm font-normal text-blue-600 font-mono mb-4"
           >
             KEY TOPICS
           </h3>
@@ -251,7 +251,7 @@ export function AIInsightsDashboard({
         <div className="bg-muted/60 border border-border rounded-lg p-4">
           <h3
             className="mac-title"
-            className="mac-title text-sm font-bold text-yellow-400 font-mono mb-4"
+            className="mac-title text-sm font-normal text-yellow-400 font-mono mb-4"
           >
             ACTION ITEMS
           </h3>

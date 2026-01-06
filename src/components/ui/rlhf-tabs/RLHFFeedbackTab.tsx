@@ -146,11 +146,11 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
           "bg-[var(--mac-surface-elevated)]"
         )}
       >
-        <CardHeader className="pb-3">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Lightbulb className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
+                <Lightbulb className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />
                 <span className="text-xs text-[var(--mac-text-muted)] font-light">
                   {new Date(item.timestamp).toLocaleString()}
                 </span>
@@ -185,8 +185,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
             >
               {item.response}
             </div>
-            <Button
-              variant="ghost"
+            <Button className="mac-button"
+              variant="ghost" className="mac-button mac-button-outline"
               size="sm"
               onClick={() => setExpanded(!expanded)}
               className="mt-2 text-xs text-[var(--mac-primary-blue-400)] hover:text-[var(--mac-primary-blue-600)] font-light"
@@ -201,9 +201,9 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
               <span className="text-xs text-[var(--mac-text-muted)] mr-2 font-light">
                 Quick feedback:
               </span>
-              <Button
+              <Button className="mac-button"
                 size="sm"
-                variant="ghost"
+                variant="ghost" className="mac-button mac-button-outline"
                 onClick={() => handleQuickFeedback("thumbs_up")}
                 disabled={submitting}
                 className={cn(
@@ -216,9 +216,9 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                 <ThumbsUp className="h-3.5 w-3.5 mr-1" />
                 Helpful
               </Button>
-              <Button
+              <Button className="mac-button"
                 size="sm"
-                variant="ghost"
+                variant="ghost" className="mac-button mac-button-outline"
                 onClick={() => handleQuickFeedback("thumbs_down")}
                 disabled={submitting}
                 className={cn(
@@ -235,7 +235,7 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
               {/* Star Rating */}
               <div className="flex items-center gap-1 ml-2 border-l border-[var(--mac-utility-border)] pl-3">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <button
+                  <button className="mac-button"
                     key={star}
                     onClick={() => setRating(star)}
                     className="transition-transform hover:scale-110"
@@ -256,7 +256,7 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                     size="sm"
                     onClick={handleRatingFeedback}
                     disabled={submitting}
-                    className={cn(
+                    className={cn("mac-button", 
                       "ml-2 h-7 text-xs font-light",
                       "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-600)]"
                     )}
@@ -271,8 +271,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
           {/* Retrieved Documents */}
           {expanded && item.retrievedDocs.length > 0 && (
             <div className="space-y-2 pt-4 border-t border-[var(--mac-utility-border)]">
-              <h4 className="text-sm font-light text-[var(--mac-text-primary)] flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
+              <h4 className="mac-title">
+                <Sparkles className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />
                 Retrieved Documents ({item.retrievedDocs.length})
               </h4>
               <div className="space-y-2">
@@ -312,9 +312,9 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                     </div>
                     {!item.feedbackSubmitted && (
                       <div className="flex gap-1">
-                        <Button
+                        <Button className="mac-button"
                           size="sm"
-                          variant="ghost"
+                          variant="ghost" className="mac-button mac-button-outline"
                           onClick={() => toggleDocRelevance(doc.id, true)}
                           className={cn(
                             "h-8 w-8 p-0 border transition-all",
@@ -325,9 +325,9 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                         >
                           <Check className="h-4 w-4" />
                         </Button>
-                        <Button
+                        <Button className="mac-button"
                           size="sm"
-                          variant="ghost"
+                          variant="ghost" className="mac-button mac-button-outline"
                           onClick={() => toggleDocRelevance(doc.id, false)}
                           className={cn(
                             "h-8 w-8 p-0 border transition-all",
@@ -349,8 +349,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
           {/* Detailed Feedback */}
           {expanded && !item.feedbackSubmitted && (
             <div className="space-y-3 pt-4 border-t border-[var(--mac-utility-border)]">
-              <h4 className="text-sm font-light text-[var(--mac-text-primary)] flex items-center gap-2">
-                <Edit3 className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
+              <h4 className="mac-title">
+                <Edit3 className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />
                 Detailed Feedback
               </h4>
               <Textarea
@@ -371,7 +371,7 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
               <Button
                 onClick={handleDetailedFeedback}
                 disabled={submitting || !correction.trim()}
-                className={cn(
+                className={cn("mac-button", 
                   "w-full font-light",
                   "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-600)]",
                   "disabled:opacity-50 disabled:cursor-not-allowed"
@@ -575,10 +575,10 @@ export function RLHFFeedbackTab() {
             <Card
               className={cn(
                 "mac-card-elevated border-[var(--mac-primary-blue-400)]/20",
-                "bg-gradient-to-r from-[var(--mac-primary-blue-400)]/5 to-[var(--mac-accent-purple-400)]/5"
+                "bg-gradient-to-r from-[var(--mac-primary-blue-400)]/5 to-[var(--mac-accent-primary-400)]/5"
               )}
             >
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center">
@@ -593,8 +593,8 @@ export function RLHFFeedbackTab() {
                       </p>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
+                  <Button className="mac-button"
+                    variant="ghost" className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => setShowExplanation(false)}
                     className="h-8 w-8 p-0 text-[var(--mac-text-muted)] hover:text-[var(--mac-text-primary)]"
@@ -626,8 +626,8 @@ export function RLHFFeedbackTab() {
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <div className="h-6 w-6 rounded bg-[var(--mac-accent-purple-400)]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-light text-[var(--mac-accent-purple-400)]">
+                    <div className="h-6 w-6 rounded bg-[var(--mac-accent-primary-400)]/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-light text-[var(--mac-accent-primary-400)]">
                         2
                       </span>
                     </div>
@@ -669,7 +669,7 @@ export function RLHFFeedbackTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Pending</p>
-                <p className="text-2xl font-light text-[var(--mac-text-primary)]">{stats.pending}</p>
+                <p className="mac-body text-2xl font-light text-[var(--mac-text-primary)]">{stats.pending}</p>
               </div>
               <AlertCircle className="h-8 w-8 text-[var(--mac-warning-yellow)]" />
             </div>
@@ -681,7 +681,7 @@ export function RLHFFeedbackTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Submitted</p>
-                <p className="text-2xl font-light text-[var(--mac-text-primary)]">
+                <p className="mac-body text-2xl font-light text-[var(--mac-text-primary)]">
                   {stats.submitted}
                 </p>
               </div>
@@ -695,11 +695,11 @@ export function RLHFFeedbackTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[var(--mac-text-muted)] font-light">Avg Rating</p>
-                <p className="text-2xl font-light text-[var(--mac-text-primary)]">
+                <p className="mac-body text-2xl font-light text-[var(--mac-text-primary)]">
                   {stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "N/A"}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-[var(--mac-accent-purple-400)]" />
+              <TrendingUp className="h-8 w-8 text-[var(--mac-accent-primary-400)]" />
             </div>
           </CardContent>
         </Card>
@@ -712,7 +712,7 @@ export function RLHFFeedbackTab() {
           size="sm"
           onClick={loadFeedbackQueue}
           disabled={loading}
-          className="text-xs"
+          className="mac-button text-xs"
         >
           <RefreshCw className={cn("h-3 w-3 mr-2", loading && "animate-spin")} />
           Refresh
@@ -725,7 +725,7 @@ export function RLHFFeedbackTab() {
           {feedbackQueue.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 text-[var(--mac-text-muted)]">
               <AlertCircle className="h-12 w-12 mb-4" />
-              <p className="font-light">No feedback items in queue</p>
+              <p className="mac-body font-light">No feedback items in queue</p>
               <p className="text-xs mt-1">Chat with the AI to generate feedback items</p>
             </div>
           ) : (

@@ -434,8 +434,8 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                 <Activity className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h1 className="text-lg font-light tracking-tight text-foreground">Test Dashboard</h1>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                <h1 className="mac-heading">Test Dashboard</h1>
+                <p className="mac-body text-[10px] text-muted-foreground uppercase tracking-wider">
                   Unified testing and quality assurance platform
                 </p>
               </div>
@@ -443,7 +443,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             {/* Control Buttons - GOLD STANDARD COMPACT */}
             <div className="flex items-center gap-2">
-              <Button
+              <Button className="mac-button"
                 variant={isRunning ? "destructive" : "default"}
                 size="sm"
                 onClick={isRunning ? () => setIsRunning(false) : handleRunTests}
@@ -461,7 +461,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-2 h-8 text-xs border-border text-foreground"
+                className="mac-button gap-2 h-8 text-xs border-border text-foreground"
                 onClick={handleRerunFailed}
                 disabled={isRunning || testStats.failed === 0}
               >
@@ -537,7 +537,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   Status
                 </div>
                 <span className={cn(
-                  "text-xs font-medium",
+                  "text-xs font-normal",
                   isRunning ? "text-amber-400" : "text-emerald-400"
                 )}>
                   {isRunning ? "⏳ In Progress" : "✅ Ready"}
@@ -573,9 +573,9 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           {(isRunning || recentLogs.length > 0) && (
             <div className="mt-3">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-medium text-foreground uppercase tracking-wider">Live Output</span>
-                <Button
-                  variant="ghost"
+                <span className="text-[10px] font-normal text-foreground uppercase tracking-wider">Live Output</span>
+                <Button className="mac-button"
+                  variant="ghost" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setUseRealTimeStreaming(!useRealTimeStreaming)}
                   className="h-6 text-[9px] text-muted-foreground hover:text-foreground"
@@ -607,7 +607,11 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <Home className="h-4 w-4" />
               Home
             </TabsTrigger>
-            <TabsTrigger value="self-healing" className="gap-2">
+            <TabsTrigger 
+              value="self-healing" 
+              className="gap-2"
+              data-testid="tab-self-healing"
+            >
               <Wrench className="h-4 w-4" />
               Self-Healing
             </TabsTrigger>

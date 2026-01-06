@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export const neonColors = {
   blue: "#3B82F6",
   green: "#10B981",
-  purple: "#8b5cf6",
+  purple: "#26c6da",
   pink: "#ff006e",
   cyan: "#06ffa5",
   matrix: "#00ff41",

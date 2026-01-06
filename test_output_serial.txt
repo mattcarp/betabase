@@ -1,0 +1,490 @@
+
+Running 22 tests using 1 worker
+
+  ✘   1 [chromium] › tests/e2e/demo/demo-gaps.spec.ts:33:7 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-01: Nano Banana Pro Page loads and generates ERD (8.5s)
+  -   2 [chromium] › tests/e2e/demo/demo-gaps.spec.ts:57:8 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-02: Chat offers diagram for architecture questions
+  ✘   3 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:88:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-001: App loads on localhost (144ms)
+  ✘   4 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:95:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-002: Welcome screen renders (137ms)
+  ✘   5 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:112:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-010: Hard but answerable question (160ms)
+  ✘   6 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:129:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-011: Upcoming release info (JIRAs) (134ms)
+  ✘   7 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:160:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation (142ms)
+  ✘   8 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:186:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-022: DDP parsing tool call (184ms)
+  ✘   9 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:212:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-030: Blockchain trick question (139ms)
+  ✘  10 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:245:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-031: Thumbs down feedback flow (137ms)
+  ✘  11 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:278:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-040: Navigate to Curate tab (138ms)
+  ✘  12 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:287:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-041: Upload area visible (233ms)
+  ✘  13 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:300:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-042: Delete functionality visible (143ms)
+  ✘  14 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:313:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-043: Curation queue renders (184ms)
+  ✘  15 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:335:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-050: Navigate to Test tab (139ms)
+  ✘  16 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:344:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-051: Test list scrollable (136ms)
+  ✘  17 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:364:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-053: Auto-ranking visible (151ms)
+  ✘  18 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:377:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-054: Self-healing tab (135ms)
+  ✘  19 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:395:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-055: Ladybug Tester Mode visible (141ms)
+  ✘  20 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:407:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-040: Curation Segue (138ms)
+  ✘  21 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:455:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-060: Three-pillar navigation (144ms)
+  ✘  22 [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:486:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-061: Screenshot capture all tabs (135ms)
+
+
+  1) [chromium] › tests/e2e/demo/demo-gaps.spec.ts:33:7 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-01: Nano Banana Pro Page loads and generates ERD 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/test-nanobanana
+    Call log:
+    [2m  - navigating to "http://localhost:3000/test-nanobanana", waiting until "load"[22m
+
+
+      33 |   test('DEMO-GAP-01: Nano Banana Pro Page loads and generates ERD', async ({ page }) => {
+      34 |     // Navigate directly to the test page
+    > 35 |     await page.goto('/test-nanobanana');
+         |                ^
+      36 |     await expect(page.locator('text=Nano Banana Pro Test Lab')).toBeVisible({ timeout: NAVIGATION_TIMEOUT });
+      37 |
+      38 |     // Click the "Multi-Tenant ERD" button
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-gaps.spec.ts:35:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-gaps-MC-Edit-66e9d-age-loads-and-generates-ERD-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:88:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-001: App loads on localhost 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:85:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-7d731--001-App-loads-on-localhost-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:95:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-002: Welcome screen renders 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:85:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-50727--002-Welcome-screen-renders-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:112:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-010: Hard but answerable question 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:109:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-49496-ard-but-answerable-question-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:129:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-011: Upcoming release info (JIRAs) 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:109:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-3fedc-pcoming-release-info-JIRAs--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:160:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:157:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-6badd--Mermaid-diagram-generation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:186:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-022: DDP parsing tool call 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:157:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-e5787-O-022-DDP-parsing-tool-call-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:212:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-030: Blockchain trick question 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:209:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-30145-0-Blockchain-trick-question-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:245:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-031: Thumbs down feedback flow 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:209:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-da9b7-1-Thumbs-down-feedback-flow-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:278:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-040: Navigate to Curate tab 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:275:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-08e07--040-Navigate-to-Curate-tab-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:287:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-041: Upload area visible 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:275:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-c55e3-EMO-041-Upload-area-visible-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:300:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-042: Delete functionality visible 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:275:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-522cd-elete-functionality-visible-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:313:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-043: Curation queue renders 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:275:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-35dd4--043-Curation-queue-renders-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:335:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-050: Navigate to Test tab 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-63e27-MO-050-Navigate-to-Test-tab-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:344:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-051: Test list scrollable 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-0dcb6-MO-051-Test-list-scrollable-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:364:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-053: Auto-ranking visible 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-dbd73-MO-053-Auto-ranking-visible-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:377:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-054: Self-healing tab 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-59a0b-t-DEMO-054-Self-healing-tab-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:395:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-055: Ladybug Tester Mode visible 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-fe851-Ladybug-Tester-Mode-visible-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:407:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-040: Curation Segue 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-fec92-dit-DEMO-040-Curation-Segue-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:455:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-060: Three-pillar navigation 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:452:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-185a5-060-Three-pillar-navigation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:486:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-061: Screenshot capture all tabs 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "domcontentloaded"[22m
+
+
+      74 |   }
+      75 |
+    > 76 |   await page.goto(testUrl, { waitUntil: 'domcontentloaded' });
+         |              ^
+      77 |   await page.waitForTimeout(3000);
+      78 | }
+      79 |
+        at setupPage (/Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:76:14)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/e2e/demo/demo-mc-edit-official.spec.ts:452:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-63c26-Screenshot-capture-all-tabs-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21 failed
+    [chromium] › tests/e2e/demo/demo-gaps.spec.ts:33:7 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-01: Nano Banana Pro Page loads and generates ERD 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:88:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-001: App loads on localhost 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:95:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-002: Welcome screen renders 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:112:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-010: Hard but answerable question 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:129:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-011: Upcoming release info (JIRAs) 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:160:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:186:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-022: DDP parsing tool call 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:212:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-030: Blockchain trick question 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:245:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-031: Thumbs down feedback flow 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:278:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-040: Navigate to Curate tab 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:287:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-041: Upload area visible 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:300:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-042: Delete functionality visible 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:313:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-043: Curation queue renders 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:335:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-050: Navigate to Test tab 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:344:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-051: Test list scrollable 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:364:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-053: Auto-ranking visible 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:377:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-054: Self-healing tab 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:395:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-055: Ladybug Tester Mode visible 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:407:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-040: Curation Segue 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:455:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-060: Three-pillar navigation 
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:486:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-061: Screenshot capture all tabs 
+  1 skipped

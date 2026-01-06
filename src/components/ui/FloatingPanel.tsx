@@ -234,7 +234,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {icon && <div className="text-blue-600">{icon}</div>}
             <h3
               className="mac-title"
-              className="mac-title text-blue-600 text-sm font-medium select-none truncate"
+              className="mac-title text-blue-600 text-sm font-normal select-none truncate"
             >
               {title}
             </h3>
@@ -244,7 +244,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {/* Reset button */}
             <button
               onClick={handleReset}
-              className="p-2 text-muted-foreground hover:text-blue-300 transition-colors"
+              className="mac-button p-2 text-muted-foreground hover:text-blue-300 transition-colors"
               title="Reset panel"
               data-testid={`panel-reset-${id}`}
             >
@@ -255,7 +255,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onMinimize && (
               <button
                 onClick={handleMinimize}
-                className="p-2 text-muted-foreground hover:text-blue-300 transition-colors"
+                className="mac-button p-2 text-muted-foreground hover:text-blue-300 transition-colors"
                 title={isMinimized ? "Restore" : "Minimize"}
                 data-testid={`panel-minimize-${id}`}
               >
@@ -267,7 +267,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onMaximize && (
               <button
                 onClick={handleMaximize}
-                className="p-2 text-muted-foreground hover:text-blue-300 transition-colors"
+                className="mac-button p-2 text-muted-foreground hover:text-blue-300 transition-colors"
                 title={isMaximized ? "Restore" : "Maximize"}
                 data-testid={`panel-maximize-${id}`}
               >
@@ -279,7 +279,7 @@ export const FloatingPanel: React.FC<FloatingPanelProps> = ({
             {onClose && (
               <button
                 onClick={handleClose}
-                className="p-2 text-muted-foreground hover:text-red-400 transition-colors"
+                className="mac-button p-2 text-muted-foreground hover:text-red-400 transition-colors"
                 title="Close panel"
                 data-testid={`panel-close-${id}`}
               >

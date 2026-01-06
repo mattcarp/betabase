@@ -160,8 +160,8 @@ export function DeduplicationTab() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header & Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-3">
-          <CardHeader className="pb-2">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-3">
+          <CardHeader className="mac-card pb-2">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="font-light text-2xl flex items-center gap-2">
@@ -182,8 +182,7 @@ export function DeduplicationTab() {
                   <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
                   Scan
                 </Button>
-                <Button 
-                  className="bg-[var(--mac-primary-blue-600)] hover:bg-[var(--mac-primary-blue-400)] text-white transition-all duration-200"
+                <Button className="mac-button bg-[var(--mac-primary-blue-600)] hover:bg-[var(--mac-primary-blue-400)] text-white transition-all duration-200"
                   onClick={() => setConfirmOpen(true)}
                   disabled={loading || deduplicating || groups.length === 0}
                 >
@@ -193,7 +192,7 @@ export function DeduplicationTab() {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
               <StatItem label="Before" value={`${stats.before} MB`} icon={<Database className="h-4 w-4" />} />
               <StatItem label="After" value={`${stats.after} MB`} icon={<CheckCircle2 className="h-4 w-4 text-[var(--mac-status-connected)]" />} />
@@ -211,8 +210,8 @@ export function DeduplicationTab() {
           </CardContent>
         </Card>
 
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
-          <CardHeader className="pb-2">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="text-sm font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">Detection Layers</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -237,7 +236,7 @@ export function DeduplicationTab() {
 
       {/* Duplicate Groups */}
       <div className="space-y-4">
-        <h3 className="text-lg font-light text-[var(--mac-text-primary)] flex items-center gap-2 px-1">
+        <h3 className="mac-title">
           Duplicate Groups Found ({groups.length})
         </h3>
         
@@ -266,7 +265,7 @@ export function DeduplicationTab() {
                       </div>
                       <div className="p-3 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)] space-y-2">
                         <div className="flex justify-between items-start">
-                          <h4 className="text-sm font-normal text-[var(--mac-text-primary)] line-clamp-1">{group.keep.filename || group.keep.source_id}</h4>
+                          <h4 className="mac-title">{group.keep.filename || group.keep.source_id}</h4>
                           <span className="text-[10px] font-light text-[var(--mac-text-secondary)]">{group.keep.size} MB</span>
                         </div>
                         <p className="text-xs font-light text-[var(--mac-text-secondary)] line-clamp-2 italic">
@@ -289,17 +288,17 @@ export function DeduplicationTab() {
                         {group.duplicates.map((dup, dIdx) => (
                           <div key={dIdx} className="p-3 rounded-lg bg-[var(--mac-surface-elevated)]/30 border border-[var(--mac-utility-border)] border-dashed space-y-2 relative">
                             <div className="flex justify-between items-start">
-                              <h4 className="text-sm font-light text-[var(--mac-text-secondary)] line-clamp-1">{dup.filename || dup.source_id}</h4>
+                              <h4 className="mac-title">{dup.filename || dup.source_id}</h4>
                               <span className="text-[10px] font-light text-[var(--mac-text-muted)]">{dup.size} MB</span>
                             </div>
-                            <p className="text-[11px] font-light text-[var(--mac-text-muted)] line-clamp-1">
+                            <p className="mac-body text-[11px] font-light text-[var(--mac-text-muted)] line-clamp-1">
                               "{dup.content_preview}"
                             </p>
                             <div className="flex gap-2 pt-1">
-                              <Button variant="ghost" size="sm" className="h-6 text-[10px] font-light hover:text-[var(--mac-primary-blue-400)] p-0 flex items-center gap-1">
+                              <Button variant="ghost" size="sm" className="mac-button mac-button-outline h-6 text-[10px] font-light hover:text-[var(--mac-primary-blue-400)] p-0 flex items-center gap-1">
                                 <Info className="h-3 w-3" /> Compare Diff
                               </Button>
-                              <Button variant="ghost" size="sm" className="h-6 text-[10px] font-light hover:text-[var(--mac-primary-blue-400)] p-0 flex items-center gap-1">
+                              <Button variant="ghost" size="sm" className="mac-button mac-button-outline h-6 text-[10px] font-light hover:text-[var(--mac-primary-blue-400)] p-0 flex items-center gap-1">
                                 <ChevronRight className="h-3 w-3" /> Keep This Version
                               </Button>
                             </div>
@@ -338,8 +337,7 @@ export function DeduplicationTab() {
             <Button variant="outline" className="mac-button-outline" onClick={() => setConfirmOpen(false)}>
               Cancel
             </Button>
-            <Button 
-              className="bg-[var(--mac-status-error-bg)] border border-[var(--mac-status-error-border)] text-[var(--mac-status-error-text)] hover:bg-[var(--mac-status-error-bg)]/80 transition-all duration-200"
+            <Button className="mac-button bg-[var(--mac-status-error-bg)] border border-[var(--mac-status-error-border)] text-[var(--mac-status-error-text)] hover:bg-[var(--mac-status-error-bg)]/80 transition-all duration-200"
               onClick={runDeduplication}
             >
               Confirm & Optimize

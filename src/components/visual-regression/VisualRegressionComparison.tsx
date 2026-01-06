@@ -192,8 +192,8 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
   return (
     <div className={cn("space-y-6", className)}>
       {/* Header */}
-      <Card>
-        <CardHeader>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <CardTitle className="text-lg">{comparison.testName}</CardTitle>
@@ -218,7 +218,12 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
 
             <div className="flex items-center gap-2">
               {getStatusBadge(comparison.status)}
-              <Button variant="outline" size="sm" onClick={handleDownload}>
+              <Button
+                className="mac-button mac-button-outline"
+                variant="outline"
+                size="sm"
+                onClick={handleDownload}
+              >
                 <Download className="h-4 w-4" />
               </Button>
             </div>
@@ -238,30 +243,30 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
 
       {/* Diff Details */}
       {comparison.diff && (
-        <Card>
+        <Card className="mac-card">
           <CardContent className="pt-6">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-normal">
                   {comparison.diff.pixelDifference.toFixed(2)}%
                 </div>
                 <div className="text-sm text-muted-foreground">Pixel Difference</div>
               </div>
               <div>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-normal">
                   {comparison.diff.pixelCount.toLocaleString()}
                 </div>
                 <div className="text-sm text-muted-foreground">Changed Pixels</div>
               </div>
               <div>
-                <div className="text-2xl font-bold">{comparison.diff.regions.length}</div>
+                <div className="text-2xl font-normal">{comparison.diff.regions.length}</div>
                 <div className="text-sm text-muted-foreground">Diff Regions</div>
               </div>
             </div>
 
             {comparison.diff.regions.length > 0 && (
               <div className="mt-4">
-                <h4 className="text-sm font-medium mb-2">Difference Regions:</h4>
+                <h4 className="mac-title">Difference Regions:</h4>
                 <div className="space-y-1 text-xs">
                   {comparison.diff.regions.slice(0, 5).map((region, idx) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -281,7 +286,7 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
                     </div>
                   ))}
                   {comparison.diff.regions.length > 5 && (
-                    <p className="text-muted-foreground">
+                    <p className="mac-body text-muted-foreground">
                       ... and {comparison.diff.regions.length - 5} more regions
                     </p>
                   )}
@@ -294,32 +299,29 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
 
       {/* Action Buttons */}
       {isPending && (
-        <Card>
+        <Card className="mac-card">
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="flex gap-2">
-                <Button
-                  onClick={handleApprove}
+                <Button onClick={handleApprove}
                   disabled={isSubmitting}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  className="mac-button flex-1 bg-green-600 hover:bg-green-700"
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Approve Changes
                 </Button>
-                <Button
-                  onClick={handleReject}
+                <Button onClick={handleReject}
                   disabled={isSubmitting || !comment.trim()}
                   variant="destructive"
-                  className="flex-1"
+                  className="mac-button mac-button-primary flex-1"
                 >
                   <XCircle className="h-4 w-4 mr-2" />
                   Reject Changes
                 </Button>
-                <Button
-                  onClick={handleUpdateBaseline}
+                <Button onClick={handleUpdateBaseline}
                   disabled={isSubmitting}
                   variant="outline"
-                  className="flex-1"
+                  className="mac-button mac-button-outline flex-1"
                 >
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Update Baseline
@@ -336,7 +338,7 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
 
       {/* Approval Info */}
       {!isPending && comparison.approvedBy && (
-        <Card className="border-green-500/20 bg-green-500/5">
+        <Card className="mac-card border-green-500/20 bg-green-500/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 text-sm">
               <User className="h-4 w-4 text-green-500" />
@@ -355,14 +357,19 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
       )}
 
       {/* Comments Section */}
-      <Card>
-        <CardHeader>
+      <Card className="mac-card">
+        <CardHeader className="mac-card">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
               Comments ({localComments.length})
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => setShowComments(!showComments)}>
+            <Button
+              className="mac-button mac-button-outline"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowComments(!showComments)}
+            >
               {showComments ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
           </div>
@@ -377,7 +384,7 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
                   {localComments.map((c) => (
                     <div key={c.id} className="border-l-2 border-muted pl-3">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">{c.author}</span>
+                        <span className="text-sm font-normal">{c.author}</span>
                         <span className="text-xs text-muted-foreground">
                           {new Date(c.createdAt).toLocaleString()}
                         </span>
@@ -401,19 +408,17 @@ export const VisualRegressionComparison: React.FC<VisualRegressionComparisonProp
                 disabled={isSubmitting}
               />
               <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
+                <Button variant="outline" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setComment("")}
                   disabled={!comment.trim() || isSubmitting}
                 >
                   Clear
                 </Button>
-                <Button
-                  size="sm"
+                <Button size="sm"
                   onClick={handleAddComment}
                   disabled={!comment.trim() || isSubmitting}
-                >
+                 className="mac-button">
                   <Send className="h-3 w-3 mr-1" />
                   Add Comment
                 </Button>

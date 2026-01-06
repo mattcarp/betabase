@@ -322,7 +322,7 @@ export const FirecrawlPanel: React.FC = () => {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <h5 className="font-medium">{feature.name}</h5>
+                              <h5 className="font-normal">{feature.name}</h5>
                               <Badge
                                 variant="outline"
                                 className={getPriorityColor(feature.testPriority)}
@@ -355,7 +355,7 @@ export const FirecrawlPanel: React.FC = () => {
                     <Card key={idx} className="mac-card mb-2">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <h5 className="font-medium">{flow.name}</h5>
+                          <h5 className="font-normal">{flow.name}</h5>
                           {flow.criticalPath && (
                             <Badge variant="destructive" className="text-xs">
                               Critical Path
@@ -468,7 +468,7 @@ export const FirecrawlPanel: React.FC = () => {
                   {supportResponse.suggestedActions &&
                     supportResponse.suggestedActions.length > 0 && (
                       <div className="pt-2 border-t">
-                        <p className="text-xs font-medium mb-2">Suggested Actions:</p>
+                        <p className="text-xs font-normal mb-2">Suggested Actions:</p>
                         <ul className="list-disc list-inside text-xs text-muted-foreground">
                           {supportResponse.suggestedActions.map((action, i) => (
                             <li key={i}>{action}</li>
@@ -490,7 +490,7 @@ export const FirecrawlPanel: React.FC = () => {
                   <div key={idx} className="text-sm">
                     <div className="flex items-center gap-2">
                       <Bug className="h-3 w-3 text-muted-foreground" />
-                      <span className="font-medium">{issue.title}</span>
+                      <span className="font-normal">{issue.title}</span>
                     </div>
                     {issue.solution && (
                       <p className="text-xs text-muted-foreground ml-6 mt-2">

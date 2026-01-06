@@ -15,7 +15,8 @@
 let EventEmitter: any;
 if (typeof window === "undefined") {
   // Server-side: Import from Node.js events
-  EventEmitter = require("events").EventEmitter;
+  const events = require("events");
+  EventEmitter = events.EventEmitter || events;
 } else {
   // Client-side: Use a minimal EventEmitter shim
   EventEmitter = class EventEmitterShim {

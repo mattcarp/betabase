@@ -21,7 +21,7 @@ import {
   Zap,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
-import type { AOMAProgressUpdate } from "@/services/aomaProgressStream";
+import type { AOMAProgressUpdate } from "../../services/aomaProgressStream";
 
 interface AOMAProgressProps {
   updates: AOMAProgressUpdate[];
@@ -79,7 +79,7 @@ export function AOMAProgress({ updates, className }: AOMAProgressProps) {
         className
       )}
     >
-      <div className="text-xs font-medium text-muted-foreground mb-4">
+      <div className="text-xs font-normal text-muted-foreground mb-4">
         AOMA Query Progress
       </div>
 

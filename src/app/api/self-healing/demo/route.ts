@@ -43,17 +43,17 @@ const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
     originalSelector: '[data-testid="button"]',
     domBefore: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
   <h1>Welcome to AOMA</h1>
-  <input type="text" placeholder="Username" />
-  <input type="password" placeholder="Password" />
-  <button data-testid="button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+  <input className="mac-input" type="text" placeholder="Username" />
+  <input className="mac-input" type="password" placeholder="Password" />
+  <button className="mac-button" data-testid="button" class="btn-primary" style="margin-top: 1rem; padding: 1rem 1.5rem;">
     Log In
   </button>
 </div>`,
     domAfter: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
   <h1>Welcome to AOMA</h1>
-  <input type="text" placeholder="Username" />
-  <input type="password" placeholder="Password" />
-  <button data-testid="login-button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+  <input className="mac-input" type="text" placeholder="Username" />
+  <input className="mac-input" type="password" placeholder="Password" />
+  <button className="mac-button" data-testid="login-button" class="btn-primary" style="margin-top: 1rem; padding: 1rem 1.5rem;">
     Log In
   </button>
 </div>`,
@@ -73,21 +73,21 @@ const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
     originalSelector: '[data-testid="login-button"]',
     domBefore: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
   <h1>Welcome to AOMA</h1>
-  <input type="text" placeholder="Username" />
-  <input type="password" placeholder="Password" />
-  <button data-testid="login-button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+  <input className="mac-input" type="text" placeholder="Username" />
+  <input className="mac-input" type="password" placeholder="Password" />
+  <button className="mac-button" data-testid="login-button" class="btn-primary" style="margin-top: 1rem; padding: 1rem 1.5rem;">
     Log In
   </button>
 </div>`,
     domAfter: `<div class="login-form" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
   <h1>Welcome to AOMA</h1>
-  <input type="text" placeholder="Username" />
-  <input type="password" placeholder="Password" />
-  <div class="button-row" style="display: flex; gap: 12px; margin-top: 16px;">
-    <button data-testid="login-button" class="btn-primary" style="padding: 12px 24px;">
+  <input className="mac-input" type="text" placeholder="Username" />
+  <input className="mac-input" type="password" placeholder="Password" />
+  <div class="button-row" style="display: flex; gap: 1rem; margin-top: 1rem;">
+    <button className="mac-button" data-testid="login-button" class="btn-primary" style="padding: 1rem 1.5rem;">
       Log In
     </button>
-    <button data-testid="forgot-password" class="btn-secondary" style="padding: 12px 24px;">
+    <button className="mac-button" data-testid="forgot-password" class="btn-secondary" style="padding: 1rem 1.5rem;">
       Forgot Password?
     </button>
   </div>
@@ -109,27 +109,27 @@ const AOMA_LOGIN_SCENARIOS: DemoScenario[] = [
     domBefore: `<div class="login-page">
   <div class="main-content" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
     <h1>Welcome to AOMA</h1>
-    <input type="text" placeholder="Username" />
-    <input type="password" placeholder="Password" />
-    <button data-testid="login-button" class="btn-primary" style="margin-top: 16px; padding: 12px 24px;">
+    <input className="mac-input" type="text" placeholder="Username" />
+    <input className="mac-input" type="password" placeholder="Password" />
+    <button className="mac-button" data-testid="login-button" class="btn-primary" style="margin-top: 1rem; padding: 1rem 1.5rem;">
       Log In
     </button>
   </div>
 </div>`,
     domAfter: `<div class="login-page" style="display: flex;">
-  <aside class="sidebar" style="position: fixed; top: 0; right: 0; width: 300px; padding: 24px; background: #1a1a2e;">
+  <aside class="sidebar" style="position: fixed; top: 0; right: 0; width: 19rem; padding: 1.5rem; background: var(--mac-surface-background);">
     <h2>Quick Access</h2>
-    <button data-testid="login-button" class="btn-sidebar" style="width: 100%; padding: 12px;">
+    <button className="mac-button" data-testid="login-button" class="btn-sidebar" style="width: 100%; padding: 1rem;">
       Log In
     </button>
-    <button data-testid="register-button" class="btn-sidebar" style="width: 100%; padding: 12px; margin-top: 8px;">
+    <button className="mac-button" data-testid="register-button" class="btn-sidebar" style="width: 100%; padding: 1rem; margin-top: 0.5rem;">
       Register
     </button>
   </aside>
   <div class="main-content" style="display: flex; flex-direction: column; align-items: center; padding: 24px; margin-right: 300px;">
     <h1>Welcome to AOMA</h1>
-    <input type="text" placeholder="Username" />
-    <input type="password" placeholder="Password" />
+    <input className="mac-input" type="text" placeholder="Username" />
+    <input className="mac-input" type="password" placeholder="Password" />
     <!-- Login button moved to sidebar -->
     <p class="help-text">Use the sidebar to log in</p>
   </div>
@@ -148,8 +148,8 @@ const LEGACY_SCENARIOS: DemoScenario[] = [
     testName: "AOMA Asset Search Toggle",
     testFile: "tests/e2e/aoma/asset-search.spec.ts",
     originalSelector: '[data-testid="mcp-enable-toggle"]',
-    domBefore: '<button data-testid="mcp-enable-toggle" class="toggle-btn">Enable MCP</button>',
-    domAfter: '<button data-testid="mcp-toggle-switch" class="toggle-switch">Enable MCP</button>',
+    domBefore: '<button className="mac-button" data-testid="mcp-enable-toggle" class="toggle-btn">Enable MCP</button>',
+    domAfter: '<button className="mac-button" data-testid="mcp-toggle-switch" class="toggle-switch">Enable MCP</button>',
     scenario: "Component library upgrade changed toggle implementation",
     tier: 1,
     expectedConfidence: 0.92,
@@ -159,8 +159,8 @@ const LEGACY_SCENARIOS: DemoScenario[] = [
     testName: "Error Boundary Recovery",
     testFile: "tests/e2e/components/error-boundary.spec.ts",
     originalSelector: '[data-testid="reload-button"]',
-    domBefore: '<button data-testid="reload-button">Reload Page</button>',
-    domAfter: '<button data-testid="error-reload-btn" class="mac-btn">Try Again</button>',
+    domBefore: '<button className="mac-button" data-testid="reload-button">Reload Page</button>',
+    domAfter: '<button className="mac-button" data-testid="error-reload-btn" class="mac-btn">Try Again</button>',
     scenario: "MAC Design System migration renamed components",
     tier: 1,
     expectedConfidence: 0.89,
@@ -170,8 +170,8 @@ const LEGACY_SCENARIOS: DemoScenario[] = [
     testName: "Voice Interrupt Flow",
     testFile: "tests/e2e/voice/interrupt.spec.ts",
     originalSelector: '[data-testid="interrupt-button"]',
-    domBefore: '<button data-testid="interrupt-button" aria-label="Stop">Interrupt</button>',
-    domAfter: '<button data-testid="voice-stop-btn" aria-label="Stop Recording">Stop</button>',
+    domBefore: '<button className="mac-button" data-testid="interrupt-button" aria-label="Stop">Interrupt</button>',
+    domAfter: '<button className="mac-button" data-testid="voice-stop-btn" aria-label="Stop Recording">Stop</button>',
     scenario: "Voice UI redesign for accessibility improvements",
     tier: 2,
     expectedConfidence: 0.74,

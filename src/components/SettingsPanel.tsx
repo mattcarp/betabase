@@ -119,14 +119,14 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             <Settings className="w-5 h-5 text-blue-600" />
             <h2
               className="mac-heading"
-              className="mac-heading text-xl font-bold text-blue-600 font-mono"
+              className="mac-heading text-xl font-normal text-blue-600 font-mono"
             >
               Settings
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="mac-button text-muted-foreground hover:text-foreground transition-colors"
             data-testid="settings-close"
           >
             <X className="w-5 h-5" />
@@ -141,7 +141,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
-                  <button
+                  <button className="mac-button"
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
@@ -195,7 +195,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={exportSettings}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-600/30 transition-colors"
+              className="mac-button flex items-center gap-2 px-4 py-2 bg-blue-600/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-600/30 transition-colors"
               data-testid="settings-export"
             >
               <Download className="w-4 h-4" />
@@ -208,7 +208,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 type="file"
                 accept=".json"
                 onChange={handleImport}
-                className="hidden"
+                className="mac-input hidden"
                 data-testid="settings-import-input"
               />
             </label>
@@ -216,7 +216,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2 bg-yellow-600/20 border border-yellow-500 text-yellow-300 rounded font-mono text-sm hover:bg-yellow-600/30 transition-colors"
+              className="mac-button flex items-center gap-2 px-4 py-2 bg-yellow-600/20 border border-yellow-500 text-yellow-300 rounded font-mono text-sm hover:bg-yellow-600/30 transition-colors"
               data-testid="settings-reset"
             >
               <RotateCcw className="w-4 h-4" />
@@ -224,7 +224,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors"
+              className="mac-button flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors"
               data-testid="settings-save"
             >
               <Save className="w-4 h-4" />
@@ -264,7 +264,7 @@ function AppearanceSettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">Theme</label>
+          <label className="block text-sm font-normal text-foreground mb-2">Theme</label>
           <select
             value={settings.theme}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -281,7 +281,7 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">Color Scheme</label>
+          <label className="block text-sm font-normal text-foreground mb-2">Color Scheme</label>
           <select
             value={settings.colorScheme}
             onChange={(e) =>
@@ -297,7 +297,7 @@ function AppearanceSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">Font Size</label>
+          <label className="block text-sm font-normal text-foreground mb-2">Font Size</label>
           <select
             value={settings.fontSize}
             onChange={(e) => updateSetting("fontSize", e.target.value as SiamSettings["fontSize"])}
@@ -312,7 +312,7 @@ function AppearanceSettings({
       </div>
 
       <div className="flex items-center">
-        <input
+        <input className="mac-input"
           type="checkbox"
           id="animations"
           checked={settings.animationsEnabled}
@@ -331,7 +331,7 @@ function AppearanceSettings({
           🔄 Window Transparency: {settings.windowOpacity}%
         </label>
         <div className="flex items-center gap-4">
-          <input
+          <input className="mac-input"
             id="window-opacity"
             type="range"
             min="10"
@@ -376,10 +376,10 @@ function AudioSettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Audio Gain: {settings.audioGain}%
           </label>
-          <input
+          <input className="mac-input"
             type="range"
             min="0"
             max="100"
@@ -393,7 +393,7 @@ function AudioSettings({
 
       <div className="space-y-3">
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="noiseReduction"
             checked={settings.noiseReduction}
@@ -407,7 +407,7 @@ function AudioSettings({
         </div>
 
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="audioVisualization"
             checked={settings.audioVisualizationEnabled}
@@ -437,7 +437,7 @@ function RecordingSettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Transcription Language
           </label>
           <select
@@ -457,10 +457,10 @@ function RecordingSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Max Recording Duration (minutes, 0 = unlimited)
           </label>
-          <input
+          <input className="mac-input"
             type="number"
             min="0"
             max="480"
@@ -475,7 +475,7 @@ function RecordingSettings({
 
       <div className="space-y-3">
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="autoStart"
             checked={settings.autoStartRecording}
@@ -489,7 +489,7 @@ function RecordingSettings({
         </div>
 
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="autoSave"
             checked={settings.autoSaveTranscriptions}
@@ -525,10 +525,10 @@ function LayoutSettings({
 
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Left Panel: {settings.panelSizes.left}%
           </label>
-          <input
+          <input className="mac-input"
             type="range"
             min="15"
             max="40"
@@ -540,10 +540,10 @@ function LayoutSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Middle Panel: {settings.panelSizes.middle}%
           </label>
-          <input
+          <input className="mac-input"
             type="range"
             min="30"
             max="60"
@@ -555,10 +555,10 @@ function LayoutSettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Right Panel: {settings.panelSizes.right}%
           </label>
-          <input
+          <input className="mac-input"
             type="range"
             min="15"
             max="40"
@@ -572,7 +572,7 @@ function LayoutSettings({
 
       <div className="space-y-3">
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="performanceStats"
             checked={settings.showPerformanceStats}
@@ -586,7 +586,7 @@ function LayoutSettings({
         </div>
 
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="statusBar"
             checked={settings.showStatusBar}
@@ -600,7 +600,7 @@ function LayoutSettings({
         </div>
 
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="compactMode"
             checked={settings.compactMode}
@@ -648,7 +648,7 @@ function ShortcutsSettings({
         {shortcuts.map(({ key, label }) => (
           <div key={key} className="flex items-center justify-between">
             <label className="text-foreground text-sm">{label}</label>
-            <input
+            <input className="mac-input"
               type="text"
               value={settings.shortcuts[key]}
               onChange={(e) => updateNestedSetting("shortcuts", key, e.target.value)}
@@ -676,10 +676,10 @@ function DataPrivacySettings({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Max Session History
           </label>
-          <input
+          <input className="mac-input"
             type="number"
             min="10"
             max="1000"
@@ -692,10 +692,10 @@ function DataPrivacySettings({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-normal text-foreground mb-2">
             Session Retention (days)
           </label>
-          <input
+          <input className="mac-input"
             type="number"
             min="1"
             max="365"
@@ -710,7 +710,7 @@ function DataPrivacySettings({
 
       <div className="space-y-3">
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="localOnly"
             checked={settings.localStorageOnly}
@@ -724,7 +724,7 @@ function DataPrivacySettings({
         </div>
 
         <div className="flex items-center">
-          <input
+          <input className="mac-input"
             type="checkbox"
             id="autoDelete"
             checked={settings.autoDeleteOldSessions}

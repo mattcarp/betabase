@@ -13,7 +13,7 @@ test.describe('Test Pillar @demo', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Wait for app to load (either login or app content)
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(1000);
   });
 

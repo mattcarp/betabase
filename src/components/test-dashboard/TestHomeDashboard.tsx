@@ -202,8 +202,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* GOLD STANDARD: Intelligence Quality Radar + Small Multiples */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Test Intelligence Quality Radar */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-2xl">
-          <CardHeader className="pb-2">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-2xl">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="font-light text-lg flex items-center gap-2">
               <Activity className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
               Test Intelligence Index
@@ -231,8 +231,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
 
         {/* Small Multiples: Test Suite Sparklines (Tufte "Small Multiples") */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-2xl">
-          <CardHeader className="pb-2">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-2xl">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="font-light text-lg flex items-center gap-2">
               <Target className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
               Test Suite Velocity
@@ -317,13 +317,13 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
       {/* Historical Test Suite Stats - Tufte-inspired compact banner */}
       {analytics && (
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="historical-stats">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="historical-stats">
           <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Archive className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
-                  <span className="text-xs font-medium text-foreground uppercase tracking-wider">Historical Vault</span>
+                  <span className="text-xs font-normal text-foreground uppercase tracking-wider">Historical Vault</span>
                 </div>
                 <div className="flex items-center gap-4 text-[11px]">
                   <div>
@@ -342,8 +342,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                   </div>
                 </div>
               </div>
-              <Button 
-                variant="ghost" 
+              <Button className="mac-button" 
+                variant="ghost" className="mac-button mac-button-outline" 
                 size="sm" 
                 onClick={() => onNavigate?.("historical")}
                 className="text-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/10 text-xs h-7"
@@ -357,7 +357,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
       {/* AI Needs Your Expertise - Compact Tufte style */}
       {healthMetrics.pendingReview > 0 && (
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="human-needed-banner">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg" data-test-id="human-needed-banner">
           <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -365,15 +365,14 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                   <Users className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-white">AI Needs Your Expertise</p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-xs font-normal text-white">AI Needs Your Expertise</p>
+                  <p className="mac-body text-[10px] text-muted-foreground">
                     {healthMetrics.pendingReview} items awaiting review
                   </p>
                 </div>
               </div>
-              <Button
-                size="sm"
-                className="bg-[var(--mac-primary-blue-400)] text-white hover:bg-[var(--mac-primary-blue-400)]/90 h-8 text-xs"
+              <Button size="sm"
+                className="mac-button bg-[var(--mac-primary-blue-400)] text-white hover:bg-[var(--mac-primary-blue-400)]/90 h-8 text-xs"
                 onClick={() => setShowCuratorQueue(true)}
               >
                 <Eye className="h-3.5 w-3.5 mr-2" />
@@ -394,17 +393,16 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       {/* Unified Grid: Recent Self-Heals + Attention Items - Gold Standard Layout */}
       <div className="grid grid-cols-3 gap-4">
         {/* Recent Self-Heals - Compact */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-2 shadow-lg">
-          <CardHeader className="pb-2 pt-3 px-4">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-2 shadow-lg">
+          <CardHeader className="mac-card pb-2 pt-3 px-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
                 <Wrench className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
                 Recent Self-Heals
               </CardTitle>
-              <Button
-                variant="ghost"
+              <Button variant="ghost"
                 size="sm"
-                className="text-[10px] h-6 text-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/10"
+                className="mac-button mac-button-outline text-[10px] h-6 text-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-400)]/10"
                 onClick={() => onNavigate?.("self-healing")}
               >
                 View All <ArrowRight className="h-3 w-3 ml-1" />
@@ -426,8 +424,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                       <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
                     )}
                     <div>
-                      <p className="text-xs font-medium text-foreground">{heal.testName}</p>
-                      <p className="text-[10px] text-muted-foreground">{heal.time}</p>
+                      <p className="text-xs font-normal text-foreground">{heal.testName}</p>
+                      <p className="mac-body text-[10px] text-muted-foreground">{heal.time}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -456,8 +454,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
         </Card>
 
         {/* Attention Needed - Compact */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg">
-          <CardHeader className="pb-2 pt-3 px-4">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg">
+          <CardHeader className="mac-card pb-2 pt-3 px-4">
             <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
               <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
               Attention Needed
@@ -492,8 +490,8 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
 
       {/* HITL Curator Queue - Compact Gold Standard */}
-      <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg">
-        <CardHeader className="pb-2 pt-3 px-4">
+      <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-lg">
+        <CardHeader className="mac-card pb-2 pt-3 px-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
               <Sparkles className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
@@ -502,8 +500,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
                 {healthMetrics.pendingReview} pending
               </Badge>
             </CardTitle>
-            <Button
-              variant="ghost"
+            <Button variant="ghost" className="mac-button mac-button-outline"
               size="sm"
               onClick={() => setShowCuratorQueue(!showCuratorQueue)}
               className="gap-1.5 h-7 text-xs text-muted-foreground hover:text-foreground"
@@ -515,7 +512,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
               )}
             </Button>
           </div>
-          <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">
+          <p className="mac-body text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">
             Review AI responses, test corrections, and low-confidence results
           </p>
         </CardHeader>
@@ -528,8 +525,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
 
       {/* Quick Actions - Tufte minimal */}
       <div className="flex gap-2">
-        <Button
-          variant="ghost"
+        <Button variant="ghost" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => onNavigate?.("self-healing")}
           className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -537,8 +533,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <Wrench className="h-3.5 w-3.5" />
           Review Self-Heals
         </Button>
-        <Button
-          variant="ghost"
+        <Button variant="ghost" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => onNavigate?.("flaky")}
           className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -546,8 +541,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <RefreshCw className="h-3.5 w-3.5" />
           Flaky Tests
         </Button>
-        <Button
-          variant="ghost"
+        <Button variant="ghost" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => onNavigate?.("analytics")}
           className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -555,8 +549,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
           <Activity className="h-3.5 w-3.5" />
           Analytics
         </Button>
-        <Button
-          variant="ghost"
+        <Button variant="ghost" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => onNavigate?.("ai-generate")}
           className="gap-2 h-8 text-xs border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"

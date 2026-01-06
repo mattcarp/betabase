@@ -10,7 +10,7 @@
  * - AOMA/Alexandria/etc = Apps under test
  */
 
-import { supabase, VectorSearchResult, handleSupabaseError, DEFAULT_APP_CONTEXT } from "@/lib/supabase";
+import { supabase, VectorSearchResult, handleSupabaseError, DEFAULT_APP_CONTEXT } from "../lib/supabase";
 // import OpenAI from "openai";
 import SupabaseVectorService from "./supabaseVectorService";
 

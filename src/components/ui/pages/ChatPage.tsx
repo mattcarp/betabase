@@ -24,7 +24,6 @@ import {
   Settings,
   Bot,
   Sparkles,
-  Zap,
   Lightbulb,
   Database,
   FileText,
@@ -76,17 +75,6 @@ const TestDashboard = dynamic(
   }
 );
 
-const HUDInterface = dynamic(
-  () => import("../HUDLauncher").then((mod) => ({ default: mod.HUDLauncher })),
-  {
-    loading: () => (
-      <div className="flex items-center justify-center h-full">
-        <div>Loading HUD...</div>
-      </div>
-    ),
-    ssr: false,
-  }
-);
 
 const CurateTab = dynamic(
   // Using CurateTab instead of CleanCurateTab - it has native tabs that avoid React 19 + Radix infinite loop
@@ -102,7 +90,7 @@ const CurateTab = dynamic(
 );
 
 interface ComponentMode {
-  mode: "chat" | "hud" | "test" | "fix" | "curate";
+  mode: "chat" | "test" | "fix" | "curate";
   label: string;
   description: string;
   icon: React.ReactNode;
@@ -114,12 +102,6 @@ const COMPONENT_MODES: ComponentMode[] = [
     label: "Chat",
     description: "AI-powered conversation",
     icon: <MessageSquare className="h-4 w-4" />,
-  },
-  {
-    mode: "hud",
-    label: "HUD",
-    description: "Heads-up display interface",
-    icon: <Zap className="h-4 w-4" />,
   },
   {
     mode: "test",
@@ -146,7 +128,7 @@ interface ChatPageProps {
 }
 
 // Valid mode values for URL hash routing
-const VALID_MODES: ComponentMode["mode"][] = ["chat", "hud", "test", "fix", "curate"];
+const VALID_MODES: ComponentMode["mode"][] = ["chat", "test", "fix", "curate"];
 
 export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   // Track if component has hydrated to prevent SSR/client mismatch
@@ -202,14 +184,36 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
     _hasHydrated,
   } = useConversationStore();
 
-  // Create initial conversation if none exists - ONLY after hydration completes
-  // This prevents race condition where we create a new conversation before localStorage loads
+  // Create initial conversation if none exists OR if active conversation is incomplete
+  // "Incomplete" = has user messages but no assistant response (e.g., user clicked suggestion then navigated away)
+  // This ensures fresh startup always shows Zeitgeist welcome screen
+  // ONLY runs after hydration to prevent race condition with localStorage
   useEffect(() => {
-    if (_hasHydrated && conversations.length === 0) {
-      const newConvo = createConversation(); // Let auto-title generate from first message
+    if (!_hasHydrated) return;
+
+    // Case 1: No conversations at all - create one
+    if (conversations.length === 0) {
+      const newConvo = createConversation();
       setActiveConversation(newConvo.id);
+      return;
     }
-  }, [_hasHydrated, conversations.length, createConversation, setActiveConversation]);
+
+    // Case 2: Active conversation is incomplete (no assistant response)
+    // This happens when user clicked a suggestion but didn't get/wait for response
+    if (activeConversationId) {
+      const activeConvo = getConversation(activeConversationId);
+      if (activeConvo && activeConvo.messages.length > 0) {
+        const hasAssistantMessage = activeConvo.messages.some(
+          (m) => m.role === "assistant"
+        );
+        if (!hasAssistantMessage) {
+          // Start fresh with a new conversation to show Zeitgeist bubbles
+          const newConvo = createConversation();
+          setActiveConversation(newConvo.id);
+        }
+      }
+    }
+  }, [_hasHydrated, conversations.length, activeConversationId, createConversation, setActiveConversation, getConversation]);
 
   // Load quick knowledge indicators for header badges
   useEffect(() => {
@@ -540,12 +544,6 @@ Be helpful, concise, and professional in your responses.`;
                       }
                     }}
                   />
-                </div>
-              )}
-
-              {activeMode === "hud" && (
-                <div className="h-full p-6">
-                  <HUDInterface />
                 </div>
               )}
 

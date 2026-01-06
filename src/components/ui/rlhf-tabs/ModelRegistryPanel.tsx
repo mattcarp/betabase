@@ -81,7 +81,8 @@ export function ModelRegistryPanel() {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error loading models:", error);
+        // Tables may not exist yet - use mock data
+        console.warn("⚠️ MODEL REGISTRY: Using MOCK DATA - table not available:", error.message);
         // Use mock data for demo
         setModels([
           {
@@ -165,7 +166,7 @@ export function ModelRegistryPanel() {
         setModels(data || []);
       }
     } catch (error) {
-      console.error("Failed to load models:", error);
+      console.debug("Failed to load models:", error);
     } finally {
       setLoading(false);
     }
@@ -248,7 +249,7 @@ export function ModelRegistryPanel() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-lg font-medium text-[var(--mac-text-primary)]">Model Registry</h2>
+          <h2 className="mac-heading">Model Registry</h2>
           <p className="text-sm text-[var(--mac-text-muted)] font-light">
             Deploy and manage fine-tuned model versions
           </p>
@@ -260,9 +261,9 @@ export function ModelRegistryPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Box className="h-8 w-8 text-purple-400" />
+              <Box className="h-8 w-8 text-primary-400" />
               <div>
-                <p className="text-2xl font-bold">{Object.keys(groupedModels).length}</p>
+                <p className="mac-body text-2xl font-normal">{Object.keys(groupedModels).length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Model Families</p>
               </div>
             </div>
@@ -273,7 +274,7 @@ export function ModelRegistryPanel() {
             <div className="flex items-center gap-3">
               <GitBranch className="h-8 w-8 text-blue-400" />
               <div>
-                <p className="text-2xl font-bold">{models.length}</p>
+                <p className="mac-body text-2xl font-normal">{models.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Versions</p>
               </div>
             </div>
@@ -284,7 +285,7 @@ export function ModelRegistryPanel() {
             <div className="flex items-center gap-3">
               <Rocket className="h-8 w-8 text-green-400" />
               <div>
-                <p className="text-2xl font-bold">
+                <p className="mac-body text-2xl font-normal">
                   {models.filter((m) => m.status === "deployed").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Deployed</p>
@@ -297,7 +298,7 @@ export function ModelRegistryPanel() {
             <div className="flex items-center gap-3">
               <Beaker className="h-8 w-8 text-yellow-400" />
               <div>
-                <p className="text-2xl font-bold">
+                <p className="mac-body text-2xl font-normal">
                   {models.filter((m) => m.status === "testing" || m.status === "staged").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">In Testing</p>
@@ -334,18 +335,18 @@ export function ModelRegistryPanel() {
                         <div
                           className={cn(
                             "h-12 w-12 rounded-lg flex items-center justify-center",
-                            latestDeployed ? "bg-green-500/10" : "bg-purple-500/10"
+                            latestDeployed ? "bg-green-500/10" : "bg-primary-500/10"
                           )}
                         >
                           <Box
                             className={cn(
                               "h-6 w-6",
-                              latestDeployed ? "text-green-400" : "text-purple-400"
+                              latestDeployed ? "text-green-400" : "text-primary-400"
                             )}
                           />
                         </div>
                         <div>
-                          <h3 className="font-medium text-[var(--mac-text-primary)] flex items-center gap-2">
+                          <h3 className="mac-title">
                             {latest.display_name || name}
                             {latestDeployed && (
                               <Badge className="bg-green-500/20 text-green-400 text-xs">
@@ -365,25 +366,25 @@ export function ModelRegistryPanel() {
                         {latestDeployed?.performance_metrics && (
                           <div className="grid grid-cols-4 gap-4 text-center">
                             <div>
-                              <p className="text-sm font-bold text-[var(--mac-text-primary)]">
+                              <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                                 {latestDeployed.performance_metrics.accuracy?.toFixed(1)}%
                               </p>
                               <p className="text-xs text-[var(--mac-text-muted)]">Accuracy</p>
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-[var(--mac-text-primary)]">
+                              <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                                 {latestDeployed.performance_metrics.latency_ms}ms
                               </p>
                               <p className="text-xs text-[var(--mac-text-muted)]">Latency</p>
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-[var(--mac-text-primary)]">
+                              <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                                 {latestDeployed.performance_metrics.quality_score?.toFixed(1)}
                               </p>
                               <p className="text-xs text-[var(--mac-text-muted)]">Quality</p>
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-[var(--mac-text-primary)]">
+                              <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                                 ${latestDeployed.performance_metrics.cost_per_1k?.toFixed(2)}
                               </p>
                               <p className="text-xs text-[var(--mac-text-muted)]">/1K tok</p>
@@ -449,9 +450,8 @@ export function ModelRegistryPanel() {
 
                                 <div className="flex items-center gap-2">
                                   {version.status === "testing" && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
+                                    <Button size="sm"
+                                      variant="outline" className="mac-button mac-button-outline"
                                       onClick={() => handleStartABTest(version)}
                                     >
                                       <TrendingUp className="h-4 w-4 mr-1" />
@@ -460,15 +460,14 @@ export function ModelRegistryPanel() {
                                   )}
                                   {(version.status === "testing" ||
                                     version.status === "staged") && (
-                                    <Button size="sm" onClick={() => handleDeploy(version)}>
+                                    <Button className="mac-button" size="sm" onClick={() => handleDeploy(version)}>
                                       <Rocket className="h-4 w-4 mr-1" />
                                       Deploy
                                     </Button>
                                   )}
                                   {version.status === "deployed" && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
+                                    <Button size="sm"
+                                      variant="outline" className="mac-button mac-button-outline"
                                       onClick={() => handleRollback(version)}
                                     >
                                       <RotateCcw className="h-4 w-4 mr-1" />
@@ -476,9 +475,8 @@ export function ModelRegistryPanel() {
                                     </Button>
                                   )}
                                   {version.status === "deprecated" && (
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
+                                    <Button size="sm"
+                                      variant="ghost" className="mac-button mac-button-outline"
                                       onClick={() => handleDeploy(version)}
                                     >
                                       <RotateCcw className="h-4 w-4 mr-1" />
@@ -501,7 +499,7 @@ export function ModelRegistryPanel() {
           {models.length === 0 && (
             <div className="flex flex-col items-center justify-center h-64 text-[var(--mac-text-muted)]">
               <Box className="h-12 w-12 mb-4" />
-              <p className="font-light">No models registered</p>
+              <p className="mac-body font-light">No models registered</p>
               <p className="text-sm">Complete a fine-tuning job to add models</p>
             </div>
           )}

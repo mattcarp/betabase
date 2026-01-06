@@ -295,7 +295,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           {getStatusIcon(suite.status)}
-                          <span className="font-medium">{suite.name}</span>
+                          <span className="font-normal">{suite.name}</span>
                         </div>
                         <ChevronRight className="h-4 w-4" />
                       </div>
@@ -374,7 +374,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Cpu className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium text-foreground">CPU Usage</span>
+                  <span className="text-sm font-normal text-foreground">CPU Usage</span>
                 </div>
                 <span className="text-sm font-normal text-foreground">{systemResources.cpu}%</span>
               </div>
@@ -385,7 +385,7 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <HardDrive className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-foreground">Memory</span>
+                  <span className="text-sm font-normal text-foreground">Memory</span>
                 </div>
                 <span className="text-sm font-normal text-foreground">
                   {systemResources.memory}%
@@ -397,8 +397,8 @@ export const TestExecutionPanel: React.FC<TestExecutionPanelProps> = ({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <Wifi className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm font-medium text-foreground">Network I/O</span>
+                  <Wifi className="h-4 w-4 text-primary-600" />
+                  <span className="text-sm font-normal text-foreground">Network I/O</span>
                 </div>
                 <span className="text-sm font-normal text-foreground">
                   {systemResources.network}%

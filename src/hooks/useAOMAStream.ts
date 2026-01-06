@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback, useRef } from "react";
-import type { AOMAProgressUpdate, AOMASource } from "@/services/aomaProgressStream";
+import type { AOMAProgressUpdate, AOMASource } from "../services/aomaProgressStream";
 
 interface UseAOMAStreamResult {
   query: (text: string) => Promise<void>;

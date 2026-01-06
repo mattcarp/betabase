@@ -2,7 +2,6 @@ import React from "react";
 import { cn } from "../../../lib/utils";
 import {
   MessageCircle,
-  Target,
   TestTube,
   Wrench,
   ClipboardList,
@@ -11,9 +10,6 @@ import {
   CheckSquare,
   TrendingUp,
   FileText,
-  // ArrowUpRight, // Unused
-  // ArrowDownRight, // Unused
-  // ArrowRight, // Unused
   ChevronRight,
 } from "lucide-react";
 import { LiveInsights } from "../LiveInsights";
@@ -37,7 +33,6 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
   const navigationItems = [
     { id: "chat", label: "Chat", icon: MessageCircle, isActive: true },
-    { id: "hud", label: "HUD", icon: Target },
     { id: "test", label: "Test", icon: TestTube },
     { id: "fix", label: "Fix", icon: Wrench },
     { id: "curate", label: "Curate", icon: ClipboardList },
@@ -72,7 +67,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="absolute -left-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border/50 hover:bg-muted transition-colors group"
+        className="mac-button absolute -left-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border/50 hover:bg-muted transition-colors group"
         aria-label="Toggle sidebar"
       >
         <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
@@ -85,7 +80,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
           {navigationItems.map((item) => (
             <button
               key={item.id}
-              className={cn(
+              className={cn("mac-button", 
                 "w-full flex items-center space-x-3 p-4 rounded-lg transition-all duration-200",
                 "glass-panel border text-sm",
                 item.isActive
@@ -132,12 +127,12 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Meeting Tools */}
       <div>
-        <h3 className="mac-title text-lg font-normal text-white mb-4">Meeting Tools</h3>
+        <h3 className="mac-title">Meeting Tools</h3>
         <div className="space-y-2">
           {meetingTools.map((tool, index) => (
             <button
               key={index}
-              className="w-full flex items-center space-x-3 p-4 rounded-lg transition-all duration-200 glass-panel border border-white/20 bg-white/5 hover:bg-white/10 text-sm text-white"
+              className="mac-button w-full flex items-center space-x-3 p-4 rounded-lg transition-all duration-200 glass-panel border border-white/20 bg-white/5 hover:bg-white/10 text-sm text-white"
             >
               <tool.icon size={16} />
               <span>{tool.name}</span>
@@ -148,7 +143,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Session Metrics */}
       <div className="mt-auto">
-        <h3 className="mac-title text-lg font-normal text-white mb-4">Meeting Metrics</h3>
+        <h3 className="mac-title">Meeting Metrics</h3>
         <div className="space-y-3">
           {sessionMetrics.length > 0 ? (
             sessionMetrics.map((metric, index) => (

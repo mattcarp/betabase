@@ -171,7 +171,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         <input
           type="file"
           id="file-upload"
-          className="hidden"
+          className="mac-input hidden"
           onChange={handleFileSelect}
           accept=".pdf,.txt,.md,.doc,.docx,.png,.jpg,.jpeg,.csv,.json"
           disabled={isUploading}

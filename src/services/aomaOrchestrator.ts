@@ -12,8 +12,8 @@
 import { aomaCache } from "./aomaCache";
 import { aomaProgressStream, type AOMASource } from "./aomaProgressStream";
 import { getSupabaseVectorService } from "./supabaseVectorService";
-import type { VectorSearchResult } from "@/lib/supabase";
-import { DEFAULT_APP_CONTEXT } from "@/lib/supabase";
+import type { VectorSearchResult } from "../lib/supabase";
+import { DEFAULT_APP_CONTEXT } from "../lib/supabase";
 import { getQueryDeduplicator } from "./queryDeduplicator";
 
 // Available AOMA-mesh-mcp tools and their capabilities

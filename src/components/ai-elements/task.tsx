@@ -88,7 +88,7 @@ export const TaskTrigger = ({
           )}
         >
           {getStatusIcon()}
-          <p className="text-sm font-medium">{title}</p>
+          <p className="text-sm font-normal">{title}</p>
           <ChevronDownIcon className="size-4 ml-auto transition-transform group-data-[state=open]:rotate-180" />
         </div>
       )}

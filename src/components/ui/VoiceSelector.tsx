@@ -90,7 +90,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         return (
           <Badge
             variant="outline"
-            className="text-xs px-2.5 py-0.5 text-purple-400 border-purple-400/30"
+            className="text-xs px-2.5 py-0.5 text-primary-400 border-primary-400/30"
           >
             Cloned
           </Badge>
@@ -146,7 +146,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         >
           <div className="flex items-center gap-2">
             {getVoiceIcon(currentVoice)}
-            <span className="text-sm font-medium truncate max-w-[80px]">
+            <span className="text-sm font-normal truncate max-w-[80px]">
               {currentVoice?.name || "Select Voice"}
             </span>
           </div>
@@ -164,7 +164,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         )}
         sideOffset={8}
       >
-        <DropdownMenuLabel className="text-xs font-medium text-white/70 px-2 py-2.5">
+        <DropdownMenuLabel className="text-xs font-normal text-white/70 px-2 py-2.5">
           Select Voice Assistant
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-white/10" />
@@ -188,7 +188,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2">
                     {getVoiceIcon(voice)}
-                    <span className="font-medium text-white text-sm">{voice.name}</span>
+                    <span className="font-normal text-white text-sm">{voice.name}</span>
                     {getCategoryBadge(voice)}
                     {isSelected && (
                       <Badge

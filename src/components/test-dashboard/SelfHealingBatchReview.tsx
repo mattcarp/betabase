@@ -169,12 +169,12 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
 
   if (reviewableAttempts.length === 0) {
     return (
-      <Card className="border-white/10 bg-black/20">
+      <Card className="mac-card border-white/10 bg-black/20">
         <CardContent className="py-12">
           <div className="text-center space-y-4">
             <CheckCircle2 className="h-16 w-16 mx-auto text-green-400 opacity-50" />
             <div>
-              <h3 className="text-lg font-light text-white">No Items for Batch Review</h3>
+              <h3 className="mac-title">No Items for Batch Review</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 All healing attempts have been processed.
               </p>
@@ -188,11 +188,11 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
   return (
     <div className="space-y-4">
       {/* Batch Controls */}
-      <Card className="border-white/10 bg-black/20">
-        <CardHeader className="pb-4">
+      <Card className="mac-card border-white/10 bg-black/20">
+        <CardHeader className="mac-card pb-4">
           <CardTitle className="flex items-center justify-between font-light text-lg">
             <div className="flex items-center gap-2">
-              <Layers className="h-5 w-5 text-purple-400" />
+              <Layers className="h-5 w-5 text-primary-400" />
               <span>Batch Review Mode</span>
             </div>
             <Badge variant="outline" className="text-white/60 border-white/20">
@@ -208,7 +208,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
               <label className="text-sm text-muted-foreground">
                 Auto-select by confidence threshold
               </label>
-              <span className="text-sm font-mono text-purple-400">{confidenceThreshold[0]}%+</span>
+              <span className="text-sm font-mono text-primary-400">{confidenceThreshold[0]}%+</span>
             </div>
             <Slider
               value={confidenceThreshold}
@@ -227,16 +227,15 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
           {/* Quick Actions */}
           <div className="flex items-center gap-3 pt-2 border-t border-white/5">
             <Button
-              variant="outline"
+              variant="teal"
               size="sm"
               onClick={selectByConfidence}
-              className="bg-purple-500/10 border-purple-500/20 text-purple-400 hover:bg-purple-500/20"
             >
               <Zap className="h-4 w-4 mr-2" />
               Select {autoApproveEligible.length} items at {confidenceThreshold[0]}%+
             </Button>
-            <Button
-              variant="ghost"
+            <Button className="mac-button"
+              variant="ghost" className="mac-button mac-button-outline"
               size="sm"
               onClick={() => setSelectedIds(new Set())}
               disabled={selectedIds.size === 0}
@@ -247,10 +246,10 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
 
           {/* Selection Summary */}
           {selectedIds.size > 0 && (
-            <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <div className="p-4 rounded-lg bg-primary-400/10 border border-primary-400/20">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-light text-white">
+                  <h4 className="mac-title">
                     {selectedIds.size} healing{selectedIds.size !== 1 ? "s" : ""} selected
                   </h4>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -260,8 +259,8 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
+                  <Button className="mac-button"
+                    variant="outline" className="mac-button mac-button-outline"
                     size="sm"
                     onClick={() => onBatchReject(Array.from(selectedIds), "batch-reject")}
                     disabled={isProcessing}
@@ -270,7 +269,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                     <XCircle className="h-4 w-4 mr-1" />
                     Reject All
                   </Button>
-                  <Button
+                  <Button className="mac-button"
                     size="sm"
                     onClick={() => setShowBatchConfirm(true)}
                     disabled={isProcessing}
@@ -288,14 +287,14 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
 
       {/* Batch Confirmation Modal */}
       {showBatchConfirm && (
-        <Card className="border-green-500/30 bg-green-500/5">
+        <Card className="mac-card border-green-500/30 bg-green-500/5">
           <CardContent className="py-6">
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-full bg-green-500/20">
                 <CheckCircle2 className="h-6 w-6 text-green-400" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-light text-white">Confirm Batch Approval</h3>
+                <h3 className="mac-title">Confirm Batch Approval</h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   You are about to approve {selectedIds.size} healing attempt
                   {selectedIds.size !== 1 ? "s" : ""}. This action will:
@@ -320,7 +319,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                   <Button
                     onClick={handleBatchApprove}
                     disabled={isProcessing}
-                    className={cn("hover:opacity-80", getStatusStyles.success)}
+                    className={cn("mac-button", "hover:opacity-80", getStatusStyles.success)}
                   >
                     {isProcessing ? (
                       <>
@@ -334,8 +333,8 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                       </>
                     )}
                   </Button>
-                  <Button
-                    variant="ghost"
+                  <Button className="mac-button"
+                    variant="ghost" className="mac-button mac-button-outline"
                     onClick={() => setShowBatchConfirm(false)}
                     disabled={isProcessing}
                   >
@@ -349,7 +348,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
       )}
 
       {/* Grouped Items */}
-      <Card className="border-white/10 bg-black/20">
+      <Card className="mac-card border-white/10 bg-black/20">
         <CardContent className="p-0">
           <ScrollArea className="h-[500px]">
             <div className="divide-y divide-white/5">
@@ -377,7 +376,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
 
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-light text-white">{group.groupLabel}</h4>
+                          <h4 className="mac-title">{group.groupLabel}</h4>
                           <Badge
                             variant="outline"
                             className="text-xs text-white/60 border-white/20"
@@ -412,7 +411,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                             key={attempt.id}
                             className={cn(
                               "flex items-start gap-3 p-4 pl-12 hover:bg-white/5 transition-colors cursor-pointer",
-                              selectedIds.has(attempt.id) && "bg-purple-500/5"
+                              selectedIds.has(attempt.id) && "bg-primary-400/5"
                             )}
                             onClick={() => toggleItem(attempt.id)}
                           >
@@ -428,7 +427,7 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
                                 <span className="text-sm text-white truncate">
                                   {attempt.testName}
                                 </span>
-                                <span className="text-xs font-mono text-purple-400">
+                                <span className="text-xs font-mono text-primary-400">
                                   {(attempt.confidence * 100).toFixed(0)}%
                                 </span>
                               </div>
@@ -462,12 +461,12 @@ export const SelfHealingBatchReview: React.FC<SelfHealingBatchReviewProps> = ({
 
       {/* Warning for mixed tiers */}
       {selectedAttempts.some((a) => a.tier === 3) && (
-        <Card className="border-amber-500/30 bg-amber-500/5">
+        <Card className="mac-card border-amber-500/30 bg-amber-500/5">
           <CardContent className="py-4">
             <div className="flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-400 mt-0.5" />
               <div>
-                <h4 className="text-sm font-light text-white">Selection includes Tier 3 items</h4>
+                <h4 className="mac-title">Selection includes Tier 3 items</h4>
                 <p className="text-xs text-muted-foreground mt-1">
                   Tier 3 items typically require architect review. Consider reviewing these
                   individually before batch approval.

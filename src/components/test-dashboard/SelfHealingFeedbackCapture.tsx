@@ -79,7 +79,7 @@ const rejectionReasons: {
     label: "Test Design Issue",
     description: "The test itself is fragile and needs a better approach",
     icon: <Wrench className="h-5 w-5" />,
-    color: "text-purple-400 bg-purple-500/10 border-purple-500/20 hover:bg-purple-500/20",
+    color: "text-primary-400 bg-primary-500/10 border-primary-500/20 hover:bg-primary-500/20",
   },
   {
     value: "false_positive",
@@ -133,8 +133,8 @@ export const SelfHealingFeedbackCapture: React.FC<SelfHealingFeedbackCaptureProp
   };
 
   return (
-    <Card className="border-red-500/20 bg-red-500/5">
-      <CardHeader className="pb-4">
+    <Card className="mac-card border-red-500/20 bg-red-500/5">
+      <CardHeader className="mac-card pb-4">
         <CardTitle className="flex items-center gap-2 font-light text-lg">
           <XCircle className="h-5 w-5 text-red-400" />
           <span>Why are you rejecting this healing?</span>
@@ -176,7 +176,7 @@ export const SelfHealingFeedbackCapture: React.FC<SelfHealingFeedbackCaptureProp
                 {reason.icon}
               </div>
               <div>
-                <h4 className="text-sm font-light">{reason.label}</h4>
+                <h4 className="mac-title">{reason.label}</h4>
                 <p className="text-xs text-muted-foreground mt-0.5">{reason.description}</p>
               </div>
             </button>
@@ -214,7 +214,7 @@ export const SelfHealingFeedbackCapture: React.FC<SelfHealingFeedbackCaptureProp
               <Bug className="h-5 w-5 text-red-400 mt-0.5" />
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-light text-white">Create Bug Report</h4>
+                  <h4 className="mac-title">Create Bug Report</h4>
                   <button
                     onClick={() => setShouldEscalate(!shouldEscalate)}
                     className={cn(
@@ -240,11 +240,11 @@ export const SelfHealingFeedbackCapture: React.FC<SelfHealingFeedbackCaptureProp
 
         {/* Learning Impact Info */}
         {selectedReason && (
-          <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 animate-in fade-in duration-200">
+          <div className="p-3 rounded-lg bg-primary-500/10 border border-primary-500/20 animate-in fade-in duration-200">
             <div className="flex items-start gap-2">
-              <Lightbulb className="h-4 w-4 text-purple-400 mt-0.5" />
+              <Lightbulb className="h-4 w-4 text-primary-400 mt-0.5" />
               <div>
-                <h4 className="text-sm font-light text-white">How this feedback helps</h4>
+                <h4 className="mac-title">How this feedback helps</h4>
                 <p className="text-xs text-muted-foreground mt-1">
                   {selectedReasonData?.value === "wrong_selector" && (
                     <>
@@ -286,13 +286,12 @@ export const SelfHealingFeedbackCapture: React.FC<SelfHealingFeedbackCaptureProp
 
         {/* Actions */}
         <div className="flex items-center justify-between pt-4 border-t border-white/5">
-          <Button variant="ghost" onClick={onCancel} disabled={isSubmitting}>
+          <Button className="mac-button" variant="ghost" className="mac-button mac-button-outline" onClick={onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmit}
+          <Button onClick={handleSubmit}
             disabled={!selectedReason || isSubmitting}
-            className="bg-red-500/20 hover:bg-red-500/30 text-red-400"
+            className="mac-button bg-red-500/20 hover:bg-red-500/30 text-red-400"
           >
             {isSubmitting ? (
               <>Processing...</>

@@ -124,7 +124,7 @@ export default function SessionsPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mac-heading text-3xl mb-2">Test Sessions</h1>
+          <h1 c className="mac-heading"lassName="mac-heading text-3xl mb-2">Test Sessions</h1>
           <p className="mac-body text-muted-foreground">Browse and manage your recorded test sessions</p>
         </div>
 
@@ -177,8 +177,7 @@ export default function SessionsPage() {
             </div>
 
             {/* Filter Toggle */}
-            <Button
-              variant="outline"
+            <Button variant="outline" className="mac-button mac-button-outline"
               onClick={() => setShowFilters(!showFilters)}
               className="mac-button-outline gap-2"
             >
@@ -251,10 +250,9 @@ export default function SessionsPage() {
 
               {activeFiltersCount > 0 && (
                 <div className="flex items-end">
-                  <Button
-                    variant="ghost"
+                  <Button variant="ghost"
                     onClick={clearFilters}
-                    className="gap-2 text-muted-foreground hover:text-white"
+                    className="mac-button mac-button-outline gap-2 text-muted-foreground hover:text-white"
                   >
                     <X className="h-4 w-4" />
                     Clear
@@ -279,7 +277,7 @@ export default function SessionsPage() {
         ) : filteredSessions.length === 0 ? (
           <div className="text-center py-16">
             <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="mac-title text-lg mb-2">No sessions found</h3>
+            <h3 c className="mac-title"lassName="mac-title text-lg mb-2">No sessions found</h3>
             <p className="mac-body text-muted-foreground mb-4">Try adjusting your search or filters</p>
             <Button onClick={clearFilters} variant="outline" className="mac-button-outline">
               Clear Filters

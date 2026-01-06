@@ -157,7 +157,7 @@ npm run dev
 - **Caching:** Redis
 - **Storage:** S3-compatible object storage
 - **Real-time:** Socket.io
-- **Monitoring:** Datadog, Sentry
+- **Monitoring:** Datadog
 
 ## 🎯 Core Features
 

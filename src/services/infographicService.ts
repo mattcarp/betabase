@@ -146,7 +146,7 @@ VISUAL STYLE:
 - Soft glowing accents and subtle shadows for depth
 - Modern sans-serif typography with excellent hierarchy
 - Smooth, elegant icons and illustrations
-- Professional color palette: deep navy (#1a1a2e), electric teal (#00d4ff), soft purple (#7c3aed)
+- Professional color palette: deep navy (#1a1a2e), electric teal (#00d4ff), soft purple (#00bcd4)
 
 DESIGN PRINCIPLES:
 - Clean whitespace and breathing room

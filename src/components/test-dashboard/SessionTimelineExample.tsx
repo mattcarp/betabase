@@ -242,7 +242,7 @@ export const SessionTimelineExample: React.FC = () => {
                 <div>
                   <h4
                     className="mac-title"
-                    className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                    className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                   >
                     Timestamp
                   </h4>
@@ -256,7 +256,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Element
                     </h4>
@@ -271,7 +271,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Selector
                     </h4>
@@ -286,7 +286,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Value
                     </h4>
@@ -301,7 +301,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       URL
                     </h4>
@@ -316,7 +316,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Duration
                     </h4>
@@ -331,32 +331,32 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Network Details
                     </h4>
                     <div className="bg-mac-surface-card p-4 rounded space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-mac-text-muted">Method:</span>
-                        <span className="text-mac-text-primary font-medium">
+                        <span className="text-mac-text-primary font-normal">
                           {selectedInteraction.networkData.method}
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-mac-text-muted">Status:</span>
-                        <span className="text-emerald-500 font-medium">
+                        <span className="text-emerald-500 font-normal">
                           {selectedInteraction.networkData.statusCode}
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-mac-text-muted">Duration:</span>
-                        <span className="text-mac-text-primary font-medium">
+                        <span className="text-mac-text-primary font-normal">
                           {selectedInteraction.networkData.duration}ms
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-mac-text-muted">Size:</span>
-                        <span className="text-mac-text-primary font-medium">
+                        <span className="text-mac-text-primary font-normal">
                           {selectedInteraction.networkData.size}
                         </span>
                       </div>
@@ -375,12 +375,12 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-rose-500 mb-2"
+                      className="mac-title text-sm font-normal text-rose-500 mb-2"
                     >
                       Error Details
                     </h4>
                     <div className="bg-rose-500/5 border border-rose-500/20 p-4 rounded space-y-2">
-                      <p className="text-sm text-rose-400 font-medium">
+                      <p className="text-sm text-rose-400 font-normal">
                         {selectedInteraction.error.message}
                       </p>
                       {selectedInteraction.error.stack && (
@@ -397,7 +397,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Screenshot
                     </h4>
@@ -415,7 +415,7 @@ export const SessionTimelineExample: React.FC = () => {
                   <div>
                     <h4
                       className="mac-title"
-                      className="mac-title text-sm font-medium text-mac-text-secondary mb-2"
+                      className="mac-title text-sm font-normal text-mac-text-secondary mb-2"
                     >
                       Metadata
                     </h4>

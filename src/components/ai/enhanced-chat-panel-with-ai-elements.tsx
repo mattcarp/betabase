@@ -593,9 +593,8 @@ export function EnhancedChatPanelWithAIElements({
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   {error.message || "An error occurred. Please try again."}
-                  <Button
-                    className="ml-2 h-auto p-0 mac-button"
-                    variant="link"
+                  <Button className="ml-2 h-auto p-0 mac-button"
+                    variant="link" className="mac-button"
                     size="sm"
                     onClick={() => reload()}
                   >

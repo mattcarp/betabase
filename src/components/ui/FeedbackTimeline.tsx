@@ -156,12 +156,12 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
   }, {} as Record<string, TimelineEvent[]>);
 
   return (
-    <Card className={cn("h-full flex flex-col bg-card/50 border-border", className)}>
-      <CardHeader>
+    <Card className={cn("mac-card", "h-full flex flex-col bg-card/50 border-border", className)}>
+      <CardHeader className="mac-card">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 text-foreground">
-              <Clock className="h-5 w-5 text-purple-400" />
+              <Clock className="h-5 w-5 text-primary-400" />
               Feedback Timeline
             </CardTitle>
             <CardDescription className="text-muted-foreground">
@@ -173,7 +173,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
             size="sm"
             onClick={loadTimeline}
             disabled={loading}
-            className="gap-2"
+            className="mac-button gap-2"
           >
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
             Refresh
@@ -182,7 +182,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
 
         {/* Filter buttons */}
         <div className="flex gap-2 mt-4">
-          <Button
+          <Button className="mac-button"
             variant={filter === "all" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilter("all")}
@@ -191,7 +191,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
             <Filter className="h-3 w-3" />
             All
           </Button>
-          <Button
+          <Button className="mac-button"
             variant={filter === "negative" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilter("negative")}
@@ -200,7 +200,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
             <ThumbsDown className="h-3 w-3" />
             Needs Fix
           </Button>
-          <Button
+          <Button className="mac-button"
             variant={filter === "corrected" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilter("corrected")}
@@ -209,7 +209,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
             <Edit3 className="h-3 w-3" />
             Corrected
           </Button>
-          <Button
+          <Button className="mac-button"
             variant={filter === "approved" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilter("approved")}
@@ -223,23 +223,23 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
         {/* Stats summary */}
         <div className="grid grid-cols-4 gap-2 mt-4">
           <div className="bg-card/30 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-foreground">{events.length}</p>
+            <p className="text-lg font-normal text-foreground">{events.length}</p>
             <p className="text-xs text-muted-foreground">Total</p>
           </div>
           <div className="bg-card/30 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-green-400">
+            <p className="text-lg font-normal text-green-400">
               {events.filter(e => e.thumbs_up === true || (e.rating && e.rating >= 4)).length}
             </p>
             <p className="text-xs text-muted-foreground">Positive</p>
           </div>
           <div className="bg-card/30 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-orange-400">
+            <p className="text-lg font-normal text-orange-400">
               {events.filter(e => e.thumbs_up === false || (e.rating && e.rating < 3)).length}
             </p>
             <p className="text-xs text-muted-foreground">Negative</p>
           </div>
           <div className="bg-card/30 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-cyan-400">
+            <p className="text-lg font-normal text-cyan-400">
               {events.filter(e => e.suggested_correction).length}
             </p>
             <p className="text-xs text-muted-foreground">Corrected</p>
@@ -265,7 +265,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
                 <div key={date}>
                   <div className="flex items-center gap-2 mb-3">
                     <div className="h-px bg-muted flex-1" />
-                    <span className="text-xs text-muted-foreground font-medium">{date}</span>
+                    <span className="text-xs text-muted-foreground font-normal">{date}</span>
                     <div className="h-px bg-muted flex-1" />
                   </div>
 
@@ -315,7 +315,7 @@ export function FeedbackTimeline({ className }: FeedbackTimelineProps) {
                                 </Badge>
                               )}
                               {event.model_used && (
-                                <Badge variant="outline" className="text-[10px] h-4 border-purple-500/50 text-purple-400">
+                                <Badge variant="outline" className="text-[10px] h-4 border-primary-400/50 text-primary-400">
                                   {event.model_used}
                                 </Badge>
                               )}

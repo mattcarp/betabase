@@ -217,7 +217,7 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
           <div className="bg-background/95 backdrop-blur-sm border rounded-lg p-4 space-y-3 shadow-lg">
             {/* Color Selection */}
             <div className="space-y-2">
-              <p className="text-xs font-medium">Color</p>
+              <p className="text-xs font-normal">Color</p>
               <div className="grid grid-cols-5 gap-2">
                 {COLORS.map((color) => (
                   <button
@@ -238,7 +238,7 @@ export const HighlighterCanvas: React.FC<HighlighterCanvasProps> = ({
 
             {/* Width Selection */}
             <div className="space-y-2">
-              <p className="text-xs font-medium">Width</p>
+              <p className="text-xs font-normal">Width</p>
               <div className="grid grid-cols-4 gap-2">
                 {WIDTHS.map((width) => (
                   <button

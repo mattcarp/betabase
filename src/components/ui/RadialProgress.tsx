@@ -184,7 +184,7 @@ export const RadialProgress: React.FC<RadialProgressProps> = ({
         ) : (
           <div className="text-center">
             {showValue && (
-              <div className={cn("font-mono font-bold", colors.text)}>
+              <div className={cn("font-mono font-normal", colors.text)}>
                 <span className="text-lg">{Math.round(animatedValue)}</span>
                 <span className="text-sm opacity-80">%</span>
               </div>

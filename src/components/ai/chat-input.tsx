@@ -164,7 +164,7 @@ export function ChatInput({
               <div className="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="h-3 w-3 text-amber-500" />
-                  <span className="text-xs font-medium text-muted-foreground">
+                  <span className="text-xs font-normal text-muted-foreground">
                     Quick suggestions
                   </span>
                 </div>
@@ -201,11 +201,11 @@ export function ChatInput({
               exit={{ opacity: 0, height: 0 }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-lg blur" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-pink-500/5 rounded-lg blur" />
               <div className="relative p-4 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
                   <Paperclip className="h-3 w-3 text-blue-500" />
-                  <span className="text-xs font-medium text-muted-foreground">
+                  <span className="text-xs font-normal text-muted-foreground">
                     Attachments ({attachments.length})
                   </span>
                 </div>
@@ -226,7 +226,7 @@ export function ChatInput({
                         <span className="text-xs text-muted-foreground/70">
                           {formatFileSize(attachment.size)}
                         </span>
-                        <button
+                        <button className="mac-button"
                           onClick={() => removeAttachment(attachment.id)}
                           className="ml-2 p-0.5 hover:bg-destructive/20 rounded-full transition-colors"
                         >
@@ -244,7 +244,7 @@ export function ChatInput({
         {/* Modern Input Area */}
         <div className="relative group">
           {/* Background glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-primary-500/10 to-emerald-500/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
 
           <div className="relative bg-background/80 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200 group-focus-within:border-primary/50">
             <Textarea
@@ -291,7 +291,7 @@ export function ChatInput({
                     ref={fileInputRef}
                     type="file"
                     multiple
-                    className="hidden"
+                    className="mac-input hidden"
                     onChange={handleFileSelect}
                   />
                   <Tooltip>

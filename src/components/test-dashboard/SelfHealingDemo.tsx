@@ -8,9 +8,11 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
+import { cn } from "../../lib/utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { CodeBlock } from "../ui/code-block";
 import {
   Play,
   RotateCcw,
@@ -228,12 +230,12 @@ test('user can submit order', async ({ page }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-card/50 border-border">
-        <CardHeader>
+      <Card className="mac-card bg-card/50 border-border">
+        <CardHeader className="mac-card">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2 text-foreground">
-                <Sparkles className="h-5 w-5 text-purple-400" />
+                <Sparkles className="h-5 w-5 text-primary-400" />
                 Self-Healing Demo
               </CardTitle>
               <CardDescription className="text-muted-foreground">
@@ -246,18 +248,18 @@ test('user can submit order', async ({ page }) => {
                 size="sm"
                 onClick={reset}
                 disabled={step === "idle"}
-                className="border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="mac-button border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <RotateCcw className="h-4 w-4 mr-2" />
                 Reset
               </Button>
               <Button
+                variant="teal-solid"
                 size="sm"
                 onClick={() => {
                   if (step === "idle") runDemo();
                   else reset();
                 }}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
               >
                 {step === "idle" ? (
                   <>
@@ -284,8 +286,8 @@ test('user can submit order', async ({ page }) => {
       {/* Main Demo Area */}
       <div className="grid grid-cols-2 gap-6">
         {/* Left: App Preview */}
-        <Card className="bg-card/50 border-border">
-          <CardHeader className="pb-3">
+        <Card className="mac-card bg-card/50 border-border">
+          <CardHeader className="mac-card pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-foreground">
               <Eye className="h-4 w-4 text-blue-400" />
               App Under Test
@@ -297,7 +299,7 @@ test('user can submit order', async ({ page }) => {
               </Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="rounded-lg overflow-hidden border border-border">
               <iframe
                 src={`/demo/self-healing?variant=${variant}`}
@@ -307,7 +309,7 @@ test('user can submit order', async ({ page }) => {
             </div>
             {step === "ui-changed" && (
               <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                <div className="flex items-center gap-2 text-amber-400 text-sm font-medium">
+                <div className="flex items-center gap-2 text-amber-400 text-sm font-normal">
                   <AlertTriangle className="h-4 w-4" />
                   UI Changed!
                 </div>
@@ -321,10 +323,10 @@ test('user can submit order', async ({ page }) => {
         </Card>
 
         {/* Right: Test Code */}
-        <Card className="bg-card/50 border-border">
-          <CardHeader className="pb-3">
+        <Card className="mac-card bg-card/50 border-border">
+          <CardHeader className="mac-card pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-foreground">
-              <Code className="h-4 w-4 text-purple-400" />
+              <Code className="h-4 w-4 text-primary-400" />
               Test Code
               {step === "test-failed" && (
                 <Badge className="bg-red-500/10 text-red-400 border-red-500/30">FAILED</Badge>
@@ -334,28 +336,34 @@ test('user can submit order', async ({ page }) => {
               )}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <pre
-              className={`p-4 rounded-lg text-xs font-mono overflow-auto h-[400px] border ${
+          <CardContent className="mac-card">
+            <div
+              className={`rounded-lg overflow-hidden h-[400px] border ${
                 step === "test-failed"
-                  ? "bg-red-950/30 border-red-500/30 text-red-300"
+                  ? "border-red-500/30 ring-1 ring-red-500/20"
                   : step === "healed" || step === "running-healed" || step === "healed-passed"
-                    ? "bg-green-950/30 border-green-500/30 text-green-300"
-                    : "bg-background border-border text-foreground"
+                    ? "border-green-500/30 ring-1 ring-green-500/20"
+                    : "border-border"
               }`}
             >
-              {step === "idle" || step === "running-original" || step === "original-passed"
-                ? originalTest
-                : step === "ui-changed" || step === "running-broken" || step === "test-failed" || step === "analyzing"
-                  ? brokenTest
-                  : healedTest}
-            </pre>
+              <CodeBlock
+                code={
+                  step === "idle" || step === "running-original" || step === "original-passed"
+                    ? originalTest
+                    : step === "ui-changed" || step === "running-broken" || step === "test-failed" || step === "analyzing"
+                      ? brokenTest
+                      : healedTest
+                }
+                language="typescript"
+                className="h-full [&>div]:h-full [&_pre]:h-full [&_pre]:overflow-auto"
+              />
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Progress Steps */}
-      <Card className="bg-card/50 border-border">
+      <Card className="mac-card bg-card/50 border-border">
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             {[
@@ -390,14 +398,14 @@ test('user can submit order', async ({ page }) => {
 
       {/* Healing Result */}
       {healingResult && (step === "healed" || step === "running-healed" || step === "healed-passed") && (
-        <Card className="bg-card/50 border-green-500/30">
-          <CardHeader className="pb-3">
+        <Card className="mac-card bg-card/50 border-green-500/30">
+          <CardHeader className="mac-card pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-green-400">
               <Sparkles className="h-4 w-4" />
               AI Healing Result
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <div className="text-xs text-muted-foreground mb-1">Original Selector</div>
@@ -438,14 +446,14 @@ test('user can submit order', async ({ page }) => {
       )}
 
       {/* Activity Log */}
-      <Card className="bg-card/50 border-border">
-        <CardHeader className="pb-3">
+      <Card className="mac-card bg-card/50 border-border">
+        <CardHeader className="mac-card pb-3">
           <CardTitle className="text-sm flex items-center gap-2 text-foreground">
             <Activity className="h-4 w-4 text-blue-400" />
             Activity Log
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           <div className="h-32 overflow-auto bg-background rounded-lg p-3 font-mono text-xs">
             {logs.length === 0 ? (
               <span className="text-muted-foreground">Click "Run Demo" to start...</span>

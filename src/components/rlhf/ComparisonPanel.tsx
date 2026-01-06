@@ -14,12 +14,12 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Textarea } from "../ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import {
   CheckCircle,
   XCircle,
@@ -32,7 +32,7 @@ import {
   Loader2,
   SkipForward,
 } from "lucide-react";
-import { Response } from "@/components/ai-elements/response";
+import { Response } from "../ai-elements/response";
 
 export interface ComparisonData {
   id: string;
@@ -152,28 +152,27 @@ export function ComparisonPanel({
         onMouseEnter={() => setHoveredSide(side)}
         onMouseLeave={() => setHoveredSide(null)}
       >
-        <Card
-          onClick={() => setSelectedPreference(side)}
+        <Card className="mac-card" onClick={() => setSelectedPreference(side)}
           className={cn(
             "cursor-pointer transition-all h-full",
             "bg-card/50 border-2",
             isSelected
-              ? "border-purple-500 ring-2 ring-purple-500/20"
+              ? "border-primary-500 ring-2 ring-primary-500/20"
               : isHovered
                 ? "border-border"
                 : "border-border",
-            isSelected && "shadow-lg shadow-purple-500/10"
+            isSelected && "shadow-lg shadow-primary-500/10"
           )}
         >
-          <CardHeader className="pb-3">
+          <CardHeader className="mac-card pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Badge
                   variant="outline"
                   className={cn(
-                    "text-lg font-bold",
+                    "text-lg font-normal",
                     isSelected
-                      ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
+                      ? "bg-primary-500/20 text-primary-400 border-primary-500/50"
                       : "bg-muted text-muted-foreground border-border"
                   )}
                 >
@@ -185,7 +184,7 @@ export function ComparisonPanel({
               <AnimatePresence>
                 {isSelected && (
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                    <CheckCircle className="h-6 w-6 text-purple-400" />
+                    <CheckCircle className="h-6 w-6 text-primary-400" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -223,7 +222,7 @@ export function ComparisonPanel({
         className="flex flex-col items-center justify-center py-16"
       >
         <CheckCircle className="h-16 w-16 text-green-400 mb-4" />
-        <h3 className="text-xl font-medium text-foreground">Preference Recorded!</h3>
+        <h3 className="mac-title">Preference Recorded!</h3>
         <p className="text-sm text-muted-foreground mt-2">Loading next comparison...</p>
       </motion.div>
     );
@@ -234,8 +233,8 @@ export function ComparisonPanel({
       {/* Header with Queue Position */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Sparkles className="h-5 w-5 text-purple-400" />
-          <h2 className="text-lg font-medium text-foreground">Compare Responses</h2>
+          <Sparkles className="h-5 w-5 text-primary-400" />
+          <h2 className="mac-heading">Compare Responses</h2>
           {queuePosition && (
             <Badge variant="outline" className="text-muted-foreground border-border">
               {queuePosition.current} of {queuePosition.total}
@@ -247,7 +246,7 @@ export function ComparisonPanel({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <Button variant="ghost" size="sm" className="mac-button text-muted-foreground">
                   <Keyboard className="h-4 w-4 mr-1" />
                   Shortcuts
                 </Button>
@@ -282,13 +281,13 @@ export function ComparisonPanel({
       </div>
 
       {/* Query Display */}
-      <Card className="bg-muted/30 border-border/50">
+      <Card className="mac-card bg-muted/30 border-border/50">
         <CardContent className="py-4">
           <div className="flex items-start gap-3">
             <MessageSquare className="h-5 w-5 text-blue-400 mt-0.5" />
             <div>
-              <span className="text-xs text-muted-foreground font-medium block mb-1">USER QUERY</span>
-              <p className="text-foreground">{comparison.query}</p>
+              <span className="text-xs text-muted-foreground font-normal block mb-1">USER QUERY</span>
+              <p className="mac-body text-foreground">{comparison.query}</p>
             </div>
           </div>
         </CardContent>
@@ -311,7 +310,7 @@ export function ComparisonPanel({
         {/* VS Divider (visible on desktop) */}
         <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
           <div className="bg-card border border-border rounded-full p-2">
-            <span className="text-muted-foreground font-medium text-sm">VS</span>
+            <span className="text-muted-foreground font-normal text-sm">VS</span>
           </div>
         </div>
 
@@ -336,7 +335,7 @@ export function ComparisonPanel({
             onClick={() => setSelectedPreference("A")}
             className={cn(
               "min-w-[120px]",
-              selectedPreference === "A" ? "bg-purple-600 hover:bg-purple-500" : "border-border"
+              selectedPreference === "A" ? "bg-primary-600 hover:bg-primary-500" : "border-border"
             )}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -360,7 +359,7 @@ export function ComparisonPanel({
             onClick={() => setSelectedPreference("B")}
             className={cn(
               "min-w-[120px]",
-              selectedPreference === "B" ? "bg-purple-600 hover:bg-purple-500" : "border-border"
+              selectedPreference === "B" ? "bg-primary-600 hover:bg-primary-500" : "border-border"
             )}
           >
             Prefer B
@@ -392,16 +391,15 @@ export function ComparisonPanel({
         {/* Action Buttons */}
         <div className="flex items-center gap-3">
           {onSkip && (
-            <Button variant="ghost" onClick={onSkip} className="text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" onClick={onSkip} className="mac-button text-muted-foreground hover:text-foreground">
               <SkipForward className="h-4 w-4 mr-1" />
               Skip
             </Button>
           )}
 
-          <Button
-            onClick={handleSubmit}
+          <Button onClick={handleSubmit}
             disabled={!selectedPreference || isSubmitting}
-            className="min-w-[150px] bg-green-600 hover:bg-green-500"
+            className="mac-button min-w-[150px] bg-green-600 hover:bg-green-500"
           >
             {isSubmitting ? (
               <>

@@ -15,10 +15,10 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { cn } from "../../lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Progress } from "../ui/progress";
 import {
   ArrowRight,
   TrendingUp,
@@ -169,7 +169,7 @@ function FlowStep({
         className={cn(
           "w-12 h-12 rounded-full flex items-center justify-center transition-all",
           isActive
-            ? "bg-purple-500/30 text-purple-400 ring-2 ring-purple-500/50"
+            ? "bg-primary-500/30 text-primary-400 ring-2 ring-primary-500/50"
             : "bg-muted/50 text-muted-foreground"
         )}
       >
@@ -189,7 +189,7 @@ function AnimatedArrow({ isActive }: { isActive?: boolean }) {
       transition={{ duration: 1, repeat: Infinity }}
     >
       <ArrowRight
-        className={cn("h-5 w-5 transition-colors", isActive ? "text-purple-400" : "text-muted-foreground")}
+        className={cn("h-5 w-5 transition-colors", isActive ? "text-primary-400" : "text-muted-foreground")}
       />
     </motion.div>
   );
@@ -232,11 +232,11 @@ export function FeedbackImpactLive({
   const positiveRate = (stats.positiveCount / stats.totalFeedback) * 100;
 
   return (
-    <Card className={cn("bg-card/50 border-border", className)}>
-      <CardHeader className="pb-4">
+    <Card className={cn("mac-card", "bg-card/50 border-border", className)}>
+      <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-light text-foreground flex items-center gap-2">
-            <Activity className="h-5 w-5 text-purple-400" />
+            <Activity className="h-5 w-5 text-primary-400" />
             Feedback Impact
             {isLive && (
               <Badge
@@ -252,14 +252,14 @@ export function FeedbackImpactLive({
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="bg-purple-500/10 text-purple-400 border-purple-500/30"
+              className="bg-primary-500/10 text-primary-400 border-primary-500/30"
             >
               <TrendingUp className="h-3 w-3 mr-1" />+{accuracyImprovement.toFixed(1)}% accuracy
             </Badge>
             {onRefresh && (
               <button
                 onClick={onRefresh}
-                className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                className="mac-button p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
               >
                 <RefreshCw className="h-4 w-4" />
               </button>
@@ -276,10 +276,10 @@ export function FeedbackImpactLive({
               initial={{ opacity: 0, y: -20, height: 0 }}
               animate={{ opacity: 1, y: 0, height: "auto" }}
               exit={{ opacity: 0, y: -20, height: 0 }}
-              className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 flex items-center gap-3"
+              className="bg-primary-500/10 border border-primary-500/30 rounded-lg p-3 flex items-center gap-3"
             >
-              <Zap className="h-5 w-5 text-purple-400" />
-              <span className="text-sm text-purple-300">New feedback received! Processing...</span>
+              <Zap className="h-5 w-5 text-primary-400" />
+              <span className="text-sm text-primary-300">New feedback received! Processing...</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -317,7 +317,7 @@ export function FeedbackImpactLive({
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Current Accuracy</span>
-            <span className="text-lg font-medium text-foreground">
+            <span className="text-lg font-normal text-foreground">
               <AnimatedCounter value={stats.currentAccuracy} suffix="%" />
             </span>
           </div>
@@ -395,7 +395,7 @@ export function FeedbackImpactLive({
 
         {/* Recent Corrections with Impact */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
+          <h4 className="mac-title">
             <MessageSquareQuote className="h-4 w-4 text-orange-400" />
             Recent Corrections
           </h4>
@@ -417,7 +417,7 @@ export function FeedbackImpactLive({
                       className={cn(
                         "text-xs",
                         item.status === "training"
-                          ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
+                          ? "bg-primary-500/10 text-primary-400 border-primary-500/30"
                           : item.status === "approved"
                             ? "bg-green-500/10 text-green-400 border-green-500/30"
                             : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
@@ -459,7 +459,7 @@ function MetricCard({
     blue: "bg-blue-500/10 text-blue-400 ring-blue-500/20",
     orange: "bg-orange-500/10 text-orange-400 ring-orange-500/20",
     green: "bg-green-500/10 text-green-400 ring-green-500/20",
-    purple: "bg-purple-500/10 text-purple-400 ring-purple-500/20",
+    purple: "bg-primary-500/10 text-primary-400 ring-primary-500/20",
   };
 
   return (

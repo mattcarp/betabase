@@ -463,7 +463,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
   return (
     <div className={`space-y-3 ${className}`} data-test-id="live-insights-root">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="mac-title text-lg font-normal text-motiff-green">Live Insights</h3>
+        <h3 className="mac-title">Live Insights</h3>
         <div className="flex items-center gap-2">
           {isLoading && <span className="text-xs text-white/60 animate-pulse">Loading...</span>}
         </div>
@@ -508,7 +508,7 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <h4 className="mac-title font-medium text-white text-sm truncate">
+                        <h4 className="mac-title">
                           {insight.title}
                         </h4>
                         {insight.trend && getTrendIcon(insight.trend)}
@@ -556,11 +556,11 @@ export const LiveInsights: React.FC<LiveInsightsProps> = ({
       {insights.length > 0 && (
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex gap-2">
-            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+            <button className="mac-button flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
               <Lightbulb size={12} className="inline mr-2" />
               Generate Summary
             </button>
-            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+            <button className="mac-button flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
               <Target size={12} className="inline mr-2" />
               Action Items
             </button>

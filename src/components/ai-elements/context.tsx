@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "src/components/ui/button";
+import { Button } from "../ui/button";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "src/components/ui/hover-card";
-import { Progress } from "src/components/ui/progress";
-import { cn } from "src/lib/utils";
+} from "../ui/hover-card";
+import { Progress } from "../ui/progress";
+import { cn } from "../../lib/utils";
 import type { LanguageModelUsage } from "ai";
 import { type ComponentProps, createContext, useContext } from "react";
 import { getUsage } from "tokenlens";
@@ -114,8 +114,13 @@ export const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
   return (
     <HoverCardTrigger asChild>
       {children ?? (
-        <Button type="button" variant="ghost" {...props}>
-          <span className="font-medium text-muted-foreground">
+        <Button
+          className="mac-button mac-button-outline"
+          type="button"
+          variant="ghost"
+          {...props}
+        >
+          <span className="font-normal text-muted-foreground">
             {renderedPercent}
           </span>
           <ContextIcon />
@@ -163,7 +168,7 @@ export const ContextContentHeader = ({
         <>
           <div className="flex items-center justify-between gap-3 text-xs">
             <p>{displayPct}</p>
-            <p className="font-mono text-muted-foreground">
+            <p className="mac-body font-mono text-muted-foreground">
               {used} / {total}
             </p>
           </div>

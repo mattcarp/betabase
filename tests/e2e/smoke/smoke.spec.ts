@@ -64,9 +64,15 @@ test.describe("Smoke Tests @smoke", () => {
       .locator('[data-testid="app-container"]')
       .isVisible({ timeout: 5000 })
       .catch(() => false);
+    
+    // Also check for the Welcome screen (common on initial load)
+    const hasWelcomeScreen = await page
+      .getByRole('heading', { name: 'Welcome to The Betabase' })
+      .isVisible({ timeout: 5000 })
+      .catch(() => false);
 
     // At least one should be visible
-    expect(hasLoginForm || hasChatInterface || hasAppContainer).toBeTruthy();
+    expect(hasLoginForm || hasChatInterface || hasAppContainer || hasWelcomeScreen).toBeTruthy();
 
     // Ensure body has content
     const bodyText = (await page.locator("body").innerText()).trim();

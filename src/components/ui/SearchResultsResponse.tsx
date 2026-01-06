@@ -104,7 +104,7 @@ const ResultCard: React.FC<{
       case "api_doc":
         return "text-green-400";
       case "knowledge_base":
-        return "text-purple-400";
+        return "text-primary-400";
       case "manual":
         return "text-orange-400";
       case "specification":
@@ -167,7 +167,7 @@ const ResultCard: React.FC<{
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 px-2 py-2 bg-blue-600/20 rounded-full border border-blue-500/30">
             <Star className="w-3 h-3 text-blue-400" />
-            <span className="text-xs text-blue-300 font-medium">
+            <span className="text-xs text-blue-300 font-normal">
               {formatRelevanceScore(result.relevanceScore)}
             </span>
           </div>
@@ -247,7 +247,7 @@ const ResultCard: React.FC<{
               <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
             </button>
           )}
-          <button className="p-2.5 hover:bg-muted/50 rounded transition-colors" title="Download">
+          <button className="mac-button p-2.5 hover:bg-muted/50 rounded transition-colors" title="Download">
             <Download className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
         </div>
@@ -285,13 +285,13 @@ export const SearchResultsResponse: React.FC<{
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-500 rounded-lg flex items-center justify-center">
             <Search className="w-5 h-5 text-white" />
           </div>
           <div>
             <h3 className="mac-title">Search Results</h3>
             <div className="text-sm text-muted-foreground">
-              <span className="font-medium">"{data.query}"</span> •{" "}
+              <span className="font-normal">"{data.query}"</span> •{" "}
               {data.totalResults.toLocaleString()} results in {data.searchTime}
               ms
             </div>
@@ -313,7 +313,7 @@ export const SearchResultsResponse: React.FC<{
           <div className="text-xs text-muted-foreground mb-2">Search Method</div>
           <div className="flex items-center gap-2">
             <span className="text-lg">{getStrategyIcon()}</span>
-            <span className="font-medium text-foreground capitalize">
+            <span className="font-normal text-foreground capitalize">
               {data.searchStrategy.method}
             </span>
           </div>
@@ -359,7 +359,7 @@ export const SearchResultsResponse: React.FC<{
             {data.searchStrategy.expandedTerms.map((term, index) => (
               <span
                 key={index}
-                className="px-2 py-2 bg-purple-600/20 text-purple-300 rounded text-sm"
+                className="px-2 py-2 bg-primary-400/20 text-primary-300 rounded text-sm"
               >
                 {term}
               </span>
@@ -378,7 +378,7 @@ export const SearchResultsResponse: React.FC<{
       {/* Suggestions */}
       {data.suggestions && data.suggestions.length > 0 && (
         <div className="bg-card/50 rounded-lg p-4">
-          <div className="text-foreground font-medium mb-4">Try these related searches:</div>
+          <div className="text-foreground font-normal mb-4">Try these related searches:</div>
           <div className="flex flex-wrap gap-2">
             {data.suggestions.map((suggestion, index) => (
               <button
@@ -395,7 +395,7 @@ export const SearchResultsResponse: React.FC<{
       {/* Load More */}
       {data.resultsShown < data.totalResults && (
         <div className="text-center mt-6">
-          <button className="px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+          <button className="mac-button px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-normal transition-colors">
             Load More Results ({data.totalResults - data.resultsShown} remaining)
           </button>
         </div>

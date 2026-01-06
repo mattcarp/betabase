@@ -220,7 +220,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
             <CardContent className="space-y-4">
               {/* Severity Selection */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Severity Level</label>
+                <label className="text-sm font-normal">Severity Level</label>
                 <div className="grid grid-cols-4 gap-2">
                   {(Object.keys(SEVERITY_CONFIG) as SeverityLevel[]).map((level) => {
                     const config = SEVERITY_CONFIG[level];
@@ -247,7 +247,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
 
               {/* Title */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Title</label>
+                <label className="text-sm font-normal">Title</label>
                 <Input
                   className="mac-input"
                   value={title}
@@ -259,7 +259,7 @@ export const FlagIssueLayer: React.FC<FlagIssueLayerProps> = ({
 
               {/* Description */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Description</label>
+                <label className="text-sm font-normal">Description</label>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}

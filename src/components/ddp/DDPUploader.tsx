@@ -31,9 +31,13 @@ import { DDPDisplay } from './DDPDisplay';
 // Types
 // ============================================================================
 
+export type DDPProcessingStage = 'idle' | 'uploading' | 'detecting' | 'parsing' | 'musicbrainz' | 'complete' | 'error';
+
 interface DDPUploaderProps {
   className?: string;
   onParsed?: (result: ReturnType<typeof useDDPParser>['result']) => void;
+  onStageChange?: (stage: DDPProcessingStage) => void;
+  onError?: (error: string) => void;
   compact?: boolean;
 }
 
@@ -41,7 +45,7 @@ interface DDPUploaderProps {
 // Component
 // ============================================================================
 
-export function DDPUploader({ className, onParsed, compact = false }: DDPUploaderProps) {
+export function DDPUploader({ className, onParsed, onStageChange, onError, compact = false }: DDPUploaderProps) {
   const folderInputRef = useRef<HTMLInputElement>(null);
   const filesInputRef = useRef<HTMLInputElement>(null);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -58,6 +62,32 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
   } = useDDPParser();
 
   const isLoading = isDetecting || isParsing;
+
+  // Track and report stage changes
+  React.useEffect(() => {
+    if (!onStageChange) return;
+
+    if (error) {
+      onStageChange('error');
+    } else if (result?.parsed) {
+      onStageChange('complete');
+    } else if (isLookingUp) {
+      onStageChange('musicbrainz');
+    } else if (isParsing) {
+      onStageChange('parsing');
+    } else if (isDetecting) {
+      onStageChange('detecting');
+    } else {
+      onStageChange('idle');
+    }
+  }, [isDetecting, isParsing, isLookingUp, result, error, onStageChange]);
+
+  // Report errors
+  React.useEffect(() => {
+    if (error && onError) {
+      onError(error);
+    }
+  }, [error, onError]);
 
   const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -150,14 +180,14 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
             webkitdirectory=""
             directory=""
             multiple
-            className="hidden"
+            className="mac-input hidden"
             onChange={handleFolderSelect}
           />
           <input
             ref={filesInputRef}
             type="file"
             multiple
-            className="hidden"
+            className="mac-input hidden"
             onChange={handleFilesSelect}
           />
 
@@ -187,7 +217,7 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
 
   // Full mode: card with upload area and results
   return (
-    <Card className={cn('border-border', className)}>
+    <Card className={cn("mac-card", 'border-border', className)}>
       <CardContent className="p-4">
         {/* Hidden inputs */}
         <input
@@ -197,14 +227,14 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
           webkitdirectory=""
           directory=""
           multiple
-          className="hidden"
+          className="mac-input hidden"
           onChange={handleFolderSelect}
         />
         <input
           ref={filesInputRef}
           type="file"
           multiple
-          className="hidden"
+          className="mac-input hidden"
           onChange={handleFilesSelect}
         />
 
@@ -224,7 +254,7 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
             </div>
 
             <div className="text-center">
-              <h3 className="font-medium text-foreground">Upload DDP Master</h3>
+              <h3 className="mac-title">Upload DDP Master</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Select a DDP folder or multiple files to parse
               </p>
@@ -268,10 +298,10 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
             <div className="flex items-start gap-2">
               <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium text-amber-500">
+                <p className="mac-body font-normal text-amber-500">
                   Skipped {skippedFiles.length} large file{skippedFiles.length > 1 ? 's' : ''} (audio)
                 </p>
-                <p className="text-muted-foreground mt-1">
+                <p className="mac-body text-muted-foreground mt-1">
                   {skippedFiles.join(', ')}
                 </p>
               </div>
@@ -292,7 +322,7 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="gap-2"
+                  className="mac-button gap-2"
                   onClick={() => setIsExpanded(!isExpanded)}
                 >
                   {isExpanded ? (
@@ -306,7 +336,7 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="gap-2 text-muted-foreground hover:text-foreground"
+                  className="mac-button gap-2 text-muted-foreground hover:text-foreground"
                   onClick={handleReset}
                 >
                   <X className="h-4 w-4" />
@@ -319,7 +349,7 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
                 <div className="p-4 bg-muted/30 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">
+                      <p className="mac-body font-normal">
                         {result.parsed.summary.albumTitle || 'Untitled Album'}
                       </p>
                       <p className="text-sm text-muted-foreground">
@@ -361,8 +391,8 @@ export function DDPUploader({ className, onParsed, compact = false }: DDPUploade
             <div className="flex items-start gap-2">
               <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium text-destructive">Not a valid DDP</p>
-                <p className="text-muted-foreground mt-1">{result.error}</p>
+                <p className="mac-body font-normal text-destructive">Not a valid DDP</p>
+                <p className="mac-body text-muted-foreground mt-1">{result.error}</p>
               </div>
             </div>
           </motion.div>

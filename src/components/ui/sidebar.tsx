@@ -186,7 +186,7 @@ const SidebarTrigger = React.forwardRef<HTMLButtonElement, React.ComponentProps<
     const { toggleSidebar } = useSidebar();
 
     return (
-      <button
+      <button className="mac-button"
         ref={ref}
         data-sidebar="trigger"
         onClick={(e) => {
@@ -212,7 +212,7 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<"bu
         ref={ref}
         data-sidebar="rail"
         onClick={toggleSidebar}
-        className={cn(
+        className={cn("mac-button", 
           "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all hover:w-1 md:flex",
           "group-data-[side=left]:right-[-7px]",
           "group-data-[side=right]:left-[-7px]",
@@ -259,7 +259,7 @@ const SidebarInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"in
         ref={ref}
         data-sidebar="input"
         suppressHydrationWarning
-        className={cn(
+        className={cn("mac-input", 
           "h-8 w-full rounded-md bg-background px-4 text-sm shadow-sm",
           "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
           className
@@ -352,7 +352,7 @@ const SidebarGroupLabel = React.forwardRef<
       ref={ref}
       data-sidebar="group-label"
       className={cn(
-        "text-xs font-medium text-sidebar-foreground/50",
+        "text-xs font-normal text-sidebar-foreground/50",
         "px-2 py-2.5",
         "group-data-[state=collapsed]:hidden",
         className
@@ -427,7 +427,7 @@ const sidebarMenuButtonVariants = cva(
     "flex w-full items-center gap-2 rounded-md px-2 py-2.5 text-sm outline-none",
     "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
     "focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-    "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium",
+    "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-normal",
     "disabled:pointer-events-none disabled:opacity-50",
     "transition-colors duration-200",
     "group-data-[state=collapsed]:justify-center group-data-[state=collapsed]:px-2"
@@ -555,7 +555,7 @@ const SidebarMenuSubButton = React.forwardRef<
       className={cn(
         "flex items-center gap-2 rounded-md px-2 py-2 text-xs",
         "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-        "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium",
+        "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-normal",
         className
       )}
       {...props}

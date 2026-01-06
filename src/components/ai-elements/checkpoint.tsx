@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "src/components/ui/button";
-import { Separator } from "src/components/ui/separator";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "src/components/ui/tooltip";
-import { cn } from "src/lib/utils";
+} from "../ui/tooltip";
+import { cn } from "../../lib/utils";
 import { BookmarkIcon, type LucideProps } from "lucide-react";
 import type { ComponentProps, HTMLAttributes } from "react";
 
@@ -53,7 +53,7 @@ export const CheckpointTrigger = ({
   tooltip ? (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button size={size} type="button" variant={variant} {...props}>
+        <Button className="mac-button" size={size} type="button" variant={variant} {...props}>
           {children}
         </Button>
       </TooltipTrigger>
@@ -62,7 +62,7 @@ export const CheckpointTrigger = ({
       </TooltipContent>
     </Tooltip>
   ) : (
-    <Button size={size} type="button" variant={variant} {...props}>
+    <Button className="mac-button" size={size} type="button" variant={variant} {...props}>
       {children}
     </Button>
   );

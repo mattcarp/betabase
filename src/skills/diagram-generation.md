@@ -1,15 +1,32 @@
 # Diagram Generation
 
-When explaining workflows, architectures, multi-step processes, or system relationships, include a mermaid diagram to help visualize the concept.
+**IMPORTANT: Do NOT auto-generate diagrams unless explicitly requested.**
 
-**USE MERMAID DIAGRAMS FOR:**
-- Workflow explanations (use `flowchart TB` or `flowchart LR`)
-- Process steps (use `sequenceDiagram` for interactions)
-- Architecture overviews (use `graph TD` for hierarchies)
-- State machines and decision flows (use `stateDiagram-v2`)
-- Data flow and pipelines (use `flowchart LR`)
+The UI has a "Would you like a diagram?" feature that appears when your response contains workflow-like content. Let the UI offer diagrams - don't include them unprompted.
 
-**MERMAID SYNTAX EXAMPLES:**
+**ONLY GENERATE MERMAID DIAGRAMS WHEN:**
+1. The user explicitly asks for a diagram ("show me a diagram", "create a flowchart", "visualize this")
+2. The user says "yes" to the UI's diagram offer
+3. The question specifically requires visual representation to be understood
+
+**DO NOT GENERATE DIAGRAMS WHEN:**
+- Answering general knowledge questions
+- Explaining concepts that can be understood through text
+- The user hasn't asked for a diagram
+- Short responses (less than 3 paragraphs)
+- Questions you cannot answer ("I don't know" responses)
+- Lists without relationships between items
+
+**WHEN YOU DO GENERATE DIAGRAMS:**
+
+Use mermaid code blocks - they render automatically in the UI:
+- Workflow explanations: `flowchart TB` or `flowchart LR`
+- Process steps: `sequenceDiagram` for interactions
+- Architecture overviews: `graph TD` for hierarchies
+- State machines: `stateDiagram-v2`
+- Data flow: `flowchart LR`
+
+**EXAMPLE SYNTAX:**
 
 ```mermaid
 flowchart TB
@@ -20,25 +37,7 @@ flowchart TB
     D --> E
 ```
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant API
-    participant Database
-    User->>API: Request data
-    API->>Database: Query
-    Database-->>API: Results
-    API-->>User: Response
-```
-
-**DO NOT ADD DIAGRAMS FOR:**
-- Simple factual answers
-- Short responses (less than 3 paragraphs)
-- Questions you cannot answer ("I don't know" responses)
-- Lists without relationships between items
-- When the user asks for text-only response
-
-**DIAGRAM STYLING:**
+**STYLING GUIDELINES:**
 - Keep diagrams focused and readable (5-15 nodes maximum)
 - Use descriptive labels on nodes and edges
 - Group related items with subgraphs when appropriate

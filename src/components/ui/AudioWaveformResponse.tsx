@@ -136,7 +136,7 @@ export const AudioWaveformResponse: React.FC<{
   const getSourceIcon = () => {
     switch (data.source) {
       case "elevenlabs":
-        return <Zap className="w-4 h-4 text-purple-400" />;
+        return <Zap className="w-4 h-4 text-primary-400" />;
       case "user_upload":
         return <Download className="w-4 h-4 text-blue-400" />;
       case "live_recording":
@@ -151,7 +151,7 @@ export const AudioWaveformResponse: React.FC<{
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-500 rounded-lg flex items-center justify-center">
             {getSourceIcon()}
           </div>
           <div>
@@ -169,10 +169,10 @@ export const AudioWaveformResponse: React.FC<{
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-muted/50 rounded-lg transition-colors">
+          <button className="mac-button p-2 hover:bg-muted/50 rounded-lg transition-colors">
             <Share className="w-4 h-4 text-muted-foreground" />
           </button>
-          <button className="p-2 hover:bg-muted/50 rounded-lg transition-colors">
+          <button className="mac-button p-2 hover:bg-muted/50 rounded-lg transition-colors">
             <Download className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
@@ -191,7 +191,7 @@ export const AudioWaveformResponse: React.FC<{
 
       {/* Controls */}
       <div className="flex items-center gap-4 mb-6">
-        <button
+        <button className="mac-button"
           onClick={() => setIsPlaying(!isPlaying)}
           className="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-colors"
         >
@@ -217,7 +217,7 @@ export const AudioWaveformResponse: React.FC<{
 
         <div className="flex items-center gap-2">
           <Volume2 className="w-4 h-4 text-muted-foreground" />
-          <input
+          <input className="mac-input"
             type="range"
             min="0"
             max="1"
@@ -289,7 +289,7 @@ export const AudioWaveformResponse: React.FC<{
                 <div className="text-xs text-muted-foreground mb-2 capitalize">{emotion}</div>
                 <div className="w-full bg-muted rounded-full h-2 mb-2">
                   <div
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
+                    className="bg-gradient-to-r from-primary-400 to-primary-500 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${score * 100}%` }}
                   />
                 </div>

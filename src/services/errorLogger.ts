@@ -153,10 +153,10 @@ class ErrorLogger {
 
   private getConsoleStyle(severity: string): string {
     const styles = {
-      low: "color: #fbbf24; font-weight: bold;",
-      medium: "color: #f97316; font-weight: bold;",
-      high: "color: #ef4444; font-weight: bold;",
-      critical: "color: #dc2626; font-weight: bold; background: #fef2f2; padding: 2px 4px;",
+      low: "color: var(--mac-tier2); font-weight: 400;",
+      medium: "color: var(--mac-status-error-border); font-weight: 400;",
+      high: "color: var(--mac-status-error-text); font-weight: 400;",
+      critical: "color: var(--mac-error-red); font-weight: 400; background: var(--mac-tier3-bg); padding: 0.125rem 0.25rem;",
     };
     return styles[severity as keyof typeof styles] || styles.medium;
   }

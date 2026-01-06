@@ -89,7 +89,7 @@ export function MessageThread({
                   )}
                 >
                   {message.role !== "user" && (
-                    <span className="text-xs font-medium text-muted-foreground capitalize">
+                    <span className="text-xs font-normal text-muted-foreground capitalize">
                       {message.role}
                     </span>
                   )}

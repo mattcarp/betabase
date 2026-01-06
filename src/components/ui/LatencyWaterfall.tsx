@@ -95,7 +95,7 @@ export function LatencyWaterfall({ segments, totalDuration, className = "" }: La
       {/* Total duration header */}
       <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">Total Duration</span>
-        <span className="font-mono font-semibold">{formatDuration(calculatedTotal)}</span>
+        <span className="font-mono font-normal">{formatDuration(calculatedTotal)}</span>
       </div>
 
       {/* Waterfall bar */}
@@ -117,7 +117,7 @@ export function LatencyWaterfall({ segments, totalDuration, className = "" }: La
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-xs space-y-1">
-                    <div className="font-semibold">{segment.name}</div>
+                    <div className="font-normal">{segment.name}</div>
                     <div className={colors.text}>{colors.label}</div>
                     <div className="font-mono">{formatDuration(segment.duration)}</div>
                     <div className="text-muted-foreground">
@@ -141,7 +141,7 @@ export function LatencyWaterfall({ segments, totalDuration, className = "" }: La
               <div className={`w-3 h-3 rounded ${colors.bg}`} />
               <span className="text-muted-foreground">
                 {segment.name}:{" "}
-                <span className="font-mono font-medium">{formatDuration(segment.duration)}</span>
+                <span className="font-mono font-normal">{formatDuration(segment.duration)}</span>
               </span>
             </div>
           );

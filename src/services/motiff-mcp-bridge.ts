@@ -13,7 +13,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from 'zod/v3';
-import { ComponentGenerator as BaseComponentGenerator } from "../tools/component-generator.js";
+import { ComponentGenerator as BaseComponentGenerator } from "../tools/component-generator";
 
 // Types for Motiff design data
 interface MotiffFrame {
@@ -687,7 +687,7 @@ class DesignProcessor {
       "justify-content: center": "justify-center",
       "align-items: center": "items-center",
       "text-align: center": "text-center",
-      "font-weight: bold": "font-bold",
+      "font-weight: bold": "font-normal",
       "font-weight: 600": "font-normal",
       "margin: 0": "m-0",
       "padding: 0": "p-0",

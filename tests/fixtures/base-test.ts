@@ -45,6 +45,11 @@ const ALLOWED_ERROR_PATTERNS = [
   // Dev server instability (Turbopack/Next.js build manifest issues)
   // Removed as Next.js 16.0.5 fixes these issues
 
+  // Rate limiting / Too Many Requests (e.g. external APIs)
+  /Failed to load resource:.*429/i,
+  /status of 429/i,
+  /Too Many Requests/i,
+
   // React hydration warnings (not errors)
   /Warning: Text content did not match/i,
   /A tree hydrated but some attributes.*didn't match/i,
@@ -168,9 +173,10 @@ export const test = base.extend<{
 test.afterEach(async ({ consoleErrors, networkErrors, failOnConsoleError }, testInfo) => {
   // Filter out known acceptable errors
   const realErrors = consoleErrors.filter(err => !shouldIgnoreError(err.text));
+  const realNetworkErrors = networkErrors.filter(err => !shouldIgnoreError(`${err.status} ${err.url}`));
 
   // Generate error report
-  if (realErrors.length > 0 || networkErrors.length > 0) {
+  if (realErrors.length > 0 || realNetworkErrors.length > 0) {
     console.log('\n========== ERROR SUMMARY ==========');
 
     if (realErrors.length > 0) {
@@ -181,9 +187,9 @@ test.afterEach(async ({ consoleErrors, networkErrors, failOnConsoleError }, test
       });
     }
 
-    if (networkErrors.length > 0) {
-      console.log(`\nNetwork Errors (${networkErrors.length}):`);
-      networkErrors.forEach((err, i) => {
+    if (realNetworkErrors.length > 0) {
+      console.log(`\nNetwork Errors (${realNetworkErrors.length}):`);
+      realNetworkErrors.forEach((err, i) => {
         console.log(`  ${i + 1}. ${err.status} ${err.statusText} - ${err.url}`);
       });
     }

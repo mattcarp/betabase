@@ -34,20 +34,20 @@ function SelfHealingDemoContent() {
   };
 
   const selectorInfo = getSelectorInfo();
-  const baseClasses = "px-8 py-4 text-white rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg";
+  const baseClasses = "px-8 py-4 text-white rounded-xl font-normal text-lg transition-all duration-200 shadow-lg";
 
   const renderButton = () => {
     switch (variant) {
       case 1:
-        return <button id="submit-btn" className={`${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800`} onClick={handleSubmit}>Complete Purchase</button>;
+        return <button id="submit-btn" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800`} onClick={handleSubmit}>Complete Purchase</button>;
       case 2:
-        return <div className="flex flex-col items-end w-full"><button id="submit-btn" className={`${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Complete Purchase</button></div>;
+        return <div className="flex flex-col items-end w-full"><button id="submit-btn" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Complete Purchase</button></div>;
       case 3:
-        return <button id="order-submit-button" data-testid="submit-action" className={`${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Complete Purchase</button>;
+        return <button id="order-submit-button" data-testid="submit-action" className={`mac-button ${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700`} onClick={handleSubmit}>Complete Purchase</button>;
       case 4:
-        return <div className="button-wrapper"><button data-action="submit" className={`order-submit-btn ${baseClasses} bg-gradient-to-r from-emerald-600 to-emerald-700`} onClick={handleSubmit}>Complete Purchase</button></div>;
+        return <div className="button-wrapper"><button data-action="submit" className={`mac-button order-submit-btn ${baseClasses} bg-gradient-to-r from-emerald-600 to-emerald-700`} onClick={handleSubmit}>Complete Purchase</button></div>;
       case 5:
-        return <button aria-label="Complete Purchase" className={`flex items-center gap-3 ${baseClasses} bg-gradient-to-r from-purple-600 to-purple-700`} onClick={handleSubmit}><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Confirm Order</button>;
+        return <button aria-label="Complete Purchase" className={`mac-button flex items-center gap-3 ${baseClasses} bg-gradient-to-r from-primary-600 to-primary-700`} onClick={handleSubmit}><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Confirm Order</button>;
       default: return null;
     }
   };
@@ -59,7 +59,7 @@ function SelfHealingDemoContent() {
           <div className="text-xs text-muted-foreground mb-3">Demo Controls</div>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((v) => (
-              <button key={v} onClick={() => setVariant(v)} className={`w-10 h-10 rounded-lg text-sm font-semibold ${variant === v ? "bg-blue-600 text-white" : "bg-muted text-muted-foreground"}`}>{v}</button>
+              <button key={v} onClick={() => setVariant(v)} className={`mac-button w-10 h-10 rounded-lg text-sm font-normal ${variant === v ? "bg-blue-600 text-white" : "bg-muted text-muted-foreground"}`}>{v}</button>
             ))}
           </div>
         </div>
@@ -68,11 +68,11 @@ function SelfHealingDemoContent() {
       <div className="max-w-3xl mx-auto pt-12 px-6">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-primary-600 rounded-xl flex items-center justify-center">
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
             </div>
             <div>
-              <h1 className="text-2xl font-bold">TechStore Pro</h1>
+              <h1 className="mac-heading text-2xl font-normal">TechStore Pro</h1>
               <p className="text-sm text-muted-foreground">Secure Checkout</p>
             </div>
           </div>
@@ -80,11 +80,11 @@ function SelfHealingDemoContent() {
 
         <div className="bg-card/80 backdrop-blur border border-border/50 rounded-2xl overflow-hidden">
           <div className="p-8">
-            <h2 className="text-lg font-semibold mb-6">Order Summary</h2>
+            <h2 className="mac-heading text-lg font-normal mb-6">Order Summary</h2>
             <div className="space-y-4 mb-8">
               <div className="flex justify-between pt-4 text-xl">
-                <span className="font-semibold">Total</span>
-                <span className="font-bold text-blue-400">$2,487.59</span>
+                <span className="font-normal">Total</span>
+                <span className="font-normal text-blue-400">$2,487.59</span>
               </div>
             </div>
             <div className="pt-6 border-t border-border/50">{renderButton()}</div>

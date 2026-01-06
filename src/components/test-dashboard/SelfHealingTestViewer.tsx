@@ -259,7 +259,7 @@ const ScreenshotComparison: React.FC<{
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-light flex items-center gap-2">
+        <h4 className="mac-title">
           <Image className="h-4 w-4" />
           Visual Comparison
         </h4>
@@ -267,7 +267,7 @@ const ScreenshotComparison: React.FC<{
           <Button
             variant={viewMode === "side-by-side" ? "default" : "ghost"}
             size="sm"
-            className="h-7 text-xs"
+            className="mac-button h-7 text-xs"
             onClick={() => setViewMode("side-by-side")}
           >
             Side by Side
@@ -275,7 +275,7 @@ const ScreenshotComparison: React.FC<{
           <Button
             variant={viewMode === "overlay" ? "default" : "ghost"}
             size="sm"
-            className="h-7 text-xs"
+            className="mac-button h-7 text-xs"
             onClick={() => setViewMode("overlay")}
           >
             Overlay
@@ -349,11 +349,11 @@ const ScreenshotComparison: React.FC<{
             )}
             {/* Slider line */}
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-purple-500 cursor-ew-resize"
+              className="absolute top-0 bottom-0 w-0.5 bg-primary-500 cursor-ew-resize"
               style={{ left: `${overlayPosition}%` }}
             />
           </div>
-          <input
+          <input className="mac-input"
             type="range"
             min="0"
             max="100"
@@ -737,7 +737,7 @@ export const SelfHealingTestViewer: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-[600px]">
         <div className="text-center space-y-4">
-          <Loader2 className="h-12 w-12 mx-auto animate-spin text-purple-500" />
+          <Loader2 className="h-12 w-12 mx-auto animate-spin text-primary-500" />
           <p className="text-sm text-muted-foreground">Loading self-healing data...</p>
         </div>
       </div>
@@ -749,7 +749,7 @@ export const SelfHealingTestViewer: React.FC = () => {
       {/* Header with Stats */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-light tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="mac-heading">
             Self-Healing Test Monitor
           </h2>
           <p className="text-sm font-light text-muted-foreground">
@@ -760,9 +760,9 @@ export const SelfHealingTestViewer: React.FC = () => {
           variant="ghost"
           size="sm"
           onClick={handleSettingsClick}
-          className={cn(
+          className={cn("mac-button", 
             "border border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-all",
-            demoClickCount > 0 && "ring-2 ring-purple-500/50",
+            demoClickCount > 0 && "ring-2 ring-primary-500/50",
             triggeringDemo && "opacity-50 cursor-wait"
           )}
           disabled={triggeringDemo}
@@ -777,13 +777,13 @@ export const SelfHealingTestViewer: React.FC = () => {
       </div>
 
       {/* About Self-Healing Collapsible Section */}
-      <Card className="border-white/10 bg-black/20">
-        <button
+      <Card className="mac-card border-white/10 bg-black/20">
+        <button className="mac-button"
           onClick={() => setAboutOpen(!aboutOpen)}
           className="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <BookOpen className="h-5 w-5 text-purple-400" />
+            <BookOpen className="h-5 w-5 text-primary-400" />
             <span className="text-sm font-light">About Self-Healing Tests</span>
           </div>
           {aboutOpen ? (
@@ -804,7 +804,7 @@ export const SelfHealingTestViewer: React.FC = () => {
               </p>
 
               <div className="space-y-3">
-                <h4 className="text-sm font-light text-white">Three-Tier Healing System</h4>
+                <h4 className="mac-title">Three-Tier Healing System</h4>
                 <div className="grid gap-2">
                   <div className="flex items-start gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
                     <Badge
@@ -852,7 +852,7 @@ export const SelfHealingTestViewer: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                <h4 className="text-sm font-light text-white">How It Works</h4>
+                <h4 className="mac-title">How It Works</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   When a test fails, the self-healing system captures a DOM snapshot and compares it
                   against the expected state. Using Gemini 3 Pro, the system analyzes the changes,
@@ -863,7 +863,7 @@ export const SelfHealingTestViewer: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                <h4 className="text-sm font-light text-white">Benefits</h4>
+                <h4 className="mac-title">Benefits</h4>
                 <ul className="text-sm text-muted-foreground space-y-1 list-none pl-0">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-3 w-3 text-green-500 shrink-0" />
@@ -884,8 +884,8 @@ export const SelfHealingTestViewer: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="mt-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                <p className="text-xs text-purple-300 flex items-start gap-2">
+              <div className="mt-4 p-3 rounded-lg bg-primary-500/10 border border-primary-500/20">
+                <p className="text-xs text-primary-300 flex items-start gap-2">
                   <Sparkles className="h-4 w-4 shrink-0 mt-0.5" />
                   <span>
                     This implementation uses real AI-powered analysis through Gemini 3 Pro,
@@ -901,23 +901,23 @@ export const SelfHealingTestViewer: React.FC = () => {
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-        <Card className="border-white/10 bg-black/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mac-card border-white/10 bg-black/20">
+          <CardHeader className="mac-card flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-light">Total Tests</CardTitle>
             <Sparkles className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-light">{stats.total.toLocaleString()}</div>
             <p className="text-xs font-light text-muted-foreground">Automated tests monitored</p>
           </CardContent>
         </Card>
 
-        <Card className="border-white/10 bg-black/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mac-card border-white/10 bg-black/20">
+          <CardHeader className="mac-card flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-light">Auto-Healed</CardTitle>
             <Wrench className="h-4 w-4 text-green-400" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-light text-green-400">
               {stats.healed.toLocaleString()}
             </div>
@@ -925,46 +925,46 @@ export const SelfHealingTestViewer: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-white/10 bg-black/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mac-card border-white/10 bg-black/20">
+          <CardHeader className="mac-card flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-light">Pending Review</CardTitle>
             <AlertTriangle className="h-4 w-4 text-amber-400" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-light text-amber-400">{stats.pendingReview}</div>
             <p className="text-xs font-light text-muted-foreground">Awaiting approval</p>
           </CardContent>
         </Card>
 
-        <Card className="border-white/10 bg-black/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mac-card border-white/10 bg-black/20">
+          <CardHeader className="mac-card flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-light">Success Rate</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-400" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-light">{stats.successRate.toFixed(1)}%</div>
             <p className="text-xs font-light text-muted-foreground">Healing accuracy</p>
           </CardContent>
         </Card>
 
-        <Card className="border-white/10 bg-black/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mac-card border-white/10 bg-black/20">
+          <CardHeader className="mac-card flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-light">Avg Heal Time</CardTitle>
             <Zap className="h-4 w-4 text-blue-400" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="text-2xl font-light">{stats.avgHealTime.toFixed(1)}s</div>
             <p className="text-xs font-light text-muted-foreground">Mean time to fix</p>
           </CardContent>
         </Card>
 
-        <Card className="border-white/10 bg-black/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mac-card border-white/10 bg-black/20">
+          <CardHeader className="mac-card flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-light">Last 24h</CardTitle>
-            <RefreshCw className="h-4 w-4 text-purple-400" />
+            <RefreshCw className="h-4 w-4 text-primary-400" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-light text-purple-400">{stats.last24h}</div>
+          <CardContent className="mac-card">
+            <div className="text-2xl font-light text-primary-400">{stats.last24h}</div>
             <p className="text-xs font-light text-muted-foreground">Recent healings</p>
           </CardContent>
         </Card>
@@ -1143,8 +1143,8 @@ export const SelfHealingTestViewer: React.FC = () => {
         <TabsContent value="workflow" className="space-y-4">
           <div className="grid gap-4 lg:grid-cols-2">
             {/* Healing Queue */}
-            <Card className="border-white/10 bg-black/20">
-              <CardHeader>
+            <Card className="mac-card border-white/10 bg-black/20">
+              <CardHeader className="mac-card">
                 <CardTitle className="flex items-center gap-2 font-light">
                   <RefreshCw className={cn("h-5 w-5 text-blue-400", loading && "animate-spin")} />
                   Active Healing Queue
@@ -1153,7 +1153,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                   )}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <ScrollArea className="h-[600px] pr-4">
                   <div className="space-y-3">
                     {attempts.length === 0 ? (
@@ -1170,7 +1170,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                           key={attempt.id}
                           className={cn(
                             "rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md",
-                            selectedAttempt?.id === attempt.id && "ring-2 ring-purple-500"
+                            selectedAttempt?.id === attempt.id && "ring-2 ring-primary-500"
                           )}
                           onClick={() => setSelectedAttempt(attempt)}
                         >
@@ -1200,9 +1200,9 @@ export const SelfHealingTestViewer: React.FC = () => {
 
                           {/* Impact Callout */}
                           {attempt.similarTestsAffected > 0 && (
-                            <div className="flex items-center gap-2 mb-2 px-2 py-1.5 rounded-md bg-purple-500/10 border border-purple-500/20">
-                              <Sparkles className="h-3 w-3 text-purple-400" />
-                              <span className="text-xs text-purple-300">
+                            <div className="flex items-center gap-2 mb-2 px-2 py-1.5 rounded-md bg-primary-500/10 border border-primary-500/20">
+                              <Sparkles className="h-3 w-3 text-primary-400" />
+                              <span className="text-xs text-primary-300">
                                 This fix will repair{" "}
                                 <span className="font-light">{attempt.similarTestsAffected}</span>{" "}
                                 similar test{attempt.similarTestsAffected !== 1 ? "s" : ""}
@@ -1235,14 +1235,14 @@ export const SelfHealingTestViewer: React.FC = () => {
             </Card>
 
             {/* Healing Details */}
-            <Card className="border-white/10 bg-black/20">
-              <CardHeader>
+            <Card className="mac-card border-white/10 bg-black/20">
+              <CardHeader className="mac-card">
                 <CardTitle className="flex items-center gap-2 font-light">
-                  <Eye className="h-5 w-5 text-purple-400" />
+                  <Eye className="h-5 w-5 text-primary-400" />
                   Healing Details
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 {selectedAttempt ? (
                   <ScrollArea className="h-[600px] pr-4">
                     <div className="space-y-6">
@@ -1295,9 +1295,10 @@ export const SelfHealingTestViewer: React.FC = () => {
                         )}
 
                         {selectedAttempt.similarTestsAffected > 0 && (
-                          <div className="flex items-center gap-2 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                            <Layers className="h-4 w-4 text-purple-400" />
-                            <span className="text-sm text-purple-300">
+                          <div className="flex items-center gap-2 p-3 rounded-lg bg-primary-500/10 border border-primary-500/20">
+                            <Layers className="h-4 w-4 text-primary-400" />
+                            <span className="text-sm text-primary-300">
+                              <span className="font-normal mr-1 text-primary-200 uppercase tracking-wider text-[10px]">Blast Radius:</span>
                               Applying this fix will automatically repair{" "}
                               <span className="font-light">
                                 {selectedAttempt.similarTestsAffected}
@@ -1319,7 +1320,7 @@ export const SelfHealingTestViewer: React.FC = () => {
 
                       {/* Visual Workflow */}
                       <div className="space-y-4">
-                        <h3 className="text-sm font-light">Healing Workflow</h3>
+                        <h3 className="mac-title">Healing Workflow</h3>
                         <div className="relative">
                           {/* Step 1: Detection */}
                           <div className="flex items-center gap-3 mb-4">
@@ -1353,8 +1354,8 @@ export const SelfHealingTestViewer: React.FC = () => {
 
                           {/* Step 3: Healing */}
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500/10 border border-purple-500/20">
-                              <Wrench className="h-5 w-5 text-purple-500" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-500/10 border border-primary-500/20">
+                              <Wrench className="h-5 w-5 text-primary-500" />
                             </div>
                             <div className="flex-1">
                               <p className="text-sm font-light">Proposed Fix Generated</p>
@@ -1372,7 +1373,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                                 <div className="mt-3 flex flex-wrap gap-2">
                                   <Button
                                     size="sm"
-                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                    className="mac-button bg-green-600 hover:bg-green-700 text-white"
                                     onClick={() => handleApplyFix(selectedAttempt.id)}
                                     disabled={applyingFix === selectedAttempt.id}
                                   >
@@ -1386,15 +1387,15 @@ export const SelfHealingTestViewer: React.FC = () => {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                                    className="mac-button border-red-500/30 text-red-400 hover:bg-red-500/10"
                                     onClick={() => handleReject(selectedAttempt.id)}
                                   >
                                     <XCircle className="mr-2 h-3.5 w-3.5" />
                                     Reject
                                   </Button>
-                                  <Button
+                                  <Button className="mac-button"
                                     size="sm"
-                                    variant="ghost"
+                                    variant="ghost" className="mac-button mac-button-outline"
                                     onClick={() =>
                                       copyToClipboard(
                                         selectedAttempt.codeAfter ||
@@ -1464,7 +1465,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                         selectedAttempt.codeBefore ||
                         selectedAttempt.codeAfter) && (
                         <div className="space-y-3 pt-4 border-t border-white/5">
-                          <h4 className="text-sm font-light flex items-center gap-2">
+                          <h4 className="mac-title">
                             <FileCode className="h-4 w-4" />
                             Code Change Preview
                           </h4>
@@ -1513,7 +1514,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                       {/* DOM Changes Detail */}
                       {selectedAttempt.domChanges.length > 0 && (
                         <div className="space-y-2">
-                          <h3 className="text-sm font-light">DOM Changes Detected</h3>
+                          <h3 className="mac-title">DOM Changes Detected</h3>
                           <div className="space-y-2">
                             {selectedAttempt.domChanges.map((change, idx) => (
                               <div
@@ -1529,8 +1530,8 @@ export const SelfHealingTestViewer: React.FC = () => {
                                   </span>
                                 </div>
                                 <div className="space-y-1">
-                                  <p className="text-red-400">- {change.before}</p>
-                                  <p className="text-green-400">+ {change.after}</p>
+                                  <p className="mac-body text-red-400">- {change.before}</p>
+                                  <p className="mac-body text-green-400">+ {change.after}</p>
                                 </div>
                               </div>
                             ))}
@@ -1541,7 +1542,7 @@ export const SelfHealingTestViewer: React.FC = () => {
                       {/* Metadata */}
                       {selectedAttempt.metadata && (
                         <div className="space-y-2">
-                          <h3 className="text-sm font-light">Execution Metadata</h3>
+                          <h3 className="mac-title">Execution Metadata</h3>
                           <div className="rounded-lg border bg-muted/50 p-3 text-xs space-y-1">
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">Execution Time</span>
@@ -1571,11 +1572,11 @@ export const SelfHealingTestViewer: React.FC = () => {
                       {(selectedAttempt.status === "success" ||
                         selectedAttempt.status === "approved") && (
                         <div className="flex gap-2 pt-4">
-                          <Button className="flex-1" variant="outline">
+                          <Button className="mac-button flex-1" variant="outline" className="mac-button mac-button-outline">
                             <Play className="mr-2 h-4 w-4" />
                             Re-run Test
                           </Button>
-                          <Button className="flex-1" variant="outline">
+                          <Button className="mac-button flex-1" variant="outline" className="mac-button mac-button-outline">
                             <Code className="mr-2 h-4 w-4" />
                             View Full Code
                           </Button>
@@ -1597,19 +1598,19 @@ export const SelfHealingTestViewer: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="history">
-          <Card className="border-white/10 bg-black/20">
-            <CardHeader>
+          <Card className="mac-card border-white/10 bg-black/20">
+            <CardHeader className="mac-card">
               <CardTitle className="flex items-center gap-2 font-light">
                 <TrendingUp className="h-5 w-5 text-blue-400" />
                 Healing History
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               {trends.length > 0 ? (
                 <div className="space-y-6">
                   {/* Simple bar chart visualization */}
                   <div className="space-y-2">
-                    <h3 className="text-sm font-light">14-Day Healing Trend</h3>
+                    <h3 className="mac-title">14-Day Healing Trend</h3>
                     <div className="flex items-end gap-1 h-32 border-b border-l">
                       {trends.map((day, idx) => {
                         const maxVal = Math.max(...trends.map((t) => t.totalAttempts)) || 100;
@@ -1652,7 +1653,7 @@ export const SelfHealingTestViewer: React.FC = () => {
 
                   {/* Recent activity list */}
                   <div className="space-y-2">
-                    <h3 className="text-sm font-light">Recent Activity</h3>
+                    <h3 className="mac-title">Recent Activity</h3>
                     <ScrollArea className="h-[300px]">
                       <div className="space-y-2">
                         {attempts.slice(0, 20).map((attempt) => (

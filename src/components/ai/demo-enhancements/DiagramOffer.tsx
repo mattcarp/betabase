@@ -58,7 +58,7 @@ export function DiagramOffer({
       <button
         onClick={handleAccept}
         disabled={isGenerating}
-        className="text-xs italic text-muted-foreground hover:text-muted-foreground/80 transition-colors cursor-pointer disabled:cursor-wait"
+        className="mac-button text-xs italic text-muted-foreground hover:text-muted-foreground/80 transition-colors cursor-pointer disabled:cursor-wait"
       >
         {isGenerating ? (
           <span className="flex items-center gap-1.5">
@@ -74,7 +74,7 @@ export function DiagramOffer({
       {!isGenerating && (
         <button
           onClick={handleDismiss}
-          className="text-[10px] text-muted hover:text-muted-foreground transition-colors"
+          className="mac-button text-[10px] text-muted hover:text-muted-foreground transition-colors"
           aria-label="Dismiss diagram offer"
         >
           ✕

@@ -181,7 +181,7 @@ export const WebPreviewConsole = ({
       <CollapsibleTrigger asChild>
         <Button
           variant="ghost"
-          className="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50 mac-button mac-button-outline"
+          className="flex w-full items-center justify-between p-4 text-left font-normal hover:bg-muted/50 mac-button mac-button-outline"
         >
           Console
           <ChevronDownIcon

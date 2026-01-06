@@ -2,7 +2,7 @@
 
 /* Glassmorphism for sidebar - Dark mode (default) */
 .mac-sidebar {
-  background: rgba(20, 20, 20, 0.7) !important;
+  background: var(--mac-surface-card) !important;
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -14,7 +14,7 @@
 
 /* Light mode sidebar */
 :root[data-theme="light"] .mac-sidebar {
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: var(--mac-surface-card) !important;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -35,7 +35,7 @@
 
 /* Enhanced dropdown with MAC glassmorphism - Dark mode */
 .mac-dropdown {
-  background: rgba(30, 30, 30, 0.95) !important;
+  background: var(--mac-surface-elevated) !important;
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(30px) saturate(200%);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -47,7 +47,7 @@
 
 /* Light mode dropdown */
 :root[data-theme="light"] .mac-dropdown {
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: var(--mac-surface-elevated) !important;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.15),
@@ -60,13 +60,13 @@
 }
 
 .mac-dropdown-item:hover {
-  background: rgba(74, 158, 255, 0.1);
+  background: var(--mac-info-bg);
   color: var(--mac-text-primary);
   padding-left: 12px;
 }
 
 :root[data-theme="light"] .mac-dropdown-item:hover {
-  background: rgba(0, 151, 167, 0.1);
+  background: var(--mac-purple-bg);
 }
 
 .mac-dropdown-item:hover::before {
@@ -75,8 +75,8 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: linear-gradient(180deg, var(--mac-primary-blue-400), var(--mac-accent-purple-400));
+  width: 0.125rem;
+  background: linear-gradient(180deg, var(--mac-primary-blue-400), var(--mac-accent-primary-400));
   animation: shimmer 1.5s infinite;
 }
 
@@ -118,10 +118,12 @@
 }
 
 @keyframes pulse-glow {
+
   0%,
   100% {
     filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.5));
   }
+
   50% {
     filter: drop-shadow(0 0 8px rgba(147, 51, 234, 0.8));
   }
@@ -137,22 +139,22 @@
 
 /* Scrollbar styling */
 .mac-sidebar-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 0.5rem;
 }
 
 .mac-sidebar-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--mac-state-hover);
   border-radius: 3px;
 }
 
 .mac-sidebar-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--mac-primary-blue-400), var(--mac-accent-purple-400));
+  background: linear-gradient(180deg, var(--mac-primary-blue-400), var(--mac-accent-primary-400));
   border-radius: 3px;
   box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
 }
 
 .mac-sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--mac-primary-blue-500), var(--mac-accent-purple-500));
+  background: linear-gradient(180deg, var(--mac-primary-blue-500), var(--mac-accent-primary-500));
   box-shadow: 0 0 15px rgba(74, 158, 255, 0.5);
 }
 
@@ -177,6 +179,7 @@
   0% {
     left: -100%;
   }
+
   100% {
     left: 100%;
   }
@@ -188,7 +191,7 @@
 }
 
 .mac-conversation-item button[title="Delete conversation"]:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--mac-status-error-border);
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
 }
 
@@ -219,6 +222,7 @@
     transform: scale(0);
     opacity: 1;
   }
+
   to {
     transform: scale(1.5);
     opacity: 0;
@@ -227,11 +231,11 @@
 
 /* Sidebar rail with gradient */
 .mac-sidebar-rail {
-  background: linear-gradient(180deg, transparent, rgba(74, 158, 255, 0.1), transparent);
+  background: transparent;
   transition: all 150ms ease-out;
 }
 
 .mac-sidebar-rail:hover {
-  background: linear-gradient(180deg, transparent, rgba(74, 158, 255, 0.2), transparent);
+  background: transparent;
   box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
 }

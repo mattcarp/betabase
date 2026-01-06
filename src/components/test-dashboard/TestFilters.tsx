@@ -92,7 +92,7 @@ export function TestFilters({
         {/* Search */}
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
+          <Input className="mac-input"
             placeholder="Search tests..."
             value={filters.search}
             onChange={(e) => onFiltersChange({ ...filters, search: e.target.value })}
@@ -124,7 +124,7 @@ export function TestFilters({
         </Select>
 
         {/* Quick filters */}
-        <Button
+        <Button className="mac-button"
           variant={filters.flaky ? "default" : "outline"}
           size="sm"
           onClick={() => onFiltersChange({ ...filters, flaky: !filters.flaky })}
@@ -137,7 +137,7 @@ export function TestFilters({
           Flaky
         </Button>
 
-        <Button
+        <Button className="mac-button"
           variant={filters.selfHealed ? "default" : "outline"}
           size="sm"
           onClick={() => onFiltersChange({ ...filters, selfHealed: !filters.selfHealed })}
@@ -150,7 +150,7 @@ export function TestFilters({
           Self-Healed
         </Button>
 
-        <Button
+        <Button className="mac-button"
           variant={filters.needsReview ? "default" : "outline"}
           size="sm"
           onClick={() => onFiltersChange({ ...filters, needsReview: !filters.needsReview })}
@@ -164,7 +164,7 @@ export function TestFilters({
         </Button>
 
         {activeFilterCount > 0 && (
-          <Button variant="ghost" size="sm" onClick={handleReset} className="h-9 gap-1">
+          <Button variant="ghost" size="sm" onClick={handleReset} className="mac-button h-9 gap-1">
             <X className="h-3.5 w-3.5" />
             Clear ({activeFilterCount})
           </Button>
@@ -175,9 +175,9 @@ export function TestFilters({
 
   return (
     <Card className={cn("mac-card", className)}>
-      <CardHeader className="pb-3">
+      <CardHeader className="mac-card pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-medium flex items-center gap-2">
+          <CardTitle className="text-base font-normal flex items-center gap-2">
             <Filter className="h-4 w-4" />
             Filter Tests
             {activeFilterCount > 0 && (
@@ -187,7 +187,7 @@ export function TestFilters({
             )}
           </CardTitle>
           {activeFilterCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={handleReset} className="h-8 gap-1">
+            <Button variant="ghost" size="sm" onClick={handleReset} className="mac-button h-8 gap-1">
               <RotateCcw className="h-3.5 w-3.5" />
               Reset
             </Button>
@@ -200,7 +200,7 @@ export function TestFilters({
           <Label className="text-xs text-muted-foreground">Search</Label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
+            <Input className="mac-input"
               placeholder="Search by test name, file path..."
               value={filters.search}
               onChange={(e) => onFiltersChange({ ...filters, search: e.target.value })}
@@ -213,7 +213,7 @@ export function TestFilters({
         <div className="space-y-2">
           <Label className="text-xs text-muted-foreground">Status</Label>
           <div className="flex flex-wrap gap-2">
-            <Button
+            <Button className="mac-button"
               variant={filters.status.includes("passed") ? "default" : "outline"}
               size="sm"
               onClick={() => handleStatusToggle("passed")}
@@ -225,7 +225,7 @@ export function TestFilters({
               <CheckCircle className="h-3.5 w-3.5" />
               Passed
             </Button>
-            <Button
+            <Button className="mac-button"
               variant={filters.status.includes("failed") ? "default" : "outline"}
               size="sm"
               onClick={() => handleStatusToggle("failed")}
@@ -237,7 +237,7 @@ export function TestFilters({
               <XCircle className="h-3.5 w-3.5" />
               Failed
             </Button>
-            <Button
+            <Button className="mac-button"
               variant={filters.status.includes("skipped") ? "default" : "outline"}
               size="sm"
               onClick={() => handleStatusToggle("skipped")}
@@ -249,7 +249,7 @@ export function TestFilters({
               <AlertTriangle className="h-3.5 w-3.5" />
               Skipped
             </Button>
-            <Button
+            <Button className="mac-button"
               variant={filters.status.includes("pending") ? "default" : "outline"}
               size="sm"
               onClick={() => handleStatusToggle("pending")}
@@ -320,7 +320,7 @@ export function TestFilters({
               />
               <label
                 htmlFor="flaky"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
               >
                 <AlertTriangle className="h-3.5 w-3.5 text-yellow-500" />
                 Flaky Tests Only
@@ -336,9 +336,9 @@ export function TestFilters({
               />
               <label
                 htmlFor="selfHealed"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
               >
-                <Sparkles className="h-3.5 w-3.5 text-purple-500" />
+                <Sparkles className="h-3.5 w-3.5 text-primary-500" />
                 Self-Healed Tests
               </label>
             </div>
@@ -352,7 +352,7 @@ export function TestFilters({
               />
               <label
                 htmlFor="needsReview"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
               >
                 <Clock className="h-3.5 w-3.5 text-orange-500" />
                 Needs HITL Review
@@ -367,7 +367,7 @@ export function TestFilters({
             <Label className="text-xs text-muted-foreground">Test Suites</Label>
             <div className="flex flex-wrap gap-2">
               {availableSuites.map((suite) => (
-                <Button
+                <Button className="mac-button"
                   key={suite}
                   variant={filters.suites.includes(suite) ? "default" : "outline"}
                   size="sm"
@@ -385,8 +385,8 @@ export function TestFilters({
         <div className="space-y-2 pt-2 border-t">
           <Label className="text-xs text-muted-foreground">Quick Presets</Label>
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant="outline"
+            <Button className="mac-button"
+              variant="outline" className="mac-button mac-button-outline"
               size="sm"
               onClick={() =>
                 onFiltersChange({
@@ -399,8 +399,8 @@ export function TestFilters({
             >
               Failed This Week
             </Button>
-            <Button
-              variant="outline"
+            <Button className="mac-button"
+              variant="outline" className="mac-button mac-button-outline"
               size="sm"
               onClick={() =>
                 onFiltersChange({
@@ -412,8 +412,8 @@ export function TestFilters({
             >
               All Flaky Tests
             </Button>
-            <Button
-              variant="outline"
+            <Button className="mac-button"
+              variant="outline" className="mac-button mac-button-outline"
               size="sm"
               onClick={() =>
                 onFiltersChange({
@@ -426,8 +426,8 @@ export function TestFilters({
             >
               Low Confidence
             </Button>
-            <Button
-              variant="outline"
+            <Button className="mac-button"
+              variant="outline" className="mac-button mac-button-outline"
               size="sm"
               onClick={() =>
                 onFiltersChange({

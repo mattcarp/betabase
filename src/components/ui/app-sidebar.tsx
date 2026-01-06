@@ -19,7 +19,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
-  SidebarRail,
   SidebarSeparator,
 } from "./sidebar";
 import {
@@ -37,13 +36,14 @@ import {
   Upload,
   Settings,
   ChevronDown,
+  Bug,
 } from "lucide-react";
+import { SettingsMenu } from "./settings-menu";
 import { Badge } from "./badge";
 import { Button } from "./button";
 import { Actions } from "../ai-elements/actions";
 import { InlineCitation } from "../ai-elements/inline-citation";
 import { Source } from "../ai-elements/source";
-import { ThemeSwitcher } from "./theme-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -157,7 +157,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
       <SidebarHeader className="mac-surface-elevated border-b border-mac-border">
         <div className="flex items-center justify-between px-2 py-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-mac-accent-purple-400" />
+            <Sparkles className="h-4 w-4 text-mac-accent-primary-400" />
             <span className="text-sm font-light text-mac-text-primary">Conversations</span>
           </div>
           <Button
@@ -256,9 +256,9 @@ export function AppSidebar({ className }: AppSidebarProps) {
                           )}
                         />
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2.5 mb-0.5">
+                          <div className="flex items-center gap-2.5 mb-0.5 pr-8">
                             {conversation.isPinned && (
-                              <Pin className="h-3 w-3 text-mac-accent-purple-400 shrink-0 mac-pin-indicator" />
+                              <Pin className="h-3 w-3 text-mac-accent-primary-400 shrink-0 mac-pin-indicator" />
                             )}
                             <span className="text-sm font-light text-mac-text-primary truncate" data-testid="conversation-title">
                               {conversation.title}
@@ -390,9 +390,9 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
       <SidebarFooter className="mac-surface-elevated border-t border-mac-border">
         <div className="px-3 py-2 space-y-2">
-          {/* Theme Switcher */}
-          <div className="pb-2 border-b border-mac-border">
-            <ThemeSwitcher />
+          {/* Settings Menu */}
+          <div className="mb-2">
+             <SettingsMenu />
           </div>
 
           <div className="flex items-center justify-between">
@@ -412,15 +412,13 @@ export function AppSidebar({ className }: AppSidebarProps) {
             <div className="text-xs text-mac-text-muted mb-2">Local Storage</div>
             <div className="h-1 bg-mac-surface-bg rounded-full overflow-hidden mac-storage-bar">
               <div
-                className="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400"
+                className="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-primary-400"
                 style={{ width: `${Math.min((conversations.length / 100) * 100, 100)}%` }}
               />
             </div>
           </div>
         </div>
       </SidebarFooter>
-
-      <SidebarRail className="mac-sidebar-rail" />
     </Sidebar>
   );
 }

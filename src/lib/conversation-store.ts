@@ -118,8 +118,19 @@ export function getMessageContent(m: any): string | undefined {
 
   // Legacy fallback: convert v4 content to parts on-the-fly
   // This allows reading old messages but new messages should use parts
-  if (m.content && typeof m.content === "string") {
-    return m.content;
+  if (m.content) {
+    // String content (most common)
+    if (typeof m.content === "string") {
+      return m.content;
+    }
+    // Array content - join strings together
+    if (Array.isArray(m.content)) {
+      return m.content.filter((c: any) => typeof c === "string").join("");
+    }
+    // Object content with text property
+    if (typeof m.content === "object" && m.content.text) {
+      return m.content.text;
+    }
   }
 
   return undefined;

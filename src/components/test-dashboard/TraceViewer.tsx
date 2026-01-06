@@ -8,6 +8,7 @@ import { Slider } from "../ui/slider";
 import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Label } from "../ui/label";
+import { CodeBlock } from "../ui/code-block";
 import {
   Play,
   Pause,
@@ -208,7 +209,7 @@ export const TraceViewer: React.FC = () => {
       case "network":
         return <Network className="h-4 w-4" />;
       case "agent_node":
-        return <Sparkles className="h-4 w-4 text-purple-400" />;
+        return <Sparkles className="h-4 w-4 text-primary-400" />;
       case "tool_call":
         return <Zap className="h-4 w-4 text-amber-400" />;
       default:
@@ -384,7 +385,7 @@ export const TraceViewer: React.FC = () => {
                               {getStepIcon(step.type)}
                             </div>
                             <div className="flex-1">
-                              <p className="text-sm font-medium">{step.description}</p>
+                              <p className="text-sm font-normal">{step.description}</p>
                               <p className="text-xs text-muted-foreground mt-2">
                                 {formatTime(step.timestamp)}
                                 {step.duration && ` • ${step.duration}ms`}
@@ -456,7 +457,7 @@ export const TraceViewer: React.FC = () => {
                   ) : (
                     <div className="text-center">
                       <div className="mb-4">{getStepIcon(traceSteps[currentStep]?.type || "")}</div>
-                      <p className="text-sm font-medium">{traceSteps[currentStep]?.description}</p>
+                      <p className="text-sm font-normal">{traceSteps[currentStep]?.description}</p>
                       {traceSteps[currentStep]?.selector && (
                         <code className="text-xs bg-muted-foreground/10 px-2 py-2 rounded mt-2 inline-block">
                           {traceSteps[currentStep].selector}
@@ -508,10 +509,10 @@ export const TraceViewer: React.FC = () => {
                   <TabsContent value="logic">
                     {traceSteps[currentStep]?.agentData ? (
                       <div className="space-y-4">
-                        <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                        <div className="p-3 rounded-lg bg-primary-500/10 border border-primary-500/20">
                           <div className="flex items-center gap-2 mb-2">
-                            <Sparkles className="h-4 w-4 text-purple-400" />
-                            <span className="text-sm font-medium text-purple-300 capitalize">
+                            <Sparkles className="h-4 w-4 text-primary-400" />
+                            <span className="text-sm font-normal text-primary-300 capitalize">
                               Node: {traceSteps[currentStep].agentData.node}
                             </span>
                           </div>
@@ -541,14 +542,14 @@ export const TraceViewer: React.FC = () => {
                         )}
 
                         <div className="pt-4 border-t border-border">
-                          <p className="text-[10px] text-muted-foreground mb-2 uppercase">LangGraph Execution Path</p>
+                          <p className="mac-body text-[10px] text-muted-foreground mb-2 uppercase">LangGraph Execution Path</p>
                           <div className="flex items-center gap-1 overflow-x-auto pb-2">
                             {["start", "supervisor", "auth_manager", "browser_agent", "end"].map((n, i) => (
                               <React.Fragment key={n}>
                                 <div className={cn(
                                   "px-2 py-1 rounded text-[10px] whitespace-nowrap border",
                                   traceSteps[currentStep].agentData.node === n
-                                    ? "bg-purple-500/20 border-purple-500/50 text-purple-300"
+                                    ? "bg-primary-500/20 border-primary-500/50 text-primary-300"
                                     : "bg-card border-border text-muted-foreground"
                                 )}>
                                   {n}
@@ -563,7 +564,7 @@ export const TraceViewer: React.FC = () => {
                       <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground text-center p-8">
                         <Network className="h-12 w-12 opacity-20 mb-4" />
                         <p className="text-sm">No agentic data for this step</p>
-                        <p className="text-[10px] text-muted-foreground mt-1">
+                        <p className="mac-body text-[10px] text-muted-foreground mt-1">
                           Agent logic is only available for AI-orchestrated multi-agent flows.
                         </p>
                       </div>
@@ -619,11 +620,12 @@ export const TraceViewer: React.FC = () => {
                   <TabsContent value="source">
                     <Card className="mac-card bg-muted/50">
                       <CardContent className="p-4">
-                        <pre className="text-xs font-mono overflow-x-auto">
-                          {`await page.goto('${traceSteps[currentStep]?.url || "/"}');
+                        <CodeBlock
+                          code={`await page.goto('${traceSteps[currentStep]?.url || "/"}');
 ${traceSteps[currentStep]?.selector ? `await page.click('${traceSteps[currentStep].selector}');` : ""}
 ${traceSteps[currentStep]?.value ? `await page.fill('input', '${traceSteps[currentStep].value}');` : ""}`}
-                        </pre>
+                          language="typescript"
+                        />
                       </CardContent>
                     </Card>
                   </TabsContent>

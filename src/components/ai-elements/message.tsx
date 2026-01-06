@@ -1,17 +1,17 @@
 "use client";
 
-import { Button } from "src/components/ui/button";
+import { Button } from "../ui/button";
 import {
   ButtonGroup,
   ButtonGroupText,
-} from "src/components/ui/button-group";
+} from "../ui/button-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "src/components/ui/tooltip";
-import { cn } from "src/lib/utils";
+} from "../ui/tooltip";
+import { cn } from "../../lib/utils";
 import type { FileUIPart, UIMessage } from "ai";
 import {
   ChevronLeftIcon,
@@ -86,7 +86,7 @@ export const MessageAction = ({
   ...props
 }: MessageActionProps) => {
   const button = (
-    <Button size={size} type="button" variant={variant} {...props}>
+    <Button className="mac-button" size={size} type="button" variant={variant} {...props}>
       {children}
       <span className="sr-only">{label || tooltip}</span>
     </Button>
@@ -247,13 +247,12 @@ export const MessageBranchPrevious = ({
   const { goToPrevious, totalBranches } = useMessageBranch();
 
   return (
-    <Button
-      aria-label="Previous branch"
+    <Button aria-label="Previous branch"
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
       size="icon-sm"
       type="button"
-      variant="ghost"
+      variant="ghost" className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <ChevronLeftIcon size={14} />}
@@ -271,13 +270,12 @@ export const MessageBranchNext = ({
   const { goToNext, totalBranches } = useMessageBranch();
 
   return (
-    <Button
-      aria-label="Next branch"
+    <Button aria-label="Next branch"
       disabled={totalBranches <= 1}
       onClick={goToNext}
       size="icon-sm"
       type="button"
-      variant="ghost"
+      variant="ghost" className="mac-button mac-button-outline"
       {...props}
     >
       {children ?? <ChevronRightIcon size={14} />}
@@ -362,9 +360,8 @@ export function MessageAttachment({
             width={100}
           />
           {onRemove && (
-            <Button
-              aria-label="Remove attachment"
-              className="absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity hover:bg-background group-hover:opacity-100 [&>svg]:size-3"
+            <Button aria-label="Remove attachment"
+              className="mac-button absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity hover:bg-background group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();
@@ -390,9 +387,8 @@ export function MessageAttachment({
             </TooltipContent>
           </Tooltip>
           {onRemove && (
-            <Button
-              aria-label="Remove attachment"
-              className="size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 [&>svg]:size-3"
+            <Button aria-label="Remove attachment"
+              className="mac-button size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();
@@ -453,7 +449,7 @@ export const MessageToolbar = ({
 );
 
 // Backwards compatibility - MessageAvatar component
-import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export type MessageAvatarProps = ComponentProps<typeof Avatar> & {
   src: string;

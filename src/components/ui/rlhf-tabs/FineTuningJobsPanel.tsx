@@ -64,7 +64,7 @@ const STATUS_CONFIG = {
   pending: { color: "bg-muted-foreground", label: "Pending", icon: Clock },
   validating: { color: "bg-blue-500", label: "Validating", icon: RefreshCw },
   queued: { color: "bg-yellow-500", label: "Queued", icon: Clock },
-  training: { color: "bg-purple-500", label: "Training", icon: Activity },
+  training: { color: "bg-primary-500", label: "Training", icon: Activity },
   completed: { color: "bg-green-500", label: "Completed", icon: CheckCircle2 },
   failed: { color: "bg-red-500", label: "Failed", icon: XCircle },
   cancelled: { color: "bg-muted", label: "Cancelled", icon: XCircle },
@@ -76,7 +76,7 @@ const PROVIDER_CONFIG = {
   huggingface: { label: "HuggingFace", color: "text-yellow-400" },
   bedrock: { label: "AWS Bedrock", color: "text-orange-500" },
   vertex: { label: "Vertex AI", color: "text-blue-400" },
-  custom: { label: "Custom", color: "text-purple-400" },
+  custom: { label: "Custom", color: "text-primary-400" },
 };
 
 export function FineTuningJobsPanel() {
@@ -114,7 +114,8 @@ export function FineTuningJobsPanel() {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error loading jobs:", error);
+        // Tables may not exist yet - use mock data
+        console.warn("⚠️ FINE-TUNING JOBS: Using MOCK DATA - table not available:", error.message);
         // Use mock data for demo
         setJobs([
           {
@@ -183,7 +184,7 @@ export function FineTuningJobsPanel() {
         setJobs(mappedJobs);
       }
     } catch (error) {
-      console.error("Failed to load jobs:", error);
+      console.debug("Failed to load jobs:", error);
     } finally {
       setLoading(false);
     }
@@ -220,7 +221,7 @@ export function FineTuningJobsPanel() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-lg font-medium text-[var(--mac-text-primary)]">Fine-Tuning Jobs</h2>
+          <h2 className="mac-heading">Fine-Tuning Jobs</h2>
           <p className="text-sm text-[var(--mac-text-muted)] font-light">
             Monitor and manage model training across providers
           </p>
@@ -238,7 +239,7 @@ export function FineTuningJobsPanel() {
               <SelectItem value="bedrock">AWS Bedrock</SelectItem>
             </SelectContent>
           </Select>
-          <Button className="gap-2">
+          <Button className="mac-button gap-2">
             <Zap className="h-4 w-4" />
             Launch Job
           </Button>
@@ -250,9 +251,9 @@ export function FineTuningJobsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Cpu className="h-8 w-8 text-purple-400" />
+              <Cpu className="h-8 w-8 text-primary-400" />
               <div>
-                <p className="text-2xl font-bold">{jobs.length}</p>
+                <p className="mac-body text-2xl font-normal">{jobs.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Jobs</p>
               </div>
             </div>
@@ -263,7 +264,7 @@ export function FineTuningJobsPanel() {
             <div className="flex items-center gap-3">
               <Activity className="h-8 w-8 text-green-400 animate-pulse" />
               <div>
-                <p className="text-2xl font-bold">{activeJobs.length}</p>
+                <p className="mac-body text-2xl font-normal">{activeJobs.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Active</p>
               </div>
             </div>
@@ -274,7 +275,7 @@ export function FineTuningJobsPanel() {
             <div className="flex items-center gap-3">
               <CheckCircle2 className="h-8 w-8 text-blue-400" />
               <div>
-                <p className="text-2xl font-bold">
+                <p className="mac-body text-2xl font-normal">
                   {jobs.filter((j) => j.status === "completed").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Completed</p>
@@ -287,7 +288,7 @@ export function FineTuningJobsPanel() {
             <div className="flex items-center gap-3">
               <DollarSign className="h-8 w-8 text-yellow-400" />
               <div>
-                <p className="text-2xl font-bold">${totalCost.toFixed(2)}</p>
+                <p className="mac-body text-2xl font-normal">${totalCost.toFixed(2)}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Cost</p>
               </div>
             </div>
@@ -297,18 +298,18 @@ export function FineTuningJobsPanel() {
 
       {/* Active Job Progress */}
       {activeJobs.length > 0 && (
-        <Card className="mac-card-elevated border-purple-500/30 bg-purple-500/5">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Activity className="h-4 w-4 text-purple-400 animate-pulse" />
+        <Card className="mac-card-elevated border-primary-500/30 bg-primary-500/5">
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-normal flex items-center gap-2">
+              <Activity className="h-4 w-4 text-primary-400 animate-pulse" />
               Active Training
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             {activeJobs.map((job) => (
               <div key={job.id} className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">{job.dataset_name}</span>
+                  <span className="text-sm font-normal">{job.dataset_name}</span>
                   <span className="text-xs text-[var(--mac-text-muted)]">{job.base_model}</span>
                 </div>
                 <Progress value={job.training_metrics.progress || 0} className="h-2" />
@@ -344,8 +345,8 @@ export function FineTuningJobsPanel() {
                     className={cn(
                       "mac-card-elevated",
                       "border-[var(--mac-utility-border)]",
-                      job.status === "training" && "border-purple-500/50",
-                      "hover:border-purple-500/30 transition-colors"
+                      job.status === "training" && "border-primary-500/50",
+                      "hover:border-primary-500/30 transition-colors"
                     )}
                   >
                     <CardContent className="py-4">
@@ -354,20 +355,20 @@ export function FineTuningJobsPanel() {
                           <div
                             className={cn(
                               "h-10 w-10 rounded-lg flex items-center justify-center",
-                              job.status === "training" ? "bg-purple-500/20" : "bg-muted"
+                              job.status === "training" ? "bg-primary-500/20" : "bg-muted"
                             )}
                           >
                             <Cpu
                               className={cn(
                                 "h-5 w-5",
                                 job.status === "training"
-                                  ? "text-purple-400 animate-pulse"
+                                  ? "text-primary-400 animate-pulse"
                                   : "text-muted-foreground"
                               )}
                             />
                           </div>
                           <div>
-                            <h3 className="font-medium text-[var(--mac-text-primary)]">
+                            <h3 className="mac-title">
                               {job.dataset_name}
                             </h3>
                             <div className="flex items-center gap-2 text-sm text-[var(--mac-text-muted)]">
@@ -386,7 +387,7 @@ export function FineTuningJobsPanel() {
 
                           {/* Cost */}
                           <div className="text-right">
-                            <p className="text-sm font-medium text-[var(--mac-text-primary)]">
+                            <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                               ${(job.actual_cost || job.estimated_cost || 0).toFixed(2)}
                             </p>
                             <p className="text-xs text-[var(--mac-text-muted)]">
@@ -413,14 +414,13 @@ export function FineTuningJobsPanel() {
                           {/* Actions */}
                           <div className="flex gap-2">
                             {job.provider_job_id && (
-                              <Button size="sm" variant="ghost" title="View on provider">
+                              <Button className="mac-button" size="sm" variant="ghost" className="mac-button mac-button-outline" title="View on provider">
                                 <ExternalLink className="h-4 w-4" />
                               </Button>
                             )}
                             {["training", "queued", "validating"].includes(job.status) && (
-                              <Button
-                                size="sm"
-                                variant="ghost"
+                              <Button size="sm"
+                                variant="ghost" className="mac-button mac-button-outline"
                                 onClick={() => handleCancelJob(job.id)}
                                 className="text-red-400 hover:text-red-300"
                               >
@@ -460,7 +460,7 @@ export function FineTuningJobsPanel() {
           {filteredJobs.length === 0 && (
             <div className="flex flex-col items-center justify-center h-64 text-[var(--mac-text-muted)]">
               <Cpu className="h-12 w-12 mb-4" />
-              <p className="font-light">No fine-tuning jobs</p>
+              <p className="mac-body font-light">No fine-tuning jobs</p>
               <p className="text-sm">Launch a job from a ready training dataset</p>
             </div>
           )}

@@ -14,9 +14,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "../../lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Badge } from "../ui/badge";
 import {
   ThumbsUp,
   ThumbsDown,
@@ -108,7 +108,7 @@ export function FeedbackBadge({
       },
       exported: {
         icon: CheckCircle,
-        color: "text-purple-400 border-purple-500/30 bg-purple-500/10",
+        color: "text-primary-400 border-primary-500/30 bg-primary-500/10",
         label: "Exported",
       },
     };

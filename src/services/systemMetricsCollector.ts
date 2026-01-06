@@ -1,5 +1,5 @@
 import os from "os";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { supabaseAdmin } from "../lib/supabase-admin";
 import {
   evaluatePerformanceAlerts,
   notifyPerformanceAlertChanges,

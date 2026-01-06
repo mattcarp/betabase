@@ -334,7 +334,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <div className="p-1.5 rounded-lg bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)]">
                 <Archive className="h-4 w-4" />
               </div>
-              <h3 className="text-sm font-semibold text-white tracking-tight">
+              <h3 className="mac-title">
                 Historical Tests
               </h3>
             </div>
@@ -346,7 +346,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
           {/* Compact Search */}
           <div className="relative group">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-[var(--mac-primary-blue-400)] transition-colors" />
-            <Input
+            <Input className="mac-input"
               placeholder="Filter by name, script..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -361,7 +361,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <select
                 value={selectedApp}
                 onChange={(e) => setSelectedApp(e.target.value)}
-                className="w-full h-8 pl-2 pr-8 text-[11px] bg-card/30 border border-border rounded-md text-foreground font-medium appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
+                className="w-full h-8 pl-2 pr-8 text-[11px] bg-card/30 border border-border rounded-md text-foreground font-normal appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
                 data-test-id="app-filter"
               >
                 <option value="">All Applications</option>
@@ -376,7 +376,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <select
                 value={hasExecutions}
                 onChange={(e) => setHasExecutions(e.target.value)}
-                className="w-full h-8 pl-2 pr-8 text-[11px] bg-card/30 border border-border rounded-md text-foreground font-medium appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
+                className="w-full h-8 pl-2 pr-8 text-[11px] bg-card/30 border border-border rounded-md text-foreground font-normal appearance-none focus:outline-none focus:border-[var(--mac-primary-blue-400)] cursor-pointer transition-colors"
                 data-test-id="execution-filter"
               >
                 <option value="">Status: All</option>
@@ -398,12 +398,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
           {!initialLoadComplete ? (
             <div className="flex flex-col items-center justify-center h-48 gap-3">
               <RefreshCw className="h-5 w-5 text-[var(--mac-primary-blue-400)] animate-spin" />
-              <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-widest">Warming cache...</span>
+              <span className="text-[11px] text-muted-foreground font-normal uppercase tracking-widest">Warming cache...</span>
             </div>
           ) : tests.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 opacity-40 grayscale">
               <Archive className="h-12 w-12 text-muted-foreground mb-4" />
-              <p className="text-xs font-medium text-muted-foreground">Zero matches found</p>
+              <p className="text-xs font-normal text-muted-foreground">Zero matches found</p>
             </div>
           ) : (
             <div className="min-w-full relative">
@@ -411,7 +411,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 <TableHeader className="sticky top-0 bg-card/90 backdrop-blur-md z-30 shadow-sm border-b border-border">
                   <TableRow className="hover:bg-transparent border-none">
                     <TableHead 
-                      className="w-[60px] h-10 px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] cursor-pointer hover:text-foreground transition-colors"
+                      className="w-[60px] h-10 px-4 text-[10px] font-normal text-muted-foreground uppercase tracking-[0.15em] cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("id")}
                     >
                       <div className="flex items-center">
@@ -419,7 +419,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="h-10 px-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] cursor-pointer hover:text-foreground transition-colors"
+                      className="h-10 px-2 text-[10px] font-normal text-muted-foreground uppercase tracking-[0.15em] cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -427,7 +427,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="w-[100px] h-10 px-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] text-center cursor-pointer hover:text-foreground transition-colors"
+                      className="w-[100px] h-10 px-2 text-[10px] font-normal text-muted-foreground uppercase tracking-[0.15em] text-center cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("app_under_test")}
                     >
                       <div className="flex items-center justify-center">
@@ -435,12 +435,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="w-[60px] h-10 px-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] text-center"
+                      className="w-[60px] h-10 px-2 text-[10px] font-normal text-muted-foreground uppercase tracking-[0.15em] text-center"
                     >
                       Conf.
                     </TableHead>
                     <TableHead 
-                      className="w-[70px] h-10 px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] text-right cursor-pointer hover:text-foreground transition-colors"
+                      className="w-[70px] h-10 px-4 text-[10px] font-normal text-muted-foreground uppercase tracking-[0.15em] text-right cursor-pointer hover:text-foreground transition-colors"
                       onClick={() => handleSort("pass_count")}
                     >
                       <div className="flex items-center justify-end">
@@ -473,11 +473,11 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         <TableCell className="py-0 px-4 text-[11px] font-mono text-muted-foreground group-hover:text-muted-foreground transition-colors">
                           #{test.id}
                         </TableCell>
-                        <TableCell className="py-0 px-2 text-[12px] font-medium text-foreground truncate max-w-[180px] tracking-tight group-hover:text-white transition-colors" title={test.test_name}>
+                        <TableCell className="py-0 px-2 text-[12px] font-normal text-foreground truncate max-w-[180px] tracking-tight group-hover:text-white transition-colors" title={test.test_name}>
                           {test.test_name || "Unnamed Scenario"}
                         </TableCell>
                         <TableCell className="py-0 px-2 text-center">
-                          <Badge variant="outline" className="text-[9px] h-auto py-0.5 px-2 border-border text-muted-foreground font-bold uppercase group-hover:border-border transition-colors whitespace-nowrap">
+                          <Badge variant="outline" className="text-[9px] h-auto py-0.5 px-2 border-border text-muted-foreground font-normal uppercase group-hover:border-border transition-colors whitespace-nowrap">
                             {test.app_under_test}
                           </Badge>
                         </TableCell>
@@ -502,7 +502,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         <TableCell className="py-0 px-4 text-[11px] font-mono text-right tabular-nums">
                           {passRate ? (
                             <span className={cn(
-                              "font-bold",
+                              "font-normal",
                               parseInt(passRate) >= 80 ? "text-emerald-500/80" :
                               parseInt(passRate) >= 50 ? "text-amber-500/80" :
                               "text-rose-500/80"
@@ -528,7 +528,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               )}
               
               {!hasMore && tests.length > 0 && (
-                <div className="p-6 text-center text-muted-foreground text-[10px] font-bold uppercase tracking-widest bg-card/20 border-t border-border">
+                <div className="p-6 text-center text-muted-foreground text-[10px] font-normal uppercase tracking-widest bg-card/20 border-t border-border">
                   Total of {total.toLocaleString()} records indexed
                 </div>
               )}
@@ -546,12 +546,12 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1">
-                    <h2 className="text-lg font-light text-white truncate tracking-tight">{selectedTest.test_name}</h2>
+                    <h2 className="mac-heading">{selectedTest.test_name}</h2>
                     <div className="mt-1 flex items-center gap-2">
                       {getConfidenceBadge(selectedTest.base_confidence)}
                       <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                         <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">
+                        <span className="text-[9px] font-normal text-emerald-400 uppercase tracking-widest">
                           Auto-Ready: {Math.round(calculateAutomationConfidence(selectedTest) * 100)}%
                         </span>
                       </div>
@@ -563,13 +563,13 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       ID-{selectedTest.id}
                     </span>
                     <span className="text-muted-foreground">|</span>
-                    <span className="text-foreground font-bold uppercase tracking-wider">
+                    <span className="text-foreground font-normal uppercase tracking-wider">
                       {selectedTest.app_under_test}
                     </span>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
+                <Button className="mac-button"
+                  variant="ghost" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => setSelectedTest(null)}
                   className="text-muted-foreground hover:text-white hover:bg-muted h-7 w-7 p-0 flex-shrink-0 rounded-full transition-all"
@@ -582,7 +582,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               {/* Quick Stats Cards */}
               <div className="grid grid-cols-3 gap-2">
                 <div className="p-2 rounded-lg bg-card/40 border border-border/50 hover:border-[var(--mac-primary-blue-400)]/40 transition-all group shadow-inner text-center">
-                  <div className="text-[8px] text-muted-foreground font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                  <div className="text-[8px] text-muted-foreground font-normal mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
                     <Activity className="h-2 w-2 text-[var(--mac-primary-blue-400)] group-hover:scale-110 transition-transform" />
                     Runs
                   </div>
@@ -591,7 +591,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   </div>
                 </div>
                 <div className="p-2 rounded-lg bg-card/40 border border-border/50 hover:border-emerald-900/30 transition-all group shadow-inner text-center">
-                  <div className="text-[8px] text-muted-foreground font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                  <div className="text-[8px] text-muted-foreground font-normal mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
                     <CheckCircle className="h-2 w-2 text-emerald-500 group-hover:scale-110 transition-transform" />
                     Pass
                   </div>
@@ -600,7 +600,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   </div>
                 </div>
                 <div className="p-2 rounded-lg bg-card/40 border border-border/50 hover:border-border/50 transition-all group shadow-inner text-center">
-                  <div className="text-[8px] text-muted-foreground font-bold mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                  <div className="text-[8px] text-muted-foreground font-normal mb-0.5 flex items-center justify-center gap-1.5 uppercase tracking-widest">
                     <FileText className="h-2 w-2 text-muted-foreground group-hover:scale-110 transition-transform" />
                     JIRA
                   </div>
@@ -617,7 +617,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 {/* Description */}
                 {selectedTest.description && (
                   <div className="group border-l border-border/50 pl-6 ml-1 transition-colors hover:border-[var(--mac-primary-blue-400)]/30">
-                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] mb-3">Context Summary</h3>
+                    <h3 className="mac-title">Context Summary</h3>
                     <div 
                       className="leading-relaxed text-foreground text-[14px] font-light overflow-hidden break-words prose prose-invert prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.description) }}
@@ -628,7 +628,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 {/* Preconditions */}
                 {selectedTest.preconditions && (
                   <div className="group border-l border-border/50 pl-6 ml-1 transition-colors hover:border-amber-500/30">
-                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] mb-3">System Prerequisites</h3>
+                    <h3 className="mac-title">System Prerequisites</h3>
                     <div 
                       className="p-4 rounded-xl bg-amber-900/5 border border-amber-900/10 text-muted-foreground text-[13px] font-light leading-relaxed shadow-sm overflow-hidden break-words prose prose-invert prose-sm max-w-none italic"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.preconditions) }}
@@ -639,7 +639,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 {/* Test Script */}
                 {selectedTest.test_script && (
                   <div className="border-l border-border/50 pl-6 ml-1 transition-colors hover:border-indigo-500/30">
-                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] mb-3">Instruction Logic</h3>
+                    <h3 className="mac-title">Instruction Logic</h3>
                     <div className="relative group">
                       <div 
                         className="p-5 rounded-2xl bg-background/40 border border-border/20 shadow-inner leading-relaxed text-foreground text-[14px] font-mono overflow-hidden break-words prose prose-invert prose-sm max-w-none"
@@ -648,7 +648,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                       <Button 
                         size="sm" 
                         variant="ghost" 
-                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-white bg-card/50 backdrop-blur-sm h-7 text-[9px] uppercase font-bold tracking-widest"
+                        className="mac-button absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-white bg-card/50 backdrop-blur-sm h-7 text-[9px] uppercase font-normal tracking-widest"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedTest.test_script);
                           toast.success("Copied to clipboard");
@@ -663,22 +663,22 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 <div className="grid grid-cols-2 gap-6 pt-2">
                   {/* Metadata Section */}
                   <div className="p-5 rounded-2xl bg-card/40 border border-border/50 shadow-md">
-                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4">Test Details</h3>
+                    <h3 className="mac-title">Test Details</h3>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between py-1.5 border-b border-border/30">
                         <span className="text-xs text-muted-foreground font-light">Application</span>
-                        <Badge variant="outline" className="text-[10px] border-border text-foreground bg-muted/30 font-medium">
+                        <Badge variant="outline" className="text-[10px] border-border text-foreground bg-muted/30 font-normal">
                           {selectedTest.category}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between py-1.5 border-b border-border/30">
                         <span className="text-xs text-muted-foreground font-light">Priority</span>
-                        <span className="text-xs text-white font-medium tabular-nums">{selectedTest.client_priority || "0"}</span>
+                        <span className="text-xs text-white font-normal tabular-nums">{selectedTest.client_priority || "0"}</span>
                       </div>
                       <div className="flex items-center justify-between py-1.5 border-b border-border/30">
                         <span className="text-xs text-muted-foreground font-light">Security</span>
                         <span className={cn(
-                          "text-[10px] font-bold uppercase tracking-wider",
+                          "text-[10px] font-normal uppercase tracking-wider",
                           selectedTest.is_security ? "text-amber-400" : "text-muted-foreground"
                         )}>
                           {selectedTest.is_security ? "Active" : "Standard"}
@@ -693,15 +693,15 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
 
                   {/* History Section */}
                   <div className="p-5 rounded-2xl bg-card/40 border border-border/50 shadow-md">
-                    <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4">History</h3>
+                    <h3 className="mac-title">History</h3>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between py-1.5 border-b border-border/30">
                         <span className="text-xs text-muted-foreground font-light">Success</span>
-                        <span className="text-emerald-400 font-bold tabular-nums text-xs">{selectedTest.pass_count.toLocaleString()}</span>
+                        <span className="text-emerald-400 font-normal tabular-nums text-xs">{selectedTest.pass_count.toLocaleString()}</span>
                       </div>
                       <div className="flex items-center justify-between py-1.5 border-b border-border/30">
                         <span className="text-xs text-muted-foreground font-light">Failure</span>
-                        <span className="text-rose-400 font-bold tabular-nums text-xs">{selectedTest.fail_count.toLocaleString()}</span>
+                        <span className="text-rose-400 font-normal tabular-nums text-xs">{selectedTest.fail_count.toLocaleString()}</span>
                       </div>
                       {selectedTest.first_executed_at && (
                         <div className="flex items-center justify-between py-1.5 border-b border-border/30">
@@ -728,16 +728,16 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           <Zap className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
                         </div>
                         <div>
-                          <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">AI Analysis</h3>
+                          <h3 className="mac-title">AI Analysis</h3>
                           <div className="mt-1">{getConfidenceBadge(aiConfidence.score)}</div>
                         </div>
                       </div>
                       
                       {aiConfidence.automationFeasibility && (
                         <div className="text-right">
-                          <div className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Automation</div>
+                          <div className="text-[8px] font-normal text-muted-foreground uppercase tracking-widest mb-0.5">Automation</div>
                           <Badge variant="outline" className={cn(
-                            "uppercase text-[9px] font-bold tracking-tighter px-1.5 h-4",
+                            "uppercase text-[9px] font-normal tracking-tighter px-1.5 h-4",
                             aiConfidence.automationFeasibility === "high" ? "border-emerald-500/50 text-emerald-400 bg-emerald-500/10" :
                             aiConfidence.automationFeasibility === "medium" ? "border-amber-500/50 text-amber-400 bg-amber-500/10" :
                             "border-rose-500/50 text-rose-400 bg-rose-500/10"
@@ -751,15 +751,15 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <div className="space-y-4">
                       <div className="relative">
                         <div className="absolute -left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--mac-primary-blue-400)]/40 via-transparent to-transparent" />
-                        <h4 className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5 pl-2">Reasoning</h4>
-                        <p className="text-[14px] text-foreground font-extralight italic leading-relaxed pl-2">
+                        <h4 className="mac-title">Reasoning</h4>
+                        <p className="mac-body text-[14px] text-foreground font-extralight italic leading-relaxed pl-2">
                           {aiConfidence.rationale}
                         </p>
                       </div>
 
                       {aiConfidence.recommendations && aiConfidence.recommendations.length > 0 && (
                         <div className="pt-3 border-t border-border/50">
-                          <h4 className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Suggestions</h4>
+                          <h4 className="mac-title">Suggestions</h4>
                           <ul className="space-y-1.5">
                             {aiConfidence.recommendations.map((rec, i) => (
                               <li key={i} className="flex items-start gap-2.5 text-[11px] text-muted-foreground font-light leading-relaxed">
@@ -782,25 +782,25 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                           <Sparkles className="h-4 w-4 text-emerald-400" />
                         </div>
-                        <ArtifactTitle className="text-xs font-black text-white uppercase tracking-[0.3em]">
+                        <ArtifactTitle className="text-xs font-normal text-white uppercase tracking-[0.3em]">
                           {artifactMode === "code" ? "Automated Test" : "Human-Readable Scenario"}
                         </ArtifactTitle>
                       </div>
                       <ArtifactActions>
                         <div className="flex bg-card/80 p-0.5 rounded-lg border border-border mr-2">
-                          <button
+                          <button className="mac-button"
                             onClick={() => setArtifactMode("human")}
                             className={cn(
-                              "px-2 py-1 text-[9px] font-bold uppercase tracking-widest rounded-md transition-all",
+                              "px-2 py-1 text-[9px] font-normal uppercase tracking-widest rounded-md transition-all",
                               artifactMode === "human" ? "bg-muted text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                             )}
                           >
                             Human
                           </button>
-                          <button
+                          <button className="mac-button"
                             onClick={() => setArtifactMode("code")}
                             className={cn(
-                              "px-2 py-1 text-[9px] font-bold uppercase tracking-widest rounded-md transition-all",
+                              "px-2 py-1 text-[9px] font-normal uppercase tracking-widest rounded-md transition-all",
                               artifactMode === "code" ? "bg-muted text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                             )}
                           >
@@ -857,13 +857,13 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         {showCritique && (
                           <div className="absolute inset-0 z-50 bg-background/90 backdrop-blur-sm p-6 animate-in fade-in zoom-in-95 duration-200 flex flex-col">
                             <div className="flex items-center justify-between mb-4">
-                              <h4 className="text-xs font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                              <h4 className="mac-title">
                                 <Edit3 className="h-3.5 w-3.5 text-[var(--mac-primary-blue-400)]" />
                                 Script Critique
                               </h4>
-                              <Button variant="ghost" size="sm" onClick={() => setShowCritique(false)} className="h-6 w-6 p-0 rounded-full">×</Button>
+                              <Button className="mac-button" variant="ghost" className="mac-button mac-button-outline" size="sm" onClick={() => setShowCritique(false)} className="h-6 w-6 p-0 rounded-full">×</Button>
                             </div>
-                            <p className="text-[11px] text-muted-foreground mb-4 font-light italic">
+                            <p className="mac-body text-[11px] text-muted-foreground mb-4 font-light italic">
                               Suggest improvements, fix selectors, or clarify logic. The AI will rebuild the script based on your feedback.
                             </p>
                             <textarea
@@ -876,7 +876,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
-                                className="flex-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
+                                className="mac-button flex-1 text-[10px] font-normal uppercase tracking-widest text-muted-foreground hover:text-white"
                                 onClick={() => {
                                   setCritiqueText("");
                                   setShowCritique(false);
@@ -886,7 +886,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               </Button>
                               <Button 
                                 size="sm" 
-                                className="flex-1 mac-button-gradient text-white text-[10px] font-bold uppercase tracking-widest"
+                                className="flex-1 mac-button-gradient text-white text-[10px] font-normal uppercase tracking-widest"
                                 onClick={async () => {
                                   if (!selectedTest) return;
                                   setGeneratingPlaywright(true);
@@ -925,21 +925,21 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           </pre>
                         ) : (
                           <div className="p-6 prose prose-invert prose-sm max-w-none">
-                            <h4 className="text-emerald-400 font-medium mb-4 flex items-center gap-2">
+                            <h4 className="mac-title">
                               <CheckCircle className="h-4 w-4" />
                               Manual Execution Logic
                             </h4>
                             <div className="space-y-4 text-foreground font-light">
                               <div>
-                                <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Step 1: Environment Setup</span>
+                                <span className="text-emerald-500/60 font-normal uppercase text-[9px] block mb-1">Step 1: Environment Setup</span>
                                 <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.preconditions) }} />
                               </div>
                               <div className="pt-2 border-t border-white/5">
-                                <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Step 2: Core Logic</span>
+                                <span className="text-emerald-500/60 font-normal uppercase text-[9px] block mb-1">Step 2: Core Logic</span>
                                 <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedTest.test_script) }} />
                               </div>
                               <div className="pt-2 border-t border-white/5">
-                                <span className="text-emerald-500/60 font-bold uppercase text-[9px] block mb-1">Expected Outcome</span>
+                                <span className="text-emerald-500/60 font-normal uppercase text-[9px] block mb-1">Expected Outcome</span>
                                 <p>Verify that the system responds correctly following the logic script above.</p>
                               </div>
                             </div>
@@ -956,7 +956,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   <div className="flex gap-6">
                     <Button 
                       size="lg" 
-                      className="flex-1 mac-button-gradient text-white font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl shadow-2xl hover:scale-[1.02] active:scale-95 transition-all group overflow-hidden relative"
+                      className="flex-1 mac-button-gradient text-white font-normal uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl shadow-2xl hover:scale-[1.02] active:scale-95 transition-all group overflow-hidden relative"
                       onClick={async () => {
                         if (!selectedTest) return;
                         setGeneratingPlaywright(true);
@@ -1002,7 +1002,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <Button 
                       size="lg" 
                       variant="outline" 
-                      className="flex-1 border-border/50 text-foreground hover:text-white hover:bg-muted/80 font-black uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl transition-all group shadow-xl active:scale-95 bg-card/30 backdrop-blur-sm"
+                      className="mac-button flex-1 border-border/50 text-foreground hover:text-white hover:bg-muted/80 font-normal uppercase tracking-[0.25em] text-[10px] h-14 rounded-2xl transition-all group shadow-xl active:scale-95 bg-card/30 backdrop-blur-sm"
                       onClick={async () => {
                         if (!selectedTest) return;
                         setCalculatingConfidence(true);
@@ -1060,11 +1060,11 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                 <FileSearch className="h-10 w-10 text-muted-foreground transition-colors" />
               </div>
             </div>
-            <h3 className="text-2xl font-extralight text-white mb-4 tracking-tight">Select a Test</h3>
+            <h3 className="mac-title">Select a Test</h3>
             <p className="text-sm text-muted-foreground font-light max-w-sm leading-relaxed mb-10">
               Pick a historical scenario from the vault to generate scripts, run AI analysis, and view performance history.
             </p>
-            <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-normal uppercase tracking-[0.2em] text-muted-foreground">
               <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
                 <Sparkles className="h-4 w-4 text-emerald-500" />
                 <span className="flex-1 text-left">Script Generator</span>

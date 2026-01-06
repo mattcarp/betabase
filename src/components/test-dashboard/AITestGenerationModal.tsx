@@ -412,14 +412,14 @@ test.describe('${testResult.suite}', () => {
                 <Sparkles className="h-16 w-16 text-primary animate-pulse" />
               )}
               <div className="text-center space-y-2">
-                <h3 className="text-lg font-medium">{phase.message}</h3>
+                <h3 className="mac-title">{phase.message}</h3>
                 <Progress value={phase.progress} className="w-64" />
                 <p className="text-sm text-muted-foreground">{phase.progress}% complete</p>
               </div>
             </div>
 
             {phase.status === "analyzing" && (
-              <Card className="bg-muted/50">
+              <Card className="mac-card bg-muted/50">
                 <CardContent className="p-6">
                   <div className="space-y-3 text-sm">
                     <div className="flex items-center gap-2">
@@ -440,7 +440,7 @@ test.describe('${testResult.suite}', () => {
             )}
 
             {phase.status === "generating" && (
-              <Card className="bg-muted/50">
+              <Card className="mac-card bg-muted/50">
                 <CardContent className="p-6">
                   <div className="space-y-3 text-sm">
                     <div className="flex items-center gap-2">
@@ -492,16 +492,15 @@ test.describe('${testResult.suite}', () => {
               </TabsList>
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopy}>
+                <Button className="mac-button" variant="outline" className="mac-button mac-button-outline" size="sm" onClick={handleCopy}>
                   <Copy className="h-4 w-4 mr-2" />
                   Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleDownload}>
+                <Button className="mac-button" variant="outline" className="mac-button mac-button-outline" size="sm" onClick={handleDownload}>
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
-                <Button
-                  variant="outline"
+                <Button variant="outline" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={handlePreview}
                   disabled={isPreviewRunning}
@@ -518,7 +517,7 @@ test.describe('${testResult.suite}', () => {
                     </>
                   )}
                 </Button>
-                <Button size="sm" onClick={handleSave} disabled={isSaving}>
+                <Button className="mac-button" size="sm" onClick={handleSave} disabled={isSaving}>
                   {isSaving ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -535,7 +534,7 @@ test.describe('${testResult.suite}', () => {
             </div>
 
             <TabsContent value="code" className="h-[500px] mt-0">
-              <Card className="h-full">
+              <Card className="mac-card h-full">
                 <CardContent className="p-0 h-full">
                   <Editor
                     height="100%"
@@ -563,14 +562,14 @@ test.describe('${testResult.suite}', () => {
               <ScrollArea className="h-full">
                 <div className="space-y-4 pr-4">
                   {assertions.map((mapping) => (
-                    <Card key={mapping.id}>
+                    <Card className="mac-card" key={mapping.id}>
                       <CardContent className="p-4">
                         <div className="flex items-start gap-4">
                           {/* Action */}
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               <Badge variant="outline">{mapping.action.type}</Badge>
-                              <span className="text-sm font-medium">
+                              <span className="text-sm font-normal">
                                 {mapping.action.description}
                               </span>
                             </div>
@@ -588,7 +587,7 @@ test.describe('${testResult.suite}', () => {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               <Badge>{mapping.assertion.type}</Badge>
-                              <span className="text-sm font-medium">
+                              <span className="text-sm font-normal">
                                 {mapping.assertion.description}
                               </span>
                             </div>
@@ -606,7 +605,7 @@ test.describe('${testResult.suite}', () => {
                               )}
                             >
                               {getConfidenceIcon(mapping.confidence)}
-                              <span className="text-lg font-bold">{mapping.confidence}%</span>
+                              <span className="text-lg font-normal">{mapping.confidence}%</span>
                             </div>
                             <span className="text-xs text-muted-foreground">confidence</span>
                             <Badge variant="secondary" className="text-xs mt-1">
@@ -622,11 +621,11 @@ test.describe('${testResult.suite}', () => {
             </TabsContent>
 
             <TabsContent value="preview" className="h-[500px] mt-0">
-              <Card className="h-full">
-                <CardHeader>
+              <Card className="mac-card h-full">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-base">Test Preview Results</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   {!previewResults ? (
                     <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
                       <Play className="h-12 w-12 mb-4" />
@@ -641,7 +640,7 @@ test.describe('${testResult.suite}', () => {
                           <AlertCircle className="h-8 w-8 text-red-500" />
                         )}
                         <div>
-                          <h3 className="font-medium text-lg">
+                          <h3 className="mac-title">
                             Test {previewResults.status === "passed" ? "Passed" : "Failed"}
                           </h3>
                           <p className="text-sm text-muted-foreground">
@@ -650,9 +649,9 @@ test.describe('${testResult.suite}', () => {
                         </div>
                       </div>
 
-                      <Card className="bg-muted/50">
+                      <Card className="mac-card bg-muted/50">
                         <CardContent className="p-4">
-                          <h4 className="font-medium mb-2">Output</h4>
+                          <h4 className="mac-title">Output</h4>
                           <pre className="text-sm">{previewResults.output}</pre>
                         </CardContent>
                       </Card>
@@ -664,20 +663,20 @@ test.describe('${testResult.suite}', () => {
 
             {existingTest && (
               <TabsContent value="diff" className="h-[500px] mt-0">
-                <Card className="h-full">
-                  <CardHeader>
+                <Card className="mac-card h-full">
+                  <CardHeader className="mac-card">
                     <CardTitle className="text-base">Code Diff</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mac-card">
                     <div className="grid grid-cols-2 gap-4 h-[400px]">
                       <div>
-                        <h4 className="text-sm font-medium mb-2 text-red-500">Previous Version</h4>
+                        <h4 className="mac-title">Previous Version</h4>
                         <ScrollArea className="h-full">
                           <pre className="text-xs bg-muted p-3 rounded">{existingTest}</pre>
                         </ScrollArea>
                       </div>
                       <div>
-                        <h4 className="text-sm font-medium mb-2 text-green-500">New Version</h4>
+                        <h4 className="mac-title">New Version</h4>
                         <ScrollArea className="h-full">
                           <pre className="text-xs bg-muted p-3 rounded">{editedCode}</pre>
                         </ScrollArea>

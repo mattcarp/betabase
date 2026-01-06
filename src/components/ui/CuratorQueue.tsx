@@ -340,7 +340,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
       case "low-confidence":
         return <AlertTriangle className="h-4 w-4 text-amber-600" />;
       case "correction":
-        return <FileText className="h-4 w-4 text-purple-600" />;
+        return <FileText className="h-4 w-4 text-primary-600" />;
       case "document-relevance":
         return <Lightbulb className="h-4 w-4 text-emerald-600" />;
     }
@@ -391,7 +391,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
     <div className={cn("grid grid-cols-5 gap-4 h-full", className)}>
       {/* Queue List */}
       <Card className="col-span-2 mac-card border-border">
-        <CardHeader className="pb-3">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-normal flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
@@ -401,10 +401,9 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
               </Badge>
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
+              <Button variant="ghost"
                 size="sm"
-                className="text-xs h-7"
+                className="mac-button mac-button-outline text-xs h-7"
                 onClick={() => loadQueue()}
                 disabled={loading}
               >
@@ -506,13 +505,13 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
 
       {/* Item Details */}
       <Card className="col-span-3 mac-card border-border">
-        <CardHeader className="pb-3">
+        <CardHeader className="mac-card pb-3">
           <CardTitle className="text-base font-normal flex items-center gap-2">
             <Eye className="h-4 w-4" />
             Review Details
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           {selectedItem ? (
             <div className="space-y-6">
               {/* Header */}
@@ -520,7 +519,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     {getTypeIcon(selectedItem.type)}
-                    <h3 className="font-normal">{selectedItem.title}</h3>
+                    <h3 className="mac-title">{selectedItem.title}</h3>
                   </div>
                   <p className="text-sm text-muted-foreground">{selectedItem.description}</p>
                 </div>
@@ -581,9 +580,8 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
 
               {/* Actions */}
               <div className="flex gap-3 pt-4 border-t">
-                <Button
-                  className="flex-1 gap-2"
-                  variant="default"
+                <Button className="flex-1 gap-2"
+                  variant="default" className="mac-button mac-button-primary"
                   onClick={() => handleApprove(selectedItem.id)}
                   disabled={actionLoading === selectedItem.id}
                 >
@@ -594,9 +592,8 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                   )}
                   Approve
                 </Button>
-                <Button
-                  className="flex-1 gap-2"
-                  variant="outline"
+                <Button className="flex-1 gap-2"
+                  variant="outline" className="mac-button mac-button-outline"
                   onClick={() => handleReject(selectedItem.id)}
                   disabled={actionLoading === selectedItem.id}
                 >
@@ -607,9 +604,8 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                   )}
                   Reject
                 </Button>
-                <Button
-                  variant="outline"
-                  className="gap-2"
+                <Button variant="outline"
+                  className="mac-button mac-button-outline gap-2"
                   onClick={() => handleFlag(selectedItem.id)}
                   disabled={actionLoading === selectedItem.id}
                 >
@@ -622,7 +618,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
+                    <Button className="mac-button" variant="ghost" className="mac-button mac-button-outline" size="icon">
                       <MoreVertical className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>

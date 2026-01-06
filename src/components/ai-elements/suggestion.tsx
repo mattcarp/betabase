@@ -34,7 +34,7 @@ export const Suggestion = ({
 
   return (
     <Button
-      className={cn(
+      className={cn("mac-button", 
         "cursor-pointer rounded-lg px-4 w-full !text-left !justify-start items-start transition-all duration-200",
         className
       )}

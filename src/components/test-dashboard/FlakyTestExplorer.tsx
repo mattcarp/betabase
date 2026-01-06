@@ -164,7 +164,7 @@ export const FlakyTestExplorer: React.FC = () => {
     { pattern: "Network Dependency", count: 8, color: "#ef4444" },
     { pattern: "Race Condition", count: 6, color: "#f59e0b" },
     { pattern: "Resource Contention", count: 4, color: "#10b981" },
-    { pattern: "External Service", count: 3, color: "#8b5cf6" },
+    { pattern: "External Service", count: 3, color: "#26c6da" },
   ];
 
   const getSeverityColor = (severity: string) => {
@@ -201,7 +201,7 @@ export const FlakyTestExplorer: React.FC = () => {
       <div className="grid grid-cols-4 gap-4">
         <Card className="mac-card border-border">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
+            <CardTitle className="text-sm font-normal flex items-center gap-2 text-muted-foreground">
               <Bug className="h-4 w-4" />
               Total Flaky Tests
             </CardTitle>
@@ -214,7 +214,7 @@ export const FlakyTestExplorer: React.FC = () => {
 
         <Card className="mac-card border-border">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
+            <CardTitle className="text-sm font-normal flex items-center gap-2 text-muted-foreground">
               <AlertTriangle className="h-4 w-4 text-rose-600" />
               Critical Issues
             </CardTitle>
@@ -229,7 +229,7 @@ export const FlakyTestExplorer: React.FC = () => {
 
         <Card className="mac-card border-border">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
+            <CardTitle className="text-sm font-normal flex items-center gap-2 text-muted-foreground">
               <TrendingDown className="h-4 w-4 text-emerald-600" />
               Avg Flakiness
             </CardTitle>
@@ -241,14 +241,14 @@ export const FlakyTestExplorer: React.FC = () => {
             </div>
             <div className="flex items-center gap-2 mt-2">
               <TrendingDown className="h-3 w-3 text-emerald-600" />
-              <span className="text-xs text-emerald-700 font-medium">-2.3% this week</span>
+              <span className="text-xs text-emerald-700 font-normal">-2.3% this week</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="mac-card border-border">
           <CardHeader className="mac-card pb-4">
-            <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
+            <CardTitle className="text-sm font-normal flex items-center gap-2 text-muted-foreground">
               <Clock className="h-4 w-4" />
               Last Failure
             </CardTitle>
@@ -320,7 +320,7 @@ export const FlakyTestExplorer: React.FC = () => {
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <p className="font-medium text-sm">{test.name}</p>
+                            <p className="font-normal text-sm">{test.name}</p>
                             <p className="text-xs text-muted-foreground">{test.suite}</p>
                           </div>
                           <Badge variant="outline" className="text-xs">
@@ -357,7 +357,7 @@ export const FlakyTestExplorer: React.FC = () => {
                       <p className="text-sm text-muted-foreground mt-2">{selectedTest.suite}</p>
                     </div>
                     <div className="flex gap-2">
-                      <Button className="mac-button mac-button-outline" variant="outline" size="sm">
+                      <Button className="mac-button mac-button-outline" variant="outline" className="mac-button mac-button-outline" size="sm">
                         <Shield className="h-4 w-4 mr-2" />
                         Quarantine
                       </Button>
@@ -381,7 +381,7 @@ export const FlakyTestExplorer: React.FC = () => {
                           <span className="text-sm text-muted-foreground">Flakiness</span>
                           <Bug className="h-4 w-4 text-muted-foreground" />
                         </div>
-                        <div className="text-2xl font-bold">{selectedTest.flakiness}%</div>
+                        <div className="text-2xl font-normal">{selectedTest.flakiness}%</div>
                       </CardContent>
                     </Card>
                     <Card className="mac-card">
@@ -390,7 +390,7 @@ export const FlakyTestExplorer: React.FC = () => {
                           <span className="text-sm text-muted-foreground">Failure Rate</span>
                           <XCircle className="h-4 w-4 text-red-500" />
                         </div>
-                        <div className="text-2xl font-bold">
+                        <div className="text-2xl font-normal">
                           {selectedTest.failures}/{selectedTest.totalRuns}
                         </div>
                       </CardContent>
@@ -401,7 +401,7 @@ export const FlakyTestExplorer: React.FC = () => {
                           <span className="text-sm text-muted-foreground">Last Failed</span>
                           <Clock className="h-4 w-4 text-muted-foreground" />
                         </div>
-                        <div className="text-sm font-medium">
+                        <div className="text-sm font-normal">
                           {getTimeAgo(selectedTest.lastFailure)}
                         </div>
                       </CardContent>
@@ -448,19 +448,19 @@ export const FlakyTestExplorer: React.FC = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div>
-                        <span className="text-sm font-medium">Pattern Detected:</span>
+                        <span className="text-sm font-normal">Pattern Detected:</span>
                         <Badge variant="outline" className="ml-2">
                           {selectedTest.pattern}
                         </Badge>
                       </div>
                       <div>
-                        <span className="text-sm font-medium">Estimated Impact:</span>
+                        <span className="text-sm font-normal">Estimated Impact:</span>
                         <p className="text-sm text-muted-foreground mt-2">
                           {selectedTest.estimatedImpact}
                         </p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium">Suggested Fix:</span>
+                        <span className="text-sm font-normal">Suggested Fix:</span>
                         <p className="text-sm text-muted-foreground mt-2">
                           {selectedTest.suggestedFix}
                         </p>

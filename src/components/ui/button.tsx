@@ -2,7 +2,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -20,9 +20,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         teal:
-          "bg-[rgba(38,198,218,0.15)] text-[#26c6da] border border-[rgba(38,198,218,0.3)] hover:bg-gradient-to-br hover:from-[#26c6da] hover:to-[#00bcd4] hover:text-[#006064] hover:border-[#00bcd4] hover:shadow-[0_4px_16px_rgba(38,198,218,0.35)]",
+          "bg-primary-400/15 text-primary-400 border border-primary-400/30 hover:bg-gradient-to-br hover:from-primary-400 hover:to-primary-500 hover:text-primary-800 hover:border-primary-500 hover:shadow-lg hover:shadow-primary-400/35",
         "teal-solid":
-          "bg-gradient-to-br from-[#26c6da] to-[#00bcd4] text-[#006064] border border-[#00acc1] font-medium hover:from-[#4dd0e1] hover:to-[#26c6da] hover:text-[#004d50] hover:shadow-[0_4px_16px_rgba(38,198,218,0.35)]",
+          "bg-gradient-to-br from-primary-400 to-primary-500 text-primary-800 border border-primary-500 font-normal hover:from-primary-300 hover:to-primary-400 hover:text-primary-900 hover:shadow-lg hover:shadow-primary-400/35",
       },
       size: {
         default: "h-9 px-4 py-2",

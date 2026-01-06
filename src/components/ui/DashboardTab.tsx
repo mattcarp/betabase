@@ -122,8 +122,8 @@ export function DashboardTab() {
       {/* High-Density Intelligence Header */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Intelligence Quality Radar */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-2xl">
-          <CardHeader className="pb-2">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-1 shadow-2xl">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="font-light text-lg flex items-center gap-2">
               <Activity className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
               Intelligence Quality Index
@@ -151,25 +151,25 @@ export function DashboardTab() {
         </Card>
 
         {/* Small Multiples: App Ingestion Sparklines */}
-        <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-2xl">
-          <CardHeader className="pb-2">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-2xl">
+          <CardHeader className="mac-card pb-2">
             <CardTitle className="font-light text-lg flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-[var(--mac-data-teal)]" />
               System Ingestion Velocity
             </CardTitle>
             <CardDescription className="text-[10px] uppercase tracking-[0.2em] opacity-50">Document processing trends by application</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mac-card">
             <div className="grid grid-cols-2 gap-x-12 gap-y-6 pt-2">
               {dynamicAppTrends.map((app: any, i: number) => (
                 <div key={i} className="flex items-center justify-between group border-b border-white/5 pb-3">
                   <div className="space-y-1">
-                    <p className="text-[11px] font-light text-muted-foreground uppercase tracking-wider">{app.name}</p>
+                    <p className="mac-body text-[11px] font-light text-muted-foreground uppercase tracking-wider">{app.name}</p>
                     <div className="flex items-center gap-2">
                       <span className="text-2xl font-extralight tracking-tighter tabular-nums">
                         {app.current || app.data[app.data.length - 1]}
                       </span>
-                      <span className="text-[10px] text-[var(--mac-data-teal)] font-medium bg-[var(--mac-data-teal)]/10 px-1 rounded-sm">+12.4%</span>
+                      <span className="text-[10px] text-[var(--mac-data-teal)] font-normal bg-[var(--mac-data-teal)]/10 px-1 rounded-sm">+12.4%</span>
                     </div>
                   </div>
                   <div className="h-10 w-28">
@@ -242,8 +242,8 @@ export function DashboardTab() {
       </div>
 
       {/* Main Processing Timeline - Refined */}
-      <Card className="mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-2xl">
-        <CardHeader className="pb-0">
+      <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] shadow-2xl">
+        <CardHeader className="mac-card pb-0">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="font-light text-xl flex items-center gap-2">
@@ -321,7 +321,7 @@ function SummaryTableCard({
   isWarning?: boolean
 }) {
   return (
-    <Card className="mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)] group hover:border-[var(--mac-utility-border-elevated)] transition-all duration-500 overflow-hidden relative shadow-xl">
+    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)] group hover:border-[var(--mac-utility-border-elevated)] transition-all duration-500 overflow-hidden relative shadow-xl">
       {isWarning && (
         <div className="absolute top-0 right-0 p-3">
           <AlertCircle className="h-3 w-3 text-[var(--mac-data-coral)] animate-pulse" />
@@ -330,7 +330,7 @@ function SummaryTableCard({
       <CardContent className="p-6">
         <div className="flex items-center gap-2 mb-5 opacity-40 group-hover:opacity-70 transition-opacity">
           {icon}
-          <span className="text-[10px] font-medium uppercase tracking-[0.25em]">{title}</span>
+          <span className="text-[10px] font-normal uppercase tracking-[0.25em]">{title}</span>
         </div>
         <div className="space-y-1">
           <h4 className={cn(
@@ -339,7 +339,7 @@ function SummaryTableCard({
           )}>
             {value}
           </h4>
-          <p className="text-[10px] text-muted-foreground font-light uppercase tracking-widest truncate">{subValue}</p>
+          <p className="mac-body text-[10px] text-muted-foreground font-light uppercase tracking-widest truncate">{subValue}</p>
         </div>
         <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
           <span className="text-[9px] text-muted-foreground font-light uppercase tracking-[0.2em]">{status}</span>

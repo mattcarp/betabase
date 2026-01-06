@@ -149,7 +149,7 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
         )}
         style={{ borderLeftColor: getSeverityColor() }}
       >
-        <CardHeader className="pb-3">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -188,8 +188,8 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
           {/* AI's Response (potentially wrong) */}
           <div className="rounded-lg border border-[var(--mac-utility-border)] bg-[var(--mac-surface-background)]/30 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
-              <h4 className="text-sm font-light text-[var(--mac-text-primary)]">
+              <Sparkles className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />
+              <h4 className="mac-title">
                 AI's Response
               </h4>
               <Badge variant="outline" className="text-xs font-light text-[var(--mac-warning-yellow)] border-[var(--mac-warning-yellow)]/30">
@@ -204,7 +204,7 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
           {/* Retrieved Documents */}
           {item.retrievedDocs.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-sm font-light text-[var(--mac-text-primary)] flex items-center gap-2">
+              <h4 className="mac-title">
                 <Sparkles className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
                 Retrieved Documents ({item.retrievedDocs.length})
               </h4>
@@ -237,9 +237,9 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
                       </p>
                     </div>
                     <div className="flex gap-1">
-                      <Button
+                      <Button className="mac-button"
                         size="sm"
-                        variant="ghost"
+                        variant="ghost" className="mac-button mac-button-outline"
                         onClick={() => toggleDocRelevance(doc.id, true)}
                         className={cn(
                           "h-8 w-8 p-0 border transition-all",
@@ -250,9 +250,9 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
                       >
                         <Check className="h-4 w-4" />
                       </Button>
-                      <Button
+                      <Button className="mac-button"
                         size="sm"
-                        variant="ghost"
+                        variant="ghost" className="mac-button mac-button-outline"
                         onClick={() => toggleDocRelevance(doc.id, false)}
                         className={cn(
                           "h-8 w-8 p-0 border transition-all",
@@ -273,8 +273,8 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
           {/* Correction Interface */}
           {showCorrection && (
             <div className="space-y-3 pt-4 border-t border-[var(--mac-utility-border)]">
-              <h4 className="text-sm font-light text-[var(--mac-text-primary)] flex items-center gap-2">
-                <Edit3 className="h-4 w-4 text-[var(--mac-accent-purple-400)]" />
+              <h4 className="mac-title">
+                <Edit3 className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />
                 What SHOULD the correct answer be?
               </h4>
               <Textarea
@@ -302,7 +302,7 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
                 <Button
                   onClick={handleApprove}
                   disabled={submitting}
-                  className={cn(
+                  className={cn("mac-button", 
                     "font-light",
                     "bg-[var(--mac-success-green)]/20 border border-[var(--mac-success-green)]/40 text-[var(--mac-success-green)]",
                     "hover:bg-[var(--mac-success-green)]/30"
@@ -311,7 +311,7 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
                   <ThumbsUp className="h-4 w-4 mr-2" />
                   Approve Response
                 </Button>
-                <Button
+                <Button className="mac-button"
                   onClick={() => setShowCorrection(true)}
                   disabled={submitting}
                   className={cn(
@@ -326,7 +326,7 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
                   onClick={handleReject}
                   disabled={submitting}
                   variant="ghost"
-                  className={cn(
+                  className={cn("mac-button", 
                     "font-light border border-[var(--mac-error-red)]/40 text-[var(--mac-error-red)]",
                     "hover:bg-[var(--mac-error-red)]/10"
                   )}
@@ -340,14 +340,14 @@ export function RLHFCurationCard({ item, onApprove, onReject, onCorrect }: Curat
                 <Button
                   onClick={handleCorrect}
                   disabled={submitting || !correctionText.trim()}
-                  className={cn(
+                  className={cn("mac-button", 
                     "font-light",
                     "bg-[var(--mac-primary-blue-400)] hover:bg-[var(--mac-primary-blue-600)]"
                   )}
                 >
                   Submit Correction
                 </Button>
-                <Button
+                <Button className="mac-button"
                   onClick={() => {
                     setShowCorrection(false);
                     setCorrectionText("");

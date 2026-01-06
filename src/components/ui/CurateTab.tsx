@@ -123,7 +123,7 @@ function RLHFSubTabTrigger({ id, label, icon, activeId, onClick, color }: {
   color: "purple" | "blue" | "orange" | "green" | "pink"
 }) {
   const colorMap = {
-    purple: "var(--mac-accent-purple-400)",
+    purple: "var(--mac-accent-primary-400)",
     blue: "var(--mac-primary-blue-400)",
     orange: "var(--mac-accent-orange-400)",
     green: "var(--mac-status-connected)",
@@ -315,16 +315,19 @@ export function CurateTab({
 
     try {
       const response = await fetch(`/api/vector-store/files/content?fileId=${file.id}`);
+      const data = await response.json();
 
       if (response.ok) {
-        const data = await response.json();
         setPreviewContent(data.content || "No content available");
       } else {
-        setPreviewContent("Failed to load file content");
+        // Show detailed error from API
+        const errorMsg = data.details || data.error || "Unknown error";
+        setPreviewContent(`Failed to load file content\n\nError: ${errorMsg}\n\nFile ID: ${file.id}`);
       }
     } catch (error) {
       console.error("Error loading file preview:", error);
-      setPreviewContent("Error loading file content");
+      const errorMsg = error instanceof Error ? error.message : "Network error";
+      setPreviewContent(`Error loading file content\n\nError: ${errorMsg}\n\nFile ID: ${file.id}`);
     } finally {
       setPreviewLoading(false);
     }
@@ -605,7 +608,7 @@ export function CurateTab({
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-light transition-all flex-1",
                 activeTab === "zeitgeist"
                   ? "bg-white/10 text-white border-b-2 border-white"
-                  : "text-[var(--mac-accent-purple-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
+                  : "text-[var(--mac-accent-primary-400)] hover:text-white hover:bg-[var(--mac-state-hover)]"
               )}
             >
               <Flame className="h-4 w-4 mr-2" />
@@ -712,8 +715,7 @@ export function CurateTab({
                 </Button>
                 {selectedFiles.size > 0 && (
                   <>
-                    <Button
-                      className={cn(
+                    <Button className={cn(
                         "mac-button mac-button-primary",
                         "bg-[var(--mac-status-error-bg)]",
                         "border border-[var(--mac-status-error-border)]",
@@ -721,7 +723,7 @@ export function CurateTab({
                         "hover:bg-[var(--mac-status-error-bg)]/80",
                         "transition-all duration-200"
                       )}
-                      variant="destructive"
+                      variant="destructive" className="mac-button mac-button-primary"
                       size="sm"
                       onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
                       disabled={loading}
@@ -729,9 +731,8 @@ export function CurateTab({
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
                     </Button>
-                    <Button
-                      className="mac-button mac-button-outline"
-                      variant="ghost"
+                    <Button className="mac-button mac-button-outline"
+                      variant="ghost" className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setSelectedFiles(new Set())}
                     >
@@ -934,7 +935,7 @@ export function CurateTab({
               <div
                 className={cn(
                   "relative overflow-hidden rounded-xl p-8",
-                  "bg-gradient-to-br from-[var(--mac-primary-blue-400)]/10 via-[var(--mac-accent-purple-400)]/5 to-[var(--mac-surface-elevated)]",
+                  "bg-gradient-to-br from-[var(--mac-primary-blue-400)]/10 via-[var(--mac-accent-primary-400)]/5 to-[var(--mac-surface-elevated)]",
                   "border-2 border-dashed border-[var(--mac-primary-blue-400)]/40",
                   "hover:border-[var(--mac-primary-blue-400)]/60",
                   "transition-all duration-300"
@@ -957,7 +958,7 @@ export function CurateTab({
                       <Upload className="h-6 w-6 text-[var(--mac-primary-blue-400)]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-normal text-[var(--mac-text-primary)]">
+                      <h3 className="mac-title">
                         Upload Knowledge Documents
                       </h3>
                       <p className="text-sm font-light text-[var(--mac-text-secondary)]">
@@ -978,59 +979,34 @@ export function CurateTab({
               </div>
 
               {/* Info Card */}
-              <Card
+              <div
                 className={cn(
-                  "mac-card-elevated",
-                  "border-[var(--mac-utility-border)]",
-                  "bg-[var(--mac-surface-elevated)]/50"
+                  "rounded-xl p-4",
+                  "bg-teal-500/5",
+                  "border border-teal-500/20"
                 )}
               >
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div
-                      className={cn(
-                        "p-2 rounded-lg flex-shrink-0",
-                        "bg-[var(--mac-primary-blue-400)]/10"
-                      )}
-                    >
-                      <Info className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm font-light text-[var(--mac-text-secondary)]">
-                        Uploaded files are automatically processed and indexed in the AOMA vector
-                        store. They become immediately available for semantic search and AI-powered
-                        analysis.
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge
-                          variant="outline"
-                          className={cn(
-                            "text-xs font-light",
-                            "bg-[var(--mac-status-success-bg)]/30",
-                            "border-[var(--mac-status-success-border)]/50",
-                            "text-[var(--mac-status-success-text)]"
-                          )}
-                        >
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          Auto-indexed
-                        </Badge>
-                        <Badge
-                          variant="outline"
-                          className={cn(
-                            "text-xs font-light",
-                            "bg-[var(--mac-primary-blue-400)]/10",
-                            "border-[var(--mac-primary-blue-400)]/30",
-                            "text-[var(--mac-primary-blue-400)]"
-                          )}
-                        >
-                          <Search className="h-3 w-3 mr-1" />
-                          Semantic search
-                        </Badge>
-                      </div>
-                    </div>
+                <div className="flex items-start gap-3">
+                  <div
+                    className={cn(
+                      "p-2 rounded-lg flex-shrink-0",
+                      "bg-teal-500/10"
+                    )}
+                  >
+                    <Info className="h-4 w-4 text-teal-400" />
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="space-y-1">
+                    <p className="text-sm font-light text-teal-300/90">
+                      Uploaded files are automatically processed and indexed in the AOMA vector
+                      store. They become immediately available for semantic search and AI-powered
+                      analysis.
+                    </p>
+                    <p className="text-xs font-light text-teal-400/60">
+                      Auto-indexed • Semantic search enabled
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
             </div>
           )}
@@ -1206,9 +1182,8 @@ export function CurateTab({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button
-              className="mac-button mac-button-outline"
-              variant="outline"
+            <Button className="mac-button mac-button-outline"
+              variant="outline" className="mac-button mac-button-outline"
               onClick={() => setDeleteDialogOpen(false)}
             >
               Cancel
@@ -1292,9 +1267,8 @@ export function CurateTab({
           </ScrollArea>
 
           <DialogFooter>
-            <Button
-              className="mac-button mac-button-outline"
-              variant="outline"
+            <Button className="mac-button mac-button-outline"
+              variant="outline" className="mac-button mac-button-outline"
               onClick={() => setPreviewDialogOpen(false)}
             >
               Close
@@ -1305,3 +1279,5 @@ export function CurateTab({
     </Card>
   );
 }
+
+export default CurateTab;

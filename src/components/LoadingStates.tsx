@@ -39,7 +39,7 @@ export function LoadingSpinner({ size = "md", color = "cyan", className }: Loadi
   const colorClasses = {
     cyan: "text-blue-600",
     green: "text-green-400",
-    purple: "text-purple-400",
+    purple: "text-primary-400",
     yellow: "text-yellow-400",
   };
 

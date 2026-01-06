@@ -19,7 +19,7 @@ export const SourcesTrigger = ({ className, count, children, ...props }: Sources
   <CollapsibleTrigger className="flex items-center gap-2" {...props}>
     {children ?? (
       <>
-        <p className="mac-body font-medium">Used {count} sources</p>
+        <p className="mac-body font-normal">Used {count} sources</p>
         <ChevronDownIcon className="h-4 w-4" />
       </>
     )}
@@ -46,7 +46,7 @@ export const Source = ({ href, title, children, ...props }: SourceProps) => (
     {children ?? (
       <>
         <BookIcon className="h-4 w-4" />
-        <span className="block font-medium">{title}</span>
+        <span className="block font-normal">{title}</span>
       </>
     )}
   </a>

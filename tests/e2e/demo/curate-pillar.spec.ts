@@ -13,7 +13,7 @@ test.describe('Curate Pillar @demo', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Wait for app to load
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(1000);
   });
 

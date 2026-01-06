@@ -182,16 +182,15 @@ export function RLHFCuratorDashboard() {
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
-              <Database className="h-7 w-7 text-purple-400" />
+            <h1 className="mac-heading">
+              <Database className="h-7 w-7 text-primary-400" />
               RLHF Curator Dashboard
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               Collect preference data for DPO fine-tuning
             </p>
           </div>
-          <Button
-            variant="outline"
+          <Button variant="outline" className="mac-button mac-button-outline"
             size="sm"
             onClick={() => {
               setLoading(true);
@@ -257,13 +256,13 @@ export function RLHFCuratorDashboard() {
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <TabsList className="mx-6 mt-4 bg-card/50 border border-border">
-          <TabsTrigger value="queue" className="data-[state=active]:bg-purple-500/20">
+          <TabsTrigger value="queue" className="data-[state=active]:bg-primary-400/20">
             Review Queue
           </TabsTrigger>
-          <TabsTrigger value="pairs" className="data-[state=active]:bg-purple-500/20">
+          <TabsTrigger value="pairs" className="data-[state=active]:bg-primary-400/20">
             Preference Pairs
           </TabsTrigger>
-          <TabsTrigger value="export" className="data-[state=active]:bg-purple-500/20">
+          <TabsTrigger value="export" className="data-[state=active]:bg-primary-400/20">
             Export Training Data
           </TabsTrigger>
         </TabsList>
@@ -302,20 +301,20 @@ function StatCard({
     blue: "text-blue-400 bg-blue-500/10 border-blue-500/20",
     amber: "text-amber-400 bg-amber-500/10 border-amber-500/20",
     green: "text-green-400 bg-green-500/10 border-green-500/20",
-    purple: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+    purple: "text-primary-400 bg-primary-400/10 border-primary-400/20",
     cyan: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
     emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
     rose: "text-rose-400 bg-rose-500/10 border-rose-500/20",
   };
 
   return (
-    <Card className={cn("border", colorClasses[color], highlight && "ring-2 ring-rose-500/50")}>
+    <Card className={cn("mac-card", "border", colorClasses[color], highlight && "ring-2 ring-rose-500/50")}>
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <span className={colorClasses[color].split(" ")[0]}>{icon}</span>
           <span className="text-xs text-muted-foreground">{label}</span>
         </div>
-        <div className="text-2xl font-bold text-foreground">{value}</div>
+        <div className="text-2xl font-normal text-foreground">{value}</div>
       </CardContent>
     </Card>
   );
@@ -426,8 +425,8 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
   return (
     <div className="grid grid-cols-2 gap-6 h-full">
       {/* Queue List */}
-      <Card className="border-border bg-card/30">
-        <CardHeader className="pb-3">
+      <Card className="mac-card border-border bg-card/30">
+        <CardHeader className="mac-card pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-amber-400" />
@@ -478,7 +477,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
                     className={cn(
                       "p-3 rounded-lg border cursor-pointer transition-all",
                       selectedItem?.id === item.id
-                        ? "bg-purple-500/10 border-purple-500/30"
+                        ? "bg-primary-400/10 border-primary-400/30"
                         : "bg-card/50 border-border hover:border-border"
                     )}
                   >
@@ -527,23 +526,23 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
       </Card>
 
       {/* Detail Panel */}
-      <Card className="border-border bg-card/30">
-        <CardHeader className="pb-3">
+      <Card className="mac-card border-border bg-card/30">
+        <CardHeader className="mac-card pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Edit3 className="h-4 w-4 text-purple-400" />
+            <Edit3 className="h-4 w-4 text-primary-400" />
             Provide Correction
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="mac-card">
             Enter what the response SHOULD have been. This creates a preference pair for DPO
             training.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           {selectedItem ? (
             <div className="space-y-4">
               {/* Original Query */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">User Query</label>
+                <label className="text-xs font-normal text-muted-foreground mb-1 block">User Query</label>
                 <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
                   <p className="text-sm text-foreground">{selectedItem.query}</p>
                 </div>
@@ -551,7 +550,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
 
               {/* Original Response (Rejected) */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block flex items-center gap-2">
+                <label className="text-xs font-normal text-muted-foreground mb-1 block flex items-center gap-2">
                   <XCircle className="h-3 w-3 text-rose-400" />
                   Original Response (will be rejected)
                 </label>
@@ -562,7 +561,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
 
               {/* Correction (Chosen) */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block flex items-center gap-2">
+                <label className="text-xs font-normal text-muted-foreground mb-1 block flex items-center gap-2">
                   <CheckCircle className="h-3 w-3 text-green-400" />
                   Correct Response (will be chosen)
                 </label>
@@ -577,7 +576,7 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
               {/* User Feedback Context */}
               {selectedItem.feedback_text && (
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                  <label className="text-xs font-normal text-muted-foreground mb-1 block">
                     User's Feedback
                   </label>
                   <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
@@ -588,20 +587,18 @@ function ReviewQueue({ supabase, onUpdate }: { supabase: any; onUpdate: () => vo
 
               {/* Actions */}
               <div className="flex gap-3 pt-4 border-t border-border">
-                <Button
-                  onClick={handleSaveCorrection}
+                <Button onClick={handleSaveCorrection}
                   disabled={saving || !correction.trim()}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  className="mac-button flex-1 bg-green-600 hover:bg-green-700"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Save Correction & Create Pair
                 </Button>
-                <Button variant="outline" onClick={handleApproveAsIs} disabled={saving}>
+                <Button className="mac-button" variant="outline" className="mac-button mac-button-outline" onClick={handleApproveAsIs} disabled={saving}>
                   <Check className="h-4 w-4 mr-2" />
                   Approve As-Is
                 </Button>
-                <Button
-                  variant="ghost"
+                <Button variant="ghost" className="mac-button mac-button-outline"
                   onClick={() => {
                     setSelectedItem(null);
                     setCorrection("");
@@ -695,8 +692,8 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
   };
 
   return (
-    <Card className="border-border bg-card/30 h-full">
-      <CardHeader className="pb-3">
+    <Card className="mac-card border-border bg-card/30 h-full">
+      <CardHeader className="mac-card pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
             <FileText className="h-4 w-4 text-cyan-400" />
@@ -774,7 +771,7 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
 
                   {/* Prompt */}
                   <div className="mb-3">
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Prompt</label>
+                    <label className="text-xs font-normal text-muted-foreground mb-1 block">Prompt</label>
                     <p className="text-sm text-foreground bg-muted/50 p-2 rounded">
                       {pair.prompt}
                     </p>
@@ -783,7 +780,7 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
                   {/* Chosen vs Rejected */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs font-medium text-green-400 mb-1 block flex items-center gap-1">
+                      <label className="text-xs font-normal text-green-400 mb-1 block flex items-center gap-1">
                         <CheckCircle className="h-3 w-3" />
                         Chosen (Correct)
                       </label>
@@ -792,7 +789,7 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
                       </p>
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-rose-400 mb-1 block flex items-center gap-1">
+                      <label className="text-xs font-normal text-rose-400 mb-1 block flex items-center gap-1">
                         <XCircle className="h-3 w-3" />
                         Rejected (Original)
                       </label>
@@ -805,20 +802,18 @@ function PreferencePairsView({ supabase, onUpdate }: { supabase: any; onUpdate: 
                   {/* Actions */}
                   <div className="flex gap-2 mt-3 pt-3 border-t border-border">
                     {!pair.curator_verified && (
-                      <Button
-                        size="sm"
+                      <Button size="sm"
                         variant="outline"
-                        className="text-green-400 border-green-500/30 hover:bg-green-500/10"
+                        className="mac-button mac-button-outline text-green-400 border-green-500/30 hover:bg-green-500/10"
                         onClick={() => handleVerify(pair.id)}
                       >
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Verify for Training
                       </Button>
                     )}
-                    <Button
-                      size="sm"
+                    <Button size="sm"
                       variant="ghost"
-                      className="text-rose-400 hover:bg-rose-500/10"
+                      className="mac-button mac-button-outline text-rose-400 hover:bg-rose-500/10"
                       onClick={() => handleDelete(pair.id)}
                     >
                       <X className="h-3 w-3 mr-1" />
@@ -919,13 +914,13 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
   return (
     <div className="grid grid-cols-2 gap-6">
       {/* Export Controls */}
-      <Card className="border-border bg-card/30">
-        <CardHeader>
+      <Card className="mac-card border-border bg-card/30">
+        <CardHeader className="mac-card">
           <CardTitle className="text-base flex items-center gap-2">
             <Download className="h-4 w-4 text-rose-400" />
             Export DPO Training Data
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="mac-card">
             Export verified preference pairs in JSONL format for fine-tuning Llama, Mistral, or
             other open models.
           </CardDescription>
@@ -935,21 +930,20 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 rounded-lg bg-muted/50 border border-border/50">
               <p className="text-xs text-muted-foreground mb-1">Export Ready</p>
-              <p className="text-2xl font-bold text-rose-400">{stats?.exportReady || 0}</p>
+              <p className="mac-body text-2xl font-normal text-rose-400">{stats?.exportReady || 0}</p>
               <p className="text-xs text-muted-foreground">verified pairs</p>
             </div>
             <div className="p-4 rounded-lg bg-muted/50 border border-border/50">
               <p className="text-xs text-muted-foreground mb-1">Total Collected</p>
-              <p className="text-2xl font-bold text-foreground">{stats?.preferencePairs || 0}</p>
+              <p className="mac-body text-2xl font-normal text-foreground">{stats?.preferencePairs || 0}</p>
               <p className="text-xs text-muted-foreground">preference pairs</p>
             </div>
           </div>
 
           {/* Export Button */}
-          <Button
-            onClick={handleExport}
+          <Button onClick={handleExport}
             disabled={exporting || (stats?.exportReady || 0) === 0}
-            className="w-full bg-rose-600 hover:bg-rose-700"
+            className="mac-button w-full bg-rose-600 hover:bg-rose-700"
           >
             {exporting ? (
               <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -961,7 +955,7 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
 
           {/* Format Info */}
           <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
-            <h4 className="text-sm font-medium text-foreground mb-2">JSONL Format</h4>
+            <h4 className="mac-title">JSONL Format</h4>
             <pre className="text-xs text-muted-foreground overflow-x-auto">
               {`{"prompt": "...", "chosen": "...", "rejected": "..."}
 {"prompt": "...", "chosen": "...", "rejected": "..."}`}
@@ -974,8 +968,8 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
       </Card>
 
       {/* Export Preview */}
-      <Card className="border-border bg-card/30">
-        <CardHeader>
+      <Card className="mac-card border-border bg-card/30">
+        <CardHeader className="mac-card">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <FileText className="h-4 w-4 text-cyan-400" />
@@ -983,11 +977,11 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
             </CardTitle>
             {exportedData && (
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopy}>
+                <Button className="mac-button" variant="outline" className="mac-button mac-button-outline" size="sm" onClick={handleCopy}>
                   {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
                   {copied ? "Copied!" : "Copy"}
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleDownload}>
+                <Button className="mac-button" variant="outline" className="mac-button mac-button-outline" size="sm" onClick={handleDownload}>
                   <Download className="h-4 w-4 mr-1" />
                   Download
                 </Button>
@@ -995,7 +989,7 @@ function ExportPanel({ supabase, stats }: { supabase: any; stats: DashboardStats
             )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           {exportedData ? (
             <ScrollArea className="h-[400px]">
               <pre className="text-xs text-foreground font-mono whitespace-pre-wrap break-all">

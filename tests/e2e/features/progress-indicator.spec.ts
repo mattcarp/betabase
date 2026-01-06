@@ -1,100 +1,149 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Chat Progress Indicator", () => {
+test.describe("Chat Progress Indicator - Chain of Thought", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the chat interface
     await page.goto("http://localhost:3000");
 
     // Wait for the chat interface to load
-    await page.waitForSelector("text=Welcome to The Betabase", { timeout: 10000 });
+    await page.waitForSelector("text=Welcome to The Betabase", { timeout: 15000 });
   });
 
-  test("should show context-aware progress indicator when clicking suggestion", async ({
+  test("should show chain of thought progress indicator when submitting a question", async ({
     page,
   }) => {
-    // Click on a code-related suggestion to trigger specific progress text
-    const codeSuggestion = page.locator('button:has-text("How does the new automated QC")').first();
-    await codeSuggestion.click();
+    // Type a question in the chat input
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+    await chatInput.fill("What is AOMA?");
 
-    // Wait for progress indicator to appear
-    await page.waitForSelector("text=Establishing secure connection", { timeout: 5000 });
+    // Submit the question
+    await chatInput.press("Enter");
 
-    // Verify all progress phases are visible
-    const progressPhases = [
-      "Establishing secure connection to AI service",
-      "Parsing request and extracting requirements",
-      "Searching AOMA knowledge base for context",
-      "Building context from previous interactions",
-      "Generating AI response with selected model",
-      "Formatting response with proper structure",
-    ];
+    // Wait for chain of thought indicator to appear
+    // The indicator shows "Understanding your question..." first
+    const thinkingIndicator = page.locator('[data-slot="chain-of-thought"]');
+    await expect(thinkingIndicator).toBeVisible({ timeout: 10000 });
 
-    for (const phase of progressPhases) {
-      const phaseElement = await page.locator(`text=${phase}`).first();
-      await expect(phaseElement).toBeVisible();
-    }
-
-    // Verify progress bar is present
-    const progressBar = await page.locator(".bg-gradient-to-r.from-blue-400.to-purple-400").first();
-    await expect(progressBar).toBeVisible();
+    // Verify the "Understanding your question..." step appears (use first() to avoid strict mode)
+    await expect(page.locator('text=Understanding your question...').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test("should show appropriate title based on request type", async ({ page }) => {
-    // Test different suggestion types for context-aware titles
-    const suggestions = await page.locator('button[class*="hover:scale-105"]').all();
+  test("should show progressive thinking steps during RAG query", async ({ page }) => {
+    // Type a question
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+    await chatInput.fill("What is asset registration?");
+    await chatInput.press("Enter");
 
-    if (suggestions.length > 0) {
-      // Click first suggestion
-      await suggestions[0].click();
+    // Wait for initial thinking step (use first() to avoid strict mode)
+    await expect(page.locator('text=Understanding your question...').first()).toBeVisible({ timeout: 10000 });
 
-      // Check that a meaningful title appears (not generic "Processing your request")
-      const titleElement = await page.locator(".text-base.font-medium").first();
-      const titleText = await titleElement.textContent();
+    // Wait for second step (appears after ~2 seconds)
+    await expect(page.locator('text=Searching knowledge base...').first()).toBeVisible({ timeout: 10000 });
 
-      // Should have a specific title, not generic
-      expect(titleText).not.toContain("Processing your request");
-      expect(titleText?.length).toBeGreaterThan(20); // Should be descriptive
-    }
+    // The third step appears after ~5 seconds
+    await expect(page.locator('text=Retrieving relevant documents...').first()).toBeVisible({ timeout: 15000 });
   });
 
-  test("should position progress indicator above chat messages", async ({ page }) => {
-    // Click a suggestion to trigger the indicator
-    const suggestion = page.locator('button[class*="hover:scale-105"]').first();
-    await suggestion.click();
+  test("should hide progress indicator once streaming starts", async ({ page }) => {
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+    await chatInput.fill("What is master linking?");
+    await chatInput.press("Enter");
 
-    // Wait for progress indicator
-    await page.waitForSelector(".bg-gradient-to-r.from-gray-800.to-gray-700", { timeout: 5000 });
+    // Wait for progress indicator to appear first
+    const thinkingIndicator = page.locator('[data-slot="chain-of-thought"]');
+    await expect(thinkingIndicator).toBeVisible({ timeout: 10000 });
 
-    // Get the progress indicator element
-    const progressIndicator = await page
-      .locator(".bg-gradient-to-r.from-gray-800.to-gray-700")
-      .first();
+    // Wait for AI response to appear (look for the AI badge which indicates response started)
+    await page.waitForSelector('div:has-text("AI")', { timeout: 30000 });
 
-    // Verify it's visible and positioned correctly
-    await expect(progressIndicator).toBeVisible();
+    // Give time for streaming to start
+    await page.waitForTimeout(2000);
 
-    // Check that it's within the messages area but before any actual messages
-    const messagesArea = await page.locator('[class*="space-y-6"]').first();
-    const progressInMessages = await messagesArea
-      .locator(".bg-gradient-to-r.from-gray-800.to-gray-700")
-      .first();
-    await expect(progressInMessages).toBeVisible();
+    // Progress indicator should be hidden once streaming starts
+    // It may already be gone, or it will be soon
+    await expect(thinkingIndicator).toBeHidden({ timeout: 10000 });
   });
 
-  test("should show phase completion with checkmarks", async ({ page }) => {
-    // Click a suggestion
-    const suggestion = page.locator('button[class*="hover:scale-105"]').first();
-    await suggestion.click();
+  test("should show complete AI response after chain of thought", async ({ page }) => {
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+    await chatInput.fill("Tell me about AOMA");
+    await chatInput.press("Enter");
 
-    // Wait a bit for progress to advance
-    await page.waitForTimeout(3000);
+    // Wait for AI response - look for the AI avatar/message marker
+    // The AI response appears with an "AI" badge
+    await page.waitForSelector('text=AI', { timeout: 45000 });
 
-    // Check for at least one checkmark icon (completed phase)
-    const checkmark = await page.locator(".text-green-400 > svg").first();
+    // Wait a bit more for content to stream
+    await page.waitForTimeout(5000);
 
-    // If progress has advanced enough, we should see checkmarks
-    // Note: This might be timing-dependent in real scenarios
-    const checkmarkCount = await page.locator(".text-green-400 > svg").count();
-    expect(checkmarkCount).toBeGreaterThanOrEqual(0); // At least some phases might be complete
+    // Verify some response text is visible
+    const pageContent = await page.textContent('body');
+    expect(pageContent).toMatch(/AOMA|Asset|Sony|system/i);
+  });
+
+  test("should not show any console errors during chat submission", async ({ page }) => {
+    const consoleErrors: string[] = [];
+
+    page.on("console", (msg) => {
+      if (msg.type() === "error") {
+        consoleErrors.push(msg.text());
+      }
+    });
+
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+    await chatInput.fill("What are the different asset types?");
+    await chatInput.press("Enter");
+
+    // Wait for response to complete
+    await page.waitForTimeout(15000);
+
+    // Filter out expected/known errors
+    const criticalErrors = consoleErrors.filter(
+      (err) =>
+        !err.includes("Failed to fetch") && // Network errors during navigation are ok
+        !err.includes("ResizeObserver") && // Layout observation errors are benign
+        !err.includes("append") && // Old AI SDK warnings
+        !err.includes("sendMessage") // AI SDK migration warnings
+    );
+
+    expect(criticalErrors).toHaveLength(0);
+  });
+
+  test("should show stop button during generation", async ({ page }) => {
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+    await chatInput.fill("Explain the asset workflow in detail");
+    await chatInput.press("Enter");
+
+    // Wait for the stop button (square icon) to appear
+    // During loading/streaming, the send button changes to a stop button
+    const stopButton = page.locator('button:has(svg)').filter({
+      has: page.locator('rect, .lucide-square')
+    });
+
+    // The button should appear during loading
+    await expect(stopButton.first()).toBeVisible({ timeout: 10000 });
+  });
+
+  test("should show chain of thought on SUBSEQUENT questions (not just first)", async ({ page }) => {
+    const chatInput = page.locator('textarea[placeholder="Ask me anything..."]');
+
+    // First question
+    await chatInput.fill("What is AOMA?");
+    await chatInput.press("Enter");
+
+    // Wait for first response to complete
+    await page.waitForSelector('text=AI', { timeout: 45000 });
+    await page.waitForTimeout(3000); // Let response finish
+
+    // Now submit a SECOND question
+    await chatInput.fill("What is master linking?");
+    await chatInput.press("Enter");
+
+    // Chain of thought should appear AGAIN for the second question
+    const thinkingIndicator = page.locator('[data-slot="chain-of-thought"]');
+    await expect(thinkingIndicator).toBeVisible({ timeout: 10000 });
+
+    // Verify the thinking step appears
+    await expect(page.locator('text=Understanding your question...').first()).toBeVisible({ timeout: 5000 });
   });
 });

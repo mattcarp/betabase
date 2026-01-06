@@ -85,11 +85,10 @@ export function NanoBananaInfographic({
       {/* Header */}
       <div className="flex items-center justify-end mb-4">
         {imageUrl && (
-          <Button
-            onClick={handleDownload}
+          <Button onClick={handleDownload}
             variant="outline"
             size="sm"
-            className="gap-2"
+            className="mac-button mac-button-outline gap-2"
           >
             <Download className="w-4 h-4" />
             Download PNG
@@ -103,7 +102,7 @@ export function NanoBananaInfographic({
           {/* Animated spinner */}
           <div className="relative">
             {/* Outer ring */}
-            <div className="h-16 w-16 animate-spin rounded-full border-4 border-transparent border-t-yellow-400 border-r-purple-400" />
+            <div className="h-16 w-16 animate-spin rounded-full border-4 border-transparent border-t-yellow-400 border-r-primary-400" />
             {/* Inner pulse */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="h-4 w-4 animate-pulse rounded-full bg-yellow-400/60" />
@@ -112,7 +111,7 @@ export function NanoBananaInfographic({
           
           {/* Status messages */}
           <div className="text-center space-y-3">
-            <p className="text-base text-foreground font-medium flex items-center gap-2 justify-center">
+            <p className="text-base text-foreground font-normal flex items-center gap-2 justify-center">
               <span className="text-2xl">🍌</span>
               <span>The Betabase is creating your infographic...</span>
             </p>
@@ -134,7 +133,12 @@ export function NanoBananaInfographic({
         <div className="w-full aspect-video bg-red-900/10 rounded-lg border border-red-500/30 flex flex-col items-center justify-center gap-4 p-6">
           <p className="text-sm text-red-400">Failed to generate infographic</p>
           <p className="text-xs text-red-300/70">{error}</p>
-          <Button onClick={generateInfographic} variant="outline" size="sm">
+          <Button
+            className="mac-button mac-button-outline"
+            onClick={generateInfographic}
+            variant="outline"
+            size="sm"
+          >
             Try Again
           </Button>
         </div>
@@ -155,7 +159,7 @@ export function NanoBananaInfographic({
       {/* Manual Generate Button (if auto-generate disabled) */}
       {!autoGenerate && !imageUrl && !isGenerating && (
         <div className="w-full aspect-video bg-card/50 rounded-lg border border-dashed border-border flex items-center justify-center">
-          <Button onClick={generateInfographic} variant="outline" className="gap-2">
+          <Button onClick={generateInfographic} variant="outline" className="mac-button gap-2">
             <ImageIcon className="w-4 h-4" />
             Generate Infographic
           </Button>

@@ -164,15 +164,14 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
   };
 
   return (
-    <Card
-      className={cn(
+    <Card className={cn("mac-card", 
         "mac-glass",
         "border-[var(--mac-utility-border)]",
         "bg-[var(--mac-surface-card)]",
         className
       )}
     >
-      <CardHeader className="pb-4">
+      <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-lg font-light text-[var(--mac-text-primary)]">
@@ -186,7 +185,7 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="p-1.5 rounded-md hover:bg-[var(--mac-surface-elevated)] transition-colors"
+              className="mac-button p-1.5 rounded-md hover:bg-[var(--mac-surface-elevated)] transition-colors"
               title="Refresh data"
             >
               <RefreshCw
@@ -236,7 +235,7 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-sm text-[var(--mac-text-secondary)]">Current Accuracy</span>
-            <span className="text-sm font-medium text-[var(--mac-text-primary)]">
+            <span className="text-sm font-normal text-[var(--mac-text-primary)]">
               {impactData.currentAccuracy}%
             </span>
           </div>
@@ -259,7 +258,7 @@ export function FeedbackImpactCard({ className }: FeedbackImpactCardProps) {
 
         {/* Recent Corrections with Impact */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-[var(--mac-text-primary)]">Recent Corrections</h4>
+          <h4 className="mac-title">Recent Corrections</h4>
           {loading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
@@ -318,7 +317,7 @@ function MetricBox({
   const colorClasses = {
     orange: "text-[var(--mac-accent-orange-400)] bg-[var(--mac-accent-orange-400)]/10",
     blue: "text-[var(--mac-accent-blue-400)] bg-[var(--mac-accent-blue-400)]/10",
-    purple: "text-[var(--mac-accent-purple-400)] bg-[var(--mac-accent-purple-400)]/10",
+    purple: "text-[var(--mac-accent-primary-400)] bg-[var(--mac-accent-primary-400)]/10",
   };
 
   return (

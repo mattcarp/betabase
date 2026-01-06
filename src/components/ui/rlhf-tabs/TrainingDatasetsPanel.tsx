@@ -97,7 +97,8 @@ export function TrainingDatasetsPanel() {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error loading datasets:", error);
+        // Tables may not exist yet - use mock data
+        console.warn("⚠️ TRAINING DATASETS: Using MOCK DATA - table not available:", error.message);
         // Use mock data for demo
         setDatasets([
           {
@@ -227,14 +228,14 @@ export function TrainingDatasetsPanel() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-lg font-medium text-[var(--mac-text-primary)]">Training Datasets</h2>
+          <h2 className="mac-heading">Training Datasets</h2>
           <p className="text-sm text-[var(--mac-text-muted)] font-light">
             Curate and manage training data for model fine-tuning
           </p>
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="mac-button gap-2">
               <Plus className="h-4 w-4" />
               New Dataset
             </Button>
@@ -248,16 +249,16 @@ export function TrainingDatasetsPanel() {
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Name</label>
-                <Input
+                <label className="text-sm font-normal">Name</label>
+                <Input className="mac-input"
                   placeholder="e.g., AOMA Support Q1 2026"
                   value={newDataset.name}
                   onChange={(e) => setNewDataset((prev) => ({ ...prev, name: e.target.value }))}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Description</label>
-                <Input
+                <label className="text-sm font-normal">Description</label>
+                <Input className="mac-input"
                   placeholder="Describe the purpose of this dataset"
                   value={newDataset.description}
                   onChange={(e) =>
@@ -266,7 +267,7 @@ export function TrainingDatasetsPanel() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Type</label>
+                <label className="text-sm font-normal">Type</label>
                 <Select
                   value={newDataset.dataset_type}
                   onValueChange={(value: any) =>
@@ -286,10 +287,10 @@ export function TrainingDatasetsPanel() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+              <Button className="mac-button" variant="outline" className="mac-button mac-button-outline" onClick={() => setShowCreateDialog(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleCreateDataset}>Create Dataset</Button>
+              <Button className="mac-button" onClick={handleCreateDataset}>Create Dataset</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -300,9 +301,9 @@ export function TrainingDatasetsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Database className="h-8 w-8 text-purple-400" />
+              <Database className="h-8 w-8 text-primary-400" />
               <div>
-                <p className="text-2xl font-bold">{datasets.length}</p>
+                <p className="mac-body text-2xl font-normal">{datasets.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Datasets</p>
               </div>
             </div>
@@ -313,7 +314,7 @@ export function TrainingDatasetsPanel() {
             <div className="flex items-center gap-3">
               <Layers className="h-8 w-8 text-blue-400" />
               <div>
-                <p className="text-2xl font-bold">
+                <p className="mac-body text-2xl font-normal">
                   {datasets.reduce((sum, d) => sum + d.sample_count, 0).toLocaleString()}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Samples</p>
@@ -326,7 +327,7 @@ export function TrainingDatasetsPanel() {
             <div className="flex items-center gap-3">
               <CheckCircle2 className="h-8 w-8 text-green-400" />
               <div>
-                <p className="text-2xl font-bold">
+                <p className="mac-body text-2xl font-normal">
                   {datasets.filter((d) => d.status === "ready" || d.status === "exported").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Ready</p>
@@ -339,7 +340,7 @@ export function TrainingDatasetsPanel() {
             <div className="flex items-center gap-3">
               <BarChart3 className="h-8 w-8 text-yellow-400" />
               <div>
-                <p className="text-2xl font-bold">
+                <p className="mac-body text-2xl font-normal">
                   {(datasets
                     .filter((d) => d.quality_score !== null)
                     .reduce((sum, d) => sum + (d.quality_score || 0), 0) /
@@ -371,7 +372,7 @@ export function TrainingDatasetsPanel() {
                     className={cn(
                       "mac-card-elevated",
                       "border-[var(--mac-utility-border)]",
-                      "hover:border-purple-500/50 transition-colors"
+                      "hover:border-primary-500/50 transition-colors"
                     )}
                   >
                     <CardContent className="py-4">
@@ -380,13 +381,13 @@ export function TrainingDatasetsPanel() {
                           <div
                             className={cn(
                               "h-10 w-10 rounded-lg flex items-center justify-center",
-                              "bg-purple-500/10"
+                              "bg-primary-500/10"
                             )}
                           >
-                            <Database className="h-5 w-5 text-purple-400" />
+                            <Database className="h-5 w-5 text-primary-400" />
                           </div>
                           <div>
-                            <h3 className="font-medium text-[var(--mac-text-primary)]">
+                            <h3 className="mac-title">
                               {dataset.name}
                             </h3>
                             <p className="text-sm text-[var(--mac-text-muted)] font-light">
@@ -396,7 +397,7 @@ export function TrainingDatasetsPanel() {
                         </div>
                         <div className="flex items-center gap-6">
                           <div className="text-right">
-                            <p className="text-lg font-bold text-[var(--mac-text-primary)]">
+                            <p className="text-lg font-normal text-[var(--mac-text-primary)]">
                               {dataset.sample_count.toLocaleString()}
                             </p>
                             <p className="text-xs text-[var(--mac-text-muted)]">samples</p>
@@ -415,23 +416,23 @@ export function TrainingDatasetsPanel() {
                           </Badge>
                           {dataset.quality_score !== null && (
                             <div className="text-right">
-                              <p className="text-sm font-medium text-[var(--mac-text-primary)]">
+                              <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                                 {(dataset.quality_score * 100).toFixed(0)}%
                               </p>
                               <p className="text-xs text-[var(--mac-text-muted)]">quality</p>
                             </div>
                           )}
                           <div className="flex gap-2">
-                            <Button
+                            <Button className="mac-button"
                               size="sm"
-                              variant="outline"
+                              variant="outline" className="mac-button mac-button-outline"
                               onClick={() => handleExportDataset(dataset)}
                               disabled={dataset.status === "draft"}
                             >
                               <FileJson className="h-4 w-4 mr-1" />
                               Export
                             </Button>
-                            <Button size="sm" variant="ghost">
+                            <Button className="mac-button" size="sm" variant="ghost" className="mac-button mac-button-outline">
                               <Edit2 className="h-4 w-4" />
                             </Button>
                           </div>
@@ -447,7 +448,7 @@ export function TrainingDatasetsPanel() {
           {datasets.length === 0 && (
             <div className="flex flex-col items-center justify-center h-64 text-[var(--mac-text-muted)]">
               <Database className="h-12 w-12 mb-4" />
-              <p className="font-light">No training datasets yet</p>
+              <p className="mac-body font-light">No training datasets yet</p>
               <p className="text-sm">Create your first dataset to start curating training data</p>
             </div>
           )}

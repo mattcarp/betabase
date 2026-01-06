@@ -36,7 +36,7 @@ export const InlineCitationCardTrigger = ({
   ...props
 }: InlineCitationCardTriggerProps) => (
   <HoverCardTrigger asChild>
-    <button type="button" className={cn("inline-flex", className)} {...props}>
+    <button type="button" className={cn("mac-button inline-flex", className)} {...props}>
       <Badge variant="secondary" className="ml-2 rounded-full">
         {sources.length ? (
           <>

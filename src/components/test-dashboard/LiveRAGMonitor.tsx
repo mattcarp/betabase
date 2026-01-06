@@ -8,6 +8,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { cn } from "../../lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
@@ -94,7 +95,7 @@ export function LiveRAGMonitor() {
       case "context-aware":
         return "bg-blue-500/20 text-blue-300";
       case "agentic":
-        return "bg-purple-500/20 text-purple-300";
+        return "bg-primary-500/20 text-primary-300";
       default:
         return "bg-muted/20 text-muted-foreground";
     }
@@ -116,29 +117,29 @@ export function LiveRAGMonitor() {
   return (
     <div className="h-full space-y-4">
       {/* Header with stats */}
-      <Card className="bg-card/50 border-border">
-        <CardHeader>
+      <Card className="mac-card bg-card/50 border-border">
+        <CardHeader className="mac-card">
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Activity className="h-5 w-5 text-green-400 animate-pulse" />
             Live RAG Pipeline Monitor
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <div className="text-2xl font-bold text-foreground">
+              <div className="text-2xl font-normal text-foreground">
                 {stats.avgDuration.toFixed(0)}ms
               </div>
               <div className="text-xs text-muted-foreground">Avg Duration</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-foreground">
+              <div className="text-2xl font-normal text-foreground">
                 {(stats.avgConfidence * 100).toFixed(0)}%
               </div>
               <div className="text-xs text-muted-foreground">Avg Confidence</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-foreground">{events.length}</div>
+              <div className="text-2xl font-normal text-foreground">{events.length}</div>
               <div className="text-xs text-muted-foreground">Recent Events</div>
             </div>
           </div>
@@ -146,11 +147,11 @@ export function LiveRAGMonitor() {
       </Card>
 
       {/* Strategy Distribution */}
-      <Card className="bg-card/50 border-border">
-        <CardHeader>
+      <Card className="mac-card bg-card/50 border-border">
+        <CardHeader className="mac-card">
           <CardTitle className="text-sm text-foreground">Strategy Distribution</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted-foreground">Basic RAG</span>
@@ -166,7 +167,7 @@ export function LiveRAGMonitor() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted-foreground">Agentic RAG</span>
-              <Badge className="bg-purple-500/20 text-purple-300">
+              <Badge className="bg-primary-500/20 text-primary-300">
                 {stats.strategyDistribution.agentic}
               </Badge>
             </div>
@@ -175,16 +176,16 @@ export function LiveRAGMonitor() {
       </Card>
 
       {/* Event Timeline */}
-      <Card className="bg-card/50 border-border flex-1">
-        <CardHeader>
+      <Card className="mac-card bg-card/50 border-border flex-1">
+        <CardHeader className="mac-card">
           <CardTitle className="text-sm text-foreground">Pipeline Events</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mac-card">
           <ScrollArea className="h-[400px]">
             {events.length > 0 ? (
               <div className="space-y-3">
                 {events.map((event) => (
-                  <Card key={event.id} className="bg-card/30 border-border">
+                  <Card key={event.id} className="mac-card bg-card/30 border-border">
                     <CardContent className="p-4 space-y-2">
                       {/* Event header */}
                       <div className="flex items-start justify-between">

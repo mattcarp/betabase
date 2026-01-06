@@ -1,17 +1,17 @@
 "use client";
 
 import React from "react";
-import { Session } from "@/types/session";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Session } from "../../types/session";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import {
   MoreVertical,
   Play,
@@ -24,7 +24,7 @@ import {
   User,
   Calendar,
 } from "lucide-react";
-import { formatDuration, formatRelativeTime } from "@/lib/mockSessions";
+import { formatDuration, formatRelativeTime } from "../../lib/mockSessions";
 
 interface SessionCardProps {
   session: Session;
@@ -71,7 +71,7 @@ export function SessionCard({
 }: SessionCardProps) {
   return (
     <Card className="mac-card group hover:cursor-pointer transition-all duration-300">
-      <CardHeader>
+      <CardHeader className="mac-card">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <CardTitle className="mac-title text-base font-light truncate">
@@ -90,7 +90,7 @@ export function SessionCard({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="mac-button h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <MoreVertical className="h-4 w-4" />
                   <span className="sr-only">Session actions</span>
@@ -130,8 +130,8 @@ export function SessionCard({
 
       <CardContent className="space-y-4" onClick={() => onPlay(session)}>
         {/* Thumbnail Placeholder */}
-        <div className="aspect-video bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 rounded-lg border border-white/10 flex items-center justify-center group-hover:border-purple-500/30 transition-colors">
-          <Play className="h-12 w-12 text-white/20 group-hover:text-purple-400/50 transition-colors" />
+        <div className="aspect-video bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 rounded-lg border border-white/10 flex items-center justify-center group-hover:border-primary-500/30 transition-colors">
+          <Play className="h-12 w-12 text-white/20 group-hover:text-primary-400/50 transition-colors" />
         </div>
 
         {/* Session Metadata */}

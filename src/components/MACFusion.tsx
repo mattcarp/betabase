@@ -70,14 +70,14 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
       <div
         className={`
           absolute top-0 left-0 right-0 h-1 rounded-t-xl transform origin-left transition-transform duration-300
-          bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400
+          bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-primary-400
           ${isHovered ? "scale-x-100" : "scale-x-0"}
         `}
       />
 
       {/* Content */}
       <div className="relative z-10">
-        <h3 c className="mac-title" className={`text-xl mb-4 ${classes.title}`}>
+        <h3 className={`mac-title text-xl mb-4 ${classes.title}`}>
           {title}
         </h3>
 
@@ -87,7 +87,7 @@ export const MACFusionCard: React.FC<MACFusionCardProps> = ({
 
         {/* Floating orb indicator (MAC style) */}
         {variant === "hybrid" && (
-          <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-mac-accent-purple-400/20 animate-mac-float opacity-60" />
+          <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-mac-accent-primary-400/20 animate-mac-float opacity-60" />
         )}
       </div>
     </div>
@@ -106,8 +106,8 @@ export const MACButton: React.FC<{
     switch (variant) {
       case "primary":
         return `
-          bg-mac-accent-purple-600 text-mac-text-primary border-mac-accent-purple-600
-          hover:bg-mac-accent-purple-400 hover:shadow-mac-purple-glow
+          bg-mac-accent-primary-600 text-mac-text-primary border-mac-accent-primary-600
+          hover:bg-mac-accent-primary-400 hover:shadow-mac-purple-glow
         `;
       case "secondary":
         return `
@@ -127,6 +127,7 @@ export const MACButton: React.FC<{
   return (
     <button
       className={`
+        mac-button
         inline-flex items-center justify-center px-6 py-4 border rounded-lg
         font-mac-body font-normal text-sm transition-all duration-200
         ${getButtonClasses()}
@@ -149,7 +150,7 @@ export const MACShowcase: React.FC = () => {
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-3/4 w-24 h-24 bg-mac-primary-blue-400/10 rounded-full animate-mac-float" />
         <div
-          className="absolute top-3/4 left-1/4 w-16 h-16 bg-mac-accent-purple-400/10 rounded-full animate-mac-float"
+          className="absolute top-3/4 left-1/4 w-16 h-16 bg-mac-accent-primary-400/10 rounded-full animate-mac-float"
           style={{ animationDelay: "2s" }}
         />
         <div

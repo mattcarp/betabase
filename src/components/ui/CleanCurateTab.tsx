@@ -733,11 +733,11 @@ export function CleanCurateTab({
 
   return (
     <Card className={cn("mac-card", "h-full flex flex-col", className)}>
-      <CardHeader>
+      <CardHeader className="mac-card">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2 text-2xl font-light tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              <Lightbulb className="h-5 w-5 text-purple-400" />
+            <CardTitle className="flex items-center gap-2 text-2xl font-light tracking-tight bg-gradient-to-r from-primary-400 to-primary-500 bg-clip-text text-transparent">
+              <Lightbulb className="h-5 w-5 text-primary-400" />
               Knowledge Curation Center
             </CardTitle>
             <CardDescription className="font-light text-muted-foreground">
@@ -772,7 +772,7 @@ export function CleanCurateTab({
               <Bot className="h-4 w-4 mr-2" />
               Q8 Feedback
               {q8Queue.length > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-purple-500">
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-primary-400">
                   {q8Queue.length}
                 </Badge>
               )}
@@ -797,13 +797,13 @@ export function CleanCurateTab({
               {/* Executive KPIs */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Knowledge Health Heatmap */}
-                <Card className="border-white/10 bg-black/20">
-                  <CardHeader>
+                <Card className="mac-card border-white/10 bg-black/20">
+                  <CardHeader className="mac-card">
                     <CardTitle className="text-lg font-light">
                       Knowledge Health by Category
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mac-card">
                     {/* Tufte-style: Real data from Supabase siam_vector_stats */}
                     {realData.loading ? (
                       <p className="text-sm text-muted-foreground">Loading real data from Supabase...</p>
@@ -841,7 +841,7 @@ export function CleanCurateTab({
                         })}
                         {/* Total */}
                         <div className="pt-2 border-t border-border">
-                          <div className="flex justify-between text-sm font-medium">
+                          <div className="flex justify-between text-sm font-normal">
                             <span className="text-foreground">Total Documents</span>
                             <span className="text-foreground tabular-nums">{realData.totalDocuments.toLocaleString()}</span>
                           </div>
@@ -851,14 +851,14 @@ export function CleanCurateTab({
                   </CardContent>
                 </Card>
                 {/* Real Betabase Test Data */}
-                <Card className="border-white/10 bg-black/20">
-                  <CardHeader>
+                <Card className="mac-card border-white/10 bg-black/20">
+                  <CardHeader className="mac-card">
                     <CardTitle className="text-lg font-light">Betabase Test Data</CardTitle>
                     <CardDescription className="text-sm text-muted-foreground">
                       Real QA test cases from Supabase
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mac-card">
                     {realData.loading ? (
                       <p className="text-sm text-muted-foreground">Loading test data...</p>
                     ) : realData.betabaseStats.length === 0 ? (
@@ -898,7 +898,7 @@ export function CleanCurateTab({
                         })}
                         {/* Total */}
                         <div className="pt-2 border-t border-border">
-                          <div className="flex justify-between text-sm font-medium">
+                          <div className="flex justify-between text-sm font-normal">
                             <span className="text-foreground">Total Test Cases</span>
                             <span className="tabular-nums" style={{ color: 'var(--mac-data-teal)' }}>{realData.totalTestCases.toLocaleString()}</span>
                           </div>
@@ -910,14 +910,15 @@ export function CleanCurateTab({
               </div>
 
               {/* Quick Actions for Management */}
-              <Card className="border-white/10 bg-black/20">
-                <CardHeader>
+              <Card className="mac-card border-white/10 bg-black/20">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-lg font-light">Executive Actions</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <Button
-                      className="justify-start mac-button bg-purple-600 hover:bg-purple-700 text-white border-0"
+                      variant="teal-solid"
+                      className="justify-start"
                       onClick={runSmartDeduplication}
                     >
                       <Sparkles className="h-4 w-4 mr-2" />
@@ -956,8 +957,8 @@ export function CleanCurateTab({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="mac-title flex items-center gap-2">
-                    <Bot className="h-5 w-5 text-purple-400" />
+                  <h3 className="mac-title">
+                    <Bot className="h-5 w-5 text-primary-400" />
                     Q8 Content Feedback Queue
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -965,7 +966,7 @@ export function CleanCurateTab({
                   </p>
                 </div>
                 {q8Queue.length > 0 && (
-                  <Button variant="outline" size="sm" onClick={clearQ8Queue}>
+                  <Button variant="outline" className="mac-button mac-button-outline" size="sm" onClick={clearQ8Queue}>
                     <Trash2 className="h-4 w-4 mr-2" />
                     Clear All
                   </Button>
@@ -973,7 +974,7 @@ export function CleanCurateTab({
               </div>
 
               {q8Queue.length === 0 ? (
-                <Card className="border-white/10 bg-black/20">
+                <Card className="mac-card border-white/10 bg-black/20">
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Bot className="h-12 w-12 text-muted-foreground mb-4" />
                     <p className="text-lg font-light text-muted-foreground">No pending feedback</p>
@@ -987,22 +988,21 @@ export function CleanCurateTab({
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {/* Feedback Queue List */}
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-muted-foreground">
+                    <h4 className="mac-title">
                       Pending Reviews ({q8Queue.length})
                     </h4>
                     {q8Queue.map((item) => (
-                      <Card
-                        key={item.id}
-                        className={cn(
+                      <Card key={item.id}
+                        className={cn("mac-card", 
                           "cursor-pointer transition-all hover:shadow-lg border-white/10 bg-black/20",
-                          selectedQ8Item?.id === item.id && "ring-2 ring-purple-500"
+                          selectedQ8Item?.id === item.id && "ring-2 ring-primary-400"
                         )}
                         onClick={() => {
                           setSelectedQ8Item(item);
                           setQ8FeedbackText("");
                         }}
                       >
-                        <CardHeader className="pb-2">
+                        <CardHeader className="mac-card pb-2">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-2">
                               <Badge
@@ -1026,10 +1026,9 @@ export function CleanCurateTab({
                                 {new Date(item.submittedAt).toLocaleTimeString()}
                               </span>
                             </div>
-                            <Button
-                              variant="ghost"
+                            <Button variant="ghost"
                               size="sm"
-                              className="h-6 w-6 p-0"
+                              className="mac-button mac-button-outline h-6 w-6 p-0"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 removeQ8Item(item.id);
@@ -1040,7 +1039,7 @@ export function CleanCurateTab({
                             </Button>
                           </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="mac-card">
                           <p className="text-sm font-light line-clamp-2">{item.question}</p>
                         </CardContent>
                       </Card>
@@ -1051,24 +1050,24 @@ export function CleanCurateTab({
                   <div className="space-y-4">
                     {selectedQ8Item ? (
                       <>
-                        <Card className="border-white/10 bg-black/20">
-                          <CardHeader>
+                        <Card className="mac-card border-white/10 bg-black/20">
+                          <CardHeader className="mac-card">
                             <CardTitle className="text-base font-light">Question</CardTitle>
                           </CardHeader>
-                          <CardContent>
+                          <CardContent className="mac-card">
                             <p className="text-sm">{selectedQ8Item.question}</p>
                           </CardContent>
                         </Card>
 
                         {selectedQ8Item.infographicData && (
-                          <Card className="border-white/10 bg-black/20">
-                            <CardHeader>
+                          <Card className="mac-card border-white/10 bg-black/20">
+                            <CardHeader className="mac-card">
                               <CardTitle className="text-base font-light flex items-center gap-2">
                                 <ImageIcon className="h-4 w-4" />
                                 Generated Infographic
                               </CardTitle>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="mac-card">
                               <img
                                 src={`data:${selectedQ8Item.infographicData.mimeType};base64,${selectedQ8Item.infographicData.imageData}`}
                                 alt="Infographic for review"
@@ -1082,24 +1081,24 @@ export function CleanCurateTab({
                         )}
 
                         {selectedQ8Item.answer && (
-                          <Card className="border-white/10 bg-black/20">
-                            <CardHeader>
+                          <Card className="mac-card border-white/10 bg-black/20">
+                            <CardHeader className="mac-card">
                               <CardTitle className="text-base font-light">AI Response</CardTitle>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="mac-card">
                               <p className="text-sm line-clamp-6">{selectedQ8Item.answer}</p>
                             </CardContent>
                           </Card>
                         )}
 
                         {/* Feedback Input */}
-                        <Card className="border-purple-500/50 bg-purple-500/5">
-                          <CardHeader>
+                        <Card className="mac-card border-primary-400/50 bg-primary-400/5">
+                          <CardHeader className="mac-card">
                             <CardTitle className="text-base font-light flex items-center gap-2">
-                              <Edit3 className="h-4 w-4 text-purple-400" />
+                              <Edit3 className="h-4 w-4 text-primary-400" />
                               Your Feedback
                             </CardTitle>
-                            <CardDescription>
+                            <CardDescription className="mac-card">
                               Provide feedback to improve AI responses and self-healing tests
                             </CardDescription>
                           </CardHeader>
@@ -1111,8 +1110,7 @@ export function CleanCurateTab({
                               className="min-h-[100px] bg-background/50"
                             />
                             <div className="flex items-center gap-2">
-                              <Button
-                                variant="outline"
+                              <Button variant="outline" className="mac-button mac-button-outline"
                                 size="sm"
                                 onClick={() => {
                                   // TODO: Integrate with self-healing tests
@@ -1124,8 +1122,7 @@ export function CleanCurateTab({
                                 <ThumbsUp className="h-4 w-4 mr-2" />
                                 Looks Good
                               </Button>
-                              <Button
-                                variant="outline"
+                              <Button variant="outline" className="mac-button mac-button-outline"
                                 size="sm"
                                 onClick={() => {
                                   toast.info("Feedback saved - creating test assertion...");
@@ -1137,7 +1134,8 @@ export function CleanCurateTab({
                                 Needs Work
                               </Button>
                               <Button
-                                className="ml-auto bg-purple-600 hover:bg-purple-700"
+                                variant="teal-solid"
+                                className="ml-auto"
                                 size="sm"
                                 disabled={!q8FeedbackText.trim()}
                                 onClick={() => {
@@ -1162,7 +1160,7 @@ export function CleanCurateTab({
                         </Card>
                       </>
                     ) : (
-                      <Card className="border-white/10 bg-black/20 h-full flex items-center justify-center">
+                      <Card className="mac-card border-white/10 bg-black/20 h-full flex items-center justify-center">
                         <CardContent className="text-center py-12">
                           <Eye className="h-8 w-8 text-muted-foreground mx-auto mb-4" />
                           <p className="text-sm text-muted-foreground">
@@ -1176,14 +1174,14 @@ export function CleanCurateTab({
               )}
 
               {/* HITL Flow Explanation */}
-              <Card className="border-white/10 bg-black/20 mt-4">
-                <CardHeader>
+              <Card className="mac-card border-white/10 bg-black/20 mt-4">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-lg font-light flex items-center gap-2">
                     <Network className="h-5 w-5 text-blue-400" />
                     Human-in-the-Loop Feedback Cycle
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex flex-col items-center gap-2">
                       <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
@@ -1193,8 +1191,8 @@ export function CleanCurateTab({
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground" />
                     <div className="flex flex-col items-center gap-2">
-                      <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                        <span className="text-purple-400 font-semibold text-xs">Q8</span>
+                      <div className="h-10 w-10 rounded-full bg-primary-400/20 flex items-center justify-center">
+                        <span className="text-primary-400 font-normal text-xs">Q8</span>
                       </div>
                       <span className="text-muted-foreground">Flag</span>
                     </div>
@@ -1264,13 +1262,12 @@ export function CleanCurateTab({
                     </option>
                   ))}
                 </select>
-                <Button variant="outline" size="sm" onClick={loadFiles} disabled={loading}>
+                <Button variant="outline" className="mac-button mac-button-outline" size="sm" onClick={loadFiles} disabled={loading}>
                   <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                 </Button>
                 {selectedFiles.size > 0 && (
                   <>
-                    <Button
-                      variant="destructive"
+                    <Button variant="destructive" className="mac-button mac-button-primary"
                       size="sm"
                       onClick={() => confirmDeleteFiles(Array.from(selectedFiles))}
                       disabled={loading}
@@ -1278,7 +1275,7 @@ export function CleanCurateTab({
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete ({selectedFiles.size})
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setSelectedFiles(new Set())}>
+                    <Button variant="ghost" className="mac-button mac-button-outline" size="sm" onClick={() => setSelectedFiles(new Set())}>
                       <X className="h-4 w-4" />
                     </Button>
                   </>
@@ -1299,7 +1296,7 @@ export function CleanCurateTab({
                 ) : (
                   <div className="p-4 space-y-2">
                     {/* Select All */}
-                    <div className="flex items-center gap-2 pb-2 border-b">
+                    <div className="flex items-center gap-2 pb-2 border-b border-border/20">
                       <input
                         type="checkbox"
                         checked={
@@ -1318,8 +1315,8 @@ export function CleanCurateTab({
                       <div
                         key={file.id}
                         className={cn(
-                          "flex items-center gap-4 p-4 rounded-lg border transition-colors hover:bg-muted/50",
-                          selectedFiles.has(file.id) && "bg-muted/50 border-primary/50"
+                          "flex items-center gap-4 p-4 rounded-lg border border-border/20 transition-all duration-200 hover:bg-muted/30 hover:border-teal-500/50",
+                          selectedFiles.has(file.id) && "bg-muted/50 border-teal-500/60"
                         )}
                       >
                         <input
@@ -1347,9 +1344,9 @@ export function CleanCurateTab({
                                 Detailed
                               </Badge>
                             )}
-                            {/* Purple Badge for New */}
+                            {/* Teal Badge for New */}
                             {file.created_at > (Date.now()/1000 - 86400 * 7) && (
-                               <Badge className="text-xs bg-purple-500 hover:bg-purple-600">
+                               <Badge className="text-xs bg-primary-400 hover:bg-primary-500">
                                 <Sparkles className="h-3 w-3 mr-2" />
                                 New
                               </Badge>
@@ -1427,7 +1424,7 @@ export function CleanCurateTab({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="mac-title">AI-Powered Curation Insights</h3>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" className="mac-button mac-button-outline" size="sm">
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Re-analyze
                 </Button>
@@ -1444,7 +1441,7 @@ export function CleanCurateTab({
                   )}
                   onClick={() => setSelectedInsight(insight)}
                 >
-                  <CardHeader>
+                  <CardHeader className="mac-card">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4">
                         {insight.type === "duplicate" && (
@@ -1477,14 +1474,14 @@ export function CleanCurateTab({
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mac-card">
                     <div className="flex items-center justify-between">
                       <div className="flex gap-4 text-sm">
                         {insight.riskScore && (
                           <span className="text-muted-foreground">Risk: {insight.riskScore}%</span>
                         )}
                       </div>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" className="mac-button mac-button-outline" size="sm">
                         Take Action
                         <ChevronRight className="h-4 w-4 ml-2" />
                       </Button>
@@ -1503,14 +1500,14 @@ export function CleanCurateTab({
               </div>
 
               {/* Real data from vector stats as curator proxy */}
-              <Card className="border-white/10 bg-black/20">
-                <CardHeader>
+              <Card className="mac-card border-white/10 bg-black/20">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-lg font-light">Data Sources Overview</CardTitle>
                   <CardDescription className="text-sm text-muted-foreground">
                     Real document counts from Supabase siam_vectors
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   {realData.loading ? (
                     <p className="text-sm text-muted-foreground">Loading curator data...</p>
                   ) : realData.vectorStats.length === 0 ? (
@@ -1523,7 +1520,7 @@ export function CleanCurateTab({
                     <div className="space-y-4">
                       {/* Tufte-style data table */}
                       <div className="divide-y divide-border">
-                        <div className="grid grid-cols-4 py-2 text-xs text-muted-foreground font-medium">
+                        <div className="grid grid-cols-4 py-2 text-xs text-muted-foreground font-normal">
                           <span>Source</span>
                           <span className="text-right">Documents</span>
                           <span className="text-right">Storage</span>
@@ -1543,8 +1540,8 @@ export function CleanCurateTab({
                       {/* Summary row */}
                       <div className="pt-3 border-t border-border">
                         <div className="flex justify-between text-sm">
-                          <span className="font-medium text-foreground">Total Documents</span>
-                          <span className="font-medium tabular-nums text-foreground">
+                          <span className="font-normal text-foreground">Total Documents</span>
+                          <span className="font-normal tabular-nums text-foreground">
                             {realData.totalDocuments.toLocaleString()}
                           </span>
                         </div>
@@ -1588,11 +1585,11 @@ export function CleanCurateTab({
                 </AlertDescription>
               </Alert>
 
-              <Card className="border-white/10 bg-black/20">
-                <CardHeader>
+              <Card className="mac-card border-white/10 bg-black/20">
+                <CardHeader className="mac-card">
                   <CardTitle className="text-lg font-light">Smart Upload Features</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mac-card">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -1670,7 +1667,7 @@ export function CleanCurateTab({
                 </div>
                 
                  <div className="p-6 border border-white/10 rounded-lg bg-black/40 my-8">
-                    <h3 className="text-lg font-medium text-white mb-4">Content Preview</h3>
+                    <h3 className="mac-title">Content Preview</h3>
                     <p>
                       This is a preview of the document content. In the full version, this would render the actual PDF or document text. 
                       For this demo, we are showing the "MAC Design System" styling of the preview modal.

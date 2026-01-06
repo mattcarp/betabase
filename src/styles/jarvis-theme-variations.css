@@ -8,7 +8,7 @@
   --jarvis-theme-primary: #3b82f6;
   --jarvis-theme-accent: #00ffff;
   --jarvis-theme-glow: rgba(59, 130, 246, 0.5);
-  --jarvis-theme-border: rgba(0, 255, 255, 0.3);
+  --jarvis-theme-border: var(--mac-info-border);
   --jarvis-theme-bg-start: rgba(0, 255, 255, 0.1);
   --jarvis-theme-bg-end: rgba(59, 130, 246, 0.05);
 }
@@ -18,17 +18,17 @@
   --jarvis-theme-primary: #00e5ff;
   --jarvis-theme-accent: #0080ff;
   --jarvis-theme-glow: rgba(0, 229, 255, 0.5);
-  --jarvis-theme-border: rgba(0, 229, 255, 0.4);
+  --jarvis-theme-border: var(--mac-info-border);
   --jarvis-theme-bg-start: rgba(0, 229, 255, 0.12);
   --jarvis-theme-bg-end: rgba(0, 128, 255, 0.06);
 }
 
 /* Royal Purple Theme */
 :root[data-jarvis-theme="purple"] {
-  --jarvis-theme-primary: #a855f7;
+  --jarvis-theme-primary: #26c6da;
   --jarvis-theme-accent: #c77dff;
   --jarvis-theme-glow: rgba(168, 85, 247, 0.5);
-  --jarvis-theme-border: rgba(199, 125, 255, 0.3);
+  --jarvis-theme-border: var(--mac-tier3-border);
   --jarvis-theme-bg-start: rgba(168, 85, 247, 0.1);
   --jarvis-theme-bg-end: rgba(199, 125, 255, 0.05);
 }
@@ -38,7 +38,7 @@
   --jarvis-theme-primary: #00ffa3;
   --jarvis-theme-accent: #00ff7f;
   --jarvis-theme-glow: rgba(0, 255, 163, 0.5);
-  --jarvis-theme-border: rgba(0, 255, 127, 0.3);
+  --jarvis-theme-border: var(--mac-status-connected-border);
   --jarvis-theme-bg-start: rgba(0, 255, 163, 0.1);
   --jarvis-theme-bg-end: rgba(0, 255, 127, 0.05);
 }
@@ -48,17 +48,17 @@
   --jarvis-theme-primary: #ffb347;
   --jarvis-theme-accent: #ff9500;
   --jarvis-theme-glow: rgba(255, 179, 71, 0.5);
-  --jarvis-theme-border: rgba(255, 149, 0, 0.3);
+  --jarvis-theme-border: var(--mac-status-warning-border);
   --jarvis-theme-bg-start: rgba(255, 179, 71, 0.1);
   --jarvis-theme-bg-end: rgba(255, 149, 0, 0.05);
 }
 
 /* High Contrast Mode Overrides */
 :root[data-high-contrast="true"] {
-  --jarvis-panel-border: rgba(255, 255, 255, 0.4);
-  --jarvis-panel-dark-border: rgba(255, 255, 255, 0.5);
+  --jarvis-panel-border: var(--mac-text-muted);
+  --jarvis-panel-dark-border: var(--mac-text-muted);
   --jarvis-panel-active-border: rgba(var(--jarvis-theme-primary-rgb), 0.8);
-  --jarvis-button-border: rgba(255, 255, 255, 0.4);
+  --jarvis-button-border: var(--mac-text-muted);
   --mac-text-secondary: #e5e5e5;
   --mac-text-muted: #cccccc;
 }
@@ -128,8 +128,8 @@
 /* Screen reader only content */
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   padding: 0;
   margin: -1px;
   overflow: hidden;
@@ -161,15 +161,15 @@
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   :root {
-    --jarvis-panel-border: rgba(255, 255, 255, 0.6);
-    --jarvis-panel-dark-border: rgba(255, 255, 255, 0.7);
+    --jarvis-panel-border: var(--mac-text-secondary);
+    --jarvis-panel-dark-border: var(--mac-text-primary);
     --mac-text-secondary: #ffffff;
     --mac-text-muted: #e5e5e5;
   }
 
   .glass-panel,
   .floating-panel {
-    border-width: 2px;
+    border-width: 0.125rem;
   }
 }
 
@@ -254,30 +254,30 @@
 
 /* Error states */
 .jarvis-error {
-  border-color: #ef4444 !important;
-  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: var(--mac-status-error-text) !important;
+  background: var(--mac-status-error-bg) !important;
 }
 
 .jarvis-error-text {
-  color: #fca5a5;
+  color: var(--mac-tier3);
 }
 
 /* Success states */
 .jarvis-success {
-  border-color: #22c55e !important;
-  background: rgba(34, 197, 94, 0.1) !important;
+  border-color: var(--mac-status-connected-text) !important;
+  background: var(--mac-status-connected-bg) !important;
 }
 
 .jarvis-success-text {
-  color: #86efac;
+  color: var(--mac-status-connected-text);
 }
 
 /* Warning states */
 .jarvis-warning {
-  border-color: #f59e0b !important;
-  background: rgba(245, 158, 11, 0.1) !important;
+  border-color: var(--mac-warning-yellow) !important;
+  background: var(--mac-status-warning-bg) !important;
 }
 
 .jarvis-warning-text {
-  color: #fcd34d;
+  color: var(--mac-status-warning-text);
 }

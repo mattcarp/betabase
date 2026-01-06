@@ -438,7 +438,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-2">
-                        <p className="text-sm font-medium text-mac-text-primary leading-tight">
+                        <p className="text-sm font-normal text-mac-text-primary leading-tight">
                           {interaction.description}
                         </p>
                         {getStatusIcon(interaction.status)}
@@ -503,21 +503,21 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Total:</span>
-            <span className="text-mac-text-primary font-medium">{interactions.length}</span>
+            <span className="text-mac-text-primary font-normal">{interactions.length}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Filtered:</span>
-            <span className="text-mac-text-primary font-medium">{filteredInteractions.length}</span>
+            <span className="text-mac-text-primary font-normal">{filteredInteractions.length}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Errors:</span>
-            <span className="text-rose-500 font-medium">
+            <span className="text-rose-500 font-normal">
               {interactions.filter((i) => i.status === "error").length}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-mac-text-muted">Duration:</span>
-            <span className="text-mac-text-primary font-medium">
+            <span className="text-mac-text-primary font-normal">
               {interactions.length > 0
                 ? formatRelativeTime(interactions[interactions.length - 1].timestamp)
                 : "0ms"}

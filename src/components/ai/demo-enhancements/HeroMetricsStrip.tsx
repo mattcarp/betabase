@@ -52,7 +52,7 @@ export function HeroMetricsStrip({
             icon: Zap,
             label: "Cache Hit",
             value: `${Math.round(cacheHitRate * 100)}%`,
-            color: "text-purple-400",
+            color: "text-primary-400",
           },
         ]
       : []),
@@ -85,7 +85,7 @@ export function HeroMetricsStrip({
               <Icon className={cn("h-3.5 w-3.5", metric.color)} />
               <span
                 className={cn(
-                  "text-xs font-medium",
+                  "text-xs font-normal",
                   metric.highlight ? "text-white" : "text-foreground"
                 )}
               >
@@ -125,7 +125,7 @@ export function HeroMetricsStrip({
               </span>
               <span
                 className={cn(
-                  "text-sm font-medium",
+                  "text-sm font-normal",
                   metric.highlight ? "text-emerald-300" : "text-foreground"
                 )}
               >

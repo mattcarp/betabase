@@ -507,8 +507,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                     const stepAnnotations = annotations.filter((ann) => ann.stepId === step.id);
                     return (
                       <div key={step.id}>
-                        <Card
-                          className={cn(
+                        <Card className={cn("mac-card", 
                             "cursor-pointer transition-all hover:shadow-md",
                             currentStep === index && "ring-2 ring-primary bg-primary/5",
                             step.status === "failure" && "border-red-500/20",
@@ -529,7 +528,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                                 {getStepIcon(step.type)}
                               </div>
                               <div className="flex-1">
-                                <p className="text-sm font-medium mac-body">{step.description}</p>
+                                <p className="text-sm font-normal mac-body">{step.description}</p>
                                 <p className="text-xs text-muted-foreground mt-1">
                                   {formatTime(step.timestamp)}
                                   {step.duration && ` • ${step.duration}ms`}
@@ -546,9 +545,8 @@ export const SessionPlaybackViewer: React.FC = () => {
                         {stepAnnotations.length > 0 && (
                           <div className="ml-12 mt-2 space-y-1">
                             {stepAnnotations.map((ann) => (
-                              <Card
-                                key={ann.id}
-                                className={cn(
+                              <Card key={ann.id}
+                                className={cn("mac-card", 
                                   "border-l-2",
                                   ann.type === "bug" && "border-l-red-500 bg-red-500/5",
                                   ann.type === "improvement" && "border-l-blue-500 bg-blue-500/5",
@@ -559,7 +557,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                                   <div className="flex items-start gap-2">
                                     <MessageSquare className="h-3 w-3 mt-0.5" />
                                     <div className="flex-1">
-                                      <p className="text-xs font-medium">{ann.text}</p>
+                                      <p className="text-xs font-normal">{ann.text}</p>
                                       <p className="text-xs text-muted-foreground mt-0.5">
                                         - {ann.author}
                                       </p>
@@ -637,7 +635,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                         <div className="mb-4 flex justify-center">
                           {getStepIcon(sessionSteps[currentStep]?.type || "")}
                         </div>
-                        <p className="text-sm font-medium">
+                        <p className="text-sm font-normal">
                           {sessionSteps[currentStep]?.description}
                         </p>
                         {sessionSteps[currentStep]?.selector && (
@@ -687,7 +685,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                 {isPlaying && (
                   <div className="absolute top-4 right-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-2 rounded-lg">
                     <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                    <span className="text-xs text-white font-medium">Playing {playbackSpeed}x</span>
+                    <span className="text-xs text-white font-normal">Playing {playbackSpeed}x</span>
                   </div>
                 )}
               </div>
@@ -696,9 +694,8 @@ export const SessionPlaybackViewer: React.FC = () => {
               {currentAnnotations.length > 0 && (
                 <div className="mt-4 space-y-2">
                   {currentAnnotations.map((ann) => (
-                    <Card
-                      key={ann.id}
-                      className={cn(
+                    <Card key={ann.id}
+                      className={cn("mac-card", 
                         "border-l-4",
                         ann.type === "bug" && "border-l-red-500 bg-red-500/5",
                         ann.type === "improvement" && "border-l-blue-500 bg-blue-500/5",
@@ -712,7 +709,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                             <Badge variant="outline" className="mb-1">
                               {ann.type}
                             </Badge>
-                            <p className="text-sm font-medium">{ann.text}</p>
+                            <p className="text-sm font-normal">{ann.text}</p>
                             <p className="text-xs text-muted-foreground mt-1">- {ann.author}</p>
                           </div>
                         </div>
@@ -758,7 +755,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                                   <Eye className="h-4 w-4 text-yellow-500" />
                                 )}
                                 <div className="flex-1 space-y-1">
-                                  <p className="text-xs font-medium capitalize">
+                                  <p className="text-xs font-normal capitalize">
                                     {interaction.type}
                                   </p>
                                   <p className="text-xs text-muted-foreground">

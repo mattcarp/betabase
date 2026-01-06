@@ -478,7 +478,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
         <h3 className="mac-title">Wisdom Library</h3>
         <div className="flex items-center gap-2">
           {/* REMOVED: MCP connection status - now using direct Supabase */}
-          <button className="text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">
+          <button className="mac-button text-motiff-accent/70 hover:text-motiff-accent text-sm transition-colors">
             Browse All
           </button>
         </div>
@@ -491,7 +491,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
             size={16}
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40"
           />
-          <input
+          <input className="mac-input"
             type="text"
             placeholder="Search wisdom..."
             value={searchQuery}
@@ -506,7 +506,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
             const Icon = category.icon;
             const isSelected = selectedCategory === category.value;
             return (
-              <button
+              <button className="mac-button"
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
                 className={`flex items-center gap-2 px-2 py-2 rounded-lg text-xs whitespace-nowrap transition-all ${
@@ -561,7 +561,7 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
                     <div className="flex items-center gap-2 mb-2">
                       <h4
                         className="mac-title"
-                        className="mac-title font-medium text-white text-sm truncate"
+                        className="mac-title font-normal text-white text-sm truncate"
                       >
                         {entry.title}
                       </h4>
@@ -617,11 +617,11 @@ export const WisdomLibrary: React.FC<WisdomLibraryProps> = ({
       {filteredEntries.length > 0 && (
         <div className="mt-4 pt-4 border-t border-white/10">
           <div className="flex gap-2">
-            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+            <button className="mac-button flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
               <Lightbulb size={12} className="inline mr-2" />
               AI Summary
             </button>
-            <button className="flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
+            <button className="mac-button flex-1 motiff-glass-panel px-4 py-2 text-xs text-white/70 hover:text-white transition-colors">
               <MessageCircle size={12} className="inline mr-2" />
               Ask About
             </button>

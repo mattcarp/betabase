@@ -91,15 +91,15 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
                     exit={{ opacity: 0, scale: 0.9 }}
                     className="flex flex-col items-center text-center"
                   >
-                    <FileText className="h-10 w-10 text-purple-400 mb-2" />
-                    <p className="text-sm font-medium text-[var(--mac-text-primary)]">
+                    <FileText className="h-10 w-10 text-primary-400 mb-2" />
+                    <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                       {file.name}
                     </p>
                     <p className="text-xs text-[var(--mac-text-muted)] font-light">
                       {(file.size / 1024).toFixed(1)} KB
                     </p>
-                    <Button
-                      variant="ghost"
+                    <Button className="mac-button"
+                      variant="ghost" className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setFile(null)}
                       className="mt-2 text-red-400 hover:text-red-500 hover:bg-red-400/10"
@@ -119,14 +119,14 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
                     <Upload className="h-10 w-10 text-[var(--mac-text-muted)] mb-2" />
                     <Label
                       htmlFor="file-upload"
-                      className="cursor-pointer text-sm font-medium text-purple-400 hover:text-purple-300"
+                      className="cursor-pointer text-sm font-normal text-primary-400 hover:text-primary-300"
                     >
                       Choose a file
                     </Label>
                     <Input
                       id="file-upload"
                       type="file"
-                      className="hidden"
+                      className="mac-input hidden"
                       onChange={handleFileChange}
                       accept=".pdf,.txt,.md"
                     />
@@ -144,7 +144,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
               className="flex flex-col items-center justify-center py-8"
             >
               <CheckCircle2 className="h-16 w-16 text-green-400 mb-4" />
-              <p className="text-lg font-medium text-[var(--mac-text-primary)]">Upload Complete!</p>
+              <p className="text-lg font-normal text-[var(--mac-text-primary)]">Upload Complete!</p>
               <p className="text-sm text-[var(--mac-text-muted)] font-light">
                 Processing for vector search...
               </p>
@@ -159,7 +159,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
               </div>
               <div className="h-2 bg-[var(--mac-utility-border)] rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-purple-400"
+                  className="h-full bg-primary-400"
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.2 }}
@@ -174,7 +174,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
             <Button
               onClick={handleUpload}
               disabled={!file || uploading}
-              className="w-full sm:w-auto font-light"
+              className="mac-button w-full sm:w-auto font-light"
             >
               {uploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {uploading ? "Uploading..." : "Upload Document"}

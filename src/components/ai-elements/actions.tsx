@@ -72,7 +72,7 @@ export const Action = ({
     <Button
       className={cn(
         "mac-button mac-button-primary",
-        "!h-8 !w-8 !p-0 text-muted-foreground hover:text-foreground shrink-0",
+        "!h-8 !w-8 !p-0 text-primary hover:text-primary/80 shrink-0",
         className
       )}
       size={size}

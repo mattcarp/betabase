@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
+} from "../ui/dialog";
 import {
   Table,
   TableBody,
@@ -15,8 +15,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+} from "../ui/table";
+import { Badge } from "../ui/badge";
 import { ExternalLink, Disc3, Calendar, MapPin, Building2, Hash } from "lucide-react";
 
 interface MusicBrainzRelease {
@@ -161,7 +161,7 @@ export function MusicBrainzDialog({ open, onOpenChange, data }: MusicBrainzDialo
         {/* Track Listing */}
         {tracks && tracks.length > 0 && (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-foreground">Track Listing</h3>
+            <h3 className="mac-title">Track Listing</h3>
             <div className="rounded-md border border-border overflow-hidden">
               <Table>
                 <TableHeader>
@@ -190,7 +190,7 @@ export function MusicBrainzDialog({ open, onOpenChange, data }: MusicBrainzDialo
         {/* Alternative Releases */}
         {alternativeReleases && alternativeReleases.length > 0 && (
           <div className="space-y-2 pt-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Other Releases</h3>
+            <h3 className="mac-title">Other Releases</h3>
             <div className="flex flex-wrap gap-2">
               {alternativeReleases.map((alt) => (
                 <a

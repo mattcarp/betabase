@@ -5,7 +5,7 @@
  */
 
 export { DDPDisplay } from './DDPDisplay';
-export { DDPUploader } from './DDPUploader';
+export { DDPUploader, type DDPProcessingStage } from './DDPUploader';
 export { MusicBrainzResultCard } from './MusicBrainzResultCard';
 
 // Re-export types

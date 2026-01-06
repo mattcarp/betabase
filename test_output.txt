@@ -1,30 +1,4 @@
 
-Running 1 test using 1 worker
+Running 22 tests using 4 workers
 
-  ✘  1 [chromium] › tests/verify-welcome-screen.spec.ts:14:7 › Welcome Screen Verification › should display logo, welcome text, and suggestions on initial load (363ms)
-
-
-  1) [chromium] › tests/verify-welcome-screen.spec.ts:14:7 › Welcome Screen Verification › should display logo, welcome text, and suggestions on initial load 
-
-    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
-    Call log:
-    [2m  - navigating to "http://localhost:3000/", waiting until "load"[22m
-
-
-       5 |     page.on('console', msg => console.log(`BROWSER LOG: ${msg.text()}`));
-       6 |     // Clear localStorage to ensure we are in a "fresh" state with no active conversation
-    >  7 |     await page.goto('/');
-         |                ^
-       8 |     await page.evaluate(() => {
-       9 |       localStorage.clear();
-      10 |     });
-        at /Users/matt/Documents/projects/siam/tests/verify-welcome-screen.spec.ts:7:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/verify-welcome-screen-Welc-83dd2-suggestions-on-initial-load-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  1 failed
-    [chromium] › tests/verify-welcome-screen.spec.ts:14:7 › Welcome Screen Verification › should display logo, welcome text, and suggestions on initial load 
-
-[36m  Serving HTML report at http://localhost:62838. Press Ctrl+C to quit.[39m
+  -   1 [chromium] › tests/e2e/demo/demo-gaps.spec.ts:57:8 › MC Edit Demo - Gap Coverage @demo @gaps › DEMO-GAP-02: Chat offers diagram for architecture questions

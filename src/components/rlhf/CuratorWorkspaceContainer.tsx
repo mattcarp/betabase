@@ -10,10 +10,11 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
+import { cn } from "../../lib/utils";
 import { Loader2, AlertCircle, RefreshCw } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 import { CuratorWorkspace } from "./CuratorWorkspace";
 import type { AnnotationQueueItem } from "./types";
 
@@ -164,10 +165,10 @@ export function CuratorWorkspaceContainer({
   // Loading state
   if (isLoading) {
     return (
-      <Card className={`bg-card/50 border-border ${className}`}>
+      <Card className={cn("mac-card", `bg-card/50 border-border ${className)}`}>
         <CardContent className="flex flex-col items-center justify-center py-16">
-          <Loader2 className="h-10 w-10 text-purple-400 animate-spin mb-4" />
-          <p className="text-muted-foreground">Loading annotation queue...</p>
+          <Loader2 className="h-10 w-10 text-primary-400 animate-spin mb-4" />
+          <p className="mac-body text-muted-foreground">Loading annotation queue...</p>
         </CardContent>
       </Card>
     );
@@ -176,12 +177,12 @@ export function CuratorWorkspaceContainer({
   // Error state
   if (error && queue.length === 0) {
     return (
-      <Card className={`bg-card/50 border-border ${className}`}>
+      <Card className={cn("mac-card", `bg-card/50 border-border ${className)}`}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <AlertCircle className="h-10 w-10 text-red-400 mb-4" />
-          <p className="text-foreground font-medium mb-2">Failed to load queue</p>
+          <p className="mac-body text-foreground font-normal mb-2">Failed to load queue</p>
           <p className="text-muted-foreground text-sm mb-4">{error}</p>
-          <Button variant="outline" onClick={fetchQueue} className="border-border text-foreground">
+          <Button variant="outline" onClick={fetchQueue} className="mac-button border-border text-foreground">
             <RefreshCw className="h-4 w-4 mr-2" />
             Retry
           </Button>
@@ -218,11 +219,10 @@ export function CuratorWorkspaceContainer({
               </div>
             )}
           </div>
-          <Button
-            variant="ghost"
+          <Button variant="ghost"
             size="sm"
             onClick={fetchQueue}
-            className="text-muted-foreground hover:text-foreground"
+            className="mac-button mac-button-outline text-muted-foreground hover:text-foreground"
           >
             <RefreshCw className="h-4 w-4 mr-1" />
             Refresh

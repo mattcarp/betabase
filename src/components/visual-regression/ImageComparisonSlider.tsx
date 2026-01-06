@@ -126,9 +126,8 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
       </div>
 
       {/* Comparison Container */}
-      <Card
-        ref={containerRef}
-        className={cn("relative overflow-hidden select-none", isDragging && "cursor-grabbing")}
+      <Card ref={containerRef}
+        className={cn("mac-card", "relative overflow-hidden select-none", isDragging && "cursor-grabbing")}
         style={{ width, height }}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -152,7 +151,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
                 className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                 draggable={false}
               />
-              <div className="absolute top-2 left-2 bg-green-500/90 text-white px-2 py-1 rounded text-xs font-medium">
+              <div className="absolute top-2 left-2 bg-green-500/90 text-white px-2 py-1 rounded text-xs font-normal">
                 Baseline
               </div>
             </div>
@@ -170,7 +169,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
                 className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                 draggable={false}
               />
-              <div className="absolute top-2 right-2 bg-blue-500/90 text-white px-2 py-1 rounded text-xs font-medium">
+              <div className="absolute top-2 right-2 bg-blue-500/90 text-white px-2 py-1 rounded text-xs font-normal">
                 Current
               </div>
             </div>
@@ -209,7 +208,7 @@ export const ImageComparisonSlider: React.FC<ImageComparisonSliderProps> = ({
               />
             )}
 
-            <div className="absolute top-2 left-2 bg-yellow-500/90 text-white px-2 py-1 rounded text-xs font-medium">
+            <div className="absolute top-2 left-2 bg-yellow-500/90 text-white px-2 py-1 rounded text-xs font-normal">
               Diff Overlay
             </div>
           </div>

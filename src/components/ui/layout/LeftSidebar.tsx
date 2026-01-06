@@ -240,7 +240,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="absolute -right-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border/50 hover:bg-muted transition-colors group"
+        className="mac-button absolute -right-4 top-8 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border/50 hover:bg-muted transition-colors group"
         aria-label="Toggle sidebar"
       >
         <ChevronLeft className="h-4 w-4 text-muted-foreground group-hover:text-white transition-colors" />
@@ -260,17 +260,17 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         {/* Enhanced Search Bar */}
         <div className="mt-4 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-mac-text-muted pointer-events-none" />
-          <input
+          <input className="mac-input"
             ref={searchInputRef}
             type="text"
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-10 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-purple-400/50 focus:border-mac-accent-purple-400/50 transition-all duration-200"
+            className="w-full pl-11 pr-10 py-2.5 bg-mac-surface-bg border border-mac-border rounded-lg text-sm text-mac-text-primary placeholder-mac-text-muted focus:outline-none focus:ring-2 focus:ring-mac-accent-primary-400/50 focus:border-mac-accent-primary-400/50 transition-all duration-200"
             data-testid="sidebar-search"
           />
           {searchQuery && (
-            <button
+            <button className="mac-button"
               onClick={() => setSearchQuery("")}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-mac-text-muted hover:text-mac-text-primary transition-colors"
             >
@@ -299,7 +299,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             conversationGroups.map((group) => (
               <div key={group.label} className="py-4">
                 {/* Group Header */}
-                <button
+                <button className="mac-button"
                   onClick={() => toggleGroup(group.label)}
                   className="flex items-center justify-between w-full px-4 py-2 text-sm font-normal text-mac-text-secondary hover:text-mac-text-primary hover:bg-mac-state-hover transition-all duration-200 group"
                 >
@@ -329,7 +329,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       <div className="space-y-8 pb-2">
                         {group.conversations.map((conversation) => (
                           <div key={conversation.id} className="relative group/conversation">
-                            <button
+                            <button className="mac-button"
                               onClick={() => onConversationSelect?.(conversation.id)}
                               onContextMenu={(e) => handleContextMenu(e, conversation.id)}
                               className={cn(
@@ -354,13 +354,13 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-2">
                                     <h4
-                                      className="mac-title text-sm font-normal text-mac-text-primary truncate flex-1"
+                                      className="mac-title"
                                       data-testid="conversation-title"
                                     >
                                       {conversation.title}
                                     </h4>
                                     {conversation.isPinned && (
-                                      <Star className="w-3 h-3 text-mac-accent-purple-400 fill-current flex-shrink-0" />
+                                      <Star className="w-3 h-3 text-mac-accent-primary-400 fill-current flex-shrink-0" />
                                     )}
                                   </div>
                                   <p className="text-xs text-mac-text-muted truncate mb-2">
@@ -384,7 +384,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                             </button>
 
                             {/* Context Menu Button */}
-                            <button
+                            <button className="mac-button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleContextMenu(e, conversation.id);
@@ -425,21 +425,21 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 transform: "translate(-50%, -10px)",
               }}
             >
-              <button
+              <button className="mac-button"
                 onClick={() => handleContextAction("rename")}
                 className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Edit className="w-4 h-4" />
                 Rename
               </button>
-              <button
+              <button className="mac-button"
                 onClick={() => handleContextAction("pin")}
                 className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
                 <Pin className="w-4 h-4" />
                 Pin conversation
               </button>
-              <button
+              <button className="mac-button"
                 onClick={() => handleContextAction("archive")}
                 className="w-full flex items-center gap-4 px-4 py-2 text-sm text-mac-text-primary hover:bg-mac-state-hover transition-colors"
               >
@@ -447,7 +447,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 Archive
               </button>
               <div className="border-t border-mac-border my-2" />
-              <button
+              <button className="mac-button"
                 onClick={() => handleContextAction("delete")}
                 className="w-full flex items-center gap-4 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
               >

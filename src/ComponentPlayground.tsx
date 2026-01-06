@@ -12,7 +12,7 @@ const ComponentPlayground = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-card to-background p-8">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
-          <h1 className="mac-heading text-4xl font-bold text-blue-600 mb-4">
+          <h1 c className="mac-heading"lassName="mac-heading text-4xl font-normal text-blue-600 mb-4">
             SIAM UI Component Playground
           </h1>
           <p className="mac-body text-foreground">Interactive component testing environment</p>
@@ -20,7 +20,7 @@ const ComponentPlayground = () => {
 
         {/* RadialProgress Section */}
         <section className="mb-16">
-          <h2 className="mac-heading text-2xl font-bold text-blue-600 mb-8">
+          <h2 c className="mac-heading"lassName="mac-heading text-2xl font-normal text-blue-600 mb-8">
             RadialProgress Component
           </h2>
 
@@ -43,16 +43,16 @@ const ComponentPlayground = () => {
 
             {/* Controls */}
             <div className="bg-card/50 rounded-lg p-8 border border-border">
-              <h3 className="mac-title text-lg font-normal text-blue-600 mb-6">
+              <h3 c className="mac-title"lassName="mac-title text-lg font-normal text-blue-600 mb-6">
                 Component Controls
               </h3>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
+                  <label className="block text-sm font-normal text-foreground mb-2">
                     Value: {progressValue}%
                   </label>
-                  <input
+                  <input className="mac-input"
                     type="range"
                     min="0"
                     max="100"
@@ -64,10 +64,10 @@ const ComponentPlayground = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
+                  <label className="block text-sm font-normal text-foreground mb-2">
                     Size: {progressSize}px
                   </label>
-                  <input
+                  <input className="mac-input"
                     type="range"
                     min="80"
                     max="300"
@@ -79,7 +79,7 @@ const ComponentPlayground = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Color</label>
+                  <label className="block text-sm font-normal text-foreground mb-2">Color</label>
                   <select
                     value={progressColor}
                     onChange={(e) => setProgressColor(e.target.value as any)}
@@ -99,7 +99,7 @@ const ComponentPlayground = () => {
 
           {/* Multiple Variants */}
           <div className="mt-12">
-            <h3 className="mac-title text-lg font-normal text-blue-600 mb-6">Component Variants</h3>
+            <h3 c className="mac-title"lassName="mac-title text-lg font-normal text-blue-600 mb-6">Component Variants</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {[
                 { value: 25, color: "danger" as const, label: "Low" },
@@ -127,7 +127,7 @@ const ComponentPlayground = () => {
 
         {/* System Status Dashboard */}
         <section className="mb-16">
-          <h2 className="mac-heading text-2xl font-bold text-blue-600 mb-8">
+          <h2 c className="mac-heading"lassName="mac-heading text-2xl font-normal text-blue-600 mb-8">
             System Dashboard Example
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">

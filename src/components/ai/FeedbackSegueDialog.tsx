@@ -63,7 +63,7 @@ export function FeedbackSegueDialog({
       <DialogContent className="sm:max-w-[550px] bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-foreground flex items-center gap-2">
-            <MessageSquarePlus className="h-5 w-5 text-mac-accent-purple-400" />
+            <MessageSquarePlus className="h-5 w-5 text-mac-accent-primary-400" />
             Thank You for Your Feedback
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
@@ -75,11 +75,11 @@ export function FeedbackSegueDialog({
           {/* Context Preview */}
           <div className="space-y-3 p-3 bg-muted/30 rounded-lg border border-border">
             <div>
-              <span className="text-xs font-medium text-muted-foreground">Your question:</span>
+              <span className="text-xs font-normal text-muted-foreground">Your question:</span>
               <p className="text-sm text-foreground line-clamp-2 mt-1">{userQuery}</p>
             </div>
             <div>
-              <span className="text-xs font-medium text-muted-foreground">AI response:</span>
+              <span className="text-xs font-normal text-muted-foreground">AI response:</span>
               <p className="text-sm text-muted-foreground line-clamp-3 mt-1">
                 {aiResponse.substring(0, 200)}...
               </p>
@@ -88,7 +88,7 @@ export function FeedbackSegueDialog({
 
           {/* Feedback Input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
+            <label className="text-sm font-normal text-foreground">
               What was the issue with this response?
             </label>
             <Textarea
@@ -101,7 +101,7 @@ export function FeedbackSegueDialog({
             <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-xs text-mac-accent-purple-400 flex items-center gap-1.5"
+              className="text-xs text-mac-accent-primary-400 flex items-center gap-1.5"
             >
               <CheckCircle className="h-3.5 w-3.5" />
               Your feedback will be added to the curation queue and integrated into the system in
@@ -115,7 +115,7 @@ export function FeedbackSegueDialog({
             variant="outline"
             onClick={() => handleSubmit("close")}
             disabled={isSubmitting}
-            className="flex-1 border-border text-foreground hover:bg-muted hover:text-foreground"
+            className="mac-button mac-button-outline flex-1 border-border text-foreground hover:bg-muted hover:text-foreground"
             data-test-id="feedback-close-btn"
           >
             Close
@@ -125,7 +125,7 @@ export function FeedbackSegueDialog({
               variant="outline"
               onClick={() => handleSubmit("integration")}
               disabled={isSubmitting}
-              className="flex-1 border-mac-primary-blue-400/30 text-mac-primary-blue-400 hover:bg-mac-primary-blue-400/10"
+              className="mac-button mac-button-outline flex-1 border-mac-primary-blue-400/30 text-mac-primary-blue-400 hover:bg-mac-primary-blue-400/10"
               data-test-id="feedback-integration-btn"
             >
               <ArrowRight className="h-4 w-4 mr-2" />
@@ -135,7 +135,7 @@ export function FeedbackSegueDialog({
           <Button
             onClick={() => handleSubmit("curation")}
             disabled={isSubmitting}
-            className="flex-1 bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-purple-400 hover:from-mac-primary-blue-500 hover:to-mac-accent-purple-500 text-white"
+            className="mac-button flex-1 bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-primary-400 hover:from-mac-primary-blue-500 hover:to-mac-accent-primary-500 text-white"
             data-test-id="feedback-curation-btn"
           >
             <ArrowRight className="h-4 w-4 mr-2" />

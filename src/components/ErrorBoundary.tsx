@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
     // Show user-friendly error notification
     toast.error(`An unexpected error occurred: ${error.message}`);
 
-    // Log to centralized logging service (in production, this would go to a service like Sentry)
+    // Log to centralized logging service
     this.logError(error, errorInfo);
   }
 
@@ -61,14 +61,14 @@ export class ErrorBoundary extends Component<Props, State> {
           >
             <div className="text-center max-w-md mx-auto border border-green-400 p-8 bg-black/80">
               <div className="text-6xl mb-4">⚠️</div>
-              <h1 className="mac-heading text-2xl font-bold mb-4 text-green-400">
-                SIAM System Error
+              <h1 className="mac-heading text-2xl font-normal mb-4 text-green-400">
+                System Malfunction
               </h1>
               <p className="mac-body text-green-300 mb-6">
                 An unexpected error occurred. The error has been logged and reported.
               </p>
               <div className="space-y-4">
-                <button
+                <button className="mac-button"
                   onClick={() => window.location.reload()}
                   className="w-full px-4 py-2 bg-green-900/50 border border-green-400 text-green-400 hover:bg-green-900/70 transition-colors"
                   data-testid="reload-button"

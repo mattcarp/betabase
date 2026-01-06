@@ -8,14 +8,14 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "src/components/ui/command";
+} from "../ui/command";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "src/components/ui/dialog";
-import { cn } from "src/lib/utils";
+} from "../ui/dialog";
+import { cn } from "../../lib/utils";
 import type { ComponentProps, ReactNode } from "react";
 
 export type ModelSelectorProps = ComponentProps<typeof Dialog>;

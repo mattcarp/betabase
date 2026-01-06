@@ -153,10 +153,10 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
   };
 
   return (
-    <Card className="h-full flex flex-col bg-card/50 border-border">
-      <CardHeader>
+    <Card className="mac-card h-full flex flex-col bg-card/50 border-border">
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <Activity className="h-5 w-5 text-purple-400" />
+          <Activity className="h-5 w-5 text-primary-400" />
           RAG Pipeline Debugger
         </CardTitle>
         <CardDescription className="text-muted-foreground">
@@ -167,7 +167,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
         {/* Search for message ID */}
         <div className="flex gap-2 mb-4">
           <div className="relative flex-1">
-            <Input
+            <Input className="mac-input"
               placeholder="Enter message or feedback ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -177,7 +177,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
             <Button
               variant="ghost"
               size="sm"
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+              className="mac-button absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
               onClick={() => {
                 setShowRecent(!showRecent);
                 if (!showRecent) loadRecentItems();
@@ -195,7 +195,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                   {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
                 </div>
                 {recentItems.map((item) => (
-                  <button
+                  <button className="mac-button"
                     key={item.id}
                     onClick={() => {
                       setSearchQuery(item.id);
@@ -240,7 +240,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
               </div>
             )}
           </div>
-          <Button
+          <Button className="mac-button"
             onClick={() => loadDebugInfo(searchQuery)}
             disabled={loading || !searchQuery.trim()}
             className="gap-2"
@@ -273,8 +273,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
             <TabsContent value="overview" className="flex-1">
               <ScrollArea className="h-[500px]">
                 <div className="space-y-4">
-                  <Card className="bg-card/30 border-border">
-                    <CardHeader>
+                  <Card className="mac-card bg-card/30 border-border">
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-sm text-muted-foreground">Query Information</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
@@ -287,7 +287,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                           className={cn(
                             "text-xs",
                             debugData.strategy === "agentic"
-                              ? "bg-purple-500/20 text-purple-300"
+                              ? "bg-primary-400/20 text-primary-300"
                               : debugData.strategy === "context-aware"
                                 ? "bg-blue-500/20 text-blue-300"
                                 : "bg-muted/20 text-foreground"
@@ -307,32 +307,32 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-card/30 border-border">
-                    <CardHeader>
+                  <Card className="mac-card bg-card/30 border-border">
+                    <CardHeader className="mac-card">
                       <CardTitle className="text-sm text-muted-foreground">Pipeline Metrics</CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4">
                       <div>
                         <span className="text-xs text-muted-foreground">Initial Documents:</span>
-                        <p className="text-lg font-bold text-purple-400">
+                        <p className="text-lg font-normal text-primary-400">
                           {debugData.retrievedDocs.length}
                         </p>
                       </div>
                       <div>
                         <span className="text-xs text-muted-foreground">After Re-ranking:</span>
-                        <p className="text-lg font-bold text-blue-400">
+                        <p className="text-lg font-normal text-blue-400">
                           {debugData.rerankedDocs.length}
                         </p>
                       </div>
                       <div>
                         <span className="text-xs text-muted-foreground">Agent Steps:</span>
-                        <p className="text-lg font-bold text-cyan-400">
+                        <p className="text-lg font-normal text-cyan-400">
                           {debugData.agentSteps.length}
                         </p>
                       </div>
                       <div>
                         <span className="text-xs text-muted-foreground">History Turns:</span>
-                        <p className="text-lg font-bold text-green-400">
+                        <p className="text-lg font-normal text-green-400">
                           {debugData.sessionHistory.length}
                         </p>
                       </div>
@@ -347,8 +347,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                 <div className="space-y-3">
                   {debugData.retrievedDocs.length > 0 ? (
                     debugData.retrievedDocs.map((doc, idx) => (
-                      <Card key={idx} className="bg-card/30 border-border">
-                        <CardHeader>
+                      <Card key={idx} className="mac-card bg-card/30 border-border">
+                        <CardHeader className="mac-card">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-sm text-muted-foreground">
                               Document #{idx + 1}
@@ -358,7 +358,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                             </Badge>
                           </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="mac-card">
                           <p className="text-xs text-muted-foreground line-clamp-3">
                             {doc.content?.substring(0, 200)}...
                           </p>
@@ -366,7 +366,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                       </Card>
                     ))
                   ) : (
-                    <p className="text-muted-foreground text-center py-8">No retrieval data available</p>
+                    <p className="mac-body text-muted-foreground text-center py-8">No retrieval data available</p>
                   )}
                 </div>
               </ScrollArea>
@@ -377,8 +377,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                 <div className="space-y-3">
                   {debugData.rerankedDocs.length > 0 ? (
                     debugData.rerankedDocs.map((doc, idx) => (
-                      <Card key={idx} className="bg-card/30 border-border">
-                        <CardHeader>
+                      <Card key={idx} className="mac-card bg-card/30 border-border">
+                        <CardHeader className="mac-card">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-sm text-muted-foreground">
                               Document #{idx + 1}
@@ -387,13 +387,13 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                               <Badge variant="outline" className="text-xs bg-blue-500/10">
                                 Before: {(doc.originalScore * 100).toFixed(1)}%
                               </Badge>
-                              <Badge variant="outline" className="text-xs bg-purple-500/10">
+                              <Badge variant="outline" className="text-xs bg-primary-400/10">
                                 After: {(doc.rerankScore * 100).toFixed(1)}%
                               </Badge>
                             </div>
                           </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="mac-card">
                           <p className="text-xs text-muted-foreground line-clamp-3">
                             {doc.content?.substring(0, 200)}...
                           </p>
@@ -406,7 +406,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                       </Card>
                     ))
                   ) : (
-                    <p className="text-muted-foreground text-center py-8">No re-ranking data available</p>
+                    <p className="mac-body text-muted-foreground text-center py-8">No re-ranking data available</p>
                   )}
                 </div>
               </ScrollArea>
@@ -417,8 +417,8 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                 <div className="space-y-3">
                   {debugData.agentSteps.length > 0 ? (
                     debugData.agentSteps.map((step, idx) => (
-                      <Card key={idx} className="bg-card/30 border-border">
-                        <CardHeader>
+                      <Card key={idx} className="mac-card bg-card/30 border-border">
+                        <CardHeader className="mac-card">
                           <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                             <GitBranch className="h-4 w-4 text-cyan-400" />
                             Step {idx + 1}: {step.action}
@@ -441,7 +441,7 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
                   ) : (
                     <div className="text-center py-8">
                       <Lightbulb className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-                      <p className="text-muted-foreground">No agent steps (standard retrieval used)</p>
+                      <p className="mac-body text-muted-foreground">No agent steps (standard retrieval used)</p>
                     </div>
                   )}
                 </div>
@@ -450,11 +450,11 @@ export function ResponseDebugger({ conversationId, messageId }: ResponseDebugger
 
             <TabsContent value="context" className="flex-1">
               <ScrollArea className="h-[500px]">
-                <Card className="bg-card/30 border-border">
-                  <CardHeader>
+                <Card className="mac-card bg-card/30 border-border">
+                  <CardHeader className="mac-card">
                     <CardTitle className="text-sm text-muted-foreground">Session Context</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mac-card">
                     <pre className="text-xs text-muted-foreground overflow-x-auto">
                       {JSON.stringify(debugData.sessionHistory, null, 2)}
                     </pre>

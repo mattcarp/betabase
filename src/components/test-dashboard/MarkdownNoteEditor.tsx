@@ -98,11 +98,11 @@ export const MarkdownNoteEditor: React.FC<MarkdownNoteEditorProps> = ({
     );
     html = html.replace(
       /^# (.*$)/gim,
-      "<h1 class='mac-heading text-2xl font-bold mt-4 mb-2'>$1</h1>"
+      "<h1 class='mac-heading text-2xl font-normal mt-4 mb-2'>$1</h1>"
     );
 
     // Bold
-    html = html.replace(/\*\*(.*?)\*\*/gim, "<strong class='font-bold'>$1</strong>");
+    html = html.replace(/\*\*(.*?)\*\*/gim, "<strong class='font-normal'>$1</strong>");
 
     // Italic
     html = html.replace(/\*(.*?)\*/gim, "<em class='italic'>$1</em>");

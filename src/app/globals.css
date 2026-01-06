@@ -19,13 +19,16 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 187 71% 40%; /* Darker teal for light mode */
-    --primary-foreground: 186 100% 13%; /* Dark teal #003d44 for contrast */
+    --primary: 187 71% 40%;
+    /* Darker teal for light mode */
+    --primary-foreground: 186 100% 13%;
+    /* Dark teal #003d44 for contrast */
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 187 100% 35%; /* Darker teal accent */
+    --accent: 187 100% 35%;
+    /* Darker teal accent */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
@@ -70,42 +73,49 @@
     --mac-text-primary: #0f172a;
     --mac-text-secondary: #475569;
     --mac-text-muted: #94a3b8;
-    --mac-utility-border: rgba(0, 0, 0, 0.1);
+    --mac-utility-border: var(--mac-utility-shadow);
     --mac-primary-blue-400: #0097a7;
     --mac-state-hover: rgba(0, 0, 0, 0.05);
-    --mac-border: rgba(0, 0, 0, 0.1);
+    --mac-border: var(--mac-utility-shadow);
   }
 
   /* Dark Theme (MAC) */
   [data-theme="mac"],
   [data-theme="dark"],
   .dark {
-    --background: 0 0% 4%; /* Near black */
+    --background: 0 0% 4%;
+    /* Near black */
     --foreground: 210 40% 98%;
     --card: 0 0% 8%;
     --card-foreground: 210 40% 98%;
     --popover: 0 0% 8%;
     --popover-foreground: 210 40% 98%;
-    --primary: 187 71% 50%; /* Teal #26c6da */
-    --primary-foreground: 186 100% 13%; /* Dark teal #003d44 for contrast */
+    --primary: 187 71% 50%;
+    /* Teal #26c6da */
+    --primary-foreground: 186 100% 13%;
+    /* Dark teal #003d44 for contrast */
     --secondary: 0 0% 8%;
     --secondary-foreground: 210 40% 98%;
     --muted: 0 0% 15%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 187 100% 42%; /* Teal #00bcd4 */
+    --accent: 187 100% 42%;
+    /* Teal #00bcd4 */
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 0 0% 8%; /* MAC Design System: subtle border */
+    --border: 0 0% 8%;
+    /* MAC Design System: subtle border */
     --input: 0 0% 10%;
-    --ring: 187 71% 50%; /* Teal ring */
+    --ring: 187 71% 50%;
+    /* Teal ring */
 
     /* MAC Data Storytelling Colors - Teal Primary */
     --mac-data-coral: #d97752;
     --mac-data-coral-dim: #b86543;
     --mac-data-teal: #26c6da;
     --mac-data-teal-dim: #0097a7;
-    --mac-data-purple: #00bcd4; /* Now teal */
+    --mac-data-purple: #00bcd4;
+    /* Now teal */
     --mac-data-purple-dim: #00838f;
 
     /* Neutral Hierarchy for Data Viz */
@@ -137,10 +147,10 @@
     --mac-text-primary: #fafafa;
     --mac-text-secondary: #a3a3a3;
     --mac-text-muted: #737373;
-    --mac-utility-border: rgba(255, 255, 255, 0.08);
+    --mac-utility-border: rgba(255, 255, 255, 0.12);
     --mac-primary-blue-400: #26c6da;
     --mac-state-hover: rgba(255, 255, 255, 0.05);
-    --mac-border: rgba(255, 255, 255, 0.08);
+    --mac-border: var(--mac-utility-border);
   }
 }
 
@@ -148,6 +158,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -160,7 +171,7 @@
 .dark .border-t-zinc-800,
 .dark .border-l-zinc-800,
 .dark .border-r-zinc-800 {
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: var(--mac-utility-border) !important;
 }
 
 .dark .border-zinc-900,
@@ -168,7 +179,7 @@
 .dark .border-t-zinc-900,
 .dark .border-l-zinc-900,
 .dark .border-r-zinc-900 {
-  border-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: var(--mac-state-hover) !important;
 }
 
 .dark .border-zinc-700,
@@ -176,7 +187,7 @@
 .dark .border-t-zinc-700,
 .dark .border-l-zinc-700,
 .dark .border-r-zinc-700 {
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: var(--mac-utility-border-elevated) !important;
 }
 
 /* Custom styles */
@@ -216,17 +227,16 @@ body {
 :root[data-theme="light"] img[alt*="SIAM"] {
   filter: invert(1) hue-rotate(180deg) brightness(1.1) !important;
 }
+
 /* MAC Design System Component Styles */
 
 /* Button Styles */
 .mac-button-primary {
-  background: linear-gradient(
-    135deg,
-    var(--mac-primary-blue-400) 0%,
-    var(--mac-accent-purple-400) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--mac-primary-blue-400) 0%,
+      var(--mac-accent-primary-400) 100%);
   color: var(--mac-text-primary);
-  padding: 12px 24px;
+  padding: 1rem 1.5rem;
   border-radius: 6px;
   border: none;
   position: relative;
@@ -243,7 +253,7 @@ body {
   background: var(--mac-surface-elevated);
   border: 1px solid var(--mac-border);
   color: var(--mac-text-primary);
-  padding: 12px 24px;
+  padding: 1rem 1.5rem;
   border-radius: 6px;
   font-weight: 300;
   backdrop-filter: blur(10px);
@@ -253,7 +263,7 @@ body {
   background: transparent;
   border: 1px solid var(--mac-primary-blue-400);
   color: var(--mac-primary-blue-400);
-  padding: 12px 24px;
+  padding: 1rem 1.5rem;
   border-radius: 6px;
   font-weight: 300;
 }
@@ -279,6 +289,7 @@ body {
   0% {
     left: -100%;
   }
+
   100% {
     left: 100%;
   }
@@ -296,7 +307,7 @@ body {
   background: var(--mac-surface-elevated);
   border: 1px solid var(--mac-border);
   color: var(--mac-text-primary);
-  padding: 12px;
+  padding: 1rem;
   border-radius: 6px;
   font-weight: 300;
 }

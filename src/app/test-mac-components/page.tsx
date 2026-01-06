@@ -27,37 +27,37 @@ export default function MACComponentsTestPage() {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-light text-white mb-2">MAC Design System Components Test</h1>
-          <p className="text-[var(--mac-text-secondary)]">
+          <h1 className="mac-heading text-4xl font-light text-white mb-2">MAC Design System Components Test</h1>
+          <p className="mac-body text-[var(--mac-text-secondary)]">
             Testing Button, Input, and Form components with MAC styling
           </p>
         </div>
 
         {/* Button Component Section */}
         <section className="mac-card p-8">
-          <h2 className="text-2xl font-light text-white mb-6">Button Components</h2>
+          <h2 className="mac-heading text-2xl font-light text-white mb-6">Button Components</h2>
 
           <div className="space-y-6">
             {/* Button Variants */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">Variants</h3>
+              <h3 className="mac-title text-sm text-[var(--mac-text-muted)] mb-4">Variants</h3>
               <div className="flex flex-wrap gap-4">
-                <Button className="mac-button mac-button-primary" variant="default">
+                <Button className="mac-button mac-button-primary" variant="default" className="mac-button mac-button-primary">
                   Default Button
                 </Button>
-                <Button className="mac-button mac-button-secondary" variant="secondary">
+                <Button className="mac-button mac-button-secondary" variant="secondary" className="mac-button mac-button-secondary">
                   Secondary
                 </Button>
-                <Button className="mac-button mac-button-outline" variant="outline">
+                <Button className="mac-button mac-button-outline" variant="outline" className="mac-button mac-button-outline">
                   Outline
                 </Button>
-                <Button className="mac-button mac-button-outline" variant="ghost">
+                <Button className="mac-button mac-button-outline" variant="ghost" className="mac-button mac-button-outline">
                   Ghost
                 </Button>
-                <Button className="mac-button mac-button-primary" variant="link">
+                <Button className="mac-button mac-button-primary" variant="link" className="mac-button">
                   Link Button
                 </Button>
-                <Button className="mac-button mac-button-primary" variant="destructive">
+                <Button className="mac-button mac-button-primary" variant="destructive" className="mac-button mac-button-primary">
                   Destructive
                 </Button>
               </div>
@@ -65,7 +65,7 @@ export default function MACComponentsTestPage() {
 
             {/* Button Sizes */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">Sizes</h3>
+              <h3 className="mac-title text-sm text-[var(--mac-text-muted)] mb-4">Sizes</h3>
               <div className="flex items-center gap-4">
                 <Button className="mac-button mac-button-primary" size="sm">
                   Small
@@ -84,7 +84,7 @@ export default function MACComponentsTestPage() {
 
             {/* Button States */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">States</h3>
+              <h3 className="mac-title text-sm text-[var(--mac-text-muted)] mb-4">States</h3>
               <div className="flex gap-4">
                 <Button>Normal</Button>
                 <Button className="mac-button mac-button-primary" disabled>
@@ -103,12 +103,12 @@ export default function MACComponentsTestPage() {
 
         {/* Input Component Section */}
         <section className="mac-card p-8">
-          <h2 className="text-2xl font-light text-white mb-6">Input Components</h2>
+          <h2 className="mac-heading text-2xl font-light text-white mb-6">Input Components</h2>
 
           <div className="space-y-6">
             {/* Basic Inputs */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">Basic Inputs</h3>
+              <h3 className="mac-title text-sm text-[var(--mac-text-muted)] mb-4">Basic Inputs</h3>
               <div className="space-y-4 max-w-md">
                 <Input className="mac-input" placeholder="Default input" />
                 <Input className="mac-input" placeholder="With glow on focus" glow />
@@ -120,7 +120,7 @@ export default function MACComponentsTestPage() {
 
             {/* Input States */}
             <div>
-              <h3 className="text-sm text-[var(--mac-text-muted)] mb-4">States</h3>
+              <h3 className="mac-title text-sm text-[var(--mac-text-muted)] mb-4">States</h3>
               <div className="space-y-4 max-w-md">
                 <Input className="mac-input" placeholder="Normal state" />
                 <Input
@@ -148,7 +148,7 @@ export default function MACComponentsTestPage() {
 
         {/* Form Component Section */}
         <section className="mac-card p-8">
-          <h2 className="text-2xl font-light text-white mb-6">Form Components</h2>
+          <h2 className="mac-heading text-2xl font-light text-white mb-6">Form Components</h2>
 
           <Form {...form}>
             <form className="space-y-6 max-w-md">
@@ -210,7 +210,7 @@ export default function MACComponentsTestPage() {
                 <Button className="mac-button mac-button-primary" type="submit">
                   Submit Form
                 </Button>
-                <Button className="mac-button mac-button-outline" type="button" variant="outline">
+                <Button className="mac-button mac-button-outline" type="button" variant="outline" className="mac-button mac-button-outline">
                   Cancel
                 </Button>
               </div>
@@ -220,13 +220,13 @@ export default function MACComponentsTestPage() {
 
         {/* Test Results */}
         <section className="mac-card p-8">
-          <h2 className="text-2xl font-light text-white mb-4">Test Results</h2>
+          <h2 className="mac-heading text-2xl font-light text-white mb-4">Test Results</h2>
           <div className="space-y-2 text-sm">
-            <p className="text-green-400">✅ Button component using MAC classes</p>
-            <p className="text-green-400">✅ Input component with MAC styling and ARIA</p>
-            <p className="text-green-400">✅ Form components with MAC design system</p>
-            <p className="text-green-400">✅ All components backward compatible</p>
-            <p className="text-green-400">✅ No console errors</p>
+            <p className="mac-body text-green-400">✅ Button component using MAC classes</p>
+            <p className="mac-body text-green-400">✅ Input component with MAC styling and ARIA</p>
+            <p className="mac-body text-green-400">✅ Form components with MAC design system</p>
+            <p className="mac-body text-green-400">✅ All components backward compatible</p>
+            <p className="mac-body text-green-400">✅ No console errors</p>
           </div>
         </section>
       </div>

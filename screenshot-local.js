@@ -14,11 +14,11 @@ import { chromium } from "playwright";
     console.log("📍 Loading http://localhost:3000...");
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
-      timeout: 15000,
+      timeout: 45000,
     });
 
     // Wait for content to fully load
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
 
     // Get page title
     const title = await page.title();

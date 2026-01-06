@@ -85,7 +85,7 @@ export const useNotifications = () => {
         const content = action ? (
           <div className="flex items-center justify-between w-full">
             <span>{message}</span>
-            <button
+            <button className="mac-button"
               onClick={() => {
                 action.onClick();
                 if (dismissible) toast.dismiss();

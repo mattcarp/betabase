@@ -13,7 +13,7 @@
 }
 
 .text-neon-purple {
-  color: var(--mac-accent-purple-400);
+  color: var(--mac-accent-primary-400);
 }
 
 .text-neon-pink {
@@ -33,7 +33,7 @@
 }
 
 .bg-neon-purple {
-  background-color: var(--mac-accent-purple-400);
+  background-color: var(--mac-accent-primary-400);
 }
 
 .bg-neon-pink {
@@ -53,7 +53,7 @@
 }
 
 .border-neon-purple {
-  border-color: var(--mac-accent-purple-400);
+  border-color: var(--mac-accent-primary-400);
 }
 
 .border-neon-pink {
@@ -310,7 +310,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 0.125rem;
   background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.8), transparent);
   animation: scan-line 3s ease-in-out infinite;
 }

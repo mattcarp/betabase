@@ -327,7 +327,7 @@ Failed to load resource: the server responded with a status of 500 ()
 
 3. **Monitoring**:
    - Set up Render metrics dashboard
-   - Add Sentry error tracking
+   - Improved error tracking
    - Implement uptime monitoring
 
 ---

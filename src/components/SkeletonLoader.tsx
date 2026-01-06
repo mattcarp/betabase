@@ -125,37 +125,6 @@ export const SystemMonitorSkeleton: React.FC = () => (
   </div>
 );
 
-export const CircularHUDSkeleton: React.FC<{ size?: number }> = ({ size = 400 }) => (
-  <div
-    className="relative flex items-center justify-center"
-    style={{ width: size, height: size }}
-    data-testid="circular-hud-skeleton"
-  >
-    {/* Outer ring */}
-    <Skeleton
-      className="absolute inset-0 rounded-full border-4 border-[var(--jarvis-primary)]/20"
-      animate={false}
-    />
-
-    {/* Inner content */}
-    <div className="text-center space-y-3">
-      <Skeleton className="h-6 w-24 mx-auto" />
-      <Skeleton className="h-4 w-32 mx-auto" />
-      <div className="flex space-x-2 justify-center">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-2 w-2 rounded-full" />
-        ))}
-      </div>
-    </div>
-
-    {/* Animated pulse effect */}
-    <div
-      className="absolute inset-4 rounded-full border-2 border-[var(--jarvis-primary)]/30 animate-ping"
-      style={{ animationDuration: "3s" }}
-    />
-  </div>
-);
-
 // Panel skeleton that adapts to panel type
 interface PanelSkeletonProps {
   panelType: "audio" | "transcription" | "ai-insights" | "system-monitor" | "default";
@@ -273,7 +242,6 @@ export default {
   TranscriptionSkeleton,
   AIInsightsSkeleton,
   SystemMonitorSkeleton,
-  CircularHUDSkeleton,
   PanelSkeleton,
   LoadingOverlay,
 };

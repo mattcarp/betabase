@@ -16,7 +16,7 @@ export default function NotFound() {
         fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >
-      <h1 style={{ fontSize: "6rem", margin: 0, fontWeight: 200 }}>404</h1>
+      <h1  className="mac-heading"style={{ fontSize: "6rem", margin: 0, fontWeight: 200 }}>404</h1>
       <p style={{ fontSize: "1.25rem", color: "#888", marginTop: "1rem" }}>Page not found</p>
       <a
         href="/"

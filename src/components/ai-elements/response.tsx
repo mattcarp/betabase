@@ -198,7 +198,7 @@ const components: Options["components"] = {
   ),
   a: ({ node, children, className, ...props }) => (
     <a
-      className={cn("font-medium text-primary underline", className)}
+      className={cn("font-normal text-primary underline", className)}
       rel="noreferrer"
       target="_blank"
       {...props}
@@ -302,9 +302,25 @@ const components: Options["components"] = {
     let language = "typescript";
     let filename = "";
 
-    if (typeof node?.properties?.className === "string") {
+    // Extract language from the <code> child element's className
+    // react-markdown puts the language class on <code>, not <pre>
+    if (isValidElement(children) && (children.props as any)?.className) {
+      const codeClassName = (children.props as any).className;
+      if (typeof codeClassName === "string" && codeClassName.includes("language-")) {
+        const langClass = codeClassName.replace("language-", "");
+        // Support format like "typescript:path/to/file.ts" or "typescript"
+        if (langClass.includes(":")) {
+          const [lang, path] = langClass.split(":");
+          language = lang;
+          filename = path;
+        } else {
+          language = langClass;
+        }
+      }
+    }
+    // Fallback to pre element's className if no code child className
+    else if (typeof node?.properties?.className === "string") {
       const langClass = node.properties.className.replace("language-", "");
-      // Support format like "typescript:path/to/file.ts" or "typescript"
       if (langClass.includes(":")) {
         const [lang, path] = langClass.split(":");
         language = lang;
@@ -333,7 +349,7 @@ const components: Options["components"] = {
           code={code.trim()}
           language={language as any}
           filename={filename || undefined}
-          showLineNumbers
+          showLineNumbers={language !== "mermaid"}
           className="shadow-lg"
         />
       </div>

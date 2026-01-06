@@ -182,14 +182,14 @@ export const ManualTestingPanel: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="mac-heading text-2xl font-light text-foreground mac-title">
+          <h2 className="mac-heading">
             Manual Testing Mode
           </h2>
           <p className="text-sm text-muted-foreground mt-2">
             Interactive testing with built-in recording and annotation tools
           </p>
         </div>
-
+        
         {/* Recording Status Badge */}
         <Badge
           className={cn(
@@ -204,7 +204,7 @@ export const ManualTestingPanel: React.FC = () => {
               getRecordingColor()
             )}
           />
-          <span className="text-sm font-medium">
+          <span className="text-sm font-normal">
             {recordingState === "recording" && "Recording"}
             {recordingState === "paused" && "Paused"}
             {recordingState === "idle" && "Not Recording"}
@@ -271,7 +271,7 @@ export const ManualTestingPanel: React.FC = () => {
 
               {/* Viewport Selector */}
               <div className="flex items-center gap-2 mt-4">
-                <span className="text-xs text-muted-foreground font-medium">Viewport:</span>
+                <span className="text-xs text-muted-foreground font-normal">Viewport:</span>
                 {(Object.keys(VIEWPORT_SIZES) as ViewportMode[]).map((mode) => {
                   const Icon = VIEWPORT_SIZES[mode].icon;
                   return (
@@ -325,7 +325,7 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Recording Controls */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3 className="mac-title">
                 <Circle className="h-4 w-4 text-red-500" />
                 Recording Controls
               </h3>
@@ -388,7 +388,7 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Session Info */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3 className="mac-title">
                 <Clock className="h-4 w-4 text-blue-500" />
                 Session Information
               </h3>
@@ -447,8 +447,8 @@ export const ManualTestingPanel: React.FC = () => {
           {/* Quick Actions */}
           <Card className="mac-card mac-glass border-[var(--mac-utility-border)]">
             <CardContent className="p-6">
-              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
-                <Maximize2 className="h-4 w-4 text-purple-500" />
+              <h3 className="mac-title">
+                <Maximize2 className="h-4 w-4 text-primary-500" />
                 Quick Actions
               </h3>
 
@@ -466,7 +466,7 @@ export const ManualTestingPanel: React.FC = () => {
                 <Button
                   onClick={handleAnnotate}
                   variant="outline"
-                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-purple-400 hover:text-purple-400 mac-button mac-button-outline"
+                  className="w-full gap-2 justify-start transition-all duration-200 hover:border-primary-400 hover:text-primary-400 mac-button mac-button-outline"
                   disabled={recordingState === "idle"}
                 >
                   <Edit3 className="h-4 w-4" />
@@ -487,9 +487,9 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
 
           {/* Testing Tips */}
-          <Card className="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-purple-950/20">
+          <Card className="mac-card mac-glass border-[var(--mac-utility-border-elevated)] bg-gradient-to-br from-blue-950/20 to-primary-950/20">
             <CardContent className="p-6">
-              <h3 className="mac-title text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3 className="mac-title">
                 <MousePointerClick className="h-4 w-4 text-blue-400" />
                 Testing Tips
               </h3>

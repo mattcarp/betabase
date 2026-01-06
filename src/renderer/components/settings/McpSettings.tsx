@@ -220,7 +220,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
       return (
         <div key={category} className="mb-6">
-          <h5 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+          <h5 className="text-sm font-normal text-foreground mb-3 flex items-center gap-2">
             {getCategoryIcon(category)}
             {category.charAt(0).toUpperCase() + category.slice(1)} ({features.length})
           </h5>
@@ -264,7 +264,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-blue-600 font-mono">MCP Settings</h3>
+        <h3 className="mac-title text-lg font-normal text-blue-600 font-mono">MCP Settings</h3>
         <div className="flex items-center gap-2 text-sm font-mono">
           <span className="text-foreground">Status:</span>
           <span className={serverStatus.color}>{serverStatus.text}</span>
@@ -275,12 +275,12 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         {/* Enable Toggle */}
         <div className="flex items-center justify-between p-4 bg-card/50 rounded-lg border border-border">
           <div>
-            <label className="text-sm font-medium text-foreground">Enable MCP</label>
+            <label className="text-sm font-normal text-foreground">Enable MCP</label>
             <p className="text-xs text-muted-foreground mt-1">
               Enable Model Context Protocol integration for enhanced AI capabilities
             </p>
           </div>
-          <button
+          <button className="mac-button"
             onClick={() => handleFieldChange("enabled", !formData.enabled)}
             className={`flex items-center gap-2 px-3 py-2 rounded font-mono text-sm transition-colors ${
               formData.enabled
@@ -307,11 +307,11 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         <div className="grid grid-cols-1 gap-6">
           {/* Server URL */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
+            <label className="block text-sm font-normal text-foreground mb-2">
               <Server className="w-4 h-4 inline mr-2" />
               Server URL
             </label>
-            <input
+            <input className="mac-input"
               type="url"
               value={formData.serverUrl}
               onChange={(e) => handleFieldChange("serverUrl", e.target.value)}
@@ -334,12 +334,12 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
           {/* API Key */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
+            <label className="block text-sm font-normal text-foreground mb-2">
               <Key className="w-4 h-4 inline mr-2" />
               API Key
               <span className="text-muted-foreground font-normal ml-2">(optional)</span>
             </label>
-            <input
+            <input className="mac-input"
               type="password"
               value={formData.apiKey}
               onChange={(e) => handleFieldChange("apiKey", e.target.value)}
@@ -354,11 +354,11 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
 
           {/* Timeout */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
+            <label className="block text-sm font-normal text-foreground mb-2">
               <Clock className="w-4 h-4 inline mr-2" />
               Timeout (ms)
             </label>
-            <input
+            <input className="mac-input"
               type="number"
               min="1000"
               max="60000"
@@ -388,7 +388,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         {/* Server Information */}
         {status?.data?.servers?.[0] && (
           <div className="p-4 bg-card/30 rounded-lg border border-border">
-            <h4 className="text-sm font-medium text-foreground mb-3">Server Information</h4>
+            <h4 className="mac-title text-sm font-normal text-foreground mb-3">Server Information</h4>
             <div className="grid grid-cols-2 gap-4 text-sm font-mono">
               <div>
                 <span className="text-muted-foreground">Name:</span>
@@ -428,8 +428,8 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
         {capabilities && formData.enabled && (
           <div className="p-4 bg-card/30 rounded-lg border border-border">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-medium text-foreground">AOMA Mesh MCP Capabilities</h4>
-              <button
+              <h4 className="mac-title text-sm font-normal text-foreground">AOMA Mesh MCP Capabilities</h4>
+              <button className="mac-button"
                 onClick={() => setShowFeatures(!showFeatures)}
                 className="text-xs text-blue-600 hover:text-blue-300 font-mono"
               >
@@ -489,7 +489,7 @@ export function McpSettings({ isOpen = true, onSave }: McpSettingsProps) {
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mac-button flex items-center gap-2 px-4 py-2 bg-blue-400/20 border border-blue-500 text-blue-300 rounded font-mono text-sm hover:bg-blue-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             data-testid="mcp-save-button"
           >
             {isLoading ? (

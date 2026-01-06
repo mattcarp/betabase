@@ -3,10 +3,10 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "src/lib/utils"
-import { Button } from "src/components/ui/button"
-import { Input } from "src/components/ui/input"
-import { Textarea } from "src/components/ui/textarea"
+import { cn } from "../../lib/utils"
+import { Button } from "./button"
+import { Input } from "./input"
+import { Textarea } from "./textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -37,7 +37,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const inputGroupAddonVariants = cva(
-  "text-muted-foreground flex h-auto cursor-text select-none items-center justify-center gap-2 py-1.5 text-sm font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
+  "text-muted-foreground flex h-auto cursor-text select-none items-center justify-center gap-2 py-1.5 text-sm font-normal group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
   {
     variants: {
       align: {
@@ -110,7 +110,7 @@ function InputGroupButton({
       type={type}
       data-size={size}
       variant={variant}
-      className={cn(inputGroupButtonVariants({ size }), className)}
+      className={cn("mac-button", inputGroupButtonVariants({ size }), className)}
       {...props}
     />
   )
@@ -135,7 +135,7 @@ function InputGroupInput({
   return (
     <Input
       data-slot="input-group-control"
-      className={cn(
+      className={cn("mac-input", 
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
         className
       )}

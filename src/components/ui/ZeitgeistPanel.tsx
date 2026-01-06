@@ -109,7 +109,7 @@ function SourceBadge({ category }: { category: ZeitgeistTopic['category'] }) {
     chat_history: {
       icon: <MessageSquare className="h-3 w-3" />,
       label: "Chat",
-      className: "bg-[var(--mac-accent-purple-400)]/10 border-[var(--mac-accent-purple-400)]/30 text-[var(--mac-accent-purple-400)]"
+      className: "bg-[var(--mac-accent-primary-400)]/10 border-[var(--mac-accent-primary-400)]/30 text-[var(--mac-accent-primary-400)]"
     },
     mixed: {
       icon: <Zap className="h-3 w-3" />,
@@ -138,7 +138,7 @@ function ScoreBar({ score, maxScore = 1.0 }: { score: number; maxScore?: number 
     <div className="flex items-center gap-2 min-w-[100px]">
       <div className="flex-1 h-2 bg-[var(--mac-surface-background)] rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-[var(--mac-primary-blue-400)] to-[var(--mac-accent-purple-400)] rounded-full transition-all duration-300"
+          className="h-full bg-gradient-to-r from-[var(--mac-primary-blue-400)] to-[var(--mac-accent-primary-400)] rounded-full transition-all duration-300"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -269,11 +269,11 @@ export function ZeitgeistPanel({ className }: ZeitgeistPanelProps) {
       "border-[var(--mac-utility-border)]",
       className
     )}>
-      <CardHeader className="pb-4">
+      <CardHeader className="mac-card pb-4">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 font-light text-[var(--mac-text-primary)]">
-              <TrendingUp className="h-5 w-5 text-[var(--mac-accent-purple-400)]" />
+              <TrendingUp className="h-5 w-5 text-[var(--mac-accent-primary-400)]" />
               Zeitgeist Intelligence
             </CardTitle>
             <CardDescription className="font-light text-[var(--mac-text-secondary)]">
@@ -425,7 +425,7 @@ export function ZeitgeistPanel({ className }: ZeitgeistPanelProps) {
                 "text-[var(--mac-text-secondary)]"
               )}>
                 <TrendingUp className="h-10 w-10 mb-4 opacity-30" />
-                <p className="font-light">No trending topics found</p>
+                <p className="mac-body font-light">No trending topics found</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Click refresh to gather signals</p>
               </div>
             )}

@@ -250,10 +250,10 @@ export function RLHFTestSuite() {
   // Graceful fallback when Supabase is not configured
   if (!supabaseAvailable) {
     return (
-      <Card className="h-full flex flex-col bg-card/50 border-border">
-        <CardHeader>
+      <Card className="mac-card h-full flex flex-col bg-card/50 border-border">
+        <CardHeader className="mac-card">
           <CardTitle className="flex items-center gap-2 text-foreground">
-            <Lightbulb className="h-5 w-5 text-purple-400" />
+            <Lightbulb className="h-5 w-5 text-primary-400" />
             RLHF-Generated Test Suite
           </CardTitle>
           <CardDescription className="text-muted-foreground">
@@ -272,10 +272,10 @@ export function RLHFTestSuite() {
   }
 
   return (
-    <Card className="h-full flex flex-col bg-card/50 border-border">
-      <CardHeader>
+    <Card className="mac-card h-full flex flex-col bg-card/50 border-border">
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <Lightbulb className="h-5 w-5 text-purple-400" />
+          <Lightbulb className="h-5 w-5 text-primary-400" />
           RLHF-Generated Test Suite
         </CardTitle>
         <CardDescription className="text-muted-foreground">
@@ -285,33 +285,33 @@ export function RLHFTestSuite() {
       <CardContent className="flex-1 flex flex-col space-y-4">
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-          <Card className="bg-card/30 border-border">
+          <Card className="mac-card bg-card/30 border-border">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-foreground">{stats.total}</div>
+              <div className="text-2xl font-normal text-foreground">{stats.total}</div>
               <div className="text-xs text-muted-foreground">Total Tests</div>
             </CardContent>
           </Card>
-          <Card className="bg-green-500/10 border-green-500/30">
+          <Card className="mac-card bg-green-500/10 border-green-500/30">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-green-400">{stats.passing}</div>
+              <div className="text-2xl font-normal text-green-400">{stats.passing}</div>
               <div className="text-xs text-muted-foreground">Passing</div>
             </CardContent>
           </Card>
-          <Card className="bg-red-500/10 border-red-500/30">
+          <Card className="mac-card bg-red-500/10 border-red-500/30">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-red-400">{stats.failing}</div>
+              <div className="text-2xl font-normal text-red-400">{stats.failing}</div>
               <div className="text-xs text-muted-foreground">Failing</div>
             </CardContent>
           </Card>
-          <Card className="bg-amber-500/10 border-amber-500/30">
+          <Card className="mac-card bg-amber-500/10 border-amber-500/30">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-amber-400">{stats.pending}</div>
+              <div className="text-2xl font-normal text-amber-400">{stats.pending}</div>
               <div className="text-xs text-muted-foreground">Pending</div>
             </CardContent>
           </Card>
-          <Card className="bg-purple-500/10 border-purple-500/30">
+          <Card className="mac-card bg-primary-500/10 border-primary-500/30">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-purple-400">{stats.generationRate}</div>
+              <div className="text-2xl font-normal text-primary-400">{stats.generationRate}</div>
               <div className="text-xs text-muted-foreground">Generated/Week</div>
             </CardContent>
           </Card>
@@ -319,7 +319,7 @@ export function RLHFTestSuite() {
 
         {/* Action buttons */}
         <div className="flex gap-2">
-          <Button variant="outline" onClick={loadRLHFTests} disabled={loading} className="gap-2">
+          <Button variant="outline" onClick={loadRLHFTests} disabled={loading} className="mac-button gap-2">
             {loading ? (
               <>
                 <RefreshCw className="h-4 w-4 animate-spin" />
@@ -332,8 +332,7 @@ export function RLHFTestSuite() {
               </>
             )}
           </Button>
-          <Button
-            className="gap-2 bg-purple-600 hover:bg-purple-700"
+          <Button className="mac-button gap-2 bg-primary-600 hover:bg-primary-700"
             onClick={generateTests}
             disabled={generating}
           >
@@ -353,13 +352,13 @@ export function RLHFTestSuite() {
 
         {/* Info banner when no tests - Emphasizing Human-AI Collaboration */}
         {tests.length === 0 && !loading && (
-          <div className="flex flex-col gap-4 p-6 rounded-lg bg-gradient-to-r from-purple-500/10 to-amber-500/5 border border-purple-500/20">
+          <div className="flex flex-col gap-4 p-6 rounded-lg bg-gradient-to-r from-primary-500/10 to-amber-500/5 border border-primary-500/20">
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-full bg-purple-500/20">
-                <Lightbulb className="h-6 w-6 text-purple-400" />
+              <div className="p-2 rounded-full bg-primary-500/20">
+                <Lightbulb className="h-6 w-6 text-primary-400" />
               </div>
               <div>
-                <p className="text-lg font-medium text-purple-200">AI Awaiting Human Guidance</p>
+                <p className="text-lg font-normal text-primary-200">AI Awaiting Human Guidance</p>
                 <p className="text-sm text-muted-foreground mt-1">
                   Tests in this suite are generated from <strong className="text-amber-300">human curator corrections</strong>.
                   The AI learns what "good" looks like from your feedback.
@@ -371,18 +370,18 @@ export function RLHFTestSuite() {
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">👤</div>
                 <span>Human reviews AI response</span>
               </div>
-              <span className="text-purple-500">→</span>
+              <span className="text-primary-500">→</span>
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">✏️</div>
                 <span>Human provides correction</span>
               </div>
-              <span className="text-purple-500">→</span>
+              <span className="text-primary-500">→</span>
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">🧪</div>
                 <span>AI generates test</span>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground pl-14 border-l-2 border-purple-500/30 ml-2">
+            <p className="text-xs text-muted-foreground pl-14 border-l-2 border-primary-500/30 ml-2">
               💡 <strong>RLHF</strong> (Reinforcement Learning from Human Feedback) ensures AI improves through human wisdom, not just data.
             </p>
           </div>
@@ -393,8 +392,8 @@ export function RLHFTestSuite() {
           {tests.length > 0 ? (
             <div className="space-y-3">
               {tests.map((test) => (
-                <Card key={test.id} className="bg-card/30 border-border">
-                  <CardHeader>
+                <Card key={test.id} className="mac-card bg-card/30 border-border">
+                  <CardHeader className="mac-card">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -439,18 +438,16 @@ export function RLHFTestSuite() {
                       </div>
                     )}
                     <div className="flex gap-2 pt-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
+                      <Button size="sm"
+                        variant="outline" className="mac-button mac-button-outline"
                         onClick={() => runTest(test)}
                         className="gap-1 text-xs h-7"
                       >
                         <Play className="h-3 w-3" />
                         Run Test
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
+                      <Button size="sm"
+                        variant="outline" className="mac-button mac-button-outline"
                         onClick={() => viewTestCode(test)}
                         className="gap-1 text-xs h-7"
                       >
@@ -489,7 +486,7 @@ export function RLHFTestSuite() {
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden bg-card border-border">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-foreground">
-              <FileText className="h-5 w-5 text-purple-400" />
+              <FileText className="h-5 w-5 text-primary-400" />
               Test Code
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
@@ -500,7 +497,7 @@ export function RLHFTestSuite() {
           <div className="space-y-4">
             {/* Original Query */}
             <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">Original Query</label>
+              <label className="text-xs font-normal text-muted-foreground mb-1 block">Original Query</label>
               <div className="p-3 rounded-lg bg-muted/50 border border-border">
                 <p className="text-sm text-foreground">{selectedTest?.original_query}</p>
               </div>
@@ -509,7 +506,7 @@ export function RLHFTestSuite() {
             {/* Expected Response */}
             {selectedTest?.curator_correction && (
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                <label className="text-xs font-normal text-muted-foreground mb-1 block">
                   Expected Response (Curator Correction)
                 </label>
                 <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20 max-h-24 overflow-y-auto">
@@ -521,14 +518,13 @@ export function RLHFTestSuite() {
             {/* Test Code */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-medium text-muted-foreground">
+                <label className="text-xs font-normal text-muted-foreground">
                   Generated Playwright Test
                 </label>
-                <Button
-                  variant="ghost"
+                <Button variant="ghost"
                   size="sm"
                   onClick={copyTestCode}
-                  className="h-7 text-xs gap-1"
+                  className="mac-button mac-button-outline h-7 text-xs gap-1"
                 >
                   {copied ? (
                     <>
@@ -567,9 +563,10 @@ export function RLHFTestSuite() {
                 </span>
               </div>
               <Button
+                variant="teal-solid"
                 size="sm"
                 onClick={() => selectedTest && runTest(selectedTest)}
-                className="gap-1 bg-purple-600 hover:bg-purple-700"
+                className="gap-1"
               >
                 <Play className="h-3 w-3" />
                 Run Test

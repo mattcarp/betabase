@@ -13,8 +13,8 @@ export const MAC_CHART_COLORS = {
   coralDim: '#b86543',
   teal: '#3ba99c',
   tealDim: '#2d8a7f',
-  purple: '#8b5cf6',
-  purpleDim: '#7c3aed',
+  purple: '#26c6da',
+  purpleDim: '#00bcd4',
   
   // Neutral hierarchy
   zinc100: '#fafafa',

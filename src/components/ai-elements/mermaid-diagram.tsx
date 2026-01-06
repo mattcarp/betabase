@@ -40,7 +40,7 @@ const MERMAID_CONFIG = {
     primaryBorderColor: "rgba(255,255,255,0.12)",
 
     // Line and relationship colors - purple
-    lineColor: "#a855f7",
+    lineColor: "#26c6da",
 
     // Background colors - dark surfaces
     secondaryColor: "#1e1e2e",
@@ -64,7 +64,7 @@ const MERMAID_CONFIG = {
     actorTextColor: "#f5f5f5",
     actorBkg: "#1e1e2e",
     actorBorder: "#26c6da",
-    signalColor: "#a855f7",
+    signalColor: "#26c6da",
     signalTextColor: "#f5f5f5",
 
     // Flowchart specific
@@ -75,7 +75,7 @@ const MERMAID_CONFIG = {
 
     // Git graph
     git0: "#26c6da",
-    git1: "#a855f7",
+    git1: "#26c6da",
     git2: "#22d3ee",
     git3: "#facc15",
     gitBranchLabel0: "#f5f5f5",
@@ -162,6 +162,9 @@ export function MermaidDiagram({
   const [isLoading, setIsLoading] = useState(true);
   const [proDiagram, setProDiagram] = useState<ProDiagramState>({ status: "idle" });
   const [zoom, setZoom] = useState(1);
+  const [mermaidRendered, setMermaidRendered] = useState(false);
+  const [showProPanel, setShowProPanel] = useState(false); // User clicked to view enhanced diagram
+  const backgroundGenerationStarted = useRef(false);
   const uniqueId = useId().replace(/:/g, "-");
 
   useEffect(() => {
@@ -191,6 +194,7 @@ export function MermaidDiagram({
           setSanitizedSvgContent(containerRef.current, renderedSvg);
           setError(null);
           setIsLoading(false);
+          setMermaidRendered(true);
         }
       } catch (err) {
         console.error("[MermaidDiagram] Render error:", err);
@@ -209,7 +213,10 @@ export function MermaidDiagram({
   }, [code, uniqueId]);
 
   // Generate pro diagram using Nano Banana Pro API
-  const generateProDiagram = useCallback(async () => {
+  const generateProDiagramInternal = useCallback(async () => {
+    if (proDiagram.status === "generating" || proDiagram.status === "ready") {
+      return; // Already generating or ready
+    }
     setProDiagram({ status: "generating" });
 
     try {
@@ -247,15 +254,34 @@ export function MermaidDiagram({
         error: err instanceof Error ? err.message : "Unknown error",
       });
     }
-  }, [code]);
+  }, [code, proDiagram.status]);
+
+  // Background generation: Start generating pro diagram as soon as mermaid renders
+  useEffect(() => {
+    if (
+      mermaidRendered &&
+      enableProUpgrade &&
+      !onUpgrade && // Only if using internal handler
+      !backgroundGenerationStarted.current &&
+      proDiagram.status === "idle"
+    ) {
+      backgroundGenerationStarted.current = true;
+      // Start background generation silently
+      generateProDiagramInternal();
+    }
+  }, [mermaidRendered, enableProUpgrade, onUpgrade, proDiagram.status, generateProDiagramInternal]);
 
   const handleUpgrade = () => {
     if (onUpgrade) {
       // External handler provided
       onUpgrade(code);
     } else if (enableProUpgrade) {
-      // Use internal Nano Banana Pro integration
-      generateProDiagram();
+      // Show the panel - it will display generating/ready status
+      setShowProPanel(true);
+      // If somehow idle (background gen failed to start), start it now
+      if (proDiagram.status === "idle") {
+        generateProDiagramInternal();
+      }
     }
   };
 
@@ -272,7 +298,7 @@ export function MermaidDiagram({
   // Zoom controls
   const zoomIn = () => setZoom((z) => Math.min(z + 0.25, 3));
   const zoomOut = () => setZoom((z) => Math.max(z - 0.25, 0.5));
-  const resetProDiagram = () => setProDiagram({ status: "idle" });
+  const closeProPanel = () => setShowProPanel(false);
 
   // Loading state
   if (isLoading) {
@@ -318,34 +344,52 @@ export function MermaidDiagram({
         )}
       />
 
-      {/* Upgrade button - only show when idle */}
-      {proDiagram.status === "idle" && (onUpgrade || enableProUpgrade) && (
+      {/* Upgrade button - shows status of background generation, hidden when panel is open */}
+      {(onUpgrade || enableProUpgrade) && !showProPanel && proDiagram.status !== "error" && (
         <button
           onClick={handleUpgrade}
-          className={cn(
+          disabled={proDiagram.status === "generating"}
+          className={cn("mac-button",
             "flex items-center gap-1.5 text-xs italic",
             "text-muted-foreground hover:text-foreground",
-            "transition-colors cursor-pointer"
+            "transition-colors",
+            proDiagram.status === "generating" ? "cursor-wait opacity-70" : "cursor-pointer"
           )}
         >
-          <Sparkles className="h-3 w-3" />
-          <span>Improve this diagram</span>
+          {proDiagram.status === "idle" && (
+            <>
+              <Sparkles className="h-3 w-3" />
+              <span>Improve this diagram</span>
+            </>
+          )}
+          {proDiagram.status === "generating" && (
+            <>
+              <Loader2 className="h-3 w-3 animate-spin" />
+              <span>Preparing enhanced version...</span>
+            </>
+          )}
+          {proDiagram.status === "ready" && (
+            <>
+              <Sparkles className="h-3 w-3 text-primary" />
+              <span className="text-primary">View enhanced diagram</span>
+            </>
+          )}
         </button>
       )}
 
-      {/* Pro Diagram Panel - generating/ready/error states */}
-      {proDiagram.status !== "idle" && (
+      {/* Pro Diagram Panel - only shows when user clicks to view */}
+      {showProPanel && (
         <div
           className={cn(
             "overflow-hidden rounded-lg border transition-all duration-500 ease-out",
-            "border-purple-500/30 bg-[#1e1e2e]"
+            "border-primary-500/30 bg-[#1e1e2e]"
           )}
         >
           {/* Header with controls */}
-          <div className="flex items-center justify-between p-3 border-b border-purple-500/20">
+          <div className="flex items-center justify-between p-3 border-b border-primary-500/20">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-400" />
-              <span className="text-sm font-medium text-purple-300">
+              <Sparkles className="h-4 w-4 text-primary-400" />
+              <span className="text-sm font-normal text-primary-300">
                 Nano Banana Pro Diagram
               </span>
             </div>
@@ -356,7 +400,7 @@ export function MermaidDiagram({
                     variant="ghost"
                     size="icon"
                     onClick={zoomOut}
-                    className="h-7 w-7"
+                    className="mac-button h-7 w-7"
                   >
                     <ZoomOut className="h-4 w-4" />
                   </Button>
@@ -367,7 +411,7 @@ export function MermaidDiagram({
                     variant="ghost"
                     size="icon"
                     onClick={zoomIn}
-                    className="h-7 w-7"
+                    className="mac-button h-7 w-7"
                   >
                     <ZoomIn className="h-4 w-4" />
                   </Button>
@@ -375,7 +419,7 @@ export function MermaidDiagram({
                     variant="ghost"
                     size="icon"
                     onClick={downloadDiagram}
-                    className="h-7 w-7"
+                    className="mac-button h-7 w-7"
                   >
                     <Download className="h-4 w-4" />
                   </Button>
@@ -384,8 +428,8 @@ export function MermaidDiagram({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={resetProDiagram}
-                className="h-7 w-7"
+                onClick={closeProPanel}
+                className="mac-button h-7 w-7"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -396,7 +440,7 @@ export function MermaidDiagram({
           <div className="p-4 min-h-[200px] flex items-center justify-center">
             {proDiagram.status === "generating" && (
               <div className="flex flex-col items-center gap-3 text-muted-foreground">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-primary-400" />
                 <p className="text-sm">Generating professional diagram...</p>
               </div>
             )}
@@ -409,8 +453,12 @@ export function MermaidDiagram({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={generateProDiagram}
-                  className="gap-1.5"
+                  onClick={() => {
+                    setProDiagram({ status: "idle" });
+                    backgroundGenerationStarted.current = false;
+                    generateProDiagramInternal();
+                  }}
+                  className="mac-button gap-1.5"
                 >
                   <RefreshCw className="h-3 w-3" />
                   Try Again

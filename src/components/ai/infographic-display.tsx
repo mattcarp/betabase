@@ -106,7 +106,7 @@ export function InfographicDisplay({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-4 right-4 text-white hover:bg-white/10"
+          className="mac-button absolute top-4 right-4 text-white hover:bg-white/10"
           onClick={() => setIsFullscreen(false)}
         >
           <X className="h-6 w-6" />
@@ -134,7 +134,7 @@ export function InfographicDisplay({
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 bg-muted/50 border-b border-border/50">
         <button
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="mac-button flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <ImageIcon className="h-4 w-4" />
@@ -154,7 +154,7 @@ export function InfographicDisplay({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="mac-button h-7 w-7"
                 onClick={handleDownload}
                 title="Download infographic"
               >
@@ -163,7 +163,7 @@ export function InfographicDisplay({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="mac-button h-7 w-7"
                 onClick={() => setIsFullscreen(true)}
                 title="View fullscreen"
               >
@@ -175,7 +175,7 @@ export function InfographicDisplay({
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className="mac-button h-7 w-7"
               onClick={onDismiss}
               title="Dismiss infographic"
             >

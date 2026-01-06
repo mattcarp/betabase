@@ -294,11 +294,10 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              className="mac-input"
+              className="mac-input pl-9"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask about AOMA, SIAM, or Sony Music systems..."
-              className="pl-9"
               disabled={isLoading}
             />
           </div>
@@ -318,31 +317,28 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
         {/* Strategy Selector */}
         <div className="flex gap-2">
           <Button
-            className="mac-button mac-button-primary"
+            className="mac-button mac-button-primary text-xs"
             size="sm"
             variant={strategy === "rapid" ? "default" : "outline"}
             onClick={() => setStrategy("rapid")}
-            className="text-xs"
           >
             <Zap className="h-3 w-3 mr-2" />
             Rapid
           </Button>
           <Button
-            className="mac-button mac-button-primary"
+            className="mac-button mac-button-primary text-xs"
             size="sm"
             variant={strategy === "focused" ? "default" : "outline"}
             onClick={() => setStrategy("focused")}
-            className="text-xs"
           >
             <Search className="h-3 w-3 mr-2" />
             Focused
           </Button>
           <Button
-            className="mac-button mac-button-primary"
+            className="mac-button mac-button-primary text-xs"
             size="sm"
             variant={strategy === "comprehensive" ? "default" : "outline"}
             onClick={() => setStrategy("comprehensive")}
-            className="text-xs"
           >
             <BookOpen className="h-3 w-3 mr-2" />
             Comprehensive
@@ -432,7 +428,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                     <div className="flex items-start gap-4 w-full">
                       <div className="mt-2">{suggestion.icon}</div>
                       <div className="flex-1">
-                        <div className="font-medium text-sm">{suggestion.text}</div>
+                        <div className="font-normal text-sm">{suggestion.text}</div>
                         <div className="text-xs text-muted-foreground mt-2">
                           {suggestion.category}
                         </div>
@@ -470,7 +466,7 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                         <div className="flex items-center gap-2">
                           <span
                             className={cn(
-                              "text-sm font-medium",
+                              "text-sm font-normal",
                               !item.success && "text-destructive"
                             )}
                           >
@@ -490,12 +486,10 @@ export function AOMAKnowledgePanel({ className, onQueryResult }: AOMAKnowledgePa
                         </p>
                       </div>
                       <Button
-                        className="mac-button mac-button-outline"
+                        className="mac-button mac-button-outline opacity-0 group-hover:opacity-100 transition-opacity"
                         size="sm"
                         variant="ghost"
-                        className="mac-button mac-button-outline"
                         onClick={() => handleHistoryRerun(item)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <RefreshCw className="h-3 w-3" />
                       </Button>
@@ -531,15 +525,15 @@ function formatResponse(text: any): string {
     // Headers
     .replace(
       /^### (.*?)$/gm,
-      '<h3  className="mac-title"class="font-normal text-base mt-4 mb-2">$1</h3>'
+      '<h3 class="mac-title font-normal text-base mt-4 mb-2">$1</h3>'
     )
     .replace(
       /^## (.*?)$/gm,
-      '<h2  className="mac-heading"class="font-bold text-lg mt-4 mb-2">$1</h2>'
+      '<h2 class="mac-heading font-normal text-lg mt-4 mb-2">$1</h2>'
     )
     .replace(
       /^# (.*?)$/gm,
-      '<h1  className="mac-heading"class="font-bold text-xl mt-4 mb-2">$1</h1>'
+      '<h1 class="mac-heading font-normal text-xl mt-4 mb-2">$1</h1>'
     )
     // Bold
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")

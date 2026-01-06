@@ -182,7 +182,7 @@ export const BranchPage = ({ className, ...props }: BranchPageProps) => {
 
   return (
     <span
-      className={cn("font-medium text-muted-foreground text-xs tabular-nums", className)}
+      className={cn("font-normal text-muted-foreground text-xs tabular-nums", className)}
       {...props}
     >
       {currentBranch + 1} of {totalBranches}

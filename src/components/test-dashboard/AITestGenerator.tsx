@@ -212,8 +212,7 @@ describe('API Integration Tests', () => {
               title: "Screencast recorded - No errors",
               description: filename,
               action: (
-                <Button
-                  variant="outline"
+                <Button variant="outline" className="mac-button mac-button-outline"
                   size="sm"
                   onClick={() => {
                     window.open(`file://${directory}`);
@@ -448,19 +447,19 @@ describe('API Integration Tests', () => {
                 <h4 className="mac-title">Advanced Options</h4>
                 <div className="space-y-2 text-sm">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
+                    <input type="checkbox" className="mac-input rounded" defaultChecked />
                     Include assertions
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
+                    <input type="checkbox" className="mac-input rounded" defaultChecked />
                     Add error handling
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
+                    <input type="checkbox" className="mac-input rounded" />
                     Generate test data
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
+                    <input type="checkbox" className="mac-input rounded" />
                     Include performance metrics
                   </label>
 
@@ -501,7 +500,8 @@ describe('API Integration Tests', () => {
 
             {/* Generate Button */}
             <Button
-              className="w-full mac-button mac-button-primary"
+              variant="teal-solid"
+              className="w-full"
               size="lg"
               onClick={handleGenerate}
               disabled={!prompt || isGenerating}
@@ -525,7 +525,7 @@ describe('API Integration Tests', () => {
 
             {/* Recording Results Panel */}
             {recordingResult && (
-              <Card className={cn(
+              <Card className={cn("mac-card", 
                 "mt-4",
                 recordingResult.consoleErrors.length > 0
                   ? "border-destructive bg-destructive/5"
@@ -533,7 +533,7 @@ describe('API Integration Tests', () => {
               )}>
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-medium flex items-center gap-2">
+                    <h4 className="mac-title">
                       {recordingResult.consoleErrors.length > 0 ? (
                         <>
                           <AlertCircle className="h-4 w-4 text-destructive" />
@@ -546,8 +546,7 @@ describe('API Integration Tests', () => {
                         </>
                       )}
                     </h4>
-                    <Button
-                      variant="ghost"
+                    <Button variant="ghost" className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setRecordingResult(null)}
                       className="h-6 w-6 p-0"
@@ -579,8 +578,7 @@ describe('API Integration Tests', () => {
                       </ScrollArea>
 
                       <div className="flex gap-2">
-                        <Button
-                          variant="default"
+                        <Button variant="teal-solid"
                           size="sm"
                           className="flex-1"
                           onClick={() => {
@@ -593,8 +591,7 @@ describe('API Integration Tests', () => {
                         >
                           Troubleshoot Errors
                         </Button>
-                        <Button
-                          variant="outline"
+                        <Button variant="outline" className="mac-button mac-button-outline"
                           size="sm"
                           onClick={() => {
                             const directory = recordingResult.videoPath.replace(/\/[^/]+$/, "");
@@ -632,7 +629,7 @@ describe('API Integration Tests', () => {
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-sm">{test.name}</span>
+                        <span className="font-normal text-sm">{test.name}</span>
                         <Badge variant="outline" className="text-xs">
                           {test.type}
                         </Badge>
@@ -676,7 +673,7 @@ describe('API Integration Tests', () => {
                     <Download className="h-4 w-4 mr-2" />
                     Export
                   </Button>
-                  <Button className="mac-button mac-button-primary" size="sm" aria-label="Play">
+                  <Button variant="teal-solid" size="sm" aria-label="Play">
                     <Play className="h-4 w-4 mr-2" />
                     Run Test
                   </Button>
@@ -741,7 +738,7 @@ describe('API Integration Tests', () => {
                     <CardContent className="p-4">
                       <h3
                         className="mac-title"
-                        className="mac-title font-medium mb-2 flex items-center gap-2"
+                        className="mac-title font-normal mb-2 flex items-center gap-2"
                       >
                         <Sparkles className="h-4 w-4 text-blue-500" />
                         AI Recommendations

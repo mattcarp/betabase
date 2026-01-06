@@ -320,7 +320,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Layers className="h-5 w-5 text-blue-400" />
-          <h2 className="text-xl font-light text-white">Unified Test Results</h2>
+          <h2 className="mac-heading">Unified Test Results</h2>
         </div>
 
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
@@ -343,7 +343,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
       {/* Metrics Panel */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
+        <Card className="mac-card bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -359,7 +359,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
+        <Card className="mac-card bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -376,7 +376,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
+        <Card className="mac-card bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -392,14 +392,14 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
+        <Card className="mac-card bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Grid3x3 className="h-4 w-4 text-purple-400" />
+                <Grid3x3 className="h-4 w-4 text-primary-400" />
                 <span className="text-sm font-light text-neutral-400">Areas Tested</span>
               </div>
-              <span className="text-2xl font-light text-purple-400">
+              <span className="text-2xl font-light text-primary-400">
                 {metrics.combined.uniqueAreas}
               </span>
             </div>
@@ -407,7 +407,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-[var(--mac-surface-bg)] border-white/10">
+        <Card className="mac-card bg-[var(--mac-surface-bg)] border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -427,7 +427,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
       <div className="flex items-center gap-4">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
+          <Input className="mac-input"
             placeholder="Search tests by name, area, suite, or tester..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -459,7 +459,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           </SelectContent>
         </Select>
 
-        <Button
+        <Button className="mac-button"
           variant={showHeatmap ? "default" : "outline"}
           size="sm"
           onClick={() => setShowHeatmap(!showHeatmap)}
@@ -469,7 +469,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
           Heatmap
         </Button>
 
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="mac-button gap-2">
           <Download className="h-4 w-4" />
           Export
         </Button>
@@ -479,8 +479,8 @@ export const UnifiedResultsDashboard: React.FC = () => {
       <div className="grid grid-cols-12 gap-6 flex-1">
         {/* Timeline / Results List */}
         <div className={cn("col-span-12", showHeatmap ? "lg:col-span-7" : "lg:col-span-5")}>
-          <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
-            <CardHeader>
+          <Card className="mac-card h-full bg-[var(--mac-surface-bg)] border-white/10">
+            <CardHeader className="mac-card">
               <CardTitle className="text-base font-light flex items-center justify-between text-white">
                 <span>Test Timeline ({filteredResults.length} results)</span>
                 <Badge variant="outline">{viewMode === "combined" ? "Mixed View" : viewMode}</Badge>
@@ -492,7 +492,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                   <div className="flex items-center justify-center h-full p-8">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                      <p className="text-muted-foreground">Loading test results...</p>
+                      <p className="mac-body text-muted-foreground">Loading test results...</p>
                     </div>
                   </div>
                 ) : filteredResults.length === 0 ? (
@@ -502,9 +502,8 @@ export const UnifiedResultsDashboard: React.FC = () => {
                 ) : (
                   <div className="p-4 space-y-2">
                     {filteredResults.map((result) => (
-                      <Card
-                        key={result.id}
-                        className={cn(
+                      <Card key={result.id}
+                        className={cn("mac-card", 
                           "cursor-pointer transition-all hover:shadow-md border-l-4 bg-[var(--mac-surface-elevated)] border-white/10",
                           result.type === "manual"
                             ? "border-l-blue-400 hover:border-l-blue-500"
@@ -521,7 +520,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   {getStatusIcon(result.status, result.type)}
-                                  <h4 className="font-medium text-sm truncate">{result.name}</h4>
+                                  <h4 className="mac-title">{result.name}</h4>
                                 </div>
                                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                   <span>{result.area || "General"}</span>
@@ -576,14 +575,14 @@ export const UnifiedResultsDashboard: React.FC = () => {
         {/* Coverage Heatmap (conditional) */}
         {showHeatmap && (
           <div className="col-span-12 lg:col-span-5">
-            <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
-              <CardHeader>
+            <Card className="mac-card h-full bg-[var(--mac-surface-bg)] border-white/10">
+              <CardHeader className="mac-card">
                 <CardTitle className="text-base font-light flex items-center gap-2 text-white">
                   <Grid3x3 className="h-4 w-4" />
                   Coverage Heatmap
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-3">
                     {coverageData.map((area) => {
@@ -598,7 +597,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           }}
                         >
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-medium text-sm">{area.area}</h4>
+                            <h4 className="mac-title">{area.area}</h4>
                             <Badge variant="secondary">{area.totalCoverage} tests</Badge>
                           </div>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -628,8 +627,8 @@ export const UnifiedResultsDashboard: React.FC = () => {
         {/* Result Details */}
         <div className={cn("col-span-12", showHeatmap ? "hidden" : "lg:col-span-7")}>
           {selectedResult ? (
-            <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
-              <CardHeader>
+            <Card className="mac-card h-full bg-[var(--mac-surface-bg)] border-white/10">
+              <CardHeader className="mac-card">
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="text-lg font-light flex items-center gap-2 text-white">
@@ -657,7 +656,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <Tabs defaultValue="details">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="details">Details</TabsTrigger>
@@ -667,9 +666,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
 
                   <TabsContent value="details" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
+                      <Card className="mac-card bg-[var(--mac-surface-elevated)] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="text-sm font-light text-neutral-400 mb-2">Type</h4>
+                          <h4 className="mac-title">Type</h4>
                           <div className="flex items-center gap-2">
                             {getTypeIcon(selectedResult.type)}
                             <span className="font-light capitalize text-white">
@@ -679,9 +678,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
+                      <Card className="mac-card bg-[var(--mac-surface-elevated)] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="text-sm font-light text-neutral-400 mb-2">Duration</h4>
+                          <h4 className="mac-title">Duration</h4>
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-neutral-400" />
                             <span className="font-light text-white">
@@ -693,15 +692,15 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     </div>
 
                     {selectedResult.error && (
-                      <Card className="bg-rose-500/10 border-rose-500/20">
+                      <Card className="mac-card bg-rose-500/10 border-rose-500/20">
                         <CardContent className="p-4">
-                          <h4 className="font-light text-rose-400 mb-2">Error Message</h4>
+                          <h4 className="mac-title">Error Message</h4>
                           <p className="text-sm font-mono text-white">
                             {selectedResult.error.message}
                           </p>
                           {selectedResult.error.stack && (
                             <>
-                              <h4 className="font-light text-rose-400 mt-4 mb-2">Stack Trace</h4>
+                              <h4 className="mac-title">Stack Trace</h4>
                               <pre className="text-xs font-mono bg-[var(--mac-surface-elevated)] p-3 rounded overflow-x-auto text-neutral-300">
                                 {selectedResult.error.stack}
                               </pre>
@@ -712,9 +711,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     )}
 
                     {selectedResult.findings && selectedResult.findings.length > 0 && (
-                      <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
+                      <Card className="mac-card bg-[var(--mac-surface-elevated)] border-white/10">
                         <CardContent className="p-4">
-                          <h4 className="font-light mb-3 text-white">Manual Test Findings</h4>
+                          <h4 className="mac-title">Manual Test Findings</h4>
                           <ul className="space-y-2">
                             {selectedResult.findings.map((finding, index) => (
                               <li
@@ -732,9 +731,9 @@ export const UnifiedResultsDashboard: React.FC = () => {
                   </TabsContent>
 
                   <TabsContent value="coverage" className="space-y-4">
-                    <Card className="bg-[var(--mac-surface-elevated)] border-white/10">
+                    <Card className="mac-card bg-[var(--mac-surface-elevated)] border-white/10">
                       <CardContent className="p-4">
-                        <h4 className="font-light mb-3 text-white">Areas Covered</h4>
+                        <h4 className="mac-title">Areas Covered</h4>
                         {selectedResult.coverage && selectedResult.coverage.length > 0 ? (
                           <div className="flex flex-wrap gap-2">
                             {selectedResult.coverage.map((area, index) => (
@@ -760,7 +759,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                     {selectedResult.screenshots && selectedResult.screenshots.length > 0 ? (
                       <div className="grid grid-cols-2 gap-4">
                         {selectedResult.screenshots.map((screenshot, index) => (
-                          <Card key={index} className="bg-[var(--mac-surface-elevated)] border-white/10">
+                          <Card key={index} className="mac-card bg-[var(--mac-surface-elevated)] border-white/10">
                             <CardContent className="p-4">
                               <div className="aspect-video bg-[#0a0a0a] rounded flex items-center justify-center">
                                 <Eye className="h-8 w-8 text-neutral-500" />
@@ -780,7 +779,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="h-full bg-[var(--mac-surface-bg)] border-white/10">
+            <Card className="mac-card h-full bg-[var(--mac-surface-bg)] border-white/10">
               <CardContent className="flex items-center justify-center h-full text-neutral-400">
                 Select a test result to view details
               </CardContent>

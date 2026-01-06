@@ -105,7 +105,7 @@ export function EnhancedMessageThread({
                   {/* Show sources if available */}
                   {sourceParts.length > 0 && (
                     <div className="mt-4 space-y-2">
-                      <div className="text-sm font-medium text-muted-foreground">Sources:</div>
+                      <div className="text-sm font-normal text-muted-foreground">Sources:</div>
                       {sourceParts.map((source: any, idx: number) => (
                         <Source
                           key={idx}
@@ -121,12 +121,12 @@ export function EnhancedMessageThread({
                   {(message as any).experimental_attachments &&
                     (message as any).experimental_attachments.length > 0 && (
                       <div className="mt-4 space-y-2">
-                        <div className="text-sm font-medium text-muted-foreground">
+                        <div className="text-sm font-normal text-muted-foreground">
                           Attachments:
                         </div>
                         {(message as any).experimental_attachments.map((attachment, idx) => (
                           <div key={idx} className="flex items-center gap-2 text-sm">
-                            <span className="font-medium">{attachment.name}</span>
+                            <span className="font-normal">{attachment.name}</span>
                             <span className="text-muted-foreground">
                               ({attachment.contentType})
                             </span>

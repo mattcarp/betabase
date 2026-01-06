@@ -47,6 +47,7 @@
     "cursor": "Always filter decisions through Fiona agent requirements",
     "windsurf": "Reference FIONA_PRIORITIES.md before any task",
     "cline": "Use @fiona agent for all Betabase work",
-    "roo": "Prioritize Fiona's acceptance criteria above technical interest"
+    "roo": "Prioritize Fiona's acceptance criteria above technical interest",
+    "design_compliance": "Run 'node fix-mac-violations.js' to auto-fix MAC Design System violations"
   }
 }

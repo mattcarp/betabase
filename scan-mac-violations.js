@@ -8,9 +8,10 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-const AUDIT_DIR = "/Users/matt/Documents/projects/siam/audit-results";
-const SRC_DIR = "/Users/matt/Documents/projects/siam/src";
-const APP_DIR = "/Users/matt/Documents/projects/siam/app";
+const AUDIT_DIR = path.join(process.cwd(), "audit-results");
+const SRC_DIR = path.join(process.cwd(), "src");
+// APP_DIR removed as it is likely inside SRC_DIR or handled separately if needed, but 'siam/app' was invalid.
+// const APP_DIR = "/Users/matt/Documents/projects/siam/app";
 
 // Ensure audit directory exists
 if (!fs.existsSync(AUDIT_DIR)) {
@@ -35,7 +36,7 @@ const patterns = {
   nonMACFontWeight: /font-weight\s*:\s*(?:500|600|700|800|900|bold|bolder)/g,
 
   // Hardcoded spacing values instead of using 8px grid
-  hardcodedSpacing: /(?:padding|margin|gap|width|height)\s*:\s*(?:(?:[0-9]+px)|(?:[0-9]+rem))/g,
+  hardcodedSpacing: /(?:padding|margin|gap|width|height)\s*:\s*(?:(?:[0-9.]+(?:px|rem)))/g,
 
   // Non-MAC animation timings (should be 150-300ms)
   nonMACAnimation:
@@ -45,11 +46,14 @@ const patterns = {
 function scanFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, "utf-8");
-    const relativePath = filePath.replace("/Users/matt/Documents/projects/siam/", "");
+    const relativePath = filePath.replace(process.cwd() + "/", "");
 
     // Check for hardcoded colors
     let match;
     while ((match = patterns.hardcodedColors.exec(content)) !== null) {
+      // Ignore if it uses a CSS variable
+      if (match[0].includes("var(")) continue;
+
       const lineNumber = content.substring(0, match.index).split("\n").length;
       violations.hardcodedColors.push({
         file: relativePath,
@@ -74,7 +78,8 @@ function scanFile(filePath) {
     // Check for hardcoded spacing
     patterns.hardcodedSpacing.lastIndex = 0;
     while ((match = patterns.hardcodedSpacing.exec(content)) !== null) {
-      const value = match[0].match(/[0-9.]+/)?.[0];
+      // Extract value with unit
+      const value = match[0].split(":")[1].trim();
       if (value && !isMultipleOfEight(value)) {
         const lineNumber = content.substring(0, match.index).split("\n").length;
         violations.hardcodedSpacing.push({
@@ -134,6 +139,9 @@ function isMultipleOfEight(value) {
   // Convert rem to px (assuming 1rem = 16px)
   const px = value.includes("rem") ? num * 16 : num;
 
+  // Allow small values (<= 4px) for borders, separators, etc.
+  if (px <= 4) return true;
+
   // Check if it's a multiple of 8 (with tolerance for floating point)
   return Math.abs(px % 8) < 0.1;
 }
@@ -164,7 +172,7 @@ console.log("🔍 Scanning for MAC Design System violations...\n");
 
 // Scan source and app directories
 scanDirectory(SRC_DIR);
-scanDirectory(APP_DIR);
+// scanDirectory(APP_DIR); // Removed as app dir is likely within src or incorrectly addressed
 
 // Generate summary
 const totalViolations =

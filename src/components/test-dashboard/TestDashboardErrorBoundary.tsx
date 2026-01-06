@@ -38,11 +38,11 @@ export class TestDashboardErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex items-center justify-center h-full p-8">
           <div className="text-center space-y-4">
-            <h2 className="text-xl font-light text-white">Test Dashboard Error</h2>
+            <h2 className="mac-heading">Test Dashboard Error</h2>
             <p className="text-sm text-muted-foreground">
               {this.state.error?.message || "Something went wrong"}
             </p>
-            <button
+            <button className="mac-button"
               onClick={() => this.setState({ hasError: false, error: null })}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >

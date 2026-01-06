@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { cn } from "../../lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -210,8 +211,8 @@ export default function PerformanceDashboard() {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Performance Dashboard</h1>
-            <p className="text-muted-foreground">Real-time system monitoring and analytics</p>
+            <h1 className="mac-heading text-4xl font-normal mb-2">Performance Dashboard</h1>
+            <p className="mac-body text-muted-foreground">Real-time system monitoring and analytics</p>
           </div>
           <div className="flex gap-2">
             <Button
@@ -223,8 +224,7 @@ export default function PerformanceDashboard() {
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            <Button
-              onClick={() => setAutoRefresh(!autoRefresh)}
+            <Button onClick={() => setAutoRefresh(!autoRefresh)}
               variant={autoRefresh ? "default" : "outline"}
               size="sm"
               className={
@@ -242,8 +242,7 @@ export default function PerformanceDashboard() {
         {/* Time Range Selector */}
         <div className="flex gap-2">
           {(["1h", "6h", "24h", "7d"] as const).map((range) => (
-            <Button
-              key={range}
+            <Button key={range}
               onClick={() => setTimeRange(range)}
               variant={timeRange === range ? "default" : "outline"}
               size="sm"
@@ -261,7 +260,7 @@ export default function PerformanceDashboard() {
 
       {/* Health Status */}
       <Card className="mac-card mb-8 bg-white/5 border-white/10">
-        <CardHeader>
+        <CardHeader className="mac-card">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-white">
               {healthStatus.status === "healthy" && (
@@ -293,11 +292,11 @@ export default function PerformanceDashboard() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card className="mac-card bg-white/5 border-white/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Avg Response Time</CardTitle>
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Avg Response Time</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">
+          <CardContent className="mac-card">
+            <div className="text-2xl font-normal text-white">
               {formatDuration(metrics.queryMetrics.avgResponseTime)}
             </div>
             <p className="text-xs text-muted-foreground mt-2">
@@ -307,11 +306,11 @@ export default function PerformanceDashboard() {
         </Card>
 
         <Card className="mac-card bg-white/5 border-white/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Queries</CardTitle>
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Total Queries</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">{metrics.queryMetrics.totalQueries}</div>
+          <CardContent className="mac-card">
+            <div className="text-2xl font-normal text-white">{metrics.queryMetrics.totalQueries}</div>
             <p className="text-xs text-muted-foreground mt-2">
               Success rate: {metrics.queryMetrics.successRate.toFixed(1)}%
             </p>
@@ -319,11 +318,11 @@ export default function PerformanceDashboard() {
         </Card>
 
         <Card className="mac-card bg-white/5 border-white/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">System Load</CardTitle>
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-normal text-muted-foreground">System Load</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">
+          <CardContent className="mac-card">
+            <div className="text-2xl font-normal text-white">
               {metrics.systemMetrics.cpuUsage.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground mt-2">
@@ -333,11 +332,11 @@ export default function PerformanceDashboard() {
         </Card>
 
         <Card className="mac-card bg-white/5 border-white/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Uptime</CardTitle>
+          <CardHeader className="mac-card pb-2">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Uptime</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white">
+          <CardContent className="mac-card">
+            <div className="text-2xl font-normal text-white">
               {formatUptime(metrics.systemMetrics.uptime)}
             </div>
             <p className="text-xs text-muted-foreground mt-2">System uptime</p>
@@ -365,13 +364,13 @@ export default function PerformanceDashboard() {
         {/* Query Analytics Tab */}
         <TabsContent value="queries" className="space-y-4">
           <Card className="mac-card bg-white/5 border-white/10">
-            <CardHeader>
+            <CardHeader className="mac-card">
               <CardTitle className="text-white">Response Time Trends</CardTitle>
               <CardDescription className="text-muted-foreground">
                 Average and P95 response times over time
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={queryMetricsHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
@@ -406,13 +405,13 @@ export default function PerformanceDashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-white">Query Types</CardTitle>
                 <CardDescription className="text-muted-foreground">
                   Distribution by query type
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={metrics.queryMetrics.queryTypes}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
@@ -430,10 +429,10 @@ export default function PerformanceDashboard() {
             </Card>
 
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-white">Performance Metrics</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">P50 Latency</span>
@@ -474,13 +473,13 @@ export default function PerformanceDashboard() {
         {/* System Health Tab */}
         <TabsContent value="system" className="space-y-4">
           <Card className="mac-card bg-white/5 border-white/10">
-            <CardHeader>
+            <CardHeader className="mac-card">
               <CardTitle className="text-white">System Resource Usage</CardTitle>
               <CardDescription className="text-muted-foreground">
                 CPU, Memory, and Disk usage over time
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={systemMetricsHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
@@ -525,14 +524,14 @@ export default function PerformanceDashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Server className="h-4 w-4" />
                   CPU Usage
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-white mb-2">
+              <CardContent className="mac-card">
+                <div className="text-3xl font-normal text-white mb-2">
                   {metrics.systemMetrics.cpuUsage.toFixed(1)}%
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">
@@ -551,14 +550,14 @@ export default function PerformanceDashboard() {
             </Card>
 
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Database className="h-4 w-4" />
                   Memory Usage
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-white mb-2">
+              <CardContent className="mac-card">
+                <div className="text-3xl font-normal text-white mb-2">
                   {metrics.systemMetrics.memoryUsage.toFixed(1)}%
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">
@@ -577,14 +576,14 @@ export default function PerformanceDashboard() {
             </Card>
 
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <HardDrive className="h-4 w-4" />
                   Disk Usage
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-white mb-2">
+              <CardContent className="mac-card">
+                <div className="text-3xl font-normal text-white mb-2">
                   {metrics.systemMetrics.diskUsage.toFixed(1)}%
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">
@@ -608,13 +607,13 @@ export default function PerformanceDashboard() {
         <TabsContent value="data" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-white flex items-center gap-2">
                   <Database className="h-5 w-5" />
                   Vector Store
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Documents</span>
@@ -647,13 +646,13 @@ export default function PerformanceDashboard() {
             </Card>
 
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-white flex items-center gap-2">
                   <Zap className="h-5 w-5" />
                   AOMA Cache
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Cache Hit Rate</span>
@@ -678,13 +677,13 @@ export default function PerformanceDashboard() {
             </Card>
 
             <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader>
+              <CardHeader className="mac-card">
                 <CardTitle className="text-white flex items-center gap-2">
                   <HardDrive className="h-5 w-5" />
                   Knowledge Base
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mac-card">
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Files</span>
@@ -709,13 +708,13 @@ export default function PerformanceDashboard() {
         {/* API Performance Tab */}
         <TabsContent value="api" className="space-y-4">
           <Card className="mac-card bg-white/5 border-white/10">
-            <CardHeader>
+            <CardHeader className="mac-card">
               <CardTitle className="text-white">API Endpoint Performance</CardTitle>
               <CardDescription className="text-muted-foreground">
                 Latency and error rates by endpoint
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mac-card">
               <div className="space-y-4">
                 {metrics.apiMetrics.map((api) => (
                   <div

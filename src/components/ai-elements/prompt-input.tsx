@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "src/components/ui/button";
+import { Button } from "../ui/button";
 import {
   Command,
   CommandEmpty,
@@ -9,32 +9,32 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "src/components/ui/command";
+} from "../ui/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "src/components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "src/components/ui/hover-card";
+} from "../ui/hover-card";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "src/components/ui/input-group";
+} from "../ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "src/components/ui/select";
-import { cn } from "src/lib/utils";
+} from "../ui/select";
+import { cn } from "../../lib/utils";
 import type { ChatStatus, FileUIPart } from "ai";
 import {
   CornerDownLeftIcon,
@@ -305,7 +305,7 @@ export function PromptInputAttachment({
       <HoverCardTrigger asChild>
         <div
           className={cn(
-            "group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-md border border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+            "group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-md border border-border px-1.5 font-normal text-sm transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
             className
           )}
           key={data.id}
@@ -329,7 +329,7 @@ export function PromptInputAttachment({
             </div>
             <Button
               aria-label="Remove attachment"
-              className="absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5"
+              className="mac-button absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5"
               onClick={(e) => {
                 e.stopPropagation();
                 attachments.remove(data.id);
@@ -360,7 +360,7 @@ export function PromptInputAttachment({
           )}
           <div className="flex items-center gap-2.5">
             <div className="min-w-0 flex-1 space-y-1 px-0.5">
-              <h4 className="truncate font-semibold text-sm leading-none">
+              <h4 className="mac-title">
                 {filename || (isImage ? "Image" : "Attachment")}
               </h4>
               {data.mediaType && (
@@ -800,7 +800,7 @@ export const PromptInput = ({
         ref={formRef}
         {...props}
       >
-        <InputGroup className="overflow-hidden">{children}</InputGroup>
+        <InputGroup className="mac-input overflow-hidden">{children}</InputGroup>
       </form>
     </>
   );
@@ -911,7 +911,7 @@ export const PromptInputTextarea = ({
 
   return (
     <InputGroupTextarea
-      className={cn("field-sizing-content max-h-48 min-h-16", className)}
+      className={cn("mac-input", "field-sizing-content max-h-48 min-h-16", className)}
       data-testid="chat-input"
       name="message"
       onCompositionEnd={() => setIsComposing(false)}
@@ -936,7 +936,7 @@ export const PromptInputHeader = ({
 }: PromptInputHeaderProps) => (
   <InputGroupAddon
     align="block-end"
-    className={cn("order-first flex-wrap gap-1", className)}
+    className={cn("mac-input", "order-first flex-wrap gap-1", className)}
     {...props}
   />
 );
@@ -952,7 +952,7 @@ export const PromptInputFooter = ({
 }: PromptInputFooterProps) => (
   <InputGroupAddon
     align="block-end"
-    className={cn("justify-between gap-1", className)}
+    className={cn("mac-input", "justify-between gap-1", className)}
     {...props}
   />
 );
@@ -979,7 +979,7 @@ export const PromptInputButton = ({
 
   return (
     <InputGroupButton
-      className={cn(className)}
+      className={cn("mac-input", className)}
       size={newSize}
       type="button"
       variant={variant}
@@ -1055,7 +1055,7 @@ export const PromptInputSubmit = ({
   return (
     <InputGroupButton
       aria-label="Submit"
-      className={cn(className)}
+      className={cn("mac-input", className)}
       data-testid="send-button"
       size={size}
       type="submit"
@@ -1243,7 +1243,7 @@ export const PromptInputSelectTrigger = ({
 }: PromptInputSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
+      "border-none bg-transparent font-normal text-muted-foreground shadow-none transition-colors",
       "hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
       className
     )}
@@ -1331,7 +1331,7 @@ export const PromptInputTabLabel = ({
 }: PromptInputTabLabelProps) => (
   <h3
     className={cn(
-      "mb-2 px-3 font-medium text-muted-foreground text-xs",
+      "mb-2 px-3 font-normal text-muted-foreground text-xs",
       className
     )}
     {...props}

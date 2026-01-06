@@ -187,7 +187,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
       }
 
       parts.push("\n  // Verify RAG metadata present (proof of advanced RAG)\n");
-      parts.push("  const ragBadges = page.locator('[class*=\"bg-purple-500\"], [class*=\"bg-blue-500\"]');\n");
+      parts.push("  const ragBadges = page.locator('[class*=\"bg-primary-500\"], [class*=\"bg-blue-500\"]');\n");
       parts.push("  const badgeCount = await ragBadges.count();\n");
       parts.push("  expect(badgeCount).toBeGreaterThan(0); // Should show RAG strategy badges\n\n");
       parts.push("  console.log('✅ RLHF regression test passed for query: ' + '" + query.substring(0, 50).replace(/'/g, "\\'") + "' + '...');\n");
@@ -225,8 +225,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col bg-card/50 border-border">
-      <CardHeader>
+    <Card className="mac-card h-full flex flex-col bg-card/50 border-border">
+      <CardHeader className="mac-card">
         <CardTitle className="flex items-center gap-2 text-foreground">
           <FileCode className="h-5 w-5 text-cyan-400" />
           Test Case Generator
@@ -241,7 +241,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
           <div className="space-y-3">
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Input
+                <Input className="mac-input"
                   placeholder="Enter feedback ID..."
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
@@ -251,7 +251,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                  className="mac-button absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
                   onClick={() => {
                     setShowRecent(!showRecent);
                     if (!showRecent) loadRecentItems();
@@ -269,7 +269,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                       {loadingRecent && <RefreshCw className="h-3 w-3 animate-spin ml-auto" />}
                     </div>
                     {recentItems.map((item) => (
-                      <button
+                      <button className="mac-button"
                         key={item.id}
                         onClick={() => loadFeedbackItem(item.id)}
                         className="w-full text-left px-3 py-2 hover:bg-muted transition-colors border-b border-border/50 last:border-0"
@@ -306,7 +306,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                   </div>
                 )}
               </div>
-              <Button
+              <Button className="mac-button"
                 onClick={() => loadFeedbackItem()}
                 disabled={loading || !searchId.trim()}
                 className="gap-2"
@@ -336,8 +336,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
 
         {/* Feedback info */}
         {feedbackData && !testCode && (
-          <Card className="bg-card/30 border-border">
-            <CardHeader>
+          <Card className="mac-card bg-card/30 border-border">
+            <CardHeader className="mac-card">
               <CardTitle className="text-sm text-foreground">Feedback Item</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -358,7 +358,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                   {feedbackData.feedback_value?.score ? (feedbackData.feedback_value.score + "/5") : "No rating"}
                 </Badge>
                 {(feedbackData.retrieved_contexts || feedbackData.documents_marked) && (
-                  <Badge className="text-xs bg-purple-500/20 text-purple-300">
+                  <Badge className="text-xs bg-primary-500/20 text-primary-300">
                     {(feedbackData.retrieved_contexts || feedbackData.documents_marked).length} docs
                   </Badge>
                 )}
@@ -380,7 +380,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
               <Button
                 onClick={generateTestCase}
                 disabled={generating}
-                className="w-full mt-4 gap-2 bg-cyan-600 hover:bg-cyan-700"
+                className="mac-button w-full mt-4 gap-2 bg-cyan-600 hover:bg-cyan-700"
               >
                 {generating ? (
                   <>
@@ -406,7 +406,7 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Test generated successfully
               </Badge>
-              <Button onClick={downloadTestFile} variant="outline" size="sm" className="gap-2">
+              <Button onClick={downloadTestFile} variant="outline" size="sm" className="mac-button gap-2">
                 <Download className="h-4 w-4" />
                 Download
               </Button>
@@ -418,8 +418,8 @@ export function TestCaseGenerator({ feedbackItemId }: TestCaseGeneratorProps) {
               </pre>
             </ScrollArea>
 
-            <Button
-              variant="outline"
+            <Button className="mac-button"
+              variant="outline" className="mac-button mac-button-outline"
               onClick={() => {
                 setFeedbackData(null);
                 setTestCode("");

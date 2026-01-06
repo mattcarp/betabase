@@ -654,8 +654,11 @@ export async function logCrawlError(error: Error, context: any) {
     occurred_at: new Date().toISOString(),
   });
 
-  // Optional: Send to Sentry or other monitoring service
-  // Sentry.captureException(error, { extra: context });
+  // Optional: Send to centralized logging service
+
+  // logger.error(error, { extra: context });
+
+  
 }
 ```
 

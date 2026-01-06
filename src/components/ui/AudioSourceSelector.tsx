@@ -141,7 +141,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
         </div>
         <button
           onClick={onClose}
-          className="hud-icon-button"
+          className="mac-button hud-icon-button"
           aria-label="Close audio source selector"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +171,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
-          <input
+          <input className="mac-input"
             type="text"
             placeholder="Search audio sources..."
             value={searchQuery}
@@ -191,7 +191,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
         ) : (
           <div className="space-y-1">
             {filteredSources.map((source) => (
-              <button
+              <button className="mac-button"
                 key={source.id}
                 onClick={() => onSelectSource(source.id)}
                 className={cn(
@@ -216,7 +216,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="mac-body font-medium text-mac-text-primary truncate">
+                        <p className="mac-body font-normal text-mac-text-primary truncate">
                           {source.name}
                         </p>
                         {source.isDefault && (
@@ -263,7 +263,7 @@ export const AudioSourceSelector: React.FC<AudioSourceSelectorProps> = ({
                                 d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
                               />
                             </svg>
-                            <input
+                            <input className="mac-input"
                               type="range"
                               min="0"
                               max="100"

@@ -16,21 +16,21 @@
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+} from "../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import {
   CheckCircle,
   XCircle,
@@ -55,7 +55,7 @@ import {
   ThumbsDown,
   Star,
 } from "lucide-react";
-import { Response } from "@/components/ai-elements/response";
+import { Response } from "../ai-elements/response";
 import type {
   FeedbackRecord,
   FeedbackStatus,
@@ -313,11 +313,11 @@ export function CuratorWorkspace({
 
   if (!currentItem && filteredItems.length === 0) {
     return (
-      <Card className={cn("bg-card/50 border-border", className)}>
+      <Card className={cn("mac-card", "bg-card/50 border-border", className)}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <CheckCircle className="h-16 w-16 text-green-400 mb-4" />
-          <h3 className="text-xl font-medium text-foreground">Queue Empty!</h3>
-          <p className="text-muted-foreground mt-2">All feedback has been reviewed. Great work!</p>
+          <h3 className="mac-title">Queue Empty!</h3>
+          <p className="mac-body text-muted-foreground mt-2">All feedback has been reviewed. Great work!</p>
         </CardContent>
       </Card>
     );
@@ -326,12 +326,12 @@ export function CuratorWorkspace({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Header with Filters */}
-      <Card className="bg-card/50 border-border">
-        <CardHeader className="pb-4">
+      <Card className="mac-card bg-card/50 border-border">
+        <CardHeader className="mac-card pb-4">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-lg text-foreground flex items-center gap-2">
-                <Users className="h-5 w-5 text-purple-400" />
+                <Users className="h-5 w-5 text-primary-400" />
                 Curator Workspace
               </CardTitle>
               <CardDescription className="text-muted-foreground">
@@ -349,7 +349,7 @@ export function CuratorWorkspace({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                    <Button variant="ghost" size="sm" className="mac-button text-muted-foreground">
                       <Keyboard className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -382,7 +382,7 @@ export function CuratorWorkspace({
           <div className="flex items-center gap-4 mt-4">
             <div className="relative flex-1 max-w-xs">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
+              <Input className="mac-input"
                 placeholder="Search feedback..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -446,10 +446,10 @@ export function CuratorWorkspace({
                     : "text-yellow-400"
               )}
             />
-            <h3 className="text-xl font-medium text-foreground capitalize">
+            <h3 className="mac-title">
               {showSuccess.replace("-", " ")}!
             </h3>
-            <p className="text-muted-foreground mt-2">Loading next item...</p>
+            <p className="mac-body text-muted-foreground mt-2">Loading next item...</p>
           </motion.div>
         ) : currentItem ? (
           <motion.div
@@ -460,10 +460,10 @@ export function CuratorWorkspace({
             className="grid grid-cols-1 lg:grid-cols-2 gap-4"
           >
             {/* Left: Original Response */}
-            <Card className="bg-card/50 border-border">
-              <CardHeader className="pb-3">
+            <Card className="mac-card bg-card/50 border-border">
+              <CardHeader className="mac-card pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-sm font-normal text-muted-foreground">
                     Original AI Response
                   </CardTitle>
                   <div className="flex items-center gap-2">
@@ -520,7 +520,7 @@ export function CuratorWorkspace({
                       <Badge
                         key={cat}
                         variant="outline"
-                        className="bg-purple-500/10 text-purple-400 border-purple-500/30"
+                        className="bg-primary-500/10 text-primary-400 border-primary-500/30"
                       >
                         {cat}
                       </Badge>
@@ -556,9 +556,9 @@ export function CuratorWorkspace({
             </Card>
 
             {/* Right: Suggested Correction & Actions */}
-            <Card className="bg-card/50 border-border">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
+            <Card className="mac-card bg-card/50 border-border">
+              <CardHeader className="mac-card pb-3">
+                <CardTitle className="text-sm font-normal text-muted-foreground">
                   Suggested Correction
                 </CardTitle>
               </CardHeader>
@@ -585,13 +585,13 @@ export function CuratorWorkspace({
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div className="bg-muted/30 rounded-lg p-3">
                     <span className="text-muted-foreground">Model</span>
-                    <p className="text-foreground mt-1">
+                    <p className="mac-body text-foreground mt-1">
                       {currentItem.feedback.modelUsed || "Unknown"}
                     </p>
                   </div>
                   <div className="bg-muted/30 rounded-lg p-3">
                     <span className="text-muted-foreground">RAG Confidence</span>
-                    <p className="text-foreground mt-1">
+                    <p className="mac-body text-foreground mt-1">
                       {currentItem.feedback.ragMetadata?.confidence
                         ? `${(currentItem.feedback.ragMetadata.confidence * 100).toFixed(0)}%`
                         : "N/A"}
@@ -599,11 +599,11 @@ export function CuratorWorkspace({
                   </div>
                   <div className="bg-muted/30 rounded-lg p-3">
                     <span className="text-muted-foreground">Priority</span>
-                    <p className="text-foreground mt-1">{currentItem.priority}</p>
+                    <p className="mac-body text-foreground mt-1">{currentItem.priority}</p>
                   </div>
                   <div className="bg-muted/30 rounded-lg p-3">
                     <span className="text-muted-foreground">Submitted</span>
-                    <p className="text-foreground mt-1">
+                    <p className="mac-body text-foreground mt-1">
                       {new Date(currentItem.feedback.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -611,7 +611,7 @@ export function CuratorWorkspace({
 
                 {/* Curator Notes */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
+                  <label className="text-sm font-normal text-foreground">
                     Curator Notes (required for reject/revision)
                   </label>
                   <Textarea
@@ -628,7 +628,7 @@ export function CuratorWorkspace({
                     <Button
                       onClick={handleApprove}
                       disabled={isProcessing}
-                      className="flex-1 bg-green-600 hover:bg-green-500"
+                      className="mac-button flex-1 bg-green-600 hover:bg-green-500"
                     >
                       {isProcessing ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -641,7 +641,7 @@ export function CuratorWorkspace({
                       onClick={handleReject}
                       disabled={isProcessing || !curatorNotes.trim()}
                       variant="destructive"
-                      className="flex-1"
+                      className="mac-button flex-1"
                     >
                       <XCircle className="h-4 w-4 mr-2" />
                       Reject
@@ -651,7 +651,7 @@ export function CuratorWorkspace({
                     onClick={handleRequestRevision}
                     disabled={isProcessing || !curatorNotes.trim()}
                     variant="outline"
-                    className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
+                    className="mac-button border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
                   >
                     <AlertTriangle className="h-4 w-4 mr-2" />
                     Request Revision
@@ -664,13 +664,13 @@ export function CuratorWorkspace({
                     variant="ghost"
                     onClick={navigatePrevious}
                     disabled={currentIndex === 0}
-                    className="text-muted-foreground"
+                    className="mac-button text-muted-foreground"
                   >
                     <ChevronLeft className="h-4 w-4 mr-1" />
                     Previous
                   </Button>
-                  <Button
-                    variant="ghost"
+                  <Button className="mac-button"
+                    variant="ghost" className="mac-button mac-button-outline"
                     onClick={() => {
                       onSkip(currentItem.feedback.id);
                       navigateNext();
@@ -683,7 +683,7 @@ export function CuratorWorkspace({
                     variant="ghost"
                     onClick={navigateNext}
                     disabled={currentIndex === filteredItems.length - 1}
-                    className="text-muted-foreground"
+                    className="mac-button text-muted-foreground"
                   >
                     Next
                     <ChevronRight className="h-4 w-4 ml-1" />

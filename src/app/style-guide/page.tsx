@@ -16,7 +16,7 @@ export default function StyleGuidePage() {
       {/* Floating Orbs Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[10%] left-[15%] w-[400px] h-[400px] rounded-full bg-[#4a9eff]/10 blur-[100px] animate-float" />
-        <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] rounded-full bg-[#a855f7]/10 blur-[120px] animate-float-delayed" />
+        <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] rounded-full bg-[#26c6da]/10 blur-[120px] animate-float-delayed" />
         <div className="absolute top-[60%] left-[40%] w-[300px] h-[300px] rounded-full bg-[#3b82f6]/8 blur-[80px] animate-float-slow" />
       </div>
 
@@ -24,11 +24,11 @@ export default function StyleGuidePage() {
       <header className="relative z-10 border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-8 py-12">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4a9eff] to-[#a855f7] flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4a9eff] to-[#26c6da] flex items-center justify-center shadow-lg shadow-primary-500/20">
               <span className="text-2xl font-extralight tracking-tight">MAC</span>
             </div>
             <div>
-              <h1 className="text-5xl font-[100] tracking-tight bg-gradient-to-r from-white via-[#e0e7ff] to-[#c7d2fe] bg-clip-text text-transparent">
+              <h1 c className="mac-heading"lassName="mac-heading text-5xl font-[100] tracking-tight bg-gradient-to-r from-white via-[#e0e7ff] to-[#c7d2fe] bg-clip-text text-transparent">
                 Design System
               </h1>
               <p className="text-[#a3a3a3] font-light text-sm mt-1">
@@ -40,12 +40,12 @@ export default function StyleGuidePage() {
           {/* Tab Navigation */}
           <nav className="flex gap-1">
             {(['colors', 'typography', 'spacing', 'components', 'effects'] as const).map((tab) => (
-              <button
+              <button className="mac-button"
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-6 py-3 rounded-lg font-light text-sm capitalize transition-all duration-150 ${
                   activeTab === tab
-                    ? 'bg-gradient-to-r from-[#4a9eff]/20 to-[#a855f7]/20 text-white border border-white/10'
+                    ? 'bg-gradient-to-r from-[#4a9eff]/20 to-[#26c6da]/20 text-white border border-white/10'
                     : 'text-[#a3a3a3] hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
@@ -106,12 +106,12 @@ function ColorsSection() {
   const colorGroups = [
     {
       title: 'Primary Palette',
-      description: 'Professional blues and purples that define the MAC aesthetic',
+      description: 'Professional blues and teals that define the MAC aesthetic',
       colors: [
         { name: 'Blue 400', value: '#4a9eff', variable: '--mac-primary-blue-400', usage: 'Primary actions, focus states' },
         { name: 'Blue 600', value: '#3b82f6', variable: '--mac-primary-blue-600', usage: 'Button gradients, emphasis' },
-        { name: 'Purple 400', value: '#a855f7', variable: '--mac-accent-purple-400', usage: 'Accent highlights, gradients' },
-        { name: 'Purple 600', value: '#9333ea', variable: '--mac-accent-purple-600', usage: 'Deep accents, hover states' },
+        { name: 'Teal 400', value: '#26c6da', variable: '--mac-accent-primary-400', usage: 'Accent highlights, gradients' },
+        { name: 'Teal 600', value: '#00bcd4', variable: '--mac-accent-primary-600', usage: 'Deep accents, hover states' },
       ],
     },
     {
@@ -154,7 +154,7 @@ function ColorsSection() {
       {colorGroups.map((group) => (
         <div key={group.title} className="space-y-4">
           <div className="mb-6">
-            <h3 className="text-xl font-[200] text-white mb-1">{group.title}</h3>
+            <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white mb-1">{group.title}</h3>
             <p className="text-[#a3a3a3] font-light text-sm">{group.description}</p>
           </div>
 
@@ -174,7 +174,7 @@ function ColorsSection() {
                 </div>
                 <div className="p-4">
                   <p className="text-white font-light text-sm mb-1">{color.name}</p>
-                  <code className="text-[#a855f7] text-xs font-mono block mb-2 opacity-80">
+                  <code className="text-[#26c6da] text-xs font-mono block mb-2 opacity-80">
                     {color.variable}
                   </code>
                   <p className="text-[#737373] text-xs">{color.usage}</p>
@@ -188,17 +188,17 @@ function ColorsSection() {
       {/* Gradient Rule */}
       <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 mt-8">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#4a9eff] to-[#a855f7] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#4a9eff] to-[#26c6da] flex items-center justify-center shrink-0">
             <span className="text-lg">⚡</span>
           </div>
           <div>
-            <h4 className="text-white font-light text-lg mb-2">The Gradient Rule</h4>
+            <h4 c className="mac-title"lassName="mac-title text-white font-light text-lg mb-2">The Gradient Rule</h4>
             <p className="text-[#a3a3a3] font-light text-sm leading-relaxed">
               <strong className="text-white">Gradients are reserved for buttons ONLY.</strong> All other elements must use solid colors.
               This maintains visual hierarchy and ensures buttons stand out as actionable elements.
             </p>
             <div className="mt-4 flex gap-4">
-              <button className="px-6 py-2 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-lg text-sm font-normal transition-all duration-150 hover:brightness-110">
+              <button className="mac-button px-6 py-2 bg-gradient-to-r from-[#4a9eff] to-[#26c6da] rounded-lg text-sm font-normal transition-all duration-150 hover:brightness-110">
                 Gradient Button
               </button>
               <div className="px-6 py-2 bg-[#1a1a1a] border border-white/[0.08] rounded-lg text-sm font-light text-[#a3a3a3]">
@@ -235,7 +235,7 @@ function TypographySection() {
 
       {/* Weight Philosophy */}
       <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6">
-        <h3 className="text-white font-[200] text-xl mb-4">The Light Typography Philosophy</h3>
+        <h3 c className="mac-title"lassName="mac-title text-white font-[200] text-xl mb-4">The Light Typography Philosophy</h3>
         <div className="grid grid-cols-4 gap-6">
           {[
             { weight: 100, label: 'Ultra Light', usage: 'Display text' },
@@ -248,7 +248,7 @@ function TypographySection() {
                 Aa
               </div>
               <p className="text-white text-sm font-light">{item.weight}</p>
-              <p className="text-[#a855f7] text-xs">{item.label}</p>
+              <p className="text-[#26c6da] text-xs">{item.label}</p>
               <p className="text-[#737373] text-xs mt-1">{item.usage}</p>
             </div>
           ))}
@@ -298,14 +298,14 @@ function SpacingSection() {
 
       {/* Visual Scale */}
       <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8">
-        <h3 className="text-white font-[200] text-lg mb-6">Spacing Scale</h3>
+        <h3 c className="mac-title"lassName="mac-title text-white font-[200] text-lg mb-6">Spacing Scale</h3>
         <div className="space-y-4">
           {spacingScale.map((size) => (
             <div key={size} className="flex items-center gap-6">
               <span className="text-[#737373] text-sm font-mono w-16 text-right">{size}px</span>
               <div className="flex-1 flex items-center gap-4">
                 <div
-                  className="bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-sm transition-all duration-200"
+                  className="bg-gradient-to-r from-[#4a9eff] to-[#26c6da] rounded-sm transition-all duration-200"
                   style={{ width: `${Math.max(size, 4)}px`, height: '24px' }}
                 />
                 <span className="text-[#a3a3a3] text-xs">
@@ -330,33 +330,33 @@ function SpacingSection() {
       {/* Component Standards */}
       <div className="grid grid-cols-2 gap-6">
         <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6">
-          <h3 className="text-white font-[200] text-lg mb-4">Component Standards</h3>
+          <h3 c className="mac-title"lassName="mac-title text-white font-[200] text-lg mb-4">Component Standards</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#4a9eff]" />
-              <span className="text-[#a3a3a3]">Button padding: <code className="text-[#a855f7]">12px 24px</code></span>
+              <span className="text-[#a3a3a3]">Button padding: <code className="text-[#26c6da]">12px 24px</code></span>
             </li>
             <li className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#4a9eff]" />
-              <span className="text-[#a3a3a3]">Input height: <code className="text-[#a855f7]">40px</code> minimum</span>
+              <span className="text-[#a3a3a3]">Input height: <code className="text-[#26c6da]">40px</code> minimum</span>
             </li>
             <li className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#4a9eff]" />
-              <span className="text-[#a3a3a3]">Card padding: <code className="text-[#a855f7]">24px</code></span>
+              <span className="text-[#a3a3a3]">Card padding: <code className="text-[#26c6da]">24px</code></span>
             </li>
             <li className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#4a9eff]" />
-              <span className="text-[#a3a3a3]">Section spacing: <code className="text-[#a855f7]">32px</code> minimum</span>
+              <span className="text-[#a3a3a3]">Section spacing: <code className="text-[#26c6da]">32px</code> minimum</span>
             </li>
             <li className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#4a9eff]" />
-              <span className="text-[#a3a3a3]">Touch targets: <code className="text-[#a855f7]">44×44px</code> minimum</span>
+              <span className="text-[#a3a3a3]">Touch targets: <code className="text-[#26c6da]">44×44px</code> minimum</span>
             </li>
           </ul>
         </div>
 
         <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6">
-          <h3 className="text-white font-[200] text-lg mb-4">Border Radius</h3>
+          <h3 c className="mac-title"lassName="mac-title text-white font-[200] text-lg mb-4">Border Radius</h3>
           <div className="space-y-4">
             {[
               { name: 'Small', value: '6px', usage: 'Inputs, buttons' },
@@ -366,7 +366,7 @@ function SpacingSection() {
             ].map((radius) => (
               <div key={radius.name} className="flex items-center gap-4">
                 <div
-                  className="w-12 h-12 bg-gradient-to-br from-[#4a9eff]/30 to-[#a855f7]/30 border border-white/[0.08]"
+                  className="w-12 h-12 bg-gradient-to-br from-[#4a9eff]/30 to-[#26c6da]/30 border border-white/[0.08]"
                   style={{ borderRadius: radius.value === '9999px' ? '9999px' : radius.value }}
                 />
                 <div>
@@ -396,19 +396,19 @@ function ComponentsSection() {
 
       {/* Buttons */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Buttons</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Buttons</h3>
         <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8">
           <div className="flex flex-wrap gap-4 items-center">
-            <button className="px-6 py-3 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-lg text-sm font-normal transition-all duration-150 hover:brightness-110">
+            <button className="mac-button px-6 py-3 bg-gradient-to-r from-[#4a9eff] to-[#26c6da] rounded-lg text-sm font-normal transition-all duration-150 hover:brightness-110">
               Primary Action
             </button>
-            <button className="px-6 py-3 bg-[#141414] border border-white/[0.12] rounded-lg text-sm font-normal text-white hover:bg-white/[0.04] hover:border-[#4a9eff] transition-all duration-150">
+            <button className="mac-button px-6 py-3 bg-[#141414] border border-white/[0.12] rounded-lg text-sm font-normal text-white hover:bg-white/[0.04] hover:border-[#4a9eff] transition-all duration-150">
               Secondary
             </button>
-            <button className="px-6 py-3 rounded-lg text-sm font-light text-[#a3a3a3] hover:text-white hover:bg-white/[0.04] transition-all duration-150">
+            <button className="mac-button px-6 py-3 rounded-lg text-sm font-light text-[#a3a3a3] hover:text-white hover:bg-white/[0.04] transition-all duration-150">
               Ghost
             </button>
-            <button className="px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm font-normal text-red-400 hover:bg-red-500/20 transition-all duration-150">
+            <button className="mac-button px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm font-normal text-red-400 hover:bg-red-500/20 transition-all duration-150">
               Destructive
             </button>
           </div>
@@ -420,7 +420,7 @@ function ComponentsSection() {
 
       {/* Form Elements */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Form Elements</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Form Elements</h3>
         <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8">
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
@@ -429,7 +429,7 @@ function ComponentsSection() {
                 <input
                   type="text"
                   placeholder="Enter your name..."
-                  className="w-full px-4 py-3 bg-[#0c0c0c] border border-white/[0.08] rounded-lg text-white placeholder-[#737373] font-light text-sm focus:outline-none focus:border-[#4a9eff] focus:ring-2 focus:ring-[#4a9eff]/20 transition-all duration-150"
+                  className="mac-input w-full px-4 py-3 bg-[#0c0c0c] border border-white/[0.08] rounded-lg text-white placeholder-[#737373] font-light text-sm focus:outline-none focus:border-[#4a9eff] focus:ring-2 focus:ring-[#4a9eff]/20 transition-all duration-150"
                 />
               </div>
               <div>
@@ -437,7 +437,7 @@ function ComponentsSection() {
                 <input
                   type="text"
                   defaultValue="Invalid input"
-                  className="w-full px-4 py-3 bg-[#0c0c0c] border border-red-500/50 rounded-lg text-white font-light text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20"
+                  className="mac-input w-full px-4 py-3 bg-[#0c0c0c] border border-red-500/50 rounded-lg text-white font-light text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20"
                 />
                 <p className="text-red-400 text-xs mt-2">This field is required</p>
               </div>
@@ -458,29 +458,29 @@ function ComponentsSection() {
 
       {/* Cards */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Cards</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Cards</h3>
         <div className="grid grid-cols-3 gap-6">
           <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6">
             <div className="w-10 h-10 rounded-lg bg-[#4a9eff]/10 flex items-center justify-center mb-4">
               <span className="text-[#4a9eff]">✦</span>
             </div>
-            <h4 className="text-white font-light text-lg mb-2">Standard Card</h4>
+            <h4 c className="mac-title"lassName="mac-title text-white font-light text-lg mb-2">Standard Card</h4>
             <p className="text-[#a3a3a3] text-sm font-light">Elevated surface with hover lift effect and border highlight.</p>
           </div>
 
           <div className="mac-glass p-6">
-            <div className="w-10 h-10 rounded-lg bg-[#a855f7]/10 flex items-center justify-center mb-4">
-              <span className="text-[#a855f7]">◈</span>
+            <div className="w-10 h-10 rounded-lg bg-[#26c6da]/10 flex items-center justify-center mb-4">
+              <span className="text-[#26c6da]">◈</span>
             </div>
-            <h4 className="text-white font-light text-lg mb-2">Glass Card</h4>
+            <h4 c className="mac-title"lassName="mac-title text-white font-light text-lg mb-2">Glass Card</h4>
             <p className="text-[#a3a3a3] text-sm font-light">Glassmorphism with backdrop blur for layered interfaces.</p>
           </div>
 
           <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 shadow-lg shadow-black/50">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#4a9eff] to-[#a855f7] flex items-center justify-center mb-4">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#4a9eff] to-[#26c6da] flex items-center justify-center mb-4">
               <span className="text-white">★</span>
             </div>
-            <h4 className="text-white font-light text-lg mb-2">Elevated Card</h4>
+            <h4 c className="mac-title"lassName="mac-title text-white font-light text-lg mb-2">Elevated Card</h4>
             <p className="text-[#a3a3a3] text-sm font-light">Deep shadow for prominent placement in the visual hierarchy.</p>
           </div>
         </div>
@@ -488,7 +488,7 @@ function ComponentsSection() {
 
       {/* Status Badges */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Status Badges</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Status Badges</h3>
         <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8">
           <div className="flex flex-wrap gap-4">
             <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-lg text-xs text-green-300">
@@ -531,7 +531,7 @@ function EffectsSection() {
 
       {/* Animation Timing */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Animation Timing</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Animation Timing</h3>
         <div className="grid grid-cols-4 gap-6">
           {[
             { name: 'Fast', duration: '100ms', usage: 'Micro-interactions, hover' },
@@ -541,13 +541,13 @@ function EffectsSection() {
           ].map((timing) => (
             <div key={timing.name} className="bg-[#141414] border border-white/[0.08] rounded-xl p-6 text-center">
               <div
-                className="w-full h-3 bg-gradient-to-r from-[#4a9eff] to-[#a855f7] rounded-full mb-4 origin-left animate-scale"
+                className="w-full h-3 bg-gradient-to-r from-[#4a9eff] to-[#26c6da] rounded-full mb-4 origin-left animate-scale"
                 style={{
                   animation: `scaleX ${timing.duration} ease-in-out infinite alternate`,
                 }}
               />
-              <p className="text-white font-light">{timing.name}</p>
-              <p className="text-[#a855f7] text-sm font-mono">{timing.duration}</p>
+              <p className="mac-body text-white font-light">{timing.name}</p>
+              <p className="text-[#26c6da] text-sm font-mono">{timing.duration}</p>
               <p className="text-[#737373] text-xs mt-2">{timing.usage}</p>
             </div>
           ))}
@@ -556,17 +556,17 @@ function EffectsSection() {
 
       {/* Glassmorphism */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Glassmorphism</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Glassmorphism</h3>
         <div className="relative h-64 rounded-xl overflow-hidden">
           {/* Background with colors */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#4a9eff]/30 via-[#0c0c0c] to-[#a855f7]/30" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#4a9eff]/30 via-[#0c0c0c] to-[#26c6da]/30" />
           <div className="absolute top-8 left-8 w-32 h-32 rounded-full bg-[#4a9eff]/40 blur-xl" />
-          <div className="absolute bottom-8 right-8 w-40 h-40 rounded-full bg-[#a855f7]/40 blur-xl" />
+          <div className="absolute bottom-8 right-8 w-40 h-40 rounded-full bg-[#26c6da]/40 blur-xl" />
           
           {/* Glass panel */}
           <div className="absolute inset-8 flex items-center justify-center">
             <div className="mac-glass p-8 max-w-md">
-              <h4 className="text-white font-[200] text-xl mb-2">Glass Effect</h4>
+              <h4 c className="mac-title"lassName="mac-title text-white font-[200] text-xl mb-2">Glass Effect</h4>
               <p className="text-[#a3a3a3] text-sm font-light">
                 backdrop-filter: blur(24px) creates depth while maintaining readability. 
                 Use rgba backgrounds with 40-85% opacity depending on backdrop support.
@@ -578,22 +578,22 @@ function EffectsSection() {
 
       {/* Glow Effects */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Glow Effects</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Glow Effects</h3>
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8 text-center">
             <div className="inline-block p-8 rounded-2xl shadow-[0_0_30px_rgba(74,158,255,0.3),0_0_60px_rgba(168,85,247,0.2)]">
               <span className="text-4xl">✦</span>
             </div>
-            <p className="text-white font-light mt-4">Blue-Purple Glow</p>
+            <p className="mac-body text-white font-light mt-4">Blue-Purple Glow</p>
             <p className="text-[#737373] text-xs mt-1">For highlighted elements and focal points</p>
           </div>
           <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-8 text-center">
             <input
               type="text"
               placeholder="Focused input glow"
-              className="px-4 py-3 bg-[#0c0c0c] border border-[#4a9eff] rounded-lg text-white placeholder-[#737373] font-light text-sm shadow-[0_0_12px_rgba(74,158,255,0.15),0_0_4px_rgba(74,158,255,0.1)] ring-2 ring-[#4a9eff]/20"
+              className="mac-input px-4 py-3 bg-[#0c0c0c] border border-[#4a9eff] rounded-lg text-white placeholder-[#737373] font-light text-sm shadow-[0_0_12px_rgba(74,158,255,0.15),0_0_4px_rgba(74,158,255,0.1)] ring-2 ring-[#4a9eff]/20"
             />
-            <p className="text-white font-light mt-4">Focus Glow</p>
+            <p className="mac-body text-white font-light mt-4">Focus Glow</p>
             <p className="text-[#737373] text-xs mt-1">3px ring with subtle shadow</p>
           </div>
         </div>
@@ -601,10 +601,10 @@ function EffectsSection() {
 
       {/* Floating Orbs Demo */}
       <div className="space-y-6">
-        <h3 className="text-xl font-[200] text-white">Floating Orbs Background</h3>
+        <h3 c className="mac-title"lassName="mac-title text-xl font-[200] text-white">Floating Orbs Background</h3>
         <div className="relative h-48 rounded-xl overflow-hidden bg-[#0c0c0c] border border-white/[0.08]">
           <div className="absolute top-[10%] left-[20%] w-24 h-24 rounded-full bg-[#4a9eff]/20 blur-[40px] animate-[float_6s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[10%] right-[20%] w-32 h-32 rounded-full bg-[#a855f7]/20 blur-[50px] animate-[float_8s_ease-in-out_infinite_reverse]" />
+          <div className="absolute bottom-[10%] right-[20%] w-32 h-32 rounded-full bg-[#26c6da]/20 blur-[50px] animate-[float_8s_ease-in-out_infinite_reverse]" />
           <div className="absolute inset-0 flex items-center justify-center">
             <p className="text-[#a3a3a3] text-sm font-light">Ambient floating orbs create depth and atmosphere</p>
           </div>
@@ -613,17 +613,17 @@ function EffectsSection() {
 
       {/* Animation Principles */}
       <div className="bg-[#141414] border border-white/[0.08] rounded-xl p-6">
-        <h3 className="text-white font-[200] text-lg mb-4">Animation Principles</h3>
+        <h3 c className="mac-title"lassName="mac-title text-white font-[200] text-lg mb-4">Animation Principles</h3>
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <h4 className="text-[#4a9eff] text-sm mb-2">✓ GPU-Accelerated Properties</h4>
+            <h4 c className="mac-title"lassName="mac-title text-[#4a9eff] text-sm mb-2">✓ GPU-Accelerated Properties</h4>
             <ul className="space-y-1 text-sm text-[#a3a3a3]">
               <li className="font-mono">transform (translate, scale, rotate)</li>
               <li className="font-mono">opacity</li>
             </ul>
           </div>
           <div>
-            <h4 className="text-red-400 text-sm mb-2">✗ Avoid Animating</h4>
+            <h4 c className="mac-title"lassName="mac-title text-red-400 text-sm mb-2">✗ Avoid Animating</h4>
             <ul className="space-y-1 text-sm text-[#a3a3a3]">
               <li className="font-mono">width / height</li>
               <li className="font-mono">left / top / right / bottom</li>
@@ -654,7 +654,7 @@ function EffectsSection() {
 function SectionHeader({ title, description }: { title: string; description: string }) {
   return (
     <div className="mb-8">
-      <h2 className="text-3xl font-[200] text-white mb-2">{title}</h2>
+      <h2 c className="mac-heading"lassName="mac-heading text-3xl font-[200] text-white mb-2">{title}</h2>
       <p className="text-[#a3a3a3] font-light text-lg max-w-2xl">{description}</p>
     </div>
   );
