@@ -287,35 +287,40 @@ export const getApplicationERD = tool({
     DIVISION ||--o{ APPLICATION : "has many"
 
     ORGANIZATION {
-        string name PK "e.g., sony-music"
+        string name PK "sony-music, smej"
         string description
     }
 
     DIVISION {
-        string name PK "e.g., digital-operations"
-        string organization FK
+        string name PK "digital-operations, label-services"
+        string organization FK "sony-music"
         string description
     }
 
     APPLICATION {
-        string name PK "e.g., aoma, usm, dam"
-        string organization FK
+        string name PK "aoma, usm, dam, crm"
+        string organization FK "sony-music"
         string division FK
         string description
     }`,
-      explanation: "Each organization can have multiple divisions. Each division can have multiple applications. All data is isolated by this 3-level hierarchy.",
+      explanation: "Multiple organizations supported (sony-music, smej). Each organization can have multiple divisions. Each division can have multiple applications. Example shown for sony-music only.",
       exampleHierarchy: {
-        organization: "sony-music",
-        divisions: [
-          {
-            name: "digital-operations",
-            applications: ["aoma", "usm", "dam"]
-          },
-          {
-            name: "label-services",
-            applications: ["crm", "royalties"]
-          }
-        ]
+        organizations: ["sony-music", "smej"],
+        "sony-music": {
+          divisions: [
+            {
+              name: "digital-operations",
+              applications: ["aoma", "usm", "dam"]
+            },
+            {
+              name: "label-services",
+              applications: ["crm"]
+            }
+          ]
+        },
+        "smej": {
+          note: "Separate organization (Sony Music Japan)"
+        }
       }
     };
   },
