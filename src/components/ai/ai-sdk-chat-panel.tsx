@@ -869,17 +869,48 @@ export function AiSdkChatPanel({
     }
   };
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom when messages change OR during streaming
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
         "[data-radix-scroll-area-viewport]"
       );
       if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        scrollContainer.scrollTo({
+          top: scrollContainer.scrollHeight,
+          behavior: "smooth"
+        });
       }
     }
-  }, [messages]);
+  }, [messages, isLoading]);
+
+  // Additional smooth scroll during active streaming (updates more frequently)
+  useEffect(() => {
+    if (!isLoading) return; // Only during streaming
+
+    const intervalId = setInterval(() => {
+      if (scrollAreaRef.current) {
+        const scrollContainer = scrollAreaRef.current.querySelector(
+          "[data-radix-scroll-area-viewport]"
+        );
+        if (scrollContainer) {
+          // Check if user has scrolled up manually
+          const isNearBottom =
+            scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight < 100;
+
+          // Only auto-scroll if user is near the bottom (respects manual scrolling)
+          if (isNearBottom) {
+            scrollContainer.scrollTo({
+              top: scrollContainer.scrollHeight,
+              behavior: "smooth"
+            });
+          }
+        }
+      }
+    }, 500); // Check every 500ms during streaming
+
+    return () => clearInterval(intervalId);
+  }, [isLoading]);
 
   // Hide suggestions after first message
   useEffect(() => {
