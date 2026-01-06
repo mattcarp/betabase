@@ -198,7 +198,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
   if (typeof window === 'undefined') return null;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10 max-w-[1400px] mx-auto">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10 w-full">
       {/* GOLD STANDARD: Intelligence Quality Radar + Small Multiples */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Test Intelligence Quality Radar */}
@@ -264,7 +264,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       </div>
 
       {/* Compact Hero Stats Row - Tufte-inspired density */}
-      <div className="grid grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
         <Card className="mac-card-static border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]/50">
           <CardContent className="p-3">
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Pass Rate</div>
@@ -391,9 +391,9 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       </Card>
 
       {/* Unified Grid: Recent Self-Heals + Attention Items - Gold Standard Layout */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Recent Self-Heals - Compact */}
-        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] col-span-2 shadow-lg">
+        <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)] lg:col-span-2 shadow-lg">
           <CardHeader className="mac-card pb-2 pt-3 px-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-light flex items-center gap-2 text-white">
@@ -524,7 +524,7 @@ export const TestHomeDashboard: React.FC<TestHomeDashboardProps> = ({
       </Card>
 
       {/* Quick Actions - Tufte minimal */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <Button variant="ghost" className="mac-button mac-button-outline"
           size="sm"
           onClick={() => onNavigate?.("self-healing")}

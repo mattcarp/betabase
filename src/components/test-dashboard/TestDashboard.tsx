@@ -427,22 +427,22 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
       {/* Main Dashboard Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header with Stats - GOLD STANDARD COMPACT */}
-        <div className="border-b border-border bg-background p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
+        <div className="border-b border-border bg-background p-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-primary/10">
                 <Activity className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h1 className="mac-heading">Test Dashboard</h1>
-                <p className="mac-body text-[10px] text-muted-foreground uppercase tracking-wider">
+                <h1 className="mac-heading text-base">Test Dashboard</h1>
+                <p className="mac-body text-[9px] text-muted-foreground uppercase tracking-wider hidden sm:block">
                   Unified testing and quality assurance platform
                 </p>
               </div>
             </div>
 
             {/* Control Buttons - GOLD STANDARD COMPACT */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <Button className="mac-button"
                 variant={isRunning ? "destructive" : "default"}
                 size="sm"
@@ -472,7 +472,7 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
           </div>
 
           {/* Test Statistics Bar - GOLD STANDARD UNIFIED BLUE */}
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
             <Card className="mac-card-static border-border bg-card/50">
               <CardContent className="p-2">
                 <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
@@ -602,67 +602,59 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
         {/* Main Content Area */}
         <Tabs value={activeView} onValueChange={setActiveView} className="flex-1 flex flex-col min-h-0">
-          <TabsList className="flex w-full rounded-none border-b border-border bg-background overflow-x-auto shrink-0">
-            <TabsTrigger value="home" className="gap-2">
-              <Home className="h-4 w-4" />
-              Home
+          <TabsList className="flex w-full rounded-none border-b border-border bg-background shrink-0 overflow-x-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
+            <TabsTrigger value="home" className="gap-1.5 px-3 shrink-0">
+              <Home className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Home</span>
             </TabsTrigger>
-            <TabsTrigger 
-              value="self-healing" 
-              className="gap-2"
+            <TabsTrigger
+              value="self-healing"
+              className="gap-1.5 px-3 shrink-0"
               data-testid="tab-self-healing"
             >
-              <Wrench className="h-4 w-4" />
-              Self-Healing
+              <Wrench className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Self-Healing</span>
             </TabsTrigger>
-            <TabsTrigger value="historical" className="gap-2">
-              <FileSearch className="h-4 w-4" />
-              Historical
+            <TabsTrigger value="historical" className="gap-1.5 px-3 shrink-0">
+              <FileSearch className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Historical</span>
             </TabsTrigger>
-            <TabsTrigger value="unified" className="gap-2">
-              <Sparkles className="h-4 w-4" />
-              Unified
+            <TabsTrigger value="unified" className="gap-1.5 px-3 shrink-0">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span className="hidden lg:inline">Unified</span>
             </TabsTrigger>
-            <TabsTrigger value="execution" className="gap-2">
-              <Activity className="h-4 w-4" />
-              Execution
+            <TabsTrigger value="execution" className="gap-1.5 px-3 shrink-0">
+              <Activity className="h-3.5 w-3.5" />
+              <span className="hidden lg:inline">Execution</span>
             </TabsTrigger>
-            <TabsTrigger value="results" className="gap-2">
-              <CheckCircle className="h-4 w-4" />
-              Results
+            <TabsTrigger value="results" className="gap-1.5 px-3 shrink-0">
+              <CheckCircle className="h-3.5 w-3.5" />
+              <span className="hidden lg:inline">Results</span>
             </TabsTrigger>
-            <TabsTrigger value="manual" className="gap-2">
-              <MousePointerClick className="h-4 w-4" />
-              Manual
+            <TabsTrigger value="manual" className="gap-1.5 px-3 shrink-0">
+              <MousePointerClick className="h-3.5 w-3.5" />
+              <span className="hidden xl:inline">Manual</span>
             </TabsTrigger>
-            <TabsTrigger value="ai-generate" className="gap-2">
-              <Lightbulb className="h-4 w-4" />
-              AI Generate
+            <TabsTrigger value="ai-generate" className="gap-1.5 px-3 shrink-0">
+              <Lightbulb className="h-3.5 w-3.5" />
+              <span className="hidden xl:inline">AI Generate</span>
             </TabsTrigger>
-            <TabsTrigger value="trace" className="gap-2">
-              <Eye className="h-4 w-4" />
-              Trace
+            <TabsTrigger value="trace" className="gap-1.5 px-3 shrink-0">
+              <Eye className="h-3.5 w-3.5" />
+              <span className="hidden xl:inline">Trace</span>
             </TabsTrigger>
-            <TabsTrigger value="session-playback" className="gap-2">
-              <Play className="h-4 w-4" />
-              Playback
+            <TabsTrigger value="session-playback" className="gap-1.5 px-3 shrink-0">
+              <Play className="h-3.5 w-3.5" />
+              <span className="hidden xl:inline">Playback</span>
             </TabsTrigger>
-            <TabsTrigger value="coverage" className="gap-2">
-              <GitBranch className="h-4 w-4" />
-              Coverage
-            </TabsTrigger>
-            <TabsTrigger value="flaky" className="gap-2">
-              <Bug className="h-4 w-4" />
-              Flaky
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="gap-2">
-              <LineChart className="h-4 w-4" />
-              Analytics
+            <TabsTrigger value="coverage" className="gap-1.5 px-3 shrink-0">
+              <GitBranch className="h-3.5 w-3.5" />
+              <span className="hidden xl:inline">Coverage</span>
             </TabsTrigger>
           </TabsList>
 
           <div className="flex-1 relative min-h-0">
-            <TabsContent value="home" className="m-0 p-6 h-full overflow-auto">
+            <TabsContent value="home" className="m-0 p-4 h-full overflow-auto">
               <TestHomeDashboard
                 onNavigate={setActiveView}
                 testStats={{
