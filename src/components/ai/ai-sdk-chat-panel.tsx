@@ -77,6 +77,7 @@ import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
+  type StickToBottomContext,
 } from "../ai-elements/conversation";
 import { Image as AIImage } from "../ai-elements/image";
 import { Loader } from "../ai-elements/loader";
@@ -283,7 +284,7 @@ export function AiSdkChatPanel({
 }: AiSdkChatPanelProps) {
   console.log("🎯 AiSdkChatPanel: Component mounted with api:", api);
   console.log("🎤 Voice buttons should be rendering in PromptInputTools");
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const conversationContextRef = useRef<StickToBottomContext | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [selectedModel, setSelectedModel] = useState("gemini-3-flash-preview");
   const [showReasoning, setShowReasoning] = useState(true);
@@ -869,45 +870,26 @@ export function AiSdkChatPanel({
     }
   };
 
-  // Auto-scroll to bottom when messages change OR during streaming
+  // Auto-scroll to bottom when messages change (uses StickToBottom context)
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]"
-      );
-      if (scrollContainer) {
-        scrollContainer.scrollTo({
-          top: scrollContainer.scrollHeight,
-          behavior: "smooth"
-        });
-      }
+    const ctx = conversationContextRef.current;
+    if (ctx) {
+      // Scroll to bottom when new messages arrive
+      ctx.scrollToBottom("smooth");
     }
-  }, [messages, isLoading]);
+  }, [messages]);
 
-  // Additional smooth scroll during active streaming (updates more frequently)
+  // Continuous smooth scroll during active streaming
   useEffect(() => {
-    if (!isLoading) return; // Only during streaming
+    if (!isLoading) return;
 
     const intervalId = setInterval(() => {
-      if (scrollAreaRef.current) {
-        const scrollContainer = scrollAreaRef.current.querySelector(
-          "[data-radix-scroll-area-viewport]"
-        );
-        if (scrollContainer) {
-          // Check if user has scrolled up manually
-          const isNearBottom =
-            scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight < 100;
-
-          // Only auto-scroll if user is near the bottom (respects manual scrolling)
-          if (isNearBottom) {
-            scrollContainer.scrollTo({
-              top: scrollContainer.scrollHeight,
-              behavior: "smooth"
-            });
-          }
-        }
+      const ctx = conversationContextRef.current;
+      if (ctx && !ctx.escapedFromLock) {
+        // Only scroll if user hasn't manually scrolled away
+        ctx.scrollToBottom({ animation: "smooth", preserveScrollPosition: false });
       }
-    }, 500); // Check every 500ms during streaming
+    }, 150); // More frequent updates for smoother scrolling during streaming
 
     return () => clearInterval(intervalId);
   }, [isLoading]);
@@ -2023,9 +2005,9 @@ export function AiSdkChatPanel({
         className="flex-shrink-0"
       />
 
-      {/* Main Chat Area */}
-      <div className="flex-1 min-h-0 overflow-y-auto bg-background">
-        <Conversation className="bg-background">
+      {/* Main Chat Area - Conversation handles its own scrolling via StickToBottom */}
+      <div className="flex-1 min-h-0 flex flex-col bg-background">
+        <Conversation className="bg-background flex-1" contextRef={conversationContextRef}>
           <ConversationContent className="px-6 py-4 pb-8 bg-background">
             {messages.length === 0 && enableWelcomeScreen ? (
               /* Beautiful Welcome Screen */

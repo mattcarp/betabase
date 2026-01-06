@@ -2,19 +2,24 @@
 
 import { Button } from "../ui/button";
 import { ArrowDownIcon } from "lucide-react";
-import type { ComponentProps } from "react";
+import type { ComponentProps, Ref } from "react";
 import { useCallback } from "react";
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import { StickToBottom, useStickToBottomContext, type StickToBottomContext } from "use-stick-to-bottom";
 import { cn } from "../../lib/utils";
 
-export type ConversationProps = ComponentProps<typeof StickToBottom>;
+export type { StickToBottomContext };
 
-export const Conversation = ({ className, ...props }: ConversationProps) => (
+export type ConversationProps = ComponentProps<typeof StickToBottom> & {
+  contextRef?: Ref<StickToBottomContext>;
+};
+
+export const Conversation = ({ className, contextRef, ...props }: ConversationProps) => (
   <StickToBottom
     className={cn("relative flex-1 overflow-y-auto", className)}
     initial="smooth"
     resize="smooth"
     role="log"
+    contextRef={contextRef}
     {...props}
   />
 );
