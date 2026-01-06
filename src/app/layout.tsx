@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import React from "react";
+import React, { Suspense } from "react";
 import { Inter } from "next/font/google";
-import { ClientProviders } from "@/components/ClientProviders";
 import "./globals.css";
 
 // Inter font - MAC Design System primary typeface
@@ -66,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/styles/theme-transitions.css" />
       </head>
       <body className="dark font-sans antialiased" suppressHydrationWarning>
-        <ClientProviders>{children}</ClientProviders>
+        {children}
       </body>
     </html>
   );

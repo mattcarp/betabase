@@ -89,12 +89,14 @@ export const ConnectionStatusIndicator: React.FC = () => {
     };
 
     // Initial check
-    checkConnections();
+    // DISABLED: Causing Fast Refresh crash when API routes compile on first call
+    // checkConnections();
 
     // Periodic health checks every 2 minutes (reduced frequency for performance)
-    const interval = setInterval(checkConnections, 120000);
+    // DISABLED: Same reason as above
+    // const interval = setInterval(checkConnections, 120000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   const getStatusIcon = (status: ConnectionStatus["type"]) => {
@@ -194,7 +196,7 @@ export const ConnectionStatusIndicator: React.FC = () => {
             <div className="flex items-center justify-between border-b border-white/20 pb-4">
               <div className="flex items-center gap-2">
                 <div className="mac-floating-orb h-2 w-2" />
-                <h3 className="mac-title text-base font-[400] tracking-wide text-white">
+                <h3 className="mac-title">
                   System Health
                 </h3>
               </div>

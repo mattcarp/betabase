@@ -31,7 +31,7 @@ import {
   Settings,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
-import { calculateCost, formatCost } from "@/lib/introspection/cost-calculator";
+import { calculateCost, formatCost } from "../../lib/introspection/cost-calculator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import {
   Collapsible,
@@ -40,9 +40,9 @@ import {
 } from "./collapsible";
 import { Switch } from "./switch";
 import { LatencyWaterfall, extractLatencySegments } from "./LatencyWaterfall";
-import { getTokenBudgets, formatTokenCount, type TokenBudget } from "@/lib/introspection/token-aggregator";
-import type { RLHFFeedbackStats } from "@/lib/introspection/rlhf-query";
-import { getQualityStatistics, type SimilarityStats, type CitationStats, type ConversationStats } from "@/lib/introspection/trace-statistics";
+import { getTokenBudgets, formatTokenCount, type TokenBudget } from "../../lib/introspection/token-aggregator";
+import type { RLHFFeedbackStats } from "../../lib/introspection/rlhf-query";
+import { getQualityStatistics, type SimilarityStats, type CitationStats, type ConversationStats } from "../../lib/introspection/trace-statistics";
 
 // Slow query threshold: 2 seconds
 const SLOW_QUERY_THRESHOLD_MS = 2000;
@@ -159,11 +159,12 @@ export function IntrospectionDropdown() {
   }, [traces]);
 
   // Eager load on mount (non-blocking) so status shows green immediately
-  useEffect(() => {
-    const controller = new AbortController();
-    fetchIntrospectionData(controller.signal);
-    return () => controller.abort();
-  }, []);
+  // DISABLED: Causing Fast Refresh crash when API route compiles
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   fetchIntrospectionData(controller.signal);
+  //   return () => controller.abort();
+  // }, []);
 
   // Refresh periodically while dropdown is open
   useEffect(() => {
@@ -249,7 +250,7 @@ export function IntrospectionDropdown() {
       case "tool":
         return "bg-blue-500/10 text-blue-500";
       case "chain":
-        return "bg-purple-500/10 text-purple-500";
+        return "bg-primary-400/10 text-primary-400";
       case "llm":
         return "bg-green-500/10 text-green-500";
       case "retriever":
@@ -344,7 +345,7 @@ export function IntrospectionDropdown() {
                       </TooltipTrigger>
                       <TooltipContent>
                         <div className="text-xs space-y-1">
-                          <div className="font-semibold">7-Day Total</div>
+                          <div className="font-normal">7-Day Total</div>
                           <div>Traces: {tokenBudgets.weekly.traceCount}</div>
                           <div>
                             Tokens: {tokenBudgets.weekly.totalTokens.toLocaleString()}
@@ -364,7 +365,7 @@ export function IntrospectionDropdown() {
               <div className="px-2 py-2.5 text-xs space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">System Status:</span>
-                  <span className={`flex items-center gap-1.5 font-medium ${status.tracingEnabled ? 'text-green-500' : 'text-yellow-500'}`}>
+                  <span className={`flex items-center gap-1.5 font-normal ${status.tracingEnabled ? 'text-green-500' : 'text-yellow-500'}`}>
                     {status.tracingEnabled ? (
                       <>
                         <CheckCircle className="h-3.5 w-3.5" />
@@ -384,7 +385,7 @@ export function IntrospectionDropdown() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Database:</span>
-                  <span className={`flex items-center gap-1.5 font-medium ${status.hasSupabase ? 'text-green-500' : 'text-red-500'}`}>
+                  <span className={`flex items-center gap-1.5 font-normal ${status.hasSupabase ? 'text-green-500' : 'text-red-500'}`}>
                     {status.hasSupabase ? (
                       <>
                         <CheckCircle className="h-3.5 w-3.5" />
@@ -400,7 +401,7 @@ export function IntrospectionDropdown() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">AI Provider:</span>
-                  <span className={`flex items-center gap-1.5 font-medium ${status.hasAIProvider ? 'text-green-500' : 'text-red-500'}`}>
+                  <span className={`flex items-center gap-1.5 font-normal ${status.hasAIProvider ? 'text-green-500' : 'text-red-500'}`}>
                     {status.hasAIProvider ? (
                       <>
                         <CheckCircle className="h-3.5 w-3.5" />
@@ -417,7 +418,7 @@ export function IntrospectionDropdown() {
                 {status.hasLangfuse !== undefined && (
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Langfuse:</span>
-                    <span className={`flex items-center gap-1.5 font-medium ${status.hasLangfuse ? 'text-green-500' : 'text-yellow-500'}`}>
+                    <span className={`flex items-center gap-1.5 font-normal ${status.hasLangfuse ? 'text-green-500' : 'text-yellow-500'}`}>
                       {status.hasLangfuse ? (
                         <>
                           <CheckCircle className="h-3.5 w-3.5" />
@@ -501,7 +502,7 @@ export function IntrospectionDropdown() {
                         </TooltipTrigger>
                         <TooltipContent>
                           <div className="text-xs space-y-1">
-                            <div className="font-semibold">Similarity Range</div>
+                            <div className="font-normal">Similarity Range</div>
                             <div>Min: {qualityStats.similarity.min?.toFixed(3)}</div>
                             <div>Max: {qualityStats.similarity.max?.toFixed(3)}</div>
                             <div>Low (&lt;0.7): {qualityStats.similarity.lowSimilarityCount}</div>
@@ -555,10 +556,9 @@ export function IntrospectionDropdown() {
             <DropdownMenuLabel className="text-xs text-muted-foreground p-0">
               Recent API Activity
             </DropdownMenuLabel>
-            <Button
-              variant="ghost"
+            <Button variant="ghost"
               size="sm"
-              className="h-6 px-2 text-xs"
+              className="mac-button mac-button-outline h-6 px-2 text-xs"
               onClick={() => setShowOnlySlowQueries(!showOnlySlowQueries)}
             >
               <Clock className="h-3 w-3 mr-1" />
@@ -625,7 +625,7 @@ export function IntrospectionDropdown() {
                             </Tooltip>
                           </TooltipProvider>
                         )}
-                        <span className="text-sm font-medium truncate max-w-[200px]">
+                        <span className="text-sm font-normal truncate max-w-[200px]">
                           {trace.name}
                         </span>
                       </div>
@@ -667,7 +667,7 @@ export function IntrospectionDropdown() {
                             </TooltipTrigger>
                             <TooltipContent>
                               <div className="text-xs space-y-1">
-                                <div className="font-semibold">Estimated Cost</div>
+                                <div className="font-normal">Estimated Cost</div>
                                 <div>
                                   Input: {metadata.promptTokens.toLocaleString()} tokens
                                 </div>
@@ -829,7 +829,7 @@ export function IntrospectionDropdown() {
                         {(selectedTrace.metadata as any).totalTokens && (
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Total Tokens:</span>
-                            <span className="font-mono text-xs font-semibold">{(selectedTrace.metadata as any).totalTokens.toLocaleString()}</span>
+                            <span className="font-mono text-xs font-normal">{(selectedTrace.metadata as any).totalTokens.toLocaleString()}</span>
                           </div>
                         )}
                         {/* Cost display */}
@@ -843,8 +843,8 @@ export function IntrospectionDropdown() {
                           if (cost !== null) {
                             return (
                               <div className="flex justify-between pt-2 border-t border-border">
-                                <span className="text-muted-foreground font-semibold">Estimated Cost:</span>
-                                <span className="font-mono text-sm font-bold text-green-600 dark:text-green-400">
+                                <span className="text-muted-foreground font-normal">Estimated Cost:</span>
+                                <span className="font-mono text-sm font-normal text-green-600 dark:text-green-400">
                                   {formatCost(cost)}
                                 </span>
                               </div>
@@ -888,17 +888,15 @@ export function IntrospectionDropdown() {
                   <Collapsible>
                     <div className="flex items-center justify-between">
                       <CollapsibleTrigger asChild>
-                        <Button
-                          variant="ghost"
+                        <Button variant="ghost"
                           size="sm"
-                          className="flex items-center gap-2 p-0 h-auto hover:bg-transparent"
+                          className="mac-button mac-button-outline flex items-center gap-2 p-0 h-auto hover:bg-transparent"
                         >
                           <h4 className="mac-title">Request</h4>
                           <ChevronRight className="h-3 w-3 transition-transform ui-state-open:rotate-90" />
                         </Button>
                       </CollapsibleTrigger>
-                      <Button
-                        variant="ghost"
+                      <Button variant="ghost" className="mac-button mac-button-outline"
                         size="sm"
                         onClick={() => handleCopyJSON(selectedTrace.inputs)}
                         className="h-6 px-2"
@@ -919,17 +917,15 @@ export function IntrospectionDropdown() {
                   <Collapsible>
                     <div className="flex items-center justify-between">
                       <CollapsibleTrigger asChild>
-                        <Button
-                          variant="ghost"
+                        <Button variant="ghost"
                           size="sm"
-                          className="flex items-center gap-2 p-0 h-auto hover:bg-transparent"
+                          className="mac-button mac-button-outline flex items-center gap-2 p-0 h-auto hover:bg-transparent"
                         >
                           <h4 className="mac-title">Response</h4>
                           <ChevronRight className="h-3 w-3 transition-transform ui-state-open:rotate-90" />
                         </Button>
                       </CollapsibleTrigger>
-                      <Button
-                        variant="ghost"
+                      <Button variant="ghost" className="mac-button mac-button-outline"
                         size="sm"
                         onClick={() => handleCopyJSON(selectedTrace.outputs)}
                         className="h-6 px-2"
@@ -950,17 +946,15 @@ export function IntrospectionDropdown() {
                   <Collapsible>
                     <div className="flex items-center justify-between">
                       <CollapsibleTrigger asChild>
-                        <Button
-                          variant="ghost"
+                        <Button variant="ghost"
                           size="sm"
-                          className="flex items-center gap-2 p-0 h-auto hover:bg-transparent"
+                          className="mac-button mac-button-outline flex items-center gap-2 p-0 h-auto hover:bg-transparent"
                         >
                           <h4 className="mac-title">System Prompt</h4>
                           <ChevronRight className="h-3 w-3 transition-transform ui-state-open:rotate-90" />
                         </Button>
                       </CollapsibleTrigger>
-                      <Button
-                        variant="ghost"
+                      <Button variant="ghost" className="mac-button mac-button-outline"
                         size="sm"
                         onClick={() => {
                           const systemPrompt =
@@ -989,7 +983,7 @@ export function IntrospectionDropdown() {
                             selectedTrace.inputs.systemPrompt;
 
                           if (!systemPrompt) {
-                            return <p className="text-muted-foreground italic">No system prompt found</p>;
+                            return <p className="mac-body text-muted-foreground italic">No system prompt found</p>;
                           }
 
                           if (typeof systemPrompt === "string") {
@@ -1006,7 +1000,7 @@ export function IntrospectionDropdown() {
                 {/* Error */}
                 {selectedTrace.error && (
                   <div>
-                    <h4 className="mac-title text-sm font-normal mb-2 text-red-500">Error</h4>
+                    <h4 className="mac-title">Error</h4>
                     <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg p-4 text-sm text-red-600 dark:text-red-400">
                       {selectedTrace.error}
                     </div>
