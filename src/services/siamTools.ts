@@ -266,6 +266,93 @@ export const getTicketCount = tool({
 });
 
 // ============================================
+// Tool 7: Get Application ERD
+// ============================================
+export const getApplicationERD = tool({
+  description: `Returns the complete Entity Relationship Diagram (ERD) for The Betabase/SIAM application.
+  Use this when the user asks about:
+  - The ERD for this application
+  - Database schema
+  - Entity relationships
+  - Data model
+  - Multi-tenant architecture
+  - Vector store structure`,
+  parameters: z.object({}),
+  execute: async () => {
+    console.log(`🔧 [Tool: getApplicationERD] Returning multi-tenant ERD`);
+
+    return {
+      title: "SIAM Multi-Tenant Vector Store ERD",
+      description: "Complete entity relationship diagram showing the 3-level tenant hierarchy (Organization → Division → App Under Test) and vector storage architecture",
+      mermaidDiagram: `erDiagram
+    ORGANIZATION ||--o{ DIVISION : contains
+    DIVISION ||--o{ APP_UNDER_TEST : contains
+    APP_UNDER_TEST ||--o{ SIAM_VECTORS : stores
+    APP_UNDER_TEST ||--o{ SIAM_MIGRATION_STATUS : tracks
+
+    ORGANIZATION {
+        string name PK "e.g., sony-music"
+        string description
+    }
+
+    DIVISION {
+        string name PK "e.g., digital-operations"
+        string organization FK
+        string description
+    }
+
+    APP_UNDER_TEST {
+        string name PK "e.g., aoma, usm"
+        string organization FK
+        string division FK
+        string description
+    }
+
+    SIAM_VECTORS {
+        uuid id PK
+        varchar organization FK "NOT NULL"
+        varchar division FK "NOT NULL"
+        varchar app_under_test FK "NOT NULL"
+        text content
+        vector_1536 embedding "OpenAI"
+        vector_768 embedding_gemini "Gemini"
+        text source_type
+        text source_id
+        jsonb metadata
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    SIAM_MIGRATION_STATUS {
+        uuid id PK
+        varchar organization FK
+        varchar division FK
+        varchar app_under_test FK
+        text source_type
+        integer total_count
+        integer migrated_count
+        integer failed_count
+        text status
+        timestamp updated_at
+    }`,
+      keyPoints: [
+        "3-level tenant hierarchy: Organization → Division → App Under Test",
+        "Each app_under_test has its own isolated vector storage",
+        "Supports both OpenAI (1536d) and Gemini (768d) embeddings",
+        "Migration status tracked per tenant and source type",
+        "HNSW indexes for fast semantic search (50-200ms queries)",
+        "All data validated with CHECK constraints on tenant identifiers"
+      ],
+      exampleHierarchy: {
+        organization: "sony-music",
+        division: "digital-operations",
+        apps: ["aoma", "usm", "dam", "crm"]
+      }
+    };
+  },
+});
+
+// ============================================
 // Export all tools as a single object
 // ============================================
 export const siamTools = {
@@ -275,6 +362,7 @@ export const siamTools = {
   searchCommits,
   parseCdtext,
   getTicketCount,
+  getApplicationERD,
 };
 
 // Type for tool results (useful for client-side)
