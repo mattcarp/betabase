@@ -4,7 +4,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 // Groq only used for STT/TTS, not for thinking - see /api/groq/transcribe
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { z } from 'zod/v3';
+import { z } from "zod/v3";
 // import type OpenAI from "openai"; // Not needed for Vercel AI SDK
 // import { aomaCache } from "../../../src/services/aomaCache";
 // DISABLED: aomaOrchestrator removed - UnifiedRAG is now the sole retrieval path
@@ -28,7 +28,12 @@ import { traceChat, flushLangfuse } from "@/lib/langfuse";
 // Dynamic skill loader for optimized system prompts
 import { buildDynamicPrompt } from "@/services/skillLoader";
 // Mem0 long-term memory for cross-conversation context
-import { retrieveMemories, addMemories, formatMemoriesForPrompt, isMemoryEnabled } from "@/services/mem0Service";
+import {
+  retrieveMemories,
+  addMemories,
+  formatMemoriesForPrompt,
+  isMemoryEnabled,
+} from "@/services/mem0Service";
 // AI SDK Tools - LLM can call these for deterministic operations
 import { cdtextTool } from "@/tools/cdtext";
 import { siamTools } from "@/services/siamTools";
@@ -84,8 +89,8 @@ const ChatRequestSchema = z.object({
   model: z
     .enum([
       // Google Gemini 3 models - ALL thinking done by Gemini
-      "gemini-3-flash-preview",  // Default - Gemini 3 Flash Preview
-      "gemini-3-pro-preview",    // Fall forward option - Gemini 3 Pro Preview
+      "gemini-3-flash-preview", // Default - Gemini 3 Flash Preview
+      "gemini-3-pro-preview", // Fall forward option - Gemini 3 Pro Preview
     ])
     .optional(),
   temperature: z.number().min(0).max(2).optional(),
@@ -105,12 +110,7 @@ export async function GET(_req: Request) {
       version: "1.1.0",
       provider: "google",
       model: "gemini-3-flash-preview",
-      features: [
-        "streaming",
-        "ultra-low-latency",
-        "aoma-context",
-        "knowledge-base",
-      ],
+      features: ["streaming", "ultra-low-latency", "aoma-context", "knowledge-base"],
     }),
     {
       status: 200,
@@ -318,9 +318,11 @@ export async function POST(req: Request) {
     // ========================================
     // Extract the latest user message for tracing
     const traceUserMessage = messages.filter((m: any) => m.role === "user").pop();
-    const traceInput = traceUserMessage?.parts?.find((p: any) => p.type === "text")?.text || 
-                       traceUserMessage?.content || "";
-    
+    const traceInput =
+      traceUserMessage?.parts?.find((p: any) => p.type === "text")?.text ||
+      traceUserMessage?.content ||
+      "";
+
     // Initialize Langfuse trace for this chat request
     const langfuseTrace = traceChat({
       sessionId: `chat_${Date.now()}`,
@@ -469,25 +471,13 @@ export async function POST(req: Request) {
       const perfStart = Date.now();
       // vectorStartTime/vectorEndTime removed - aomaOrchestrator no longer used
 
-      // ========================================
-      // MEM0: RETRIEVE LONG-TERM MEMORIES
-      // ========================================
-      if (isMemoryEnabled()) {
-        console.log(`🧠 [Mem0] Retrieving memories for user ${userId}...`);
-        const memoryStartTime = Date.now();
-        userMemories = await retrieveMemories(queryString, userId, 10);
-        console.log(`🧠 [Mem0] Retrieved ${userMemories.length} memories in ${Date.now() - memoryStartTime}ms`);
-      }
-      // ========================================
-      // END MEM0 RETRIEVAL
-      // ========================================
-
       // PHASE 0 REMOVED: Intent classifier added ~85ms latency for ~15ms savings
       // All sources are now queried, synthesis step handles relevance
 
       try {
         // ========================================
-        // PHASE 1: ADVANCED RAG with UnifiedRAGOrchestrator
+        // PARALLEL EXECUTION: Mem0 + RAG
+        // Memory retrieval runs alongside RAG for zero added latency
         // ========================================
         console.log("🌟 Executing Advanced RAG (re-ranking, agentic, context-aware)...");
         const ragStartTime = Date.now();
@@ -510,163 +500,184 @@ export async function POST(req: Request) {
         // Determine query complexity to decide on agentic RAG
         const queryComplexity = queryString.split(" ").length > 15 ? 8 : 5; // Simple heuristic
 
-        try {
-          const ragResult = await unifiedRAG.query(queryString, {
-            sessionId,
-            ...DEFAULT_APP_CONTEXT, // organization: 'sony-music', division: 'digital-operations', app_under_test: 'aoma'
-            useContextAware: true,
-            useAgenticRAG: queryComplexity > 7,
-            useRLHFSignals: true,
-            useHybridSearch: true, // NEW: Enable hybrid search with RRF + Gemini reranking
-            topK: 5,
-            targetConfidence: 0.7,
+        // ========================================
+        // START PARALLEL: Mem0 retrieval
+        // ========================================
+        const memoryPromise = isMemoryEnabled()
+          ? (async () => {
+              console.log(`🧠 [Mem0] Retrieving memories for user ${userId}... (parallel)`);
+              const memStart = Date.now();
+              const memories = await retrieveMemories(queryString, userId, 10);
+              console.log(
+                `🧠 [Mem0] Retrieved ${memories.length} memories in ${Date.now() - memStart}ms`
+              );
+              return memories;
+            })()
+          : Promise.resolve([]);
+
+        // ========================================
+        // START PARALLEL: RAG query
+        // ========================================
+        const ragPromise = unifiedRAG.query(queryString, {
+          sessionId,
+          ...DEFAULT_APP_CONTEXT, // organization: 'sony-music', division: 'digital-operations', app_under_test: 'aoma'
+          useContextAware: true,
+          useAgenticRAG: queryComplexity > 7,
+          useRLHFSignals: true,
+          useHybridSearch: true, // NEW: Enable hybrid search with RRF + Gemini reranking
+          topK: 5,
+          targetConfidence: 0.7,
+        });
+
+        // ========================================
+        // AWAIT BOTH IN PARALLEL - Zero added latency from Mem0
+        // ========================================
+        const [memories, ragResult] = await Promise.all([memoryPromise, ragPromise]);
+        userMemories = memories;
+
+        const ragDuration = Date.now() - ragStartTime;
+        console.log(`⚡ [Parallel] Mem0 + RAG completed in ${ragDuration}ms total`);
+        console.log(`📊 Strategy used: ${ragResult.metadata.strategy}`);
+        console.log(`🎯 Confidence: ${(ragResult.metadata.confidence * 100).toFixed(1)}%`);
+
+        // Store RAG metadata for response
+        ragMetadata = {
+          strategy: ragResult.metadata.strategy,
+          documentsReranked: ragResult.metadata.usedContextAware,
+          agentSteps: ragResult.metadata.agentIterations || 0,
+          confidence: ragResult.metadata.confidence,
+          timeMs: ragResult.metadata.totalTimeMs,
+          initialDocs: ragResult.documents.length,
+          finalDocs: ragResult.documents.length,
+          usedHybridSearch: ragResult.metadata.usedHybridSearch || false, // NEW
+        };
+
+        // Add RAG-enhanced documents to knowledge elements
+        if (ragResult.documents && ragResult.documents.length > 0) {
+          ragResult.documents.slice(0, 3).forEach((doc: any) => {
+            knowledgeElements.push({
+              type: "reference",
+              content: doc.content || doc.text || "",
+              metadata: {
+                source: "advanced-rag",
+                strategy: ragResult.metadata.strategy,
+                confidence: ragResult.metadata.confidence,
+                timestamp: new Date().toISOString(),
+              },
+            });
+          });
+        }
+
+        // Record successful retrieval in session
+        if (ragResult.metadata.confidence > 0.7) {
+          await sessionManager.recordSuccessfulRetrieval(sessionId, {
+            query: queryString,
+            documents: ragResult.documents,
+            confidence: ragResult.metadata.confidence,
+          });
+        }
+
+        // Langfuse: End RAG tracing with results
+        ragTrace.end({
+          confidence: ragResult.metadata.confidence,
+          documentsRetrieved: ragResult.documents.length,
+          documentsAfterRerank: ragResult.documents.length,
+          agentIterations: ragResult.metadata.agentIterations || 0,
+          durationMs: ragDuration,
+        });
+
+        // ========================================
+        // BUILD CONTEXT FROM UNIFIED RAG RESULTS
+        // ========================================
+        // PHASE 2 (aomaOrchestrator) REMOVED - UnifiedRAG is now the sole retrieval path
+        // This eliminates duplicate vector queries and ~2-5s latency
+
+        if (ragResult.documents && ragResult.documents.length > 0) {
+          console.log(
+            `📄 Building context from ${ragResult.documents.length} UnifiedRAG documents...`
+          );
+
+          // Synthesize context from UnifiedRAG documents
+          const vectorResults: VectorResult[] = ragResult.documents.map((doc: any) => ({
+            content: doc.content || doc.text || "",
+            source_type: doc.source_type || "unknown",
+            source_id: doc.id || doc.source_id,
+            similarity: doc.similarity || doc.rerankScore || 0.75,
+            metadata: doc.metadata || {},
+          }));
+
+          const synthesizedCtx = await synthesizeContext(queryString, vectorResults);
+          console.log(`✅ Synthesis completed in ${synthesizedCtx.synthesisTimeMs}ms`);
+          console.log(`📊 Key insights: ${synthesizedCtx.keyInsights.length}`);
+
+          const formattedContext = formatContextForPrompt(synthesizedCtx);
+
+          knowledgeElements.push({
+            type: "context",
+            content: formattedContext,
+            metadata: {
+              source: "unified-rag",
+              strategy: ragResult.metadata.strategy,
+              synthesized: true,
+              synthesisTimeMs: synthesizedCtx.synthesisTimeMs,
+              timestamp: new Date().toISOString(),
+            },
           });
 
-          const ragDuration = Date.now() - ragStartTime;
-          console.log(`✅ Advanced RAG completed in ${ragDuration}ms`);
-          console.log(`📊 Strategy used: ${ragResult.metadata.strategy}`);
-          console.log(`🎯 Confidence: ${(ragResult.metadata.confidence * 100).toFixed(1)}%`);
+          aomaContext = `\n\n[Knowledge Base Context:\n${formattedContext}\n]`;
+          aomaConnectionStatus = "success";
+          console.log(
+            `📝 Context length: ${formattedContext.length} chars (synthesized from UnifiedRAG)`
+          );
 
-          // Store RAG metadata for response
-          ragMetadata = {
-            strategy: ragResult.metadata.strategy,
-            documentsReranked: ragResult.metadata.usedContextAware,
-            agentSteps: ragResult.metadata.agentIterations || 0,
-            confidence: ragResult.metadata.confidence,
-            timeMs: ragResult.metadata.totalTimeMs,
-            initialDocs: ragResult.documents.length,
-            finalDocs: ragResult.documents.length,
-            usedHybridSearch: ragResult.metadata.usedHybridSearch || false, // NEW
-          };
+          // 📎 Extract citation sources for inline display
+          citationSources = ragResult.documents.slice(0, 5).map((doc: any, idx: number) => ({
+            id: `source-${idx + 1}`,
+            title:
+              doc.metadata?.title ||
+              doc.metadata?.file_path ||
+              doc.metadata?.ticket_key ||
+              `Source ${idx + 1}`,
+            url: doc.metadata?.url || doc.metadata?.jira_url,
+            description: doc.metadata?.summary || (doc.content || doc.text || "").substring(0, 150),
+            confidence: Math.round((doc.similarity || doc.rerankScore || 0.75) * 100),
+            sourceType: doc.source_type,
+          }));
+          console.log(`📎 Extracted ${citationSources.length} citation sources from UnifiedRAG`);
 
-          // Add RAG-enhanced documents to knowledge elements
-          if (ragResult.documents && ragResult.documents.length > 0) {
-            ragResult.documents.slice(0, 3).forEach((doc: any) => {
+          // Add screenshot references if available
+          ragResult.documents.slice(0, 6).forEach((doc: any) => {
+            if (doc.metadata?.screenshot_path) {
               knowledgeElements.push({
                 type: "reference",
                 content: doc.content || doc.text || "",
                 metadata: {
-                  source: "advanced-rag",
-                  strategy: ragResult.metadata.strategy,
-                  confidence: ragResult.metadata.confidence,
+                  source: "unified-rag",
+                  source_type: doc.source_type,
+                  screenshot_path: doc.metadata.screenshot_path,
                   timestamp: new Date().toISOString(),
                 },
               });
-            });
-          }
-
-          // Record successful retrieval in session
-          if (ragResult.metadata.confidence > 0.7) {
-            await sessionManager.recordSuccessfulRetrieval(sessionId, {
-              query: queryString,
-              documents: ragResult.documents,
-              confidence: ragResult.metadata.confidence,
-            });
-          }
-
-          // Langfuse: End RAG tracing with results
-          ragTrace.end({
-            confidence: ragResult.metadata.confidence,
-            documentsRetrieved: ragResult.documents.length,
-            documentsAfterRerank: ragResult.documents.length,
-            agentIterations: ragResult.metadata.agentIterations || 0,
-            durationMs: ragDuration,
+            }
           });
-
-          // ========================================
-          // BUILD CONTEXT FROM UNIFIED RAG RESULTS
-          // ========================================
-          // PHASE 2 (aomaOrchestrator) REMOVED - UnifiedRAG is now the sole retrieval path
-          // This eliminates duplicate vector queries and ~2-5s latency
-
-          if (ragResult.documents && ragResult.documents.length > 0) {
-            console.log(`📄 Building context from ${ragResult.documents.length} UnifiedRAG documents...`);
-
-            // Synthesize context from UnifiedRAG documents
-            const vectorResults: VectorResult[] = ragResult.documents.map((doc: any) => ({
-              content: doc.content || doc.text || "",
-              source_type: doc.source_type || "unknown",
-              source_id: doc.id || doc.source_id,
-              similarity: doc.similarity || doc.rerankScore || 0.75,
-              metadata: doc.metadata || {},
-            }));
-
-            const synthesizedCtx = await synthesizeContext(queryString, vectorResults);
-            console.log(`✅ Synthesis completed in ${synthesizedCtx.synthesisTimeMs}ms`);
-            console.log(`📊 Key insights: ${synthesizedCtx.keyInsights.length}`);
-
-            const formattedContext = formatContextForPrompt(synthesizedCtx);
-
-            knowledgeElements.push({
-              type: "context",
-              content: formattedContext,
-              metadata: {
-                source: "unified-rag",
-                strategy: ragResult.metadata.strategy,
-                synthesized: true,
-                synthesisTimeMs: synthesizedCtx.synthesisTimeMs,
-                timestamp: new Date().toISOString(),
-              },
-            });
-
-            aomaContext = `\n\n[Knowledge Base Context:\n${formattedContext}\n]`;
-            aomaConnectionStatus = "success";
-            console.log(`📝 Context length: ${formattedContext.length} chars (synthesized from UnifiedRAG)`);
-
-            // 📎 Extract citation sources for inline display
-            citationSources = ragResult.documents.slice(0, 5).map((doc: any, idx: number) => ({
-              id: `source-${idx + 1}`,
-              title: doc.metadata?.title || doc.metadata?.file_path || doc.metadata?.ticket_key || `Source ${idx + 1}`,
-              url: doc.metadata?.url || doc.metadata?.jira_url,
-              description: doc.metadata?.summary || (doc.content || doc.text || "").substring(0, 150),
-              confidence: Math.round((doc.similarity || doc.rerankScore || 0.75) * 100),
-              sourceType: doc.source_type
-            }));
-            console.log(`📎 Extracted ${citationSources.length} citation sources from UnifiedRAG`);
-
-            // Add screenshot references if available
-            ragResult.documents.slice(0, 6).forEach((doc: any) => {
-              if (doc.metadata?.screenshot_path) {
-                knowledgeElements.push({
-                  type: "reference",
-                  content: doc.content || doc.text || "",
-                  metadata: {
-                    source: "unified-rag",
-                    source_type: doc.source_type,
-                    screenshot_path: doc.metadata.screenshot_path,
-                    timestamp: new Date().toISOString(),
-                  },
-                });
-              }
-            });
-          } else {
-            console.log("⚠️ UnifiedRAG returned no documents");
-            aomaConnectionStatus = "no-results";
-          }
-
-          // Performance summary
-          const totalDuration = Date.now() - perfStart;
-          console.log("📊 RAG Performance Summary:", {
-            totalMs: totalDuration,
-            ragTimeMs: ragMetadata?.timeMs || "N/A",
-            strategy: ragMetadata?.strategy || "unknown",
-            contextLength: aomaContext.length,
-            status: aomaConnectionStatus,
-            documents: ragResult.documents?.length || 0,
-          });
-          console.log(`⏱️  PERFORMANCE: RAG completed in ${totalDuration}ms - streaming will now start`);
-
-        } catch (ragError) {
-          console.error("❌ Advanced RAG failed:", ragError);
-          // Langfuse: End RAG tracing with failure
-          ragTrace.end({
-            confidence: 0,
-            documentsRetrieved: 0,
-            documentsAfterRerank: 0,
-            durationMs: Date.now() - ragStartTime,
-          });
-          aomaConnectionStatus = "failed";
+        } else {
+          console.log("⚠️ UnifiedRAG returned no documents");
+          aomaConnectionStatus = "no-results";
         }
+
+        // Performance summary
+        const totalDuration = Date.now() - perfStart;
+        console.log("📊 RAG Performance Summary:", {
+          totalMs: totalDuration,
+          ragTimeMs: ragMetadata?.timeMs || "N/A",
+          strategy: ragMetadata?.strategy || "unknown",
+          contextLength: aomaContext.length,
+          status: aomaConnectionStatus,
+          documents: ragResult.documents?.length || 0,
+        });
+        console.log(
+          `⏱️  PERFORMANCE: RAG completed in ${totalDuration}ms - streaming will now start`
+        );
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDuration = Date.now() - perfStart;
@@ -682,7 +693,7 @@ export async function POST(req: Request) {
                 ? "SUPABASE_FUNCTION_MISSING"
                 : "UNKNOWN";
 
-        console.error("❌ RAG query error:", {
+        console.error("❌ RAG/Memory error:", {
           errorType,
           error: errorMessage,
           stack: error instanceof Error ? error.stack : undefined,
@@ -712,15 +723,24 @@ export async function POST(req: Request) {
     // ========================================
     // Build system prompt dynamically based on query content
     // Intent classification removed - skill loader uses keyword matching instead
-    const queryForSkills = typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent || "");
+    const queryForSkills =
+      typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent || "");
 
     // Extract unique source types from citation sources for skill loading
-    const ragSourceTypes = citationSources.length > 0
-      ? [...new Set(citationSources.map(s => s.sourceType).filter(Boolean))] as ('knowledge' | 'jira' | 'git' | 'email' | 'firecrawl' | 'metrics')[]
-      : undefined;
+    const ragSourceTypes =
+      citationSources.length > 0
+        ? ([...new Set(citationSources.map((s) => s.sourceType).filter(Boolean))] as (
+            | "knowledge"
+            | "jira"
+            | "git"
+            | "email"
+            | "firecrawl"
+            | "metrics"
+          )[])
+        : undefined;
 
     if (ragSourceTypes?.length) {
-      console.log(`📂 [Skills] RAG source types detected: [${ragSourceTypes.join(', ')}]`);
+      console.log(`📂 [Skills] RAG source types detected: [${ragSourceTypes.join(", ")}]`);
     }
 
     // Build the dynamic prompt - skill loader will auto-detect relevant skills
@@ -728,13 +748,15 @@ export async function POST(req: Request) {
       aomaContext: aomaContext.trim() || undefined,
       sourceTypes: ragSourceTypes,
     });
-    
-    console.log(`🎨 [Skills] Loaded: [${dynamicPromptResult.skills.join(', ')}]`);
+
+    console.log(`🎨 [Skills] Loaded: [${dynamicPromptResult.skills.join(", ")}]`);
     console.log(`📊 [Skills] Estimated tokens: ${dynamicPromptResult.estimatedTokens}`);
 
     // Use dynamic prompt or fallback to user-provided system prompt
-    let enhancedSystemPrompt = dynamicPromptResult.prompt ||
-      (systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music.");
+    let enhancedSystemPrompt =
+      dynamicPromptResult.prompt ||
+      systemPrompt ||
+      "You are SIAM, a helpful AI assistant for Sony Music.";
 
     // ========================================
     // MEM0: INJECT LONG-TERM MEMORIES INTO SYSTEM PROMPT
@@ -752,7 +774,7 @@ export async function POST(req: Request) {
     const hasAomaContent = aomaContext.trim() !== "";
     const useCase = hasAomaContent ? "aoma-query" : "chat";
     const modelSettings = modelConfig.getModelWithConfig(useCase);
-    
+
     // Default to Gemini 3 Flash Preview - all reasoning + RAG
     const selectedModel = model || "gemini-3-flash-preview";
 
@@ -780,7 +802,7 @@ export async function POST(req: Request) {
     // Use Groq provider or Google provider based on model selection
     // Wrap with DevTools middleware in development for debugging visibility
     let baseModel;
-    
+
     if (selectedModel.toLowerCase().includes("gemini")) {
       // Gemini 3 model IDs are used directly - no mapping needed
       const mappedModel = selectedModel; // gemini-3-flash-preview or gemini-3-pro-preview
@@ -788,9 +810,10 @@ export async function POST(req: Request) {
       baseModel = google(mappedModel);
     }
 
-    const modelProvider = process.env.NODE_ENV === "development"
-      ? wrapLanguageModel({ model: baseModel, middleware: devToolsMiddleware })
-      : baseModel;
+    const modelProvider =
+      process.env.NODE_ENV === "development"
+        ? wrapLanguageModel({ model: baseModel, middleware: devToolsMiddleware })
+        : baseModel;
 
     console.log(`🤖 Using Gemini provider for model: ${selectedModel}`);
     if (process.env.NODE_ENV === "development") {
@@ -802,8 +825,11 @@ export async function POST(req: Request) {
     const generationTrace = langfuseTrace.traceGeneration({
       model: selectedModel,
       systemPrompt: enhancedSystemPrompt,
-      messages: openAIMessages.map((m: any) => ({ role: m.role, content: String(m.content || "").substring(0, 500) })),
-      temperature: supportsTemperature ? (modelSettings.temperature || temperature) : undefined,
+      messages: openAIMessages.map((m: any) => ({
+        role: m.role,
+        content: String(m.content || "").substring(0, 500),
+      })),
+      temperature: supportsTemperature ? modelSettings.temperature || temperature : undefined,
     });
 
     const result = streamText({
@@ -822,24 +848,28 @@ export async function POST(req: Request) {
       // Attach RAG metadata to the stream for client-side display
       onFinish: async ({ text, finishReason, usage, steps }) => {
         // Log tool usage for debugging
-        const toolCalls = steps?.flatMap(s => s.toolCalls || []) || [];
+        const toolCalls = steps?.flatMap((s) => s.toolCalls || []) || [];
         if (toolCalls.length > 0) {
-          console.log(`🔧 [Tools] ${toolCalls.length} tool call(s): ${toolCalls.map(t => t.toolName).join(', ')}`);
+          console.log(
+            `🔧 [Tools] ${toolCalls.length} tool call(s): ${toolCalls.map((t) => t.toolName).join(", ")}`
+          );
         }
-        
+
         // RAG metadata will be available in response headers
         console.log("✅ Stream finished. RAG metadata:", ragMetadata);
-        
+
         // Langfuse: End generation tracing with final output
         const langfuseUsage = usage as any;
         generationTrace.end({
           output: text,
           finishReason: finishReason,
-          usage: usage ? {
-            promptTokens: langfuseUsage.promptTokens || langfuseUsage.inputTokens,
-            completionTokens: langfuseUsage.completionTokens || langfuseUsage.outputTokens,
-            totalTokens: langfuseUsage.totalTokens,
-          } : undefined,
+          usage: usage
+            ? {
+                promptTokens: langfuseUsage.promptTokens || langfuseUsage.inputTokens,
+                completionTokens: langfuseUsage.completionTokens || langfuseUsage.outputTokens,
+                totalTokens: langfuseUsage.totalTokens,
+              }
+            : undefined,
           durationMs: Date.now() - generationStartTime,
         });
 
@@ -861,7 +891,13 @@ export async function POST(req: Request) {
         if (isMemoryEnabled() && text && messageContent) {
           try {
             const exchangeMessages = [
-              { role: "user", content: typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent) },
+              {
+                role: "user",
+                content:
+                  typeof messageContent === "string"
+                    ? messageContent
+                    : JSON.stringify(messageContent),
+              },
               { role: "assistant", content: text },
             ];
             await addMemories(exchangeMessages, userId, {
@@ -894,7 +930,7 @@ export async function POST(req: Request) {
         response.headers.set("X-RAG-Metadata", JSON.stringify(ragMetadata));
         console.log("📊 RAG Metadata attached to response:", ragMetadata);
       }
-      
+
       // Attach citation sources as custom header for inline citations
       if (citationSources.length > 0) {
         response.headers.set("X-Citation-Sources", JSON.stringify(citationSources));

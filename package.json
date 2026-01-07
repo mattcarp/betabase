@@ -1,6 +1,6 @@
 {
   "name": "siam",
-  "version": "0.24.95",
+  "version": "0.24.96",
   "private": true,
   "scripts": {
     "dev": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && infisical run --env=dev -- next dev -p 3000",
@@ -182,6 +182,7 @@
     "leo-profanity": "^1.8.0",
     "lru-cache": "^11.2.4",
     "lucide-react": "^0.556.0",
+    "mem0ai": "^2.2.0",
     "mermaid": "^11.12.2",
     "nanoid": "^5.1.6",
     "next": "15.5.9",

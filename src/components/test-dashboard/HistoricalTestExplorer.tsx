@@ -52,7 +52,14 @@ import {
   PenLine,
   AlertTriangle,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  Star,
+  ImageIcon,
+  ThumbsUp,
+  MessageSquare,
+  Send,
+  Play,
+  ExternalLink
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -170,6 +177,23 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
   const [persistedTestId, setPersistedTestId] = useState<string | null>(null);
   const [savingStatus, setSavingStatus] = useState(false);
 
+  // Blast from the Past - Featured Test state
+  const [featuredTest, setFeaturedTest] = useState<HistoricalTest | null>(null);
+  const [showFeaturedTest, _setShowFeaturedTest] = useState(true);
+  const [historicalFeedback, setHistoricalFeedback] = useState<{
+    status: "approved" | "needs_changes" | null;
+    comment: string;
+  }>({ status: null, comment: "" });
+  const [showFeedbackInput, setShowFeedbackInput] = useState(false);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+
+  // Demo screenshots for Blast from the Past visual timeline
+  const demoScreenshots = [
+    { id: 1, label: "Initial State", timestamp: "00:00", description: "Test environment setup" },
+    { id: 2, label: "Action Performed", timestamp: "00:03", description: "User interaction captured" },
+    { id: 3, label: "Validation", timestamp: "00:05", description: "Assertion checkpoint" },
+  ];
+
   // Load initial batch (first 100 tests for cache)
   const loadInitialTests = useCallback(async () => {
     setLoading(true);
@@ -201,13 +225,24 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
       setFilters(data.filters);
       setInitialLoadComplete(true);
       setPage(1);
+
+      // Select a featured test (Blast from the Past) - pick one with high confidence and execution history
+      if (data.tests.length > 0 && !featuredTest) {
+        const highConfidenceTests = data.tests.filter(
+          (t: HistoricalTest) => calculateAutomationConfidence(t) >= 0.7 && t.execution_count > 0
+        );
+        const featured = highConfidenceTests.length > 0
+          ? highConfidenceTests[Math.floor(Math.random() * Math.min(highConfidenceTests.length, 5))]
+          : data.tests[0];
+        setFeaturedTest(featured);
+      }
     } catch (error: any) {
       console.error("Error loading initial tests:", error);
       toast.error(error.message || "Failed to load historical tests");
     } finally {
       setLoading(false);
     }
-  }, [selectedApp, hasExecutions, searchQuery, sortBy, sortOrder]);
+  }, [selectedApp, hasExecutions, searchQuery, sortBy, sortOrder, featuredTest]);
 
   // Load more tests for infinite scroll
   const loadMoreTests = useCallback(async () => {
@@ -428,6 +463,50 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     if (editedCode.trim()) {
       setIsEditing(false);
       toast.success("Edits saved locally - Accept to persist");
+    }
+  };
+
+  // Handle feedback submission for Blast from the Past
+  const handleHistoricalFeedback = async (status: "approved" | "needs_changes") => {
+    if (!featuredTest) return;
+
+    setIsSubmittingFeedback(true);
+    try {
+      const response = await fetch("/api/rlhf/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          feedbackType: "historical_test_review",
+          testId: featuredTest.id,
+          testName: featuredTest.test_name,
+          status,
+          comment: historicalFeedback.comment,
+          confidence: calculateAutomationConfidence(featuredTest),
+          metadata: {
+            app: featuredTest.app_under_test,
+            executionCount: featuredTest.execution_count,
+            passRate: featuredTest.execution_count > 0
+              ? (featuredTest.pass_count / featuredTest.execution_count) * 100
+              : 0,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        setHistoricalFeedback({ status, comment: historicalFeedback.comment });
+        setShowFeedbackInput(false);
+        toast.success(
+          status === "approved"
+            ? "Test approved for automation pipeline"
+            : "Feedback recorded - test queued for review"
+        );
+      } else {
+        throw new Error("Failed to submit feedback");
+      }
+    } catch (error) {
+      toast.error("Failed to submit feedback");
+    } finally {
+      setIsSubmittingFeedback(false);
     }
   };
 
@@ -1300,32 +1379,293 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
             </ScrollArea>
           </div>
         ) : (
-          // Empty state - no test selected
-          <div className="flex flex-col items-center justify-start h-full text-center p-12 pt-24 bg-background/20 backdrop-blur-3xl overflow-y-auto">
-            <div className="relative mb-8">
-              <div className="absolute -inset-4 bg-[var(--mac-primary-blue-400)]/10 rounded-full blur-2xl transition-all duration-700" />
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative shadow-2xl border border-border/50 transition-transform">
-                <FileSearch className="h-10 w-10 text-muted-foreground transition-colors" />
+          // Blast from the Past - Featured Historical Test
+          <div className="flex flex-col h-full overflow-y-auto bg-background/20 backdrop-blur-3xl">
+            {/* Featured Test Header */}
+            {featuredTest && showFeaturedTest ? (
+              <div className="p-6 space-y-6">
+                {/* Blast from the Past Title */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                      <Star className="h-5 w-5 text-amber-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-light text-foreground tracking-tight">Blast from the Past</h2>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Featured Historical Test</p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground"
+                    onClick={() => {
+                      const highConfidenceTests = tests.filter(
+                        t => calculateAutomationConfidence(t) >= 0.7 && t.execution_count > 0
+                      );
+                      if (highConfidenceTests.length > 1) {
+                        const newFeatured = highConfidenceTests[Math.floor(Math.random() * highConfidenceTests.length)];
+                        setFeaturedTest(newFeatured);
+                        setHistoricalFeedback({ status: null, comment: "" });
+                      }
+                    }}
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    <span className="text-[10px] uppercase tracking-wider">Shuffle</span>
+                  </Button>
+                </div>
+
+                {/* Featured Test Card */}
+                <div className="rounded-2xl border border-border bg-card/40 overflow-hidden shadow-xl">
+                  {/* Test Info Header */}
+                  <div className="p-5 border-b border-border/50 bg-card/60">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base font-normal text-foreground truncate mb-1">
+                          {featuredTest.test_name}
+                        </h3>
+                        <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Archive className="h-3 w-3" />
+                            ID #{featuredTest.id}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Activity className="h-3 w-3" />
+                            {featuredTest.execution_count} runs
+                          </span>
+                          <Badge variant="outline" className="text-[9px] px-2 py-0 border-border">
+                            {featuredTest.app_under_test}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {getTierBadge(calculateAutomationConfidence(featuredTest))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visual Timeline - Screenshots */}
+                  <div className="p-5 bg-black/20">
+                    <div className="flex items-center gap-2 mb-4">
+                      <ImageIcon className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Test Execution Timeline</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                      {demoScreenshots.map((screenshot, index) => (
+                        <div key={screenshot.id} className="group relative">
+                          <div className="aspect-video rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 border border-border/50 overflow-hidden relative">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="text-center">
+                                <ImageIcon className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+                                <span className="text-[9px] text-muted-foreground/60 block">Screenshot {index + 1}</span>
+                              </div>
+                            </div>
+                            <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/70 text-[9px] font-mono text-white/80">
+                              {screenshot.timestamp}
+                            </div>
+                            <div className="absolute inset-0 bg-[var(--mac-primary-blue-400)]/0 group-hover:bg-[var(--mac-primary-blue-400)]/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                              <ExternalLink className="h-5 w-5 text-white/70" />
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <p className="text-[11px] font-normal text-foreground">{screenshot.label}</p>
+                            <p className="text-[9px] text-muted-foreground">{screenshot.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Test Description - Using plain text to avoid XSS */}
+                  {featuredTest.description && (
+                    <div className="p-5 border-t border-border/30">
+                      <h4 className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <FileText className="h-3 w-3" />
+                        Test Description
+                      </h4>
+                      <p className="text-sm text-foreground/90 font-light leading-relaxed line-clamp-3">
+                        {featuredTest.description.replace(/<[^>]*>/g, '')}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-4 gap-px bg-border/30">
+                    <div className="p-3 bg-card/40 text-center">
+                      <div className="text-lg font-light text-foreground">{featuredTest.execution_count}</div>
+                      <div className="text-[8px] text-muted-foreground uppercase tracking-widest">Runs</div>
+                    </div>
+                    <div className="p-3 bg-card/40 text-center">
+                      <div className="text-lg font-light text-emerald-400">
+                        {featuredTest.execution_count > 0
+                          ? Math.round((featuredTest.pass_count / featuredTest.execution_count) * 100)
+                          : 0}%
+                      </div>
+                      <div className="text-[8px] text-muted-foreground uppercase tracking-widest">Pass Rate</div>
+                    </div>
+                    <div className="p-3 bg-card/40 text-center">
+                      <div className="text-lg font-light text-[var(--mac-primary-blue-400)]">
+                        {Math.round(calculateAutomationConfidence(featuredTest) * 100)}%
+                      </div>
+                      <div className="text-[8px] text-muted-foreground uppercase tracking-widest">Confidence</div>
+                    </div>
+                    <div className="p-3 bg-card/40 text-center">
+                      <div className="text-lg font-light text-foreground">{featuredTest.jira_ticket_count}</div>
+                      <div className="text-[8px] text-muted-foreground uppercase tracking-widest">JIRA</div>
+                    </div>
+                  </div>
+
+                  {/* User Feedback Section */}
+                  <div className="p-5 border-t border-border/30 bg-card/30">
+                    {historicalFeedback.status ? (
+                      <div className={cn(
+                        "p-4 rounded-xl border text-center",
+                        historicalFeedback.status === "approved"
+                          ? "bg-emerald-500/10 border-emerald-500/30"
+                          : "bg-amber-500/10 border-amber-500/30"
+                      )}>
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          {historicalFeedback.status === "approved" ? (
+                            <ThumbsUp className="h-5 w-5 text-emerald-400" />
+                          ) : (
+                            <MessageSquare className="h-5 w-5 text-amber-400" />
+                          )}
+                          <span className={cn(
+                            "text-sm font-normal",
+                            historicalFeedback.status === "approved" ? "text-emerald-400" : "text-amber-400"
+                          )}>
+                            {historicalFeedback.status === "approved"
+                              ? "Approved for Automation"
+                              : "Changes Requested"}
+                          </span>
+                        </div>
+                        {historicalFeedback.comment && (
+                          <p className="text-[11px] text-muted-foreground italic">
+                            &quot;{historicalFeedback.comment}&quot;
+                          </p>
+                        )}
+                      </div>
+                    ) : showFeedbackInput ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest">
+                          <MessageSquare className="h-3 w-3" />
+                          Request Changes
+                        </div>
+                        <textarea
+                          value={historicalFeedback.comment}
+                          onChange={(e) => setHistoricalFeedback(prev => ({ ...prev, comment: e.target.value }))}
+                          placeholder="Describe what changes are needed for this test..."
+                          className="w-full p-3 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[var(--mac-primary-blue-400)] resize-none h-20"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex-1 text-[10px] uppercase tracking-wider"
+                            onClick={() => {
+                              setShowFeedbackInput(false);
+                              setHistoricalFeedback(prev => ({ ...prev, comment: "" }));
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="flex-1 bg-amber-600 hover:bg-amber-500 text-white text-[10px] uppercase tracking-wider"
+                            onClick={() => handleHistoricalFeedback("needs_changes")}
+                            disabled={!historicalFeedback.comment.trim() || isSubmittingFeedback}
+                          >
+                            {isSubmittingFeedback ? (
+                              <RefreshCw className="h-3 w-3 mr-2 animate-spin" />
+                            ) : (
+                              <Send className="h-3 w-3 mr-2" />
+                            )}
+                            Submit Feedback
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest">
+                          <UserCheck className="h-3 w-3" />
+                          Your Feedback
+                        </div>
+                        <div className="flex gap-3">
+                          <Button
+                            size="lg"
+                            className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white h-12 text-[11px] uppercase tracking-wider"
+                            onClick={() => handleHistoricalFeedback("approved")}
+                            disabled={isSubmittingFeedback}
+                          >
+                            {isSubmittingFeedback ? (
+                              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                            ) : (
+                              <ThumbsUp className="h-4 w-4 mr-2" />
+                            )}
+                            Approve for Automation
+                          </Button>
+                          <Button
+                            size="lg"
+                            variant="outline"
+                            className="flex-1 border-amber-500/40 text-amber-400 hover:bg-amber-500/10 h-12 text-[11px] uppercase tracking-wider"
+                            onClick={() => setShowFeedbackInput(true)}
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Request Changes
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action: View Full Details */}
+                  <div className="p-4 border-t border-border/30 bg-card/20">
+                    <Button
+                      className="w-full mac-button-gradient text-white h-11 text-[10px] uppercase tracking-widest"
+                      onClick={() => setSelectedTest(featuredTest)}
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      View Full Details & Generate Test
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Select from List Hint */}
+                <div className="text-center pt-4">
+                  <p className="text-[11px] text-muted-foreground">
+                    Or select a test from the list on the left to view details
+                  </p>
+                </div>
               </div>
-            </div>
-            <h3 className="mac-title">Select a Test</h3>
-            <p className="text-sm text-muted-foreground font-light max-w-sm leading-relaxed mb-10">
-              Pick a historical scenario from the vault to generate scripts, run AI analysis, and view performance history.
-            </p>
-            <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-normal uppercase tracking-[0.2em] text-muted-foreground">
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
-                <Sparkles className="h-4 w-4 text-emerald-500" />
-                <span className="flex-1 text-left">Script Generator</span>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center p-12">
+                <div className="relative mb-8">
+                  <div className="absolute -inset-4 bg-[var(--mac-primary-blue-400)]/10 rounded-full blur-2xl" />
+                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative shadow-2xl border border-border/50">
+                    <FileSearch className="h-10 w-10 text-muted-foreground" />
+                  </div>
+                </div>
+                <h3 className="mac-title">Select a Test</h3>
+                <p className="text-sm text-muted-foreground font-light max-w-sm leading-relaxed mb-10">
+                  Pick a historical scenario from the vault to generate scripts, run AI analysis, and view performance history.
+                </p>
+                <div className="grid grid-cols-1 gap-4 w-full max-w-xs text-[10px] font-normal uppercase tracking-[0.2em] text-muted-foreground">
+                  <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20">
+                    <Sparkles className="h-4 w-4 text-emerald-500" />
+                    <span className="flex-1 text-left">Script Generator</span>
+                  </div>
+                  <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20">
+                    <Zap className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
+                    <span className="flex-1 text-left">AI Analyzer</span>
+                  </div>
+                  <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20">
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                    <span className="flex-1 text-left">Test History</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
-                <Zap className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />
-                <span className="flex-1 text-left">AI Analyzer</span>
-              </div>
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/20 transition-colors">
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                <span className="flex-1 text-left">Test History</span>
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
