@@ -150,6 +150,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
+  // Prefetched historical tests for instant loading (no "Warming cache..." delay)
+  const [prefetchedTests, setPrefetchedTests] = useState<any>(null);
+
   // URL hash-based routing for deep linking
   useEffect(() => {
     // Update URL hash when activeMode changes
@@ -169,6 +172,41 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
 
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Prefetch historical tests during idle time (non-blocking)
+  // This eliminates the "Warming cache..." delay when switching to Historical Tests tab
+  useEffect(() => {
+    const prefetchHistoricalTests = async () => {
+      try {
+        const scheduleIdleFetch = (callback: () => void) => {
+          if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+            (window as any).requestIdleCallback(callback, { timeout: 2000 });
+          } else {
+            setTimeout(callback, 1000);
+          }
+        };
+
+        scheduleIdleFetch(async () => {
+          const params = new URLSearchParams({
+            page: "1",
+            limit: "100", // First 100 tests for instant display
+          });
+
+          const response = await fetch(`/api/tests/historical?${params}`);
+          if (response.ok) {
+            const data = await response.json();
+            setPrefetchedTests(data);
+            console.log("Prefetched 100 historical tests for instant loading");
+          }
+        });
+      } catch (error) {
+        console.error("Failed to prefetch historical tests:", error);
+        // Silent failure - component will fetch on mount as fallback
+      }
+    };
+
+    prefetchHistoricalTests();
   }, []);
 
   const {
@@ -531,7 +569,7 @@ Be helpful, concise, and professional in your responses.`;
                     </TabsContent>
 
                     <TabsContent value="historical" className="h-full">
-                      <HistoricalTestExplorer />
+                      <HistoricalTestExplorer prefetchedData={prefetchedTests} />
                     </TabsContent>
 
                     <TabsContent value="rlhf-tests" className="h-full">

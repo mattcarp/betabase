@@ -1,0 +1,116 @@
+erDiagram
+    %% ---------------------------------------------------------
+    %% LOGICAL TENANT HIERARCHY (Virtual Entities)
+    %% ---------------------------------------------------------
+    ORGANIZATION {
+        string name PK "e.g. sony-music"
+        string description
+    }
+
+    DIVISION {
+        string name PK "e.g. pde, label-services"
+        string organization FK "Link to ORGANIZATION"
+    }
+
+    APP_UNDER_TEST {
+        string name PK "e.g. aoma, usm, beta-base"
+        string division FK "Link to DIVISION"
+        string organization FK "Link to ORGANIZATION"
+    }
+
+    %% Hierarchy Relationships
+    ORGANIZATION ||--o{ DIVISION : "contains"
+    DIVISION ||--o{ APP_UNDER_TEST : "contains"
+
+    %% ---------------------------------------------------------
+    %% CORE LEGACY TABLES (Beta Base)
+    %% ---------------------------------------------------------
+    USER {
+        integer id PK
+        varchar username
+        varchar email
+        varchar org FK "Links to ORGANIZATION.name"
+        varchar roles
+        smallint enabled
+    }
+
+    SCENARIO {
+        integer id PK
+        varchar name
+        varchar app_under_test FK "Links to APP_UNDER_TEST.name"
+        text script
+        varchar mode
+        smallint is_security
+    }
+
+    TEST {
+        integer id PK
+        integer scenario_id FK
+        varchar pass_fail
+        varchar build
+        varchar deployment_stamp
+    }
+
+    DEPLOYMENT {
+        integer id PK
+        varchar app_under_test FK "Links to APP_UNDER_TEST.name"
+        varchar build
+        varchar branch
+        varchar deployed_at
+    }
+
+    ROUND {
+        integer id PK
+        varchar name
+        varchar app FK "Links to APP_UNDER_TEST.name"
+        varchar release_num
+        smallint current_flag
+    }
+
+    %% ---------------------------------------------------------
+    %% SIAM VECTOR STORE (AI Knowledge Base)
+    %% ---------------------------------------------------------
+    SIAM_VECTORS {
+        uuid id PK
+        varchar organization FK "Links to ORGANIZATION.name"
+        varchar division FK "Links to DIVISION.name"
+        varchar app_under_test FK "Links to APP_UNDER_TEST.name"
+        text content
+        vector embedding_1536
+        vector embedding_768
+        text source_type
+        jsonb metadata
+    }
+
+    SIAM_MIGRATION_STATUS {
+        uuid id PK
+        varchar organization FK
+        varchar division FK
+        varchar app_under_test FK
+        text status
+        integer total_count
+        integer migrated_count
+    }
+
+    %% ---------------------------------------------------------
+    %% CROSS-SYSTEM RELATIONSHIPS
+    %% ---------------------------------------------------------
+    
+    %% Users belong to an Organization (Tenant Root)
+    ORGANIZATION ||--o{ USER : "employs"
+
+    %% Scenarios and Deployments belong to an App (Tenant Leaf)
+    APP_UNDER_TEST ||--o{ SCENARIO : "defines tests for"
+    APP_UNDER_TEST ||--o{ DEPLOYMENT : "deployed as"
+    APP_UNDER_TEST ||--o{ ROUND : "released in"
+    
+    %% Tests belong to Scenarios
+    SCENARIO ||--o{ TEST : "executed as"
+
+    %% SIAM Vectors belong to the specific App Tenant context
+    APP_UNDER_TEST ||--o{ SIAM_VECTORS : "stores knowledge for"
+    APP_UNDER_TEST ||--o{ SIAM_MIGRATION_STATUS : "tracks migration for"
+
+    %% Note on Multi-Tenancy
+    %% The system is multi-tenant at the Organization level for Users
+    %% and at the App level for Data (Scenarios, Vectors, etc.)

@@ -91,7 +91,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
                     exit={{ opacity: 0, scale: 0.9 }}
                     className="flex flex-col items-center text-center"
                   >
-                    <FileText className="h-10 w-10 text-primary-400 mb-2" />
+                    <FileText className="h-10 w-10 text-[var(--mac-primary-blue-400)] mb-2" />
                     <p className="text-sm font-normal text-[var(--mac-text-primary)]">
                       {file.name}
                     </p>
@@ -102,7 +102,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
                       variant="ghost" className="mac-button mac-button-outline"
                       size="sm"
                       onClick={() => setFile(null)}
-                      className="mt-2 text-red-400 hover:text-red-500 hover:bg-red-400/10"
+                      className="mt-2 text-[var(--mac-status-error-text)] hover:text-[var(--mac-status-error-text)] hover:bg-[var(--mac-status-error-bg)]/10"
                       disabled={uploading}
                     >
                       <X className="h-4 w-4 mr-1" />
@@ -119,7 +119,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
                     <Upload className="h-10 w-10 text-[var(--mac-text-muted)] mb-2" />
                     <Label
                       htmlFor="file-upload"
-                      className="cursor-pointer text-sm font-normal text-primary-400 hover:text-primary-300"
+                      className="cursor-pointer text-sm font-normal text-[var(--mac-primary-blue-400)] hover:text-[var(--mac-primary-blue-600)]"
                     >
                       Choose a file
                     </Label>
@@ -143,7 +143,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
               animate={{ opacity: 1, scale: 1 }}
               className="flex flex-col items-center justify-center py-8"
             >
-              <CheckCircle2 className="h-16 w-16 text-green-400 mb-4" />
+              <CheckCircle2 className="h-16 w-16 text-[var(--mac-status-connected)] mb-4" />
               <p className="text-lg font-normal text-[var(--mac-text-primary)]">Upload Complete!</p>
               <p className="text-sm text-[var(--mac-text-muted)] font-light">
                 Processing for vector search...
@@ -159,7 +159,7 @@ export function UploadDocumentModal({ open, onOpenChange }: UploadDocumentModalP
               </div>
               <div className="h-2 bg-[var(--mac-utility-border)] rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-primary-400"
+                  className="h-full bg-[var(--mac-primary-blue-400)]"
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.2 }}

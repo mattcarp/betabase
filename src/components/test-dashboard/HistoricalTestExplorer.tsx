@@ -30,9 +30,9 @@ import {
   ArtifactAction, 
   ArtifactActions 
 } from "../ai-elements/artifact";
-import { 
-  Archive, 
-  Search, 
+import {
+  Archive,
+  Search,
   RefreshCw,
   Copy,
   FileText,
@@ -45,7 +45,14 @@ import {
   Zap,
   ArrowUp,
   ArrowDown,
-  Edit3
+  Edit3,
+  Check,
+  X,
+  Save,
+  PenLine,
+  AlertTriangle,
+  ShieldCheck,
+  UserCheck
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -155,6 +162,13 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
   const [artifactMode, setArtifactMode] = useState<"code" | "human">("code");
   const [showCritique, setShowCritique] = useState(false);
   const [critiqueText, setCritiqueText] = useState("");
+
+  // HITL workflow state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedCode, setEditedCode] = useState("");
+  const [testStatus, setTestStatus] = useState<"pending" | "accepted" | "rejected" | null>(null);
+  const [persistedTestId, setPersistedTestId] = useState<string | null>(null);
+  const [savingStatus, setSavingStatus] = useState(false);
 
   // Load initial batch (first 100 tests for cache)
   const loadInitialTests = useCallback(async () => {
@@ -312,6 +326,109 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
     if (test.execution_count === 0) return null;
     const rate = (test.pass_count / test.execution_count) * 100;
     return rate.toFixed(0);
+  };
+
+  // Three-tier system badge based on automation confidence
+  const getTierBadge = (confidence: number) => {
+    const pct = Math.round(confidence * 100);
+    if (pct >= 90) {
+      return (
+        <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/40 font-normal gap-1.5">
+          <ShieldCheck className="h-3 w-3" />
+          <span>Tier 1</span>
+          <span className="text-emerald-500/60 text-[9px]">Auto-Approve</span>
+        </Badge>
+      );
+    } else if (pct >= 60) {
+      return (
+        <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/40 font-normal gap-1.5">
+          <UserCheck className="h-3 w-3" />
+          <span>Tier 2</span>
+          <span className="text-amber-500/60 text-[9px]">Human Review</span>
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge className="bg-rose-500/20 text-rose-400 border-rose-500/40 font-normal gap-1.5">
+          <AlertTriangle className="h-3 w-3" />
+          <span>Tier 3</span>
+          <span className="text-rose-500/60 text-[9px]">Architect</span>
+        </Badge>
+      );
+    }
+  };
+
+  // HITL handlers
+  const handleAcceptTest = async () => {
+    if (!persistedTestId) {
+      toast.error("No test to accept - generate one first");
+      return;
+    }
+    setSavingStatus(true);
+    try {
+      const codeToSave = isEditing ? editedCode : generatedCode;
+      const response = await fetch("/api/tests/rlhf", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testId: persistedTestId,
+          status: "accepted",
+          humanEdited: isEditing,
+          finalCode: codeToSave,
+        }),
+      });
+      if (response.ok) {
+        setTestStatus("accepted");
+        toast.success("Test accepted and saved to training data");
+      } else {
+        throw new Error("Failed to save");
+      }
+    } catch {
+      toast.error("Failed to accept test");
+    } finally {
+      setSavingStatus(false);
+    }
+  };
+
+  const handleRejectTest = async () => {
+    if (!persistedTestId) {
+      toast.error("No test to reject - generate one first");
+      return;
+    }
+    setSavingStatus(true);
+    try {
+      const response = await fetch("/api/tests/rlhf", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testId: persistedTestId,
+          status: "rejected",
+          rejectionReason: critiqueText || "Rejected by curator",
+        }),
+      });
+      if (response.ok) {
+        setTestStatus("rejected");
+        toast.success("Test rejected - feedback saved for improvement");
+      } else {
+        throw new Error("Failed to save");
+      }
+    } catch {
+      toast.error("Failed to reject test");
+    } finally {
+      setSavingStatus(false);
+    }
+  };
+
+  const handleStartEditing = () => {
+    setEditedCode(generatedCode || "");
+    setIsEditing(true);
+  };
+
+  const handleSaveEdits = () => {
+    if (editedCode.trim()) {
+      setIsEditing(false);
+      toast.success("Edits saved locally - Accept to persist");
+    }
   };
 
   const SortIcon = ({ field }: { field: string }) => {
@@ -779,12 +896,38 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                   <Artifact className="border-border/80 shadow-2xl animate-in zoom-in-95 duration-300 bg-background">
                     <ArtifactHeader className="bg-card/50 border-b border-border/50">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                          <Sparkles className="h-4 w-4 text-emerald-400" />
+                        <div className={cn(
+                          "p-2 rounded-xl border",
+                          testStatus === "accepted" ? "bg-emerald-500/20 border-emerald-500/40" :
+                          testStatus === "rejected" ? "bg-rose-500/20 border-rose-500/40" :
+                          "bg-emerald-500/10 border-emerald-500/20"
+                        )}>
+                          {testStatus === "accepted" ? (
+                            <Check className="h-4 w-4 text-emerald-400" />
+                          ) : testStatus === "rejected" ? (
+                            <X className="h-4 w-4 text-rose-400" />
+                          ) : (
+                            <Sparkles className="h-4 w-4 text-emerald-400" />
+                          )}
                         </div>
-                        <ArtifactTitle className="text-xs font-normal text-white uppercase tracking-[0.3em]">
-                          {artifactMode === "code" ? "Automated Test" : "Human-Readable Scenario"}
-                        </ArtifactTitle>
+                        <div className="flex flex-col gap-1">
+                          <ArtifactTitle className="text-xs font-normal text-white uppercase tracking-[0.3em]">
+                            {artifactMode === "code" ? "Automated Test" : "Human-Readable Scenario"}
+                          </ArtifactTitle>
+                          <div className="flex items-center gap-2">
+                            {selectedTest && getTierBadge(calculateAutomationConfidence(selectedTest))}
+                            {testStatus === "accepted" && (
+                              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/40 text-[9px]">
+                                <Check className="h-2.5 w-2.5 mr-1" />Accepted
+                              </Badge>
+                            )}
+                            {testStatus === "rejected" && (
+                              <Badge className="bg-rose-500/20 text-rose-400 border-rose-500/40 text-[9px]">
+                                <X className="h-2.5 w-2.5 mr-1" />Rejected
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
                       </div>
                       <ArtifactActions>
                         <div className="flex bg-card/80 p-0.5 rounded-lg border border-border mr-2">
@@ -842,11 +985,18 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           tooltip="Critique Script"
                           onClick={() => setShowCritique(!showCritique)}
                         />
+                        {!isEditing && artifactMode === "code" && (
+                          <ArtifactAction
+                            icon={PenLine}
+                            tooltip="Edit Code"
+                            onClick={handleStartEditing}
+                          />
+                        )}
                         <ArtifactAction
                           icon={Copy}
                           tooltip="Copy Test"
                           onClick={() => {
-                            navigator.clipboard.writeText(generatedCode);
+                            navigator.clipboard.writeText(isEditing ? editedCode : generatedCode);
                             toast.success("Copied to clipboard");
                           }}
                         />
@@ -920,9 +1070,42 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           </div>
                         )}
                         {artifactMode === "code" ? (
-                          <pre className="text-xs text-emerald-400/80 font-mono p-5 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
-                            {generatedCode}
-                          </pre>
+                          isEditing ? (
+                            <div className="relative">
+                              <textarea
+                                value={editedCode}
+                                onChange={(e) => setEditedCode(e.target.value)}
+                                className="w-full text-xs text-emerald-400 font-mono p-5 bg-black/60 border-0 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 resize-none min-h-[400px] max-h-[500px] overflow-auto custom-scrollbar leading-loose tracking-tight"
+                                spellCheck={false}
+                              />
+                              <div className="absolute bottom-3 right-3 flex gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-7 px-3 text-[9px] uppercase tracking-wider text-muted-foreground hover:text-white"
+                                  onClick={() => {
+                                    setIsEditing(false);
+                                    setEditedCode("");
+                                  }}
+                                >
+                                  <X className="h-3 w-3 mr-1.5" />
+                                  Cancel
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  className="h-7 px-3 text-[9px] uppercase tracking-wider bg-emerald-600 hover:bg-emerald-500 text-white"
+                                  onClick={handleSaveEdits}
+                                >
+                                  <Save className="h-3 w-3 mr-1.5" />
+                                  Save Edits
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <pre className="text-xs text-emerald-400/80 font-mono p-5 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
+                              {generatedCode}
+                            </pre>
+                          )
                         ) : (
                           <div className="p-6 prose prose-invert prose-sm max-w-none">
                             <h4 className="mac-title">
@@ -948,6 +1131,67 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
                       </div>
                     </ArtifactContent>
+
+                    {/* HITL Accept/Reject Footer */}
+                    {testStatus !== "accepted" && testStatus !== "rejected" && persistedTestId && (
+                      <div className="px-4 py-3 bg-card/30 border-t border-border/50 flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                          <Activity className="h-3 w-3" />
+                          <span>Review this generated test for your training data</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-8 px-4 text-[10px] uppercase tracking-wider border-rose-500/40 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300"
+                            onClick={handleRejectTest}
+                            disabled={savingStatus}
+                          >
+                            {savingStatus ? (
+                              <RefreshCw className="h-3 w-3 mr-1.5 animate-spin" />
+                            ) : (
+                              <X className="h-3 w-3 mr-1.5" />
+                            )}
+                            Reject
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="h-8 px-4 text-[10px] uppercase tracking-wider bg-emerald-600 hover:bg-emerald-500 text-white"
+                            onClick={handleAcceptTest}
+                            disabled={savingStatus}
+                          >
+                            {savingStatus ? (
+                              <RefreshCw className="h-3 w-3 mr-1.5 animate-spin" />
+                            ) : (
+                              <Check className="h-3 w-3 mr-1.5" />
+                            )}
+                            Accept for Training
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Status indicator when already decided */}
+                    {(testStatus === "accepted" || testStatus === "rejected") && (
+                      <div className={cn(
+                        "px-4 py-3 border-t flex items-center justify-center gap-2 text-[10px] uppercase tracking-wider",
+                        testStatus === "accepted"
+                          ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                          : "bg-rose-500/10 border-rose-500/30 text-rose-400"
+                      )}>
+                        {testStatus === "accepted" ? (
+                          <>
+                            <CheckCircle className="h-3.5 w-3.5" />
+                            Test accepted and added to training data
+                          </>
+                        ) : (
+                          <>
+                            <X className="h-3.5 w-3.5" />
+                            Test rejected - feedback recorded for improvement
+                          </>
+                        )}
+                      </div>
+                    )}
                   </Artifact>
                 )}
 
@@ -977,6 +1221,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                           const data = await res.json();
                           if (data.success) {
                             setGeneratedCode(data.testCode);
+                            setPersistedTestId(data.persistedId || null);
+                            setTestStatus("pending");
+                            setIsEditing(false);
+                            setEditedCode("");
                             toast.success(`Script generated and saved to vault! (ID: ${data.persistedId?.slice(0, 8)})`);
                           } else {
                             toast.error(data.error || "Generation failed");

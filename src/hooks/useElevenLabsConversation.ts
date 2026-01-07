@@ -59,6 +59,8 @@ export interface UseElevenLabsConversationReturn {
   aiAudioLevel: number;
   isUserSpeaking: boolean;
   isAISpeaking: boolean;
+  isMuted: boolean;
+  toggleMute: () => void;
 
   // Error handling
   error: Error | null;
@@ -103,7 +105,7 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
   // Initialize official ElevenLabs hook
   // CRITICAL: Always start with mic unmuted
   const conversation = useConversation({
-    micMuted: false, // Always unmuted - handle muting via state only
+    micMuted, // Controlled by state
     onConnect: () => {
       console.log("🔗 ElevenLabs: Connected to conversation");
       setStatus("connected");
@@ -547,6 +549,8 @@ export function useElevenLabsConversation(): UseElevenLabsConversationReturn {
     aiAudioLevel,
     isUserSpeaking,
     isAISpeaking,
+    isMuted: micMuted,
+    toggleMute: useCallback(() => setMicMuted((prev) => !prev), []),
 
     // Error handling
     error,

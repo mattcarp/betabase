@@ -3,45 +3,74 @@
 /**
  * useDDPParser Hook
  *
- * Handles DDP file detection, parsing, and MusicBrainz lookup.
- * All processing happens client-side - no server upload.
+ * Handles DDP file detection and parsing via server-side API.
+ * MusicBrainz lookup happens after parsing.
  */
 
 import { useState, useCallback } from 'react';
 import {
-  detectDDP,
-  parseDDP,
-  getTrackOffsets,
-  getLeadoutOffset,
-} from '@/services/ddpParser';
-import {
-  calculateDiscId,
   lookupFromDDP,
   type MusicBrainzLookupResult,
 } from '@/services/musicBrainz';
-import type { ParsedDDP, DDPDetectionResult } from '@/types/ddp';
 
 // ============================================================================
 // Types
 // ============================================================================
 
+interface ParsedDDPResponse {
+  parseTime: string;
+  referencedFiles: string[];
+  id?: {
+    ddpid: string;
+    upc: string;
+    mid: string;
+  };
+  cdText?: {
+    album: string;
+    artist: string;
+    upc: string;
+    tracks: Array<{ track: number; title?: string; isrc?: string }>;
+  };
+  pqEntries: Array<{
+    trk: string;
+    idx: string;
+    min: string;
+    sec: string;
+    frm: string;
+    isrc: string;
+    dur?: string;
+  }>;
+  tracks: Array<{
+    number: number;
+    title?: string;
+    performer?: string;
+    duration?: string;
+    isrc?: string;
+  }>;
+  summary: {
+    albumTitle?: string;
+    performer?: string;
+    upc?: string;
+    trackCount: number;
+    totalDuration?: string;
+    hasCdText: boolean;
+    hasPq: boolean;
+  };
+}
+
 export interface DDPParseResult {
-  detection: DDPDetectionResult;
-  parsed?: ParsedDDP;
-  discId?: string;
+  parseTime?: string;
+  parsed?: ParsedDDPResponse;
   musicBrainz?: MusicBrainzLookupResult;
   error?: string;
 }
 
 export interface UseDDPParserReturn {
-  // State
   isDetecting: boolean;
   isParsing: boolean;
   isLookingUp: boolean;
   result: DDPParseResult | null;
   error: string | null;
-
-  // Actions
   processFiles: (files: File[]) => Promise<DDPParseResult | null>;
   reset: () => void;
 }
@@ -68,79 +97,76 @@ export function useDDPParser(): UseDDPParserReturn {
   const processFiles = useCallback(async (files: File[]): Promise<DDPParseResult | null> => {
     try {
       setError(null);
-
-      // Step 1: Detect if this is a DDP
       setIsDetecting(true);
-      const detection = detectDDP(files);
 
-      if (!detection.isDDP) {
+      // Check for DDPMS
+      const hasDDPMS = files.some(f => f.name.toUpperCase() === 'DDPMS');
+      if (!hasDDPMS) {
         setIsDetecting(false);
         const partialResult: DDPParseResult = {
-          detection,
           error: 'No DDPMS file found. This does not appear to be a DDP folder.',
         };
         setResult(partialResult);
         return partialResult;
       }
 
-      // Notify about skipped files
-      if (detection.skippedFiles.length > 0) {
-        console.log('Skipped large files (likely audio):', detection.skippedFiles);
+      setIsDetecting(false);
+      setIsParsing(true);
+
+      // Filter to small files only (DDPMS, DDPID, DDPPQ, .BIN < 10KB)
+      const smallFiles = files.filter(f => {
+        const upper = f.name.toUpperCase();
+        if (upper === 'DDPMS' || upper === 'DDPID' || upper === 'DDPPQ') return true;
+        if (upper.includes('PQ')) return true;
+        if (upper.endsWith('.BIN') && f.size <= 10240) return true;
+        if (upper.includes('CDTEXT')) return true;
+        return false;
+      });
+
+      // Send to API
+      const formData = new FormData();
+      for (const file of smallFiles) {
+        formData.append('files', file);
       }
 
-      setIsDetecting(false);
+      const response = await fetch('/api/ddp', {
+        method: 'POST',
+        body: formData,
+      });
 
-      // Step 2: Parse DDP files
-      setIsParsing(true);
-      const parsed = await parseDDP(files);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const parsed: ParsedDDPResponse = await response.json();
       setIsParsing(false);
 
-      // Step 3: Calculate Disc ID if we have PQ data
-      let discId: string | undefined;
-      if (parsed.pqEntries.length > 0) {
-        try {
-          const offsets = getTrackOffsets(parsed.pqEntries);
-          const leadout = getLeadoutOffset(parsed.pqEntries);
-
-          if (offsets.length > 0 && leadout > 0) {
-            discId = await calculateDiscId(1, offsets.length, leadout, offsets);
-          }
-        } catch (e) {
-          console.warn('Failed to calculate disc ID:', e);
-        }
-      }
-
-      // Initial result without MusicBrainz
+      // Initial result
       const intermediateResult: DDPParseResult = {
-        detection,
+        parseTime: parsed.parseTime,
         parsed,
-        discId,
       };
       setResult(intermediateResult);
 
-      // Step 4: Look up MusicBrainz (async, non-blocking)
+      // MusicBrainz lookup
       setIsLookingUp(true);
 
-      // Collect ISRCs from tracks
       const isrcs = parsed.tracks
         .map(t => t.isrc)
         .filter((isrc): isrc is string => !!isrc);
 
       const musicBrainz = await lookupFromDDP({
-        discId,
         barcode: parsed.summary.upc,
         isrcs,
-        artist: parsed.cdText?.albumPerformer,
-        title: parsed.cdText?.albumTitle,
+        artist: parsed.summary.performer,
+        title: parsed.summary.albumTitle,
       });
 
       setIsLookingUp(false);
 
-      // Final result with MusicBrainz
       const finalResult: DDPParseResult = {
-        detection,
+        parseTime: parsed.parseTime,
         parsed,
-        discId,
         musicBrainz,
       };
       setResult(finalResult);
@@ -154,7 +180,6 @@ export function useDDPParser(): UseDDPParserReturn {
       setIsLookingUp(false);
 
       const errorResult: DDPParseResult = {
-        detection: detectDDP(files),
         error: errorMessage,
       };
       setResult(errorResult);

@@ -1,7 +1,7 @@
 import { streamText, wrapLanguageModel } from "ai";
 import { devToolsMiddleware } from "@ai-sdk/devtools";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-// OpenAI removed - using Gemini-only setup
+// Groq only used for STT/TTS, not for thinking - see /api/groq/transcribe
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { z } from 'zod/v3';
@@ -27,6 +27,8 @@ import { traceChat, flushLangfuse } from "@/lib/langfuse";
 // Risk/reward is poor: misclassification excludes relevant data entirely
 // Dynamic skill loader for optimized system prompts
 import { buildDynamicPrompt } from "@/services/skillLoader";
+// Mem0 long-term memory for cross-conversation context
+import { retrieveMemories, addMemories, formatMemoriesForPrompt, isMemoryEnabled } from "@/services/mem0Service";
 // AI SDK Tools - LLM can call these for deterministic operations
 import { cdtextTool } from "@/tools/cdtext";
 import { siamTools } from "@/services/siamTools";
@@ -81,25 +83,9 @@ const ChatRequestSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50), // Max 50 messages in history
   model: z
     .enum([
-      // Gemini 3.x models (primary for RAG) - Dec 2025
-      "gemini-3-flash-preview",   // Released Dec 17, 2025 - 3x faster!
-      // Gemini 2.x models (legacy)
-      "gemini-2.5-pro",
-      "gemini-2.5-flash",
-      "gemini-2.0-flash",
-      // OpenAI models (fallback)
-      "gpt-5",
-      "gpt-5-pro",
-      "gpt-4o",
-      "gpt-4o-mini",
-      "o3",
-      "o3-pro",
-      "o4-mini",
-      // Claude models
-      "claude-3-opus",
-      "claude-3-sonnet",
-      "claude-3-5-sonnet-20241022",
-      "claude-3-haiku",
+      // Google Gemini 3 models - ALL thinking done by Gemini
+      "gemini-3-flash-preview",  // Default - Gemini 3 Flash Preview
+      "gemini-3-pro-preview",    // Fall forward option - Gemini 3 Pro Preview
     ])
     .optional(),
   temperature: z.number().min(0).max(2).optional(),
@@ -116,14 +102,14 @@ export async function GET(_req: Request) {
   return new Response(
     JSON.stringify({
       status: "ready",
-      version: "1.0.0",
-      models: ["gemini-3-flash-preview", "gemini-2.5-pro", "gemini-2.5-flash", "gpt-5", "gpt-4o"],
+      version: "1.1.0",
+      provider: "google",
+      model: "gemini-3-flash-preview",
       features: [
         "streaming",
+        "ultra-low-latency",
         "aoma-context",
         "knowledge-base",
-        "gemini-3-flash-speed",
-        "thinking-level",
       ],
     }),
     {
@@ -163,6 +149,9 @@ export async function POST(req: Request) {
     // Note: NEXT_PUBLIC_ vars don't work reliably in API routes, so check both
     const bypassAuth =
       process.env.NEXT_PUBLIC_BYPASS_AUTH === "true" || process.env.NODE_ENV === "development";
+
+    // Session variable - populated if auth is enabled, null otherwise
+    let session: { user: { id: string; email?: string } } | null = null;
 
     console.log("[API] Bypass auth:", bypassAuth);
 
@@ -214,10 +203,10 @@ export async function POST(req: Request) {
         }
       );
 
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
+      const sessionResult = await supabase.auth.getSession();
+      const sessionError = sessionResult.error;
+      // Assign to outer scope session variable for Mem0 user ID
+      session = sessionResult.data.session as typeof session;
 
       if (sessionError) {
         console.error("[API] Session check error:", sessionError);
@@ -251,16 +240,33 @@ export async function POST(req: Request) {
     // ========================================
 
     // ========================================
+    // USER ID FOR MEMORY (Mem0)
+    // ========================================
+    // Get user ID from session if available, otherwise use anonymous ID
+    // This is used for Mem0 long-term memory storage
+    let userId = "anonymous";
+    if (!bypassAuth && session?.user?.id) {
+      userId = session.user.id;
+    } else if (bypassAuth) {
+      // In dev mode, use a consistent anonymous ID from localStorage equivalent
+      userId = "dev-user-local";
+    }
+    console.log(`[API] User ID for memory: ${userId}`);
+    // ========================================
+    // END USER ID FOR MEMORY
+    // ========================================
+
+    // ========================================
     // API KEY VALIDATION
     // ========================================
     // Check for API key configuration
-    if (!process.env.GOOGLE_API_KEY) {
-      console.error("[API] GOOGLE_API_KEY is not set in environment variables");
+    if (!process.env.GROQ_API_KEY) {
+      console.error("[API] GROQ_API_KEY is not set in environment variables");
       return new Response(
         JSON.stringify({
           error: "Service temporarily unavailable",
           code: "CONFIG_ERROR",
-          message: "Google AI API key is not configured. Please contact support.",
+          message: "Groq API key is not configured. Please contact support.",
         }),
         {
           status: 503,
@@ -269,12 +275,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // Initialize Gemini provider (Gemini-only setup - no OpenAI)
+    // Initialize Google provider (Gemini 3 Flash Preview for all thinking)
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY,
+      apiKey: process.env.GOOGLE_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || "",
     });
 
-    console.log("[API] ✅ AI providers initialized");
+    console.log("[API] ✅ Google Gemini provider initialized");
     // ========================================
     // END API KEY VALIDATION
     // ========================================
@@ -402,6 +408,8 @@ export async function POST(req: Request) {
     let aomaConnectionStatus = "not-queried";
     const knowledgeElements: KnowledgeElement[] = [];
     let citationSources: any[] = [];
+    // Mem0 long-term memories - populated if MEM0_API_KEY is configured
+    let userMemories: Awaited<ReturnType<typeof retrieveMemories>> = [];
 
     // Initialize Advanced RAG Orchestrator and Session Manager
     const unifiedRAG = new UnifiedRAGOrchestrator();
@@ -461,6 +469,19 @@ export async function POST(req: Request) {
       const perfStart = Date.now();
       // vectorStartTime/vectorEndTime removed - aomaOrchestrator no longer used
 
+      // ========================================
+      // MEM0: RETRIEVE LONG-TERM MEMORIES
+      // ========================================
+      if (isMemoryEnabled()) {
+        console.log(`🧠 [Mem0] Retrieving memories for user ${userId}...`);
+        const memoryStartTime = Date.now();
+        userMemories = await retrieveMemories(queryString, userId, 10);
+        console.log(`🧠 [Mem0] Retrieved ${userMemories.length} memories in ${Date.now() - memoryStartTime}ms`);
+      }
+      // ========================================
+      // END MEM0 RETRIEVAL
+      // ========================================
+
       // PHASE 0 REMOVED: Intent classifier added ~85ms latency for ~15ms savings
       // All sources are now queried, synthesis step handles relevance
 
@@ -483,7 +504,7 @@ export async function POST(req: Request) {
         await sessionManager.addToHistory(sessionId, {
           query: queryString,
           timestamp: new Date().toISOString(),
-          userId: "current-user", // TODO: Get from session
+          userId: userId, // From session auth or dev-user-local
         });
 
         // Determine query complexity to decide on agentic RAG
@@ -710,16 +731,30 @@ export async function POST(req: Request) {
     
     console.log(`🎨 [Skills] Loaded: [${dynamicPromptResult.skills.join(', ')}]`);
     console.log(`📊 [Skills] Estimated tokens: ${dynamicPromptResult.estimatedTokens}`);
-    
+
     // Use dynamic prompt or fallback to user-provided system prompt
-    const enhancedSystemPrompt = dynamicPromptResult.prompt || 
+    let enhancedSystemPrompt = dynamicPromptResult.prompt ||
       (systemPrompt || "You are SIAM, a helpful AI assistant for Sony Music.");
+
+    // ========================================
+    // MEM0: INJECT LONG-TERM MEMORIES INTO SYSTEM PROMPT
+    // ========================================
+    if (userMemories.length > 0) {
+      const memoryContext = formatMemoriesForPrompt(userMemories);
+      enhancedSystemPrompt = enhancedSystemPrompt + "\n\n" + memoryContext;
+      console.log(`🧠 [Mem0] Injected ${userMemories.length} memories into system prompt`);
+    }
+    // ========================================
+    // END MEM0 INJECTION
+    // ========================================
 
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
     const useCase = hasAomaContent ? "aoma-query" : "chat";
     const modelSettings = modelConfig.getModelWithConfig(useCase);
-    const selectedModel = model || modelSettings.model || "gpt-4o-mini";
+    
+    // Default to Gemini 3 Flash Preview - all reasoning + RAG
+    const selectedModel = model || "gemini-3-flash-preview";
 
     console.log(`🤖 Creating stream with model: ${selectedModel}`);
     console.log(
@@ -739,17 +774,25 @@ export async function POST(req: Request) {
     // Use Vercel AI SDK streamText for proper useChat hook compatibility
     console.log("⏳ Calling AI SDK streamText...");
 
-    // O-series models (o1, o3, o4) don't support temperature - they use fixed reasoning
-    const supportsTemperature = !selectedModel.startsWith("o");
+    // Groq models support temperature
+    const supportsTemperature = true;
 
-    // Gemini-only setup - all models use Google provider
+    // Use Groq provider or Google provider based on model selection
     // Wrap with DevTools middleware in development for debugging visibility
-    const baseModel = google(selectedModel);
+    let baseModel;
+    
+    if (selectedModel.toLowerCase().includes("gemini")) {
+      // Gemini 3 model IDs are used directly - no mapping needed
+      const mappedModel = selectedModel; // gemini-3-flash-preview or gemini-3-pro-preview
+      console.log(`🤖 Routing to Google Gemini 3: ${mappedModel}`);
+      baseModel = google(mappedModel);
+    }
+
     const modelProvider = process.env.NODE_ENV === "development"
       ? wrapLanguageModel({ model: baseModel, middleware: devToolsMiddleware })
       : baseModel;
 
-    console.log(`🤖 Using Google Gemini provider for model: ${selectedModel}`);
+    console.log(`🤖 Using Gemini provider for model: ${selectedModel}`);
     if (process.env.NODE_ENV === "development") {
       console.log(`🔧 DevTools middleware enabled - visit http://localhost:3000/api/ai-devtools`);
     }
@@ -811,6 +854,30 @@ export async function POST(req: Request) {
         // Langfuse: Flush events (critical for serverless!)
         await flushLangfuse();
         console.log("[Langfuse] Events flushed");
+
+        // ========================================
+        // MEM0: STORE MEMORIES FROM THIS EXCHANGE
+        // ========================================
+        if (isMemoryEnabled() && text && messageContent) {
+          try {
+            const exchangeMessages = [
+              { role: "user", content: typeof messageContent === "string" ? messageContent : JSON.stringify(messageContent) },
+              { role: "assistant", content: text },
+            ];
+            await addMemories(exchangeMessages, userId, {
+              model: selectedModel,
+              hasAomaContent,
+              sessionId,
+            });
+            console.log(`🧠 [Mem0] Stored memories from this exchange for user ${userId}`);
+          } catch (memError) {
+            console.error("[Mem0] Error storing memories:", memError);
+            // Non-critical - don't fail the response
+          }
+        }
+        // ========================================
+        // END MEM0 STORAGE
+        // ========================================
       },
     });
 

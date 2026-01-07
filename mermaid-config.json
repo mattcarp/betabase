@@ -1,0 +1,22 @@
+{
+  "theme": "default",
+  "look": "handDrawn",
+  "handDrawnSeed": 42,
+  "themeVariables": {
+    "primaryColor": "#E3F2FD",
+    "primaryTextColor": "#1a1a2e",
+    "primaryBorderColor": "#2196F3",
+    "lineColor": "#455A64",
+    "secondaryColor": "#F3E5F5",
+    "tertiaryColor": "#E8F5E9",
+    "background": "#FAFAFA",
+    "fontFamily": "Comic Sans MS, cursive, sans-serif"
+  },
+  "er": {
+    "layoutDirection": "TB",
+    "minEntityWidth": 100,
+    "minEntityHeight": 75,
+    "entityPadding": 15,
+    "useMaxWidth": false
+  }
+}

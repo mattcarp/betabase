@@ -125,11 +125,9 @@ export function CompactThemeSwitcher() {
   const cycleTheme = () => {
     if (isTransitioning) return;
 
-    const currentIndex = availableThemes.findIndex((t) => t.id === currentTheme);
-    const nextIndex = (currentIndex + 1) % availableThemes.length;
-    const nextTheme = availableThemes[nextIndex];
-
-    setTheme(nextTheme.id);
+    // Toggle between light and mac (dark) themes only
+    // If current is light, go to mac. Otherwise (mac, jarvis, aoma), go to light.
+    setTheme(currentTheme === "light" ? "mac" : "light");
   };
 
   const currentThemeInfo = availableThemes.find((t) => t.id === currentTheme);

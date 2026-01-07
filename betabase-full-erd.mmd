@@ -1,0 +1,133 @@
+erDiagram
+    APPLICATION {
+        INTEGER id PK
+        VARCHAR(255) name
+        VARCHAR(255) primary_color
+    }
+
+    USER {
+        INTEGER id PK
+        VARCHAR(180) username
+        VARCHAR(180) username_canonical
+        VARCHAR(180) email
+        VARCHAR(180) email_canonical
+        SMALLINT enabled
+        VARCHAR(255) salt
+        VARCHAR(255) password
+        VARCHAR(255) last_login
+        SMALLINT locked
+        SMALLINT expired
+        VARCHAR(255) expires_at
+        VARCHAR(180) confirmation_token
+        VARCHAR(255) password_requested_at
+        TEXT roles
+        SMALLINT credentials_expired
+        VARCHAR(255) credentials_expire_at
+        VARCHAR(255) created_at
+        VARCHAR(255) updated_at
+        VARCHAR(255) f_name
+        VARCHAR(255) l_name
+        VARCHAR(255) jira_username
+        SMALLINT is_notified
+        VARCHAR(255) mobile_phone
+        VARCHAR(255) org
+    }
+
+    ROUND {
+        INTEGER id PK
+        VARCHAR(255) name
+        VARCHAR(255) starts_at
+        VARCHAR(255) ends_at
+        VARCHAR(255) updated_at
+        VARCHAR(255) release_num
+        VARCHAR(255) app
+        TEXT notes
+        VARCHAR(255) created_at
+        TEXT client_notes
+        SMALLINT current_flag
+        VARCHAR(255) release_date
+    }
+
+    VARIATION {
+        INTEGER id PK
+        TEXT scenario_id
+        TEXT variation_text
+        VARCHAR(255) created_by
+        VARCHAR(255) updated_by
+        VARCHAR(255) created_at
+        VARCHAR(255) updated_at
+    }
+
+    CASES {
+        INTEGER id
+        VARCHAR(5) app_under_test
+        VARCHAR(254) name
+        VARCHAR(1376) script
+        VARCHAR(462) expected_result
+        VARCHAR(92) tags
+        VARCHAR(19) created_by
+        VARCHAR(19) created_at
+        VARCHAR(19) updated_by
+        VARCHAR(19) updated_at
+        VARCHAR(590) preconditions
+    }
+
+    DEPLOYMENT {
+        INTEGER id PK
+        VARCHAR(255) build
+        VARCHAR(255) branch
+        VARCHAR(255) app_under_test
+        VARCHAR(255) deployed_at
+        VARCHAR(255) record_inserted_at
+    }
+
+    SCENARIO {
+        INTEGER id PK
+        VARCHAR(255) name
+        TEXT script
+        TEXT expected_result
+        VARCHAR(255) created_by
+        VARCHAR(255) updated_by
+        TEXT preconditions
+        VARCHAR(255) created_at
+        VARCHAR(255) updated_at
+        SMALLINT review_flag
+        TEXT flag_reason
+        VARCHAR(255) app_under_test
+        VARCHAR(255) tags
+        VARCHAR(255) coverage
+        SMALLINT client_priority
+        VARCHAR(255) mode
+        SMALLINT is_security
+        INTEGER priority_sort_order
+        INTEGER enhancement_sort_order
+        INTEGER current_regression_sort_order
+        VARCHAR(255) reviewed_flag
+    }
+
+    TEST {
+        INTEGER id PK
+        INTEGER scenario_id
+        VARCHAR(255) created_at
+        TEXT comments
+        VARCHAR(255) ticket
+        VARCHAR(255) created_by
+        TEXT input
+        TEXT result
+        VARCHAR(255) pass_fail
+        VARCHAR(255) build
+        VARCHAR(255) updated_at
+        VARCHAR(255) updated_by
+        VARCHAR(255) path
+        VARCHAR(255) browser_name
+        VARCHAR(255) browser_major
+        VARCHAR(255) browser_minor
+        VARCHAR(255) os_name
+        VARCHAR(255) os_major
+        VARCHAR(255) os_minor
+        VARCHAR(255) deployment_stamp
+        VARCHAR(255) in_prod
+    }
+
+    SCENARIO ||--o{ VARIATION : "has"
+    SCENARIO ||--o{ TEST : "has"

@@ -39,6 +39,7 @@ import {
 } from "../ai-elements/inline-citation";
 import { Loader } from "../ai-elements/loader";
 import { CodeBlock } from "../ai-elements/code-block";
+import { useGroqVoice } from "../../hooks/useGroqVoice";
 
 interface ChatPanelProps {
   api?: string;
@@ -129,6 +130,31 @@ export function EnhancedChatPanelWithAIElements({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
+  // Groq Voice Hook
+  const {
+    isRecording,
+    isTranscribing,
+    transcript,
+    startRecording,
+    stopRecording,
+    resetTranscript,
+    speak,
+    stopSpeaking,
+    isSpeaking
+  } = useGroqVoice();
+
+  // Sync transcript to input
+  useEffect(() => {
+    if (transcript) {
+      // Append transcript to current input with a space
+      setInput((prev: string) => {
+        const spacer = prev && !prev.endsWith(" ") ? " " : "";
+        return prev + spacer + transcript;
+      });
+      resetTranscript();
+    }
+  }, [transcript, setInput, resetTranscript]);
+
   // Infographic state: track per-message infographics
   const [infographics, setInfographics] = useState<
     Record<
@@ -147,6 +173,7 @@ export function EnhancedChatPanelWithAIElements({
   const [parsedDDP, setParsedDDP] = useState<ParsedDDP | null>(null);
   const [ddpMusicBrainz, setDdpMusicBrainz] = useState<MusicBrainzLookupResult | null>(null);
   const [isLoadingMusicBrainz, setIsLoadingMusicBrainz] = useState(false);
+  const [isMuted, setIsMuted] = useState(false); // Default to unmuted (sound on)
 
   // Handle DDP detection from file upload
   const handleDDPDetected = useCallback(async (ddp: ParsedDDP) => {
@@ -275,6 +302,11 @@ export function EnhancedChatPanelWithAIElements({
     onFinish: (message: any) => {
       if (maxMessages && messages.length >= maxMessages) {
         console.warn(`Maximum messages (${maxMessages}) reached`);
+      }
+
+      // Speak the response if it's from the assistant and not muted
+      if (message?.content && message.role === "assistant" && !isMuted) {
+        speak(message.content);
       }
 
       // When AI response completes, trigger infographic generation
@@ -623,12 +655,26 @@ export function EnhancedChatPanelWithAIElements({
               value={input}
               onChange={handleInputChange}
               onSubmit={handleFormSubmit}
-              onStop={stop}
+              onStop={() => {
+                stop();
+                stopSpeaking();
+              }}
               isLoading={isLoading}
-              placeholder={isMaxMessagesReached ? "Message limit reached" : placeholder}
+              placeholder={isMaxMessagesReached ? "Message limit reached" : (isRecording ? "Listening..." : isTranscribing ? "Transcribing..." : placeholder)}
               className="w-full"
               allowAttachments={true}
-              allowVoice={false}
+              allowVoice={true}
+              isRecording={isRecording}
+              onVoiceStart={startRecording}
+              onVoiceEnd={stopRecording}
+              allowSpeaker={true}
+              isMuted={isMuted}
+              onMuteToggle={() => {
+                if (!isMuted && isSpeaking) {
+                  stopSpeaking();
+                }
+                setIsMuted(!isMuted);
+              }}
               suggestions={showSuggestions ? suggestions : []}
               onSuggestionClick={handleSuggestionClick}
               onDDPDetected={handleDDPDetected}

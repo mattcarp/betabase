@@ -51,11 +51,11 @@ interface Model {
 }
 
 const STATUS_CONFIG = {
-  testing: { color: "bg-yellow-500", label: "Testing", icon: Beaker },
-  staged: { color: "bg-blue-500", label: "Staged", icon: GitBranch },
-  deployed: { color: "bg-green-500", label: "Deployed", icon: Rocket },
-  deprecated: { color: "bg-orange-500", label: "Deprecated", icon: AlertTriangle },
-  archived: { color: "bg-muted", label: "Archived", icon: Archive },
+  testing: { color: "bg-[var(--mac-warning-yellow)]", label: "Testing", icon: Beaker },
+  staged: { color: "bg-[var(--mac-primary-blue-400)]", label: "Staged", icon: GitBranch },
+  deployed: { color: "bg-[var(--mac-status-connected)]", label: "Deployed", icon: Rocket },
+  deprecated: { color: "bg-[var(--mac-status-error-text)]", label: "Deprecated", icon: AlertTriangle },
+  archived: { color: "bg-[var(--mac-utility-border)]", label: "Archived", icon: Archive },
 };
 
 export function ModelRegistryPanel() {
@@ -261,9 +261,9 @@ export function ModelRegistryPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Box className="h-8 w-8 text-primary-400" />
+              <Box className="h-8 w-8 text-[var(--mac-accent-primary-400)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">{Object.keys(groupedModels).length}</p>
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">{Object.keys(groupedModels).length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Model Families</p>
               </div>
             </div>
@@ -272,9 +272,9 @@ export function ModelRegistryPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <GitBranch className="h-8 w-8 text-blue-400" />
+              <GitBranch className="h-8 w-8 text-[var(--mac-primary-blue-400)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">{models.length}</p>
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">{models.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Versions</p>
               </div>
             </div>
@@ -283,9 +283,9 @@ export function ModelRegistryPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Rocket className="h-8 w-8 text-green-400" />
+              <Rocket className="h-8 w-8 text-[var(--mac-status-connected)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">
                   {models.filter((m) => m.status === "deployed").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Deployed</p>
@@ -296,9 +296,9 @@ export function ModelRegistryPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Beaker className="h-8 w-8 text-yellow-400" />
+              <Beaker className="h-8 w-8 text-[var(--mac-warning-yellow)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">
                   {models.filter((m) => m.status === "testing" || m.status === "staged").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">In Testing</p>
@@ -322,7 +322,7 @@ export function ModelRegistryPanel() {
                   className={cn(
                     "mac-card-elevated",
                     "border-[var(--mac-utility-border)]",
-                    latestDeployed && "border-green-500/30"
+                    latestDeployed && "border-[var(--mac-status-connected)]/30"
                   )}
                 >
                   {/* Main Model Row */}
@@ -335,21 +335,21 @@ export function ModelRegistryPanel() {
                         <div
                           className={cn(
                             "h-12 w-12 rounded-lg flex items-center justify-center",
-                            latestDeployed ? "bg-green-500/10" : "bg-primary-500/10"
+                            latestDeployed ? "bg-[var(--mac-status-connected)]/10" : "bg-[var(--mac-accent-primary-400)]/10"
                           )}
                         >
                           <Box
                             className={cn(
                               "h-6 w-6",
-                              latestDeployed ? "text-green-400" : "text-primary-400"
+                              latestDeployed ? "text-[var(--mac-status-connected)]" : "text-[var(--mac-accent-primary-400)]"
                             )}
                           />
                         </div>
                         <div>
-                          <h3 className="mac-title">
+                          <h3 className="mac-title text-[var(--mac-text-primary)]">
                             {latest.display_name || name}
                             {latestDeployed && (
-                              <Badge className="bg-green-500/20 text-green-400 text-xs">
+                              <Badge className="bg-[var(--mac-status-connected)]/20 text-[var(--mac-status-connected)] text-xs border-[var(--mac-status-connected)]/30">
                                 <Sparkles className="h-3 w-3 mr-1" />
                                 Active
                               </Badge>
@@ -393,7 +393,7 @@ export function ModelRegistryPanel() {
                         )}
 
                         {/* Version count */}
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs text-[var(--mac-text-muted)] border-[var(--mac-utility-border)]">
                           {versions.length} version{versions.length > 1 ? "s" : ""}
                         </Badge>
 
@@ -427,11 +427,11 @@ export function ModelRegistryPanel() {
                                   "bg-[var(--mac-surface-background)]/50",
                                   "border border-[var(--mac-utility-border)]",
                                   version.status === "deployed" &&
-                                    "border-green-500/30 bg-green-500/5"
+                                    "border-[var(--mac-status-connected)]/30 bg-[var(--mac-status-connected)]/5"
                                 )}
                               >
                                 <div className="flex items-center gap-4">
-                                  <Badge variant="outline" className="font-mono text-xs">
+                                  <Badge variant="outline" className="font-mono text-xs text-[var(--mac-text-muted)] border-[var(--mac-utility-border)]">
                                     v{version.version}
                                   </Badge>
                                   <span className="text-sm text-[var(--mac-text-muted)] font-mono">
@@ -439,7 +439,7 @@ export function ModelRegistryPanel() {
                                   </span>
                                   <Badge
                                     className={cn(
-                                      "text-xs text-white",
+                                      "text-xs text-white border-0",
                                       STATUS_CONFIG[version.status].color
                                     )}
                                   >

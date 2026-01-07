@@ -61,22 +61,22 @@ interface FineTuningJob {
 }
 
 const STATUS_CONFIG = {
-  pending: { color: "bg-muted-foreground", label: "Pending", icon: Clock },
-  validating: { color: "bg-blue-500", label: "Validating", icon: RefreshCw },
-  queued: { color: "bg-yellow-500", label: "Queued", icon: Clock },
-  training: { color: "bg-primary-500", label: "Training", icon: Activity },
-  completed: { color: "bg-green-500", label: "Completed", icon: CheckCircle2 },
-  failed: { color: "bg-red-500", label: "Failed", icon: XCircle },
-  cancelled: { color: "bg-muted", label: "Cancelled", icon: XCircle },
+  pending: { color: "bg-[var(--mac-text-muted)]", label: "Pending", icon: Clock },
+  validating: { color: "bg-[var(--mac-primary-blue-400)]", label: "Validating", icon: RefreshCw },
+  queued: { color: "bg-[var(--mac-warning-yellow)]", label: "Queued", icon: Clock },
+  training: { color: "bg-[var(--mac-accent-primary-400)]", label: "Training", icon: Activity },
+  completed: { color: "bg-[var(--mac-status-connected)]", label: "Completed", icon: CheckCircle2 },
+  failed: { color: "bg-[var(--mac-status-error-text)]", label: "Failed", icon: XCircle },
+  cancelled: { color: "bg-[var(--mac-utility-border)]", label: "Cancelled", icon: XCircle },
 };
 
 const PROVIDER_CONFIG = {
-  openai: { label: "OpenAI", color: "text-emerald-400" },
-  anthropic: { label: "Anthropic", color: "text-orange-400" },
-  huggingface: { label: "HuggingFace", color: "text-yellow-400" },
-  bedrock: { label: "AWS Bedrock", color: "text-orange-500" },
-  vertex: { label: "Vertex AI", color: "text-blue-400" },
-  custom: { label: "Custom", color: "text-primary-400" },
+  openai: { label: "OpenAI", color: "text-[var(--mac-status-connected)]" },
+  anthropic: { label: "Anthropic", color: "text-[var(--mac-accent-orange-400)]" },
+  huggingface: { label: "HuggingFace", color: "text-[var(--mac-warning-yellow)]" },
+  bedrock: { label: "AWS Bedrock", color: "text-[var(--mac-accent-orange-600)]" },
+  vertex: { label: "Vertex AI", color: "text-[var(--mac-primary-blue-400)]" },
+  custom: { label: "Custom", color: "text-[var(--mac-accent-primary-400)]" },
 };
 
 export function FineTuningJobsPanel() {
@@ -228,10 +228,10 @@ export function FineTuningJobsPanel() {
         </div>
         <div className="flex items-center gap-4">
           <Select value={selectedProvider} onValueChange={setSelectedProvider}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] mac-input">
               <SelectValue placeholder="Filter by provider" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="mac-glass border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]">
               <SelectItem value="all">All Providers</SelectItem>
               <SelectItem value="openai">OpenAI</SelectItem>
               <SelectItem value="anthropic">Anthropic</SelectItem>
@@ -251,9 +251,9 @@ export function FineTuningJobsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Cpu className="h-8 w-8 text-primary-400" />
+              <Cpu className="h-8 w-8 text-[var(--mac-accent-primary-400)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">{jobs.length}</p>
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">{jobs.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Jobs</p>
               </div>
             </div>
@@ -262,9 +262,9 @@ export function FineTuningJobsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Activity className="h-8 w-8 text-green-400 animate-pulse" />
+              <Activity className="h-8 w-8 text-[var(--mac-accent-primary-400)] animate-pulse" />
               <div>
-                <p className="mac-body text-2xl font-normal">{activeJobs.length}</p>
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">{activeJobs.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Active</p>
               </div>
             </div>
@@ -273,9 +273,9 @@ export function FineTuningJobsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-8 w-8 text-blue-400" />
+              <CheckCircle2 className="h-8 w-8 text-[var(--mac-status-connected)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">
                   {jobs.filter((j) => j.status === "completed").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Completed</p>
@@ -286,9 +286,9 @@ export function FineTuningJobsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <DollarSign className="h-8 w-8 text-yellow-400" />
+              <DollarSign className="h-8 w-8 text-[var(--mac-warning-yellow)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">${totalCost.toFixed(2)}</p>
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">${totalCost.toFixed(2)}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Cost</p>
               </div>
             </div>
@@ -298,10 +298,10 @@ export function FineTuningJobsPanel() {
 
       {/* Active Job Progress */}
       {activeJobs.length > 0 && (
-        <Card className="mac-card-elevated border-primary-500/30 bg-primary-500/5">
+        <Card className="mac-card-elevated border-[var(--mac-accent-primary-400)]/30 bg-[var(--mac-accent-primary-400)]/5">
           <CardHeader className="mac-card pb-2">
-            <CardTitle className="text-sm font-normal flex items-center gap-2">
-              <Activity className="h-4 w-4 text-primary-400 animate-pulse" />
+            <CardTitle className="text-sm font-normal flex items-center gap-2 text-[var(--mac-text-primary)]">
+              <Activity className="h-4 w-4 text-[var(--mac-accent-primary-400)] animate-pulse" />
               Active Training
             </CardTitle>
           </CardHeader>
@@ -309,7 +309,7 @@ export function FineTuningJobsPanel() {
             {activeJobs.map((job) => (
               <div key={job.id} className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-normal">{job.dataset_name}</span>
+                  <span className="text-sm font-normal text-[var(--mac-text-primary)]">{job.dataset_name}</span>
                   <span className="text-xs text-[var(--mac-text-muted)]">{job.base_model}</span>
                 </div>
                 <Progress value={job.training_metrics.progress || 0} className="h-2" />
@@ -345,8 +345,8 @@ export function FineTuningJobsPanel() {
                     className={cn(
                       "mac-card-elevated",
                       "border-[var(--mac-utility-border)]",
-                      job.status === "training" && "border-primary-500/50",
-                      "hover:border-primary-500/30 transition-colors"
+                      job.status === "training" && "border-[var(--mac-accent-primary-400)]/50",
+                      "hover:border-[var(--mac-accent-primary-400)]/30 transition-colors"
                     )}
                   >
                     <CardContent className="py-4">
@@ -355,20 +355,20 @@ export function FineTuningJobsPanel() {
                           <div
                             className={cn(
                               "h-10 w-10 rounded-lg flex items-center justify-center",
-                              job.status === "training" ? "bg-primary-500/20" : "bg-muted"
+                              job.status === "training" ? "bg-[var(--mac-accent-primary-400)]/20" : "bg-[var(--mac-surface-elevated)]"
                             )}
                           >
                             <Cpu
                               className={cn(
                                 "h-5 w-5",
                                 job.status === "training"
-                                  ? "text-primary-400 animate-pulse"
-                                  : "text-muted-foreground"
+                                  ? "text-[var(--mac-accent-primary-400)] animate-spin"
+                                  : "text-[var(--mac-text-muted)]"
                               )}
                             />
                           </div>
                           <div>
-                            <h3 className="mac-title">
+                            <h3 className="mac-title text-[var(--mac-text-primary)]">
                               {job.dataset_name}
                             </h3>
                             <div className="flex items-center gap-2 text-sm text-[var(--mac-text-muted)]">
@@ -398,7 +398,7 @@ export function FineTuningJobsPanel() {
                           {/* Status */}
                           <Badge
                             className={cn(
-                              "text-xs text-white min-w-[100px] justify-center",
+                              "text-xs text-white min-w-[100px] justify-center border-0",
                               STATUS_CONFIG[job.status].color
                             )}
                           >
@@ -422,7 +422,7 @@ export function FineTuningJobsPanel() {
                               <Button size="sm"
                                 variant="ghost" className="mac-button mac-button-outline"
                                 onClick={() => handleCancelJob(job.id)}
-                                className="text-red-400 hover:text-red-300"
+                                className="text-[var(--mac-status-error-text)] hover:text-[var(--mac-status-error-text)] hover:bg-[var(--mac-status-error-bg)]/10"
                               >
                                 <XCircle className="h-4 w-4" />
                               </Button>
@@ -433,8 +433,8 @@ export function FineTuningJobsPanel() {
 
                       {/* Error message */}
                       {job.error_message && (
-                        <div className="mt-3 p-2 rounded bg-red-500/10 border border-red-500/30">
-                          <p className="text-xs text-red-400 flex items-center gap-2">
+                        <div className="mt-3 p-2 rounded bg-[var(--mac-status-error-bg)]/10 border border-[var(--mac-status-error-border)]/30">
+                          <p className="text-xs text-[var(--mac-status-error-text)] flex items-center gap-2">
                             <AlertCircle className="h-3 w-3" />
                             {job.error_message}
                           </p>
@@ -443,8 +443,8 @@ export function FineTuningJobsPanel() {
 
                       {/* Resulting model */}
                       {job.resulting_model_id && (
-                        <div className="mt-3 p-2 rounded bg-green-500/10 border border-green-500/30">
-                          <p className="text-xs text-green-400 flex items-center gap-2">
+                        <div className="mt-3 p-2 rounded bg-[var(--mac-status-connected)]/10 border border-[var(--mac-status-connected)]/30">
+                          <p className="text-xs text-[var(--mac-status-connected)] flex items-center gap-2">
                             <CheckCircle2 className="h-3 w-3" />
                             Model: <code className="font-mono">{job.resulting_model_id}</code>
                           </p>

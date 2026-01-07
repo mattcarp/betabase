@@ -162,40 +162,67 @@ export async function PATCH(request: NextRequest) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body = await request.json();
 
-    const { id, status, approved_by, rejection_reason, last_run_result } = body;
+    // Support both old field names (id) and new (testId)
+    const {
+      id,
+      testId,
+      status,
+      approved_by,
+      rejection_reason,
+      rejectionReason,
+      last_run_result,
+      humanEdited,
+      finalCode
+    } = body;
 
-    if (!id) {
+    const testIdToUpdate = testId || id;
+
+    if (!testIdToUpdate) {
       return NextResponse.json(
-        { error: "id is required" },
+        { error: "id or testId is required" },
         { status: 400 }
       );
     }
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
     };
 
-    if (status) updateData.status = status;
+    // Map status values: 'accepted' -> 'approved', 'rejected' -> 'rejected'
+    if (status) {
+      updateData.status = status === "accepted" ? "approved" : status;
+    }
+
     if (approved_by) {
       updateData.approved_by = approved_by;
       updateData.approved_at = new Date().toISOString();
     }
-    if (rejection_reason) updateData.rejection_reason = rejection_reason;
+
+    // Handle acceptance with human edits
+    if (status === "accepted") {
+      updateData.approved_at = new Date().toISOString();
+      // Note: human_edited column may not exist in older schemas
+      // updateData.human_edited = humanEdited || false;
+      if (finalCode) {
+        updateData.test_code = finalCode;
+      }
+    }
+
+    // Handle rejection
+    const rejectReason = rejection_reason || rejectionReason;
+    if (rejectReason) {
+      updateData.rejection_reason = rejectReason;
+    }
+
     if (last_run_result) {
       updateData.last_run_result = last_run_result;
       updateData.last_run_at = new Date().toISOString();
-      updateData.run_count = supabase.rpc("increment", { row_id: id, column: "run_count" });
-      
-      // Update pass/fail counts based on result
-      if (last_run_result === "passed") {
-        // Would need RPC for atomic increment
-      }
     }
 
     const { data, error } = await supabase
       .from("rlhf_generated_tests")
       .update(updateData)
-      .eq("id", id)
+      .eq("id", testIdToUpdate)
       .select()
       .single();
 

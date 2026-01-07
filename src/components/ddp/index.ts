@@ -1,16 +1,8 @@
 /**
- * DDP Components
- *
- * Components for uploading and displaying DDP (Disc Description Protocol) masters.
+ * DDP Components Index
  */
 
 export { DDPDisplay } from './DDPDisplay';
-export { DDPUploader, type DDPProcessingStage } from './DDPUploader';
-export { MusicBrainzResultCard } from './MusicBrainzResultCard';
-
-// Re-export types
-export type { ParsedDDP, DDPTrack, DDPDetectionResult } from '@/types/ddp';
-export type { MusicBrainzLookupResult, MusicBrainzRelease } from '@/services/musicBrainz';
-
-// Re-export hook
-export { useDDPParser } from '@/hooks/useDDPParser';
+export { DDPUploader } from './DDPUploader';
+export { DDPResultsPanel } from './DDPResultsPanel';
+export { MusicBrainzResultsCard, MusicBrainzResultsSkeleton } from './MusicBrainzResultsCard';

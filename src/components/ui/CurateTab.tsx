@@ -114,40 +114,35 @@ const formatDate = (timestamp: number): string => {
 };
 
 // Helper component for RLHF sub-tabs
-function RLHFSubTabTrigger({ id, label, icon, activeId, onClick, color }: { 
+function RLHFSubTabTrigger({ id, label, icon, activeId, onClick }: { 
   id: string, 
   label: string, 
   icon: React.ReactNode, 
   activeId: string, 
-  onClick: (id: string) => void,
-  color: "purple" | "blue" | "orange" | "green" | "pink"
+  onClick: (id: string) => void
 }) {
-  const colorMap = {
-    purple: "var(--mac-accent-primary-400)",
-    blue: "var(--mac-primary-blue-400)",
-    orange: "var(--mac-accent-orange-400)",
-    green: "var(--mac-status-connected)",
-    pink: "#ec4899"
-  };
-
   const isActive = id === activeId;
-  const activeColor = colorMap[color];
 
   return (
     <button
       onClick={() => onClick(id)}
       className={cn(
         "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-light transition-all border",
+        "bg-[var(--mac-surface-elevated)]",
         isActive 
-          ? `border-[${activeColor}] bg-[${activeColor}]/10 text-[${activeColor}]`
-          : "border-transparent text-[var(--mac-text-secondary)] hover:bg-[var(--mac-surface-elevated)]"
+          ? [
+              "border-[var(--mac-primary-blue-400)]",
+              "bg-[var(--mac-primary-blue-400)]/10",
+              "text-[var(--mac-primary-blue-400)]",
+              "shadow-[0_0_10px_rgba(51,133,255,0.1)]"
+            ]
+          : [
+              "border-[var(--mac-utility-border)]",
+              "text-[var(--mac-text-secondary)]",
+              "hover:border-[var(--mac-primary-blue-400)]/40",
+              "hover:bg-[var(--mac-state-hover)]"
+            ]
       )}
-      style={isActive ? { 
-        borderColor: activeColor, 
-        backgroundColor: `${activeColor}1a`,
-        color: activeColor,
-        boxShadow: `0 0 10px ${activeColor}20`
-      } : {}}
     >
       {icon}
       {label}
@@ -1115,11 +1110,11 @@ export function CurateTab({
             <div role="tabpanel" className="flex-1 overflow-auto mt-4 space-y-6">
               {/* RLHF Sub-navigation */}
               <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                <RLHFSubTabTrigger id="feedback" label="Feedback" icon={<Lightbulb className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
-                <RLHFSubTabTrigger id="reinforcement" label="Learning Curve" icon={<TrendingUp className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
-                <RLHFSubTabTrigger id="datasets" label="Datasets" icon={<DatabaseIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="orange" />
-                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<LightbulbIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="blue" />
-                <RLHFSubTabTrigger id="registry" label="Model Registry" icon={<Rocket className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} color="green" />
+                <RLHFSubTabTrigger id="feedback" label="Feedback" icon={<Lightbulb className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} />
+                <RLHFSubTabTrigger id="reinforcement" label="Learning Curve" icon={<TrendingUp className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} />
+                <RLHFSubTabTrigger id="datasets" label="Datasets" icon={<DatabaseIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} />
+                <RLHFSubTabTrigger id="jobs" label="Fine-Tuning" icon={<LightbulbIcon className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} />
+                <RLHFSubTabTrigger id="registry" label="Model Registry" icon={<Rocket className="h-3.5 w-3.5" />} activeId={rlhfSubTab} onClick={setRlhfSubTab} />
               </div>
 
               <div className="mt-4">

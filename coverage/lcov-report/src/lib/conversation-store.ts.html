@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/utils/microsoftEmailParser.ts</title>
+    <title>Code coverage report for src/lib/conversation-store.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/utils</a> microsoftEmailParser.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/lib</a> conversation-store.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.43% </span>
+                <span class="strong">30.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>130/147</span>
+                <span class='fraction'>43/142</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.91% </span>
+                <span class="strong">28.69% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>93/107</span>
+                <span class='fraction'>33/115</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.36% </span>
+                <span class="strong">21.27% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>19/22</span>
+                <span class='fraction'>10/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.18% </span>
+                <span class="strong">30.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>112/127</span>
+                <span class='fraction'>38/126</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -500,12 +500,7 @@
 <a name='L435'></a><a href='#L435'>435</a>
 <a name='L436'></a><a href='#L436'>436</a>
 <a name='L437'></a><a href='#L437'>437</a>
-<a name='L438'></a><a href='#L438'>438</a>
-<a name='L439'></a><a href='#L439'>439</a>
-<a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L438'></a><a href='#L438'>438</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -546,399 +541,260 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">84x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">73x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -947,448 +803,577 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Microsoft Email Parser Extensions
- * Specialized parsing for Microsoft Teams and Outlook emails
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">"use client";
+&nbsp;
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+&nbsp;
+export interface Message {
+  id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
+  timestamp: Date;
+  citations?: Citation[];
+  reasoningText?: string;
+  tools?: ToolInvocation[];
+}
+&nbsp;
+export interface Citation {
+  title: string;
+  url: string;
+  snippet?: string;
+}
+&nbsp;
+export interface ToolInvocation {
+  name: string;
+  args: Record&lt;string, any&gt;;
+  result?: any;
+}
+&nbsp;
+export interface Conversation {
+  id: string;
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
+  isPinned?: boolean;
+  tags?: string[];
+  model?: string;
+}
+&nbsp;
+/**
+ * Generate a concise, meaningful title from user's first message.
+ * Extracts the essence of the query for sidebar display.
  */
+export function generateTitleFromMessage(content: string): string {
+  if (!content || typeof content !== "string") return "New Conversation";
 &nbsp;
-import { EmailData, ParsedEmailContext } from "./emailParser";
+  // Clean up the content
+  let title = content
+    .trim()
+    .replace(/\s+/g, " "); // Normalize whitespace
 &nbsp;
-export interface MicrosoftEmailData extends EmailData {
-  // Microsoft-specific fields
-  conversationId?: string; // Teams conversation ID
-  conversationTopic?: string; // Teams channel/topic
-  importance?: "low" | "normal" | "high";
-  sensitivity?: "normal" | "personal" | "private" | "confidential";
-  categories?: string[]; // Outlook categories
-  flag?: {
-    flagStatus: "notFlagged" | "complete" | "flagged";
-    dueDateTime?: string;
-  };
+  // Remove common prefixes - apply repeatedly to handle compound phrases like "Hey can you"
+  // Note: Keep meaningful action words like "explain", "help me", "show me", "tell me" as they indicate user intent
+  const prefixPattern = /^(hey|hi|hello|please|can you|could you|i need|i want|i'd like to|so|um|uh)\s+/i;
+  let prevTitle = "";
+  while (prevTitle !== title &amp;&amp; prefixPattern.test(title)) {
+    prevTitle = title;
+    title = title.replace(prefixPattern, "");
+  }
 &nbsp;
-  // Teams-specific
-  isTeamsMessage?: boolean;
-  teamsChannelId?: string;
-  teamsChannelName?: string;
-  teamId?: string;
-  teamName?: string;
-  mentions?: Array&lt;{
-    id: string;
-    displayName: string;
-    userPrincipalName?: string;
-  }&gt;;
-&nbsp;
-  // Meeting-related
-  isMeetingRequest?: boolean;
-  meetingDetails?: {
-    subject: string;
-    startTime: string;
-    endTime: string;
-    location?: string;
-    isOnlineMeeting?: boolean;
-    joinUrl?: string;
-    organizer?: string;
-    attendees?: string[];
-  };
-&nbsp;
-  // Outlook-specific
-  internetMessageId?: string; // X-Message-ID header
-  conversationIndex?: string; // Thread ordering
-  outlookCategories?: string[];
+  // Remove trailing punctuation
+  title = title.replace(/[?!.]+$/, "");
+  
+  // If empty after cleaning, return default
+  if (!title) return "New Conversation";
+  
+  // Capitalize first letter
+  title = title.charAt(0).toUpperCase() + title.slice(1);
+  
+  // Truncate intelligently - try to break at word boundary
+  const maxLength = 45;
+  if (title.length &gt; maxLength) {
+    // Find the last space before maxLength
+    const truncateAt = title.lastIndexOf(" ", maxLength);
+    if (truncateAt &gt; 20) {
+      title = title.substring(0, truncateAt);
+    } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >      title = title.substring(0, maxLength);</span>
+    }
+  }
+  
+  return title;
 }
 &nbsp;
-export interface MicrosoftEmailMetadata {
-  // Standard email metadata
-  from: string;
-  to: string[];
-  cc?: string[];
-  subject: string;
-  date: string;
-  hasAttachments: boolean;
-  attachmentCount: number;
-  isReply: boolean;
-  threadParticipants: string[];
-&nbsp;
-  // Microsoft-specific metadata
-  isMicrosoft: true;
-  importance?: "low" | "normal" | "high";
-  sensitivity?: string;
-  categories?: string[];
-&nbsp;
-  // Teams-specific
-  isTeamsMessage: boolean;
-  teamsChannel?: string;
-  teamName?: string;
-  mentionedUsers?: string[];
-&nbsp;
-  // Meeting-specific
-  isMeeting: boolean;
-  meetingTime?: {
-    start: string;
-    end: string;
-  };
-  meetingJoinUrl?: string;
-&nbsp;
-  // Enhanced context
-  hasActionableContent: boolean; // Flags, meetings, mentions
-  urgencyScore: number; // 0-10 based on importance, flags, keywords
-  contentLength: number;
-  extractedAt: string;
+/**
+ * Check if a title needs auto-generation (is a default/placeholder title)
+ */
+export function isDefaultTitle(title: string): boolean {
+  const defaultTitles = [
+    "new conversation",
+    "the betabase",
+    "untitled",
+    "untitled conversation",
+    ""
+  ];
+  return defaultTitles.includes(title.toLowerCase().trim());
 }
 &nbsp;
-export class MicrosoftEmailParser {
-  /**
-   * Parse Microsoft Teams/Outlook email with enhanced metadata
-   */
-  static parseMicrosoftEmail(email: MicrosoftEmailData): ParsedEmailContext &amp; {
-    metadata: MicrosoftEmailMetadata;
-  } {
-    const content = this.buildMicrosoftSearchableContent(email);
-    const threadParticipants = this.extractThreadParticipants(email);
-    const mentionedUsers = this.extractMentions(email);
+/**
+ * Extract message content from AI SDK v6 format (parts array)
+ * AI SDK v6 uses: parts[].text for text content
+ *
+ * NOTE: v4 format (content string) is no longer supported as of AI SDK 6.0
+ * Use migrateMessageToV6() to convert old messages.
+ */
+export function getMessageContent(m: any): string | undefined {
+  if (!m) return undefined;
 &nbsp;
-    return {
-      messageId: email.messageId,
-      threadId: email.threadId || email.conversationId,
-      content,
-      metadata: {
-        // Standard metadata
-        from: email.from,
-        to: email.to,
-        cc: email.cc,
-        subject: email.subject,
-        date: this.normalizeDate(email.date),
-        hasAttachments: (email.attachments?.length || 0) &gt; 0,
-        attachmentCount: email.attachments?.length || 0,
-        isReply: !!email.inReplyTo || !!email.references?.length,
-        threadParticipants,
-        contentLength: content.length,
-        extractedAt: new Date().toISOString(),
+  // AI SDK v6: parts array with text
+  // Join ALL text parts to support multi-part messages
+  if (m.parts &amp;&amp; Array.isArray(m.parts) &amp;&amp; m.parts.length &gt; 0) {
+    const allText = m.parts
+      .filter((p: any) =&gt; p.type === "text" || p.text)
+      .map((p: any) =&gt; p.text || <span class="branch-1 cbranch-no" title="branch not covered" >"")</span>
+      .filter(Boolean)
+      .join("");
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (allText) return allText;
+  }
 &nbsp;
-        // Microsoft-specific
-        isMicrosoft: true,
-        importance: email.importance,
-        sensitivity: email.sensitivity,
-        categories: email.categories || email.outlookCategories,
+  // Legacy fallback: convert v4 content to parts on-the-fly
+  // This allows reading old messages but new messages should use parts
+  if (m.content) {
+    // String content (most common)
+    if (typeof m.content === "string") {
+      return m.content;
+    }
+    // Array content - join strings together
+    if (Array.isArray(m.content)) {
+      return m.content.filter((c: any) =&gt; typeof c === "string").join("");
+    }
+    // Object content with text property
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (typeof m.content === "object" &amp;&amp; m.content.text) {
+      return m.content.text;
+    }
+  }
 &nbsp;
-        // Teams-specific
-        isTeamsMessage: email.isTeamsMessage || false,
-        teamsChannel: email.teamsChannelName,
-        teamName: email.teamName,
-        mentionedUsers,
+  return undefined;
+}
 &nbsp;
-        // Meeting-specific
-        isMeeting: email.isMeetingRequest || false,
-        meetingTime: email.meetingDetails
-          ? {
-              start: email.meetingDetails.startTime,
-              end: email.meetingDetails.endTime,
-            }
-          : undefined,
-        meetingJoinUrl: email.meetingDetails?.joinUrl,
+/**
+ * Convert a v4 message (content string) to v6 format (parts array)
+ */
+export function <span class="fstat-no" title="function not covered" >migrateMessageToV6(m</span>: any): any {
+<span class="cstat-no" title="statement not covered" >  if (!m) <span class="cstat-no" title="statement not covered" >return m;</span></span>
 &nbsp;
-        // Enhanced context
-        hasActionableContent: this.detectActionableContent(email),
-        urgencyScore: this.calculateUrgencyScore(email),
-      } as MicrosoftEmailMetadata,
+  // Already v6 format
+<span class="cstat-no" title="statement not covered" >  if (m.parts &amp;&amp; Array.isArray(m.parts)) {</span>
+<span class="cstat-no" title="statement not covered" >    return m;</span>
+  }
+&nbsp;
+  // Convert v4 content to v6 parts
+<span class="cstat-no" title="statement not covered" >  if (m.content &amp;&amp; typeof m.content === "string") {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      ...m,
+      parts: [{ type: "text", text: m.content }],
+      content: undefined, // Remove legacy field
     };
   }
 &nbsp;
-  /**
-   * Build searchable content optimized for Teams/Outlook emails
-   */
-  private static buildMicrosoftSearchableContent(email: MicrosoftEmailData): string {
-    const parts: string[] = [];
-&nbsp;
-    // Subject with importance indicator
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (email.subject) {
-      const importancePrefix = email.importance === "high" ? "[IMPORTANT] " : "";
-      parts.push(`Subject: ${importancePrefix}${email.subject}`);
-    }
-&nbsp;
-    // Teams context
-    if (email.isTeamsMessage) {
-      if (email.teamName &amp;&amp; email.teamsChannelName) {
-        parts.push(`Teams: ${email.teamName} &gt; ${email.teamsChannelName}`);
-      }
-    }
-&nbsp;
-    // Meeting context
-    if (email.isMeetingRequest &amp;&amp; email.meetingDetails) {
-      parts.push(`Meeting Request`);
-      parts.push(`Time: ${email.meetingDetails.startTime}`);
-      if (email.meetingDetails.location) {
-        parts.push(`Location: ${email.meetingDetails.location}`);
-      }
-      if (email.meetingDetails.isOnlineMeeting) {
-        parts.push(`Online Meeting: ${email.meetingDetails.joinUrl}`);
-      }
-    }
-&nbsp;
-    // From/To with better Teams formatting
-    parts.push(`From: ${this.formatEmailAddress(email.from)}`);
-    parts.push(`To: ${email.to.map(this.formatEmailAddress).join(", ")}`);
-&nbsp;
-    if (email.cc &amp;&amp; email.cc.length &gt; 0) {
-      parts.push(`CC: ${email.cc.map(this.formatEmailAddress).join(", ")}`);
-    }
-&nbsp;
-    // Categories/tags
-    if (email.categories &amp;&amp; email.categories.length &gt; 0) {
-      parts.push(`Categories: ${email.categories.join(", ")}`);
-    }
-&nbsp;
-    // Mentions
-    if (email.mentions &amp;&amp; email.mentions.length &gt; 0) {
-      const mentionNames = email.mentions.map((m) =&gt; m.displayName).join(", ");
-      parts.push(`Mentioned: ${mentionNames}`);
-    }
-&nbsp;
-    // Body content (cleaned)
-    const bodyText = this.extractMicrosoftBodyText(email);
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (bodyText) {
-      parts.push(`\nContent:\n${bodyText}`);
-    }
-&nbsp;
-    // Attachments
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (email.attachments &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >email.attachments.length &gt; 0) {</span>
-      const attachmentNames = <span class="cstat-no" title="statement not covered" >email.attachments.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.filename)</span>.join(", ");</span>
-<span class="cstat-no" title="statement not covered" >      parts.push(`\nAttachments: ${attachmentNames}`);</span>
-    }
-&nbsp;
-    return parts.join("\n");
-  }
-&nbsp;
-  /**
-   * Extract clean text from Microsoft email body
-   * Handles Outlook's specific HTML patterns
-   */
-  private static extractMicrosoftBodyText(email: MicrosoftEmailData): string {
-    if (email.htmlBody) {
-      return this.cleanMicrosoftHtml(email.htmlBody);
-    }
-&nbsp;
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (email.body) {
-      return this.cleanText(email.body);
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return "";</span>
-  }
-&nbsp;
-  /**
-   * Clean Microsoft-specific HTML patterns
-   */
-  private static cleanMicrosoftHtml(html: string): string {
-    let text = html;
-&nbsp;
-    // Remove Outlook-specific markup
-    text = text.replace(/&lt;o:p&gt;.*?&lt;\/o:p&gt;/gi, "");
-    text = text.replace(/&lt;v:.*?&gt;.*?&lt;\/v:.*?&gt;/gi, "");
-    text = text.replace(/&lt;!--\[if.*?\]&gt;.*?&lt;!\[endif\]--&gt;/gi, "");
-&nbsp;
-    // Remove Teams-specific elements
-    text = text.replace(/&lt;div[^&gt;]*class="[^"]*teams-message-wrapper[^"]*"[^&gt;]*&gt;.*?&lt;\/div&gt;/gi, "");
-&nbsp;
-    // Remove Microsoft tracking pixels
-    text = text.replace(/&lt;img[^&gt;]*src="[^"]*safelink[^"]*"[^&gt;]*&gt;/gi, "");
-&nbsp;
-    // Extract actual URLs from Outlook Safe Links in &lt;a&gt; tags and replace the entire tag with the URL
-    // This needs to happen BEFORE stripHtml so the URL is preserved in the text
-    text = text.replace(
-      /&lt;a[^&gt;]*href="(https:\/\/[^\/]*\.safelinks\.protection\.outlook\.com\/[^"]*)"[^&gt;]*&gt;([^&lt;]*)&lt;\/a&gt;/gi,
-      (match, safeUrl, linkText) =&gt; {
-        // Try to extract original URL from Safe Link
-        const urlMatch = safeUrl.match(/url=([^&amp;"'\s]+)/);
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (urlMatch) {
-          try {
-            const decodedUrl = decodeURIComponent(urlMatch[1]);
-            // Replace the entire &lt;a&gt; tag with: "linkText (decodedUrl)"
-            return `${linkText} (${decodedUrl})`;
-          } catch {
-<span class="cstat-no" title="statement not covered" >            return match;</span>
-          }
-        }
-<span class="cstat-no" title="statement not covered" >        return match;</span>
-      }
-    );
-&nbsp;
-    // Also handle Safe Links in plain text (not in href attributes)
-    text = text.replace(
-      /https:\/\/[\w-]+\.safelinks\.protection\.outlook\.com\/[^"'\s&lt;&gt;]+/g,
-<span class="fstat-no" title="function not covered" >      (m</span>atch) =&gt; {
-        // Try to extract original URL from Safe Link
-        const urlMatch = <span class="cstat-no" title="statement not covered" >match.match(/url=([^&amp;"'\s]+)/);</span>
-<span class="cstat-no" title="statement not covered" >        if (urlMatch) {</span>
-<span class="cstat-no" title="statement not covered" >          try {</span>
-<span class="cstat-no" title="statement not covered" >            return decodeURIComponent(urlMatch[1]);</span>
-          } catch {
-<span class="cstat-no" title="statement not covered" >            return match;</span>
-          }
-        }
-<span class="cstat-no" title="statement not covered" >        return match;</span>
-      }
-    );
-&nbsp;
-    // Standard HTML cleaning
-    text = this.stripHtml(text);
-&nbsp;
-    // Remove Outlook signature separators
-    text = text.replace(/_{10,}/g, ""); // Long underscores
-&nbsp;
-    return this.cleanText(text);
-  }
-&nbsp;
-  /**
-   * Extract @mentions from Teams messages
-   */
-  private static extractMentions(email: MicrosoftEmailData): string[] {
-    if (email.mentions &amp;&amp; email.mentions.length &gt; 0) {
-      return email.mentions.map((m) =&gt; m.displayName);
-    }
-&nbsp;
-    // Try to extract from body if not provided
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (email.body || email.htmlBody) {
-      const content = email.body || email.htmlBody || <span class="branch-2 cbranch-no" title="branch not covered" >"";</span>
-      const mentionPattern = /@\[([^\]]+)\]/g;
-      const mentions: string[] = [];
-      let match;
-&nbsp;
-      while ((match = mentionPattern.exec(content)) !== null) {
-        mentions.push(match[1]);
-      }
-&nbsp;
-      return mentions;
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-&nbsp;
-  /**
-   * Detect if email has actionable content
-   */
-  private static detectActionableContent(email: MicrosoftEmailData): boolean {
-    // High importance
-    if (email.importance === "high") return true;
-&nbsp;
-    // Flagged
-    if (email.flag?.flagStatus === "flagged") return true;
-&nbsp;
-    // Meeting request
-    if (email.isMeetingRequest) return true;
-&nbsp;
-    // Has mentions (someone needs your attention)
-    if (email.mentions &amp;&amp; email.mentions.length &gt; 0) return true;
-&nbsp;
-    // Contains action keywords in subject
-    const actionKeywords = [
-      "urgent",
-      "action required",
-      "please review",
-      "approval needed",
-      "deadline",
-      "asap",
-      "important",
-      "critical",
-    ];
-&nbsp;
-    const subject = email.subject.toLowerCase();
-    return actionKeywords.some((keyword) =&gt; subject.includes(keyword));
-  }
-&nbsp;
-  /**
-   * Calculate urgency score (0-10)
-   */
-  private static calculateUrgencyScore(email: MicrosoftEmailData): number {
-    let score = 5; // Base score
-&nbsp;
-    // Importance
-    if (email.importance === "high") score += 2;
-    if (email.importance === "low") score -= 1;
-&nbsp;
-    // Flagged
-    if (email.flag?.flagStatus === "flagged") score += 2;
-&nbsp;
-    // Meeting request (especially urgent if soon)
-    if (email.isMeetingRequest) {
-      score += 1;
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (email.meetingDetails) {
-        const meetingTime = new Date(email.meetingDetails.startTime);
-        const now = new Date();
-        const hoursUntil = (meetingTime.getTime() - now.getTime()) / (1000 * 60 * 60);
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (hoursUntil &lt; 24) score += 2;
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (hoursUntil &lt; 2) score += 2;
-      }
-    }
-&nbsp;
-    // Mentioned
-    if (email.mentions &amp;&amp; email.mentions.length &gt; 0) score += 1;
-&nbsp;
-    // Keywords in subject
-    const urgentKeywords = ["urgent", "asap", "critical", "emergency"];
-    const subject = email.subject.toLowerCase();
-    if (urgentKeywords.some((kw) =&gt; subject.includes(kw))) score += 2;
-&nbsp;
-    // Sensitivity
-    if (email.sensitivity === "confidential") score += 1;
-&nbsp;
-    return Math.min(10, Math.max(0, score));
-  }
-&nbsp;
-  /**
-   * Format email address for display
-   */
-  private static formatEmailAddress(email: string): string {
-    // Extract name from "Name &lt;email@domain.com&gt;" format
-    const match = email.match(/^(.+?)\s*&lt;(.+?)&gt;$/);
-    if (match) {
-      return match[1].trim();
-    }
-    return email;
-  }
-&nbsp;
-  /**
-   * Standard helper methods
-   */
-  private static stripHtml(html: string): string {
-    let text = html.replace(/&lt;script\b[^&lt;]*(?:(?!&lt;\/script&gt;)&lt;[^&lt;]*)*&lt;\/script&gt;/gi, "");
-    text = text.replace(/&lt;style\b[^&lt;]*(?:(?!&lt;\/style&gt;)&lt;[^&lt;]*)*&lt;\/style&gt;/gi, "");
-    text = text.replace(/&lt;br\s*\/?&gt;/gi, "\n");
-    text = text.replace(/&lt;\/p&gt;/gi, "\n\n");
-    text = text.replace(/&lt;\/div&gt;/gi, "\n");
-    text = text.replace(/&lt;\/li&gt;/gi, "\n");
-    text = text.replace(/&lt;\/tr&gt;/gi, "\n");
-    text = text.replace(/&lt;[^&gt;]+&gt;/g, "");
-    return text;
-  }
-&nbsp;
-  private static cleanText(text: string): string {
-    text = text.replace(/\r\n/g, "\n");
-    text = text.replace(/\r/g, "\n");
-    text = text.replace(/[ \t]+/g, " ");
-    text = text.replace(/\n{3,}/g, "\n\n");
-    return text.trim();
-  }
-&nbsp;
-  private static extractThreadParticipants(email: MicrosoftEmailData): string[] {
-    const participants = new Set&lt;string&gt;();
-    participants.add(email.from);
-    email.to.forEach((addr) =&gt; participants.add(addr));
-    email.cc?.forEach((addr) =&gt; participants.add(addr));
-    email.bcc?.forEach(<span class="fstat-no" title="function not covered" >(a</span>ddr) =&gt; <span class="cstat-no" title="statement not covered" >participants.add(addr))</span>;
-    return Array.from(participants);
-  }
-&nbsp;
-  private static normalizeDate(date: Date | string): string {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (date instanceof Date) {
-      return date.toISOString();
-    }
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return new Date(date).toISOString();</span>
-    } catch {
-<span class="cstat-no" title="statement not covered" >      return new Date().toISOString();</span>
-    }
-  }
+<span class="cstat-no" title="statement not covered" >  return m;</span>
 }
+&nbsp;
+/**
+ * Migrate all messages in a conversation to v6 format
+ */
+export function <span class="fstat-no" title="function not covered" >migrateConversationToV6(c</span>onv: Conversation): Conversation {
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    ...conv,
+    messages: conv.messages.map(migrateMessageToV6),
+  };
+}
+&nbsp;
+interface ConversationStore {
+  conversations: Conversation[];
+  activeConversationId: string | null;
+  _hasHydrated: boolean; // True after store has loaded from localStorage
+&nbsp;
+  // Actions
+  createConversation: (title?: string) =&gt; Conversation;
+  deleteConversation: (id: string) =&gt; void;
+  updateConversation: (id: string, updates: Partial&lt;Conversation&gt;) =&gt; void;
+  setActiveConversation: (id: string) =&gt; void;
+  addMessage: (conversationId: string, message: Message) =&gt; void;
+  pinConversation: (id: string, pinned: boolean) =&gt; void;
+  searchConversations: (query: string) =&gt; Conversation[];
+  getConversation: (id: string) =&gt; Conversation | undefined;
+  clearAllConversations: () =&gt; void;
+  removeDuplicateConversations: () =&gt; void;
+  regenerateDefaultTitles: () =&gt; number; // Returns count of updated conversations
+  setHasHydrated: (hydrated: boolean) =&gt; void;
+}
+&nbsp;
+export const useConversationStore = create&lt;ConversationStore&gt;()(
+  persist(
+    (set, get) =&gt; ({
+      conversations: [],
+      activeConversationId: null,
+      _hasHydrated: false,
+&nbsp;
+      setHasHydrated: <span class="fstat-no" title="function not covered" >(h</span>ydrated: boolean) =&gt; <span class="cstat-no" title="statement not covered" >set({ _hasHydrated: hydrated }),</span>
+&nbsp;
+      createConversation: <span class="fstat-no" title="function not covered" >(t</span>itle = <span class="branch-0 cbranch-no" title="branch not covered" >"New Conversation") =&gt; {</span>
+        const newConversation: Conversation = <span class="cstat-no" title="statement not covered" >{</span>
+          id: `conv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title,
+          messages: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isPinned: false,
+          tags: [],
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          conversations: [newConversation, ...state.conversations],
+          activeConversationId: newConversation.id,
+        }));
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return newConversation;</span>
+      },
+&nbsp;
+      deleteConversation: <span class="fstat-no" title="function not covered" >(i</span>d) =&gt; {
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          conversations: state.conversations.filter(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.id !== id)</span>,
+          activeConversationId:
+            state.activeConversationId === id ? null : state.activeConversationId,
+        }));
+      },
+&nbsp;
+      updateConversation: <span class="fstat-no" title="function not covered" >(i</span>d, updates) =&gt; {
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          conversations: state.conversations.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (c.id !== id) <span class="cstat-no" title="statement not covered" >return c;</span></span>
+&nbsp;
+            const updatedConversation = <span class="cstat-no" title="statement not covered" >{ ...c, ...updates, updatedAt: new Date() };</span>
+&nbsp;
+            // Auto-generate title from first user message if still default/empty
+            const shouldGenerateTitle = <span class="cstat-no" title="statement not covered" >isDefaultTitle(c.title);</span>
+            const hasMessages = <span class="cstat-no" title="statement not covered" >updates.messages &amp;&amp; updates.messages.length &gt; 0;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (shouldGenerateTitle &amp;&amp; hasMessages) {</span>
+              const firstUserMessage = <span class="cstat-no" title="statement not covered" >updates.messages.find(</span>
+<span class="fstat-no" title="function not covered" >                (m</span>: any) =&gt; <span class="cstat-no" title="statement not covered" >m.role === "user" &amp;&amp; getMessageContent(m)</span>
+              );
+&nbsp;
+              const messageContent = <span class="cstat-no" title="statement not covered" >firstUserMessage ? getMessageContent(firstUserMessage) : undefined;</span>
+<span class="cstat-no" title="statement not covered" >              if (messageContent) {</span>
+                const newTitle = <span class="cstat-no" title="statement not covered" >generateTitleFromMessage(messageContent);</span>
+<span class="cstat-no" title="statement not covered" >                updatedConversation.title = newTitle;</span>
+              }
+            }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return updatedConversation;</span>
+          }),
+        }));
+      },
+&nbsp;
+      setActiveConversation: <span class="fstat-no" title="function not covered" >(i</span>d) =&gt; {
+<span class="cstat-no" title="statement not covered" >        set({ activeConversationId: id });</span>
+      },
+&nbsp;
+      addMessage: <span class="fstat-no" title="function not covered" >(c</span>onversationId, message) =&gt; {
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          conversations: state.conversations.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (c.id === conversationId) {</span>
+              const updatedConversation = <span class="cstat-no" title="statement not covered" >{</span>
+                ...c,
+                messages: [...c.messages, message],
+                updatedAt: new Date(),
+              };
+&nbsp;
+              // Auto-generate title from first user message if still default
+              // Title is generated as soon as first user message arrives (works with AI SDK v4/v5)
+              const messageContent = <span class="cstat-no" title="statement not covered" >getMessageContent(message);</span>
+<span class="cstat-no" title="statement not covered" >              if (</span>
+                isDefaultTitle(c.title) &amp;&amp;
+                message.role === "user" &amp;&amp;
+                messageContent
+              ) {
+<span class="cstat-no" title="statement not covered" >                updatedConversation.title = generateTitleFromMessage(messageContent);</span>
+              }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >              return updatedConversation;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            return c;</span>
+          }),
+        }));
+      },
+&nbsp;
+      pinConversation: <span class="fstat-no" title="function not covered" >(i</span>d, pinned) =&gt; {
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          conversations: state.conversations.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt;
+<span class="cstat-no" title="statement not covered" >            c.id === id ? { ...c, isPinned: pinned } : c</span>
+          ),
+        }));
+      },
+&nbsp;
+      searchConversations: <span class="fstat-no" title="function not covered" >(q</span>uery) =&gt; {
+        const lowerQuery = <span class="cstat-no" title="statement not covered" >query.toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >        return get().conversations.filter(</span>
+<span class="fstat-no" title="function not covered" >          (c</span>) =&gt;
+<span class="cstat-no" title="statement not covered" >            c.title.toLowerCase().includes(lowerQuery) ||</span>
+            c.messages.some((m) =&gt; {
+              const content = getMessageContent(m);
+              return content?.toLowerCase().includes(lowerQuery);
+            }) ||
+            c.tags?.some(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.toLowerCase().includes(lowerQuery))</span>
+        );
+      },
+&nbsp;
+      getConversation: <span class="fstat-no" title="function not covered" >(i</span>d) =&gt; {
+<span class="cstat-no" title="statement not covered" >        return get().conversations.find(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.id === id)</span>;</span>
+      },
+&nbsp;
+      clearAllConversations: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        set({ conversations: [], activeConversationId: null });</span>
+      },
+&nbsp;
+      removeDuplicateConversations: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; {</span>
+          const seenTitles = <span class="cstat-no" title="statement not covered" >new Map&lt;string, Conversation&gt;();</span>
+          const uniqueConversations: Conversation[] = <span class="cstat-no" title="statement not covered" >[];</span>
+&nbsp;
+          // Keep the most recent conversation for each title
+<span class="cstat-no" title="statement not covered" >          for (const conv of state.conversations) {</span>
+            const existing = <span class="cstat-no" title="statement not covered" >seenTitles.get(conv.title);</span>
+<span class="cstat-no" title="statement not covered" >            if (!existing || conv.updatedAt &gt; existing.updatedAt) {</span>
+<span class="cstat-no" title="statement not covered" >              if (existing) {</span>
+                // Remove the older conversation from the array
+                const index = <span class="cstat-no" title="statement not covered" >uniqueConversations.indexOf(existing);</span>
+<span class="cstat-no" title="statement not covered" >                if (index &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                  uniqueConversations.splice(index, 1);</span>
+                }
+              }
+<span class="cstat-no" title="statement not covered" >              seenTitles.set(conv.title, conv);</span>
+<span class="cstat-no" title="statement not covered" >              uniqueConversations.push(conv);</span>
+            }
+          }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          return {</span>
+            conversations: uniqueConversations,
+            activeConversationId:
+              state.activeConversationId &amp;&amp;
+              uniqueConversations.some(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.id === state.activeConversationId)</span>
+                ? state.activeConversationId
+                : uniqueConversations[0]?.id || null,
+          };
+        });
+      },
+&nbsp;
+      regenerateDefaultTitles: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+        let updatedCount = <span class="cstat-no" title="statement not covered" >0;</span>
+<span class="cstat-no" title="statement not covered" >        set(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          conversations: state.conversations.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; {
+            // Only process conversations with default titles AND messages
+            // Works with AI SDK v4 (content) and v5 (parts[0].text) formats
+<span class="cstat-no" title="statement not covered" >            if (isDefaultTitle(c.title) &amp;&amp; c.messages.length &gt; 0) {</span>
+              const firstUserMessage = <span class="cstat-no" title="statement not covered" >c.messages.find(</span>
+<span class="fstat-no" title="function not covered" >                (m</span>: any) =&gt; <span class="cstat-no" title="statement not covered" >m.role === "user" &amp;&amp; getMessageContent(m)</span>
+              );
+              const messageContent = <span class="cstat-no" title="statement not covered" >firstUserMessage ? getMessageContent(firstUserMessage) : undefined;</span>
+<span class="cstat-no" title="statement not covered" >              if (messageContent) {</span>
+<span class="cstat-no" title="statement not covered" >                updatedCount++;</span>
+<span class="cstat-no" title="statement not covered" >                return {</span>
+                  ...c,
+                  title: generateTitleFromMessage(messageContent),
+                  updatedAt: new Date(),
+                };
+              }
+            }
+<span class="cstat-no" title="statement not covered" >            return c;</span>
+          }),
+        }));
+<span class="cstat-no" title="statement not covered" >        return updatedCount;</span>
+      },
+    }),
+    {
+      name: "siam-conversations",
+      version: 2, // Bumped for AI SDK v6 migration
+      onRehydrateStorage: () =&gt; (state) =&gt; {
+        // After hydration completes, mark as hydrated and regenerate any default titles
+        // This ensures titles are generated from message content after loading from localStorage
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (state) {
+<span class="cstat-no" title="statement not covered" >          state.setHasHydrated(true);</span>
+<span class="cstat-no" title="statement not covered" >          state.regenerateDefaultTitles();</span>
+        }
+      },
+      storage: {
+        getItem: (name) =&gt; {
+          const str = localStorage.getItem(name);
+          <span class="missing-if-branch" title="if path not taken" >I</span>if (!str) <span class="cstat-no" title="statement not covered" >return null;</span>
+&nbsp;
+          const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(str);</span>
+&nbsp;
+          // Convert date strings back to Date objects
+          // Guard against undefined/null dates that would create Invalid Date objects
+<span class="cstat-no" title="statement not covered" >          if (parsed.state?.conversations) {</span>
+<span class="cstat-no" title="statement not covered" >            parsed.state.conversations = parsed.state.conversations.map(<span class="fstat-no" title="function not covered" >(c</span>onv: any) =&gt; {</span>
+              const now = <span class="cstat-no" title="statement not covered" >new Date();</span>
+              const parseDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ateValue: any, fallback: Date): Date =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                if (!dateValue) <span class="cstat-no" title="statement not covered" >return fallback;</span></span>
+                const parsed = <span class="cstat-no" title="statement not covered" >new Date(dateValue);</span>
+<span class="cstat-no" title="statement not covered" >                return isNaN(parsed.getTime()) ? fallback : parsed;</span>
+              };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >              return {</span>
+                ...conv,
+                createdAt: parseDate(conv.createdAt, now),
+                updatedAt: parseDate(conv.updatedAt, parseDate(conv.createdAt, now)),
+                // Migrate messages from v4 (content) to v6 (parts) format
+                messages:
+                  conv.messages?.map(<span class="fstat-no" title="function not covered" >(m</span>sg: any) =&gt; {
+                    const migratedMsg = <span class="cstat-no" title="statement not covered" >{</span>
+                      ...msg,
+                      timestamp: parseDate(msg.timestamp, now),
+                    };
+                    // Convert v4 content string to v6 parts array
+<span class="cstat-no" title="statement not covered" >                    if (msg.content &amp;&amp; typeof msg.content === "string" &amp;&amp; !msg.parts) {</span>
+<span class="cstat-no" title="statement not covered" >                      migratedMsg.parts = [{ type: "text", text: msg.content }];</span>
+<span class="cstat-no" title="statement not covered" >                      delete migratedMsg.content;</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    return migratedMsg;</span>
+                  }) || [],
+              };
+            });
+          }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          return parsed;</span>
+        },
+        setItem: <span class="fstat-no" title="function not covered" >(n</span>ame, value) =&gt; {
+<span class="cstat-no" title="statement not covered" >          localStorage.setItem(name, JSON.stringify(value));</span>
+        },
+        removeItem: <span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; {
+<span class="cstat-no" title="statement not covered" >          localStorage.removeItem(name);</span>
+        },
+      },
+    }
+  )
+);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -1396,7 +1381,7 @@ export class MicrosoftEmailParser {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-22T20:55:23.763Z
+                at 2026-01-07T15:19:03.622Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

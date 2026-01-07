@@ -32,13 +32,14 @@ export const searchKnowledge = tool({
   }),
   execute: async ({ query, maxResults = 5 }) => {
     console.log(`🔧 [Tool: searchKnowledge] Query: "${query}"`);
-    
+
     const vectorService = getSupabaseVectorService();
+    // Search ALL relevant sources including jira (where AOMA info often lives)
     const results = await vectorService.searchVectors(query, {
       ...DEFAULT_APP_CONTEXT,
-      matchThreshold: 0.50,
+      matchThreshold: 0.40, // Lower threshold to catch more relevant results
       matchCount: maxResults,
-      sourceTypes: ['knowledge', 'firecrawl', 'confluence'],
+      sourceTypes: ['knowledge', 'firecrawl', 'confluence', 'jira'],
     });
 
     if (!results || results.length === 0) {
@@ -374,6 +375,42 @@ IMPORTANT: Only Sony Music has divisions and applications below it. SMEJ and Son
 });
 
 // ============================================
+// Tool 8: Asset Ingestion Workflow
+// ============================================
+export const getAssetIngestionWorkflow = tool({
+  description: `Returns the AOMA asset ingestion workflow diagram.
+  Use this when the user asks about:
+  - Asset ingestion workflow
+  - How assets are ingested
+  - The flow of data into AOMA
+  - "show me a diagram of the AOMA asset ingestion workflow"
+
+  IMPORTANT: After calling this tool, you MUST:
+  1. Render the mermaidDiagram field as a Mermaid code block
+  2. Explain the workflow using the explanation field`,
+  parameters: z.object({}),
+  execute: async () => {
+    console.log(`🔧 [Tool: getAssetIngestionWorkflow] Returning workflow diagram`);
+    return {
+      title: "AOMA Asset Ingestion Workflow",
+      mermaidDiagram: `graph TD
+    User[User] -->|Uploads DDP| UploadZone[Upload Zone]
+    UploadZone -->|Trigger| IngestionService[Ingestion Service]
+    IngestionService -->|Validate| Validation{Valid?}
+    Validation -->|No| Reject[Reject & Notify]
+    Validation -->|Yes| Parse[Parse Metadata]
+    Parse -->|Extract| CDText[CD-TEXT]
+    Parse -->|Extract| ISRC[ISRC Codes]
+    CDText --> DB[(AOMA Database)]
+    ISRC --> DB
+    DB -->|Index| VectorDB[(Vector Store)]
+    VectorDB -->|Ready| Search[Searchable]`,
+      explanation: "The ingestion process starts with a user upload. The system validates the DDP file, parses metadata (CD-TEXT, ISRC), stores it in the relational database, and indexes it in the vector store for AI retrieval."
+    };
+  },
+});
+
+// ============================================
 // Export all tools as a single object
 // ============================================
 export const siamTools = {
@@ -384,6 +421,7 @@ export const siamTools = {
   parseCdtext,
   getTicketCount,
   getMultiTenantERD,
+  getAssetIngestionWorkflow,
 };
 
 // Type for tool results (useful for client-side)

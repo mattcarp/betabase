@@ -15,6 +15,8 @@ import {
   Loader2,
   Sparkles,
   Plus,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "../ui/badge";
@@ -45,6 +47,9 @@ interface ChatInputProps {
   onVoiceStart?: () => void;
   onVoiceEnd?: () => void;
   isRecording?: boolean;
+  allowSpeaker?: boolean;
+  isMuted?: boolean;
+  onMuteToggle?: () => void;
   suggestions?: string[];
   onSuggestionClick?: (suggestion: string) => void;
   onDDPDetected?: (ddp: ParsedDDP) => void;
@@ -64,6 +69,9 @@ export function ChatInput({
   onVoiceStart,
   onVoiceEnd,
   isRecording = false,
+  allowSpeaker = false,
+  isMuted = false,
+  onMuteToggle,
   suggestions = [],
   onSuggestionClick,
   onDDPDetected,
@@ -316,6 +324,30 @@ export function ChatInput({
                     </TooltipContent>
                   </Tooltip>
                 </>
+              )}
+
+              {/* Speaker Button */}
+              {allowSpeaker && !isLoading && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      className="h-9 w-9 hover:bg-muted/50 transition-colors mac-button mac-button-primary"
+                      onClick={onMuteToggle}
+                    >
+                      {isMuted ? (
+                        <VolumeX className="h-4 w-4" />
+                      ) : (
+                        <Volume2 className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {isMuted ? "Unmute text-to-speech" : "Mute text-to-speech"}
+                  </TooltipContent>
+                </Tooltip>
               )}
 
               {/* Voice Button */}

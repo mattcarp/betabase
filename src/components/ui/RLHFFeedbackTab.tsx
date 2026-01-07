@@ -352,9 +352,9 @@ export function RLHFFeedbackTab() {
       // Transform to FeedbackItem format
       const items: FeedbackItem[] = (data || []).map((row) => ({
         id: row.id,
-        sessionId: row.conversation_id,
-        query: row.user_query || "N/A",
-        response: row.ai_response || "N/A",
+        sessionId: row.session_id || row.conversation_id, // session_id is in schema
+        query: row.query || row.user_query || "N/A", // query is in schema
+        response: row.response || row.ai_response || "N/A",
         retrievedDocs: row.documents_marked || [],
         timestamp: row.created_at,
         feedbackSubmitted: row.rating !== null && row.rating >= 3,

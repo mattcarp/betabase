@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/services/emailContextService.ts</title>
+    <title>Code coverage report for src/services/skillLoader.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> emailContextService.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> skillLoader.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.46% </span>
+                <span class="strong">37.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/67</span>
+                <span class='fraction'>26/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.56% </span>
+                <span class="strong">45.16% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/39</span>
+                <span class='fraction'>14/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/18</span>
+                <span class='fraction'>3/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.06% </span>
+                <span class="strong">35.93% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/62</span>
+                <span class='fraction'>23/64</span>
             </div>
         
             
@@ -334,7 +334,94 @@
 <a name='L269'></a><a href='#L269'>269</a>
 <a name='L270'></a><a href='#L270'>270</a>
 <a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,10 +450,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -374,19 +458,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -398,36 +477,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -439,7 +503,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -449,7 +512,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -465,31 +527,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -500,92 +551,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -598,284 +584,526 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">49x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">42x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">42x</span>
+<span class="cline-any cline-yes">327x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">42x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">42x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">42x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Email Context Service
- * Coordinates email parsing, vectorization, and storage
+ * Skill Loader Service
+ * 
+ * Dynamically loads instruction "skills" based on query intent.
+ * This prevents bloating the system prompt with instructions that
+ * aren't relevant to the current query.
+ * 
+ * Part of Dynamic Prompt Injection - Phase 2
+ * 
+ * Token Savings:
+ * - Base personality: ~200 tokens (always loaded)
+ * - Each skill: ~300-800 tokens (loaded only when needed)
+ * - Total system prompt: ~500-1500 tokens vs ~4000-5000
  */
 &nbsp;
-import { EmailParser, EmailData, ParsedEmailContext } from "../utils/emailParser";
-import { getSupabaseVectorService } from "./supabaseVectorService";
+import { readFileSync } from 'fs';
+import { join } from 'path';
 &nbsp;
-export interface EmailIngestionResult {
-  success: boolean;
-  messageId: string;
-  vectorId?: string;
-  error?: string;
+// Type definitions (previously from intentClassifier, now local since intent classifier was removed)
+export type SourceType = 'knowledge' | 'jira' | 'git' | 'email' | 'firecrawl' | 'metrics';
+export type QueryType = 'technical' | 'status' | 'communication' | 'procedural' | 'troubleshooting' | 'general';
+&nbsp;
+// Skill definitions with their triggers and file paths
+export interface SkillDefinition {
+  id: string;
+  name: string;
+  fileName: string;
+  triggerPatterns: RegExp[];  // Regex patterns that trigger this skill
+  queryTypes: QueryType[];     // Query types that benefit from this skill
+  sourceTypes: SourceType[];   // Source types that suggest this skill
+  priority: number;            // Higher = loaded first (for ordering in prompt)
+  estimatedTokens: number;     // Approximate token count
 }
 &nbsp;
-export interface BatchIngestionResult {
-  total: number;
-  successful: number;
-  failed: number;
-  results: EmailIngestionResult[];
+export const SKILL_DEFINITIONS: SkillDefinition[] = [
+  {
+    id: 'base-personality',
+    name: 'Base Personality',
+    fileName: 'base-personality.md',
+    triggerPatterns: [], // Always loaded
+    queryTypes: [],      // Always loaded regardless of type
+    sourceTypes: [],     // Always loaded regardless of sources
+    priority: 100,       // Highest priority - always first
+    estimatedTokens: 200,
+  },
+  {
+    id: 'cdtext-parsing',
+    name: 'CDTEXT Parsing',
+    fileName: 'cdtext-parsing.md',
+    triggerPatterns: [
+      /cdtext/i,
+      /cd.?text/i,
+      /hex\s*dump/i,
+      /binary.*parse/i,
+      /0x8[0-9a-f]/i,  // CDTEXT pack type bytes
+      /\b[0-9a-f]{36,}\b/i, // Long hex strings (potential CDTEXT data)
+    ],
+    queryTypes: ['technical'],
+    sourceTypes: [],
+    priority: 50,
+    estimatedTokens: 800,
+  },
+  {
+    id: 'code-formatting',
+    name: 'Code Formatting',
+    fileName: 'code-formatting.md',
+    triggerPatterns: [
+      /show.*code/i,
+      /implementation/i,
+      /source\s*code/i,
+      /where.*code/i,
+      /which\s*file/i,
+      /code\s*snippet/i,
+      /generate.*code/i,
+      /write.*code/i,
+    ],
+    queryTypes: ['technical'],
+    sourceTypes: ['git'],
+    priority: 60,
+    estimatedTokens: 400,
+  },
+  {
+    id: 'troubleshooting',
+    name: 'Troubleshooting',
+    fileName: 'troubleshooting.md',
+    triggerPatterns: [
+      /error/i,
+      /failed/i,
+      /not\s*working/i,
+      /debug/i,
+      /issue/i,
+      /bug/i,
+      /broken/i,
+      /fix/i,
+      /500\s*(error)?/i,
+      /exception/i,
+      /problem/i,        // Added: common troubleshooting keyword
+      /timeout/i,        // Added: timeout issues
+      /timing\s*out/i,   // Added: timing out variations
+      /stuck/i,          // Added: stuck processes
+      /slow/i,           // Added: performance issues
+      /hanging/i,        // Added: hanging processes
+    ],
+    queryTypes: ['troubleshooting'],
+    sourceTypes: ['jira'],
+    priority: 70,
+    estimatedTokens: 500,
+  },
+  {
+    id: 'jira-analysis',
+    name: 'Jira Analysis',
+    fileName: 'jira-analysis.md',
+    triggerPatterns: [
+      /jira/i,
+      /ticket/i,
+      /sprint/i,
+      /backlog/i,
+      /epic/i,
+      /story/i,
+      /aoma-\d+/i,  // AOMA ticket pattern
+    ],
+    queryTypes: ['status'],
+    sourceTypes: ['jira'],
+    priority: 55,
+    estimatedTokens: 300,
+  },
+  {
+    id: 'demo-mode',
+    name: 'Demo Mode',
+    fileName: 'demo-mode.md',
+    triggerPatterns: [
+      /recording.*demo/i,
+      /demo\s*mode/i,
+      /presentation/i,
+      /infographic/i,
+      /format.*nicely/i,
+    ],
+    queryTypes: [],
+    sourceTypes: [],
+    priority: 90, // High priority - affects overall tone
+    estimatedTokens: 150,
+  },
+  {
+    id: 'diagram-generation',
+    name: 'Diagram Generation',
+    fileName: 'diagram-generation.md',
+    triggerPatterns: [
+      /workflow/i,
+      /architecture/i,
+      /process/i,
+      /how\s+(does|do|is)/i,      // "How does X work?"
+      /explain.*steps/i,
+      /walk.*through/i,
+      /pipeline/i,
+      /flow/i,
+      /sequence/i,
+      /state\s*machine/i,
+      /data\s*flow/i,
+      /integration/i,
+      /multi-?tenant/i,
+      /ingestion/i,
+      /orchestrat/i,
+    ],
+    queryTypes: ['technical', 'procedural'],
+    sourceTypes: ['knowledge'],
+    priority: 75, // Load for architecture/workflow questions
+    estimatedTokens: 400,
+  },
+];
+&nbsp;
+// Cache for loaded skill content
+const skillContentCache = new Map&lt;string, string&gt;();
+&nbsp;
+/**
+ * Get the skills directory path
+ */
+function <span class="fstat-no" title="function not covered" >getSkillsDir(): string {</span>
+  // In Next.js, we need to handle both dev and production paths
+  // Try src/skills first (dev), then .next/server/skills (prod)
+  const possiblePaths = <span class="cstat-no" title="statement not covered" >[</span>
+    join(process.cwd(), 'src', 'skills'),
+    join(process.cwd(), '.next', 'server', 'skills'),
+    join(__dirname, 'skills'),
+  ];
+  
+<span class="cstat-no" title="statement not covered" >  return possiblePaths[0]; // Default to src/skills</span>
 }
 &nbsp;
-export class EmailContextService {
-  private vectorService = getSupabaseVectorService();
+/**
+ * Load a skill's content from file
+ */
+function <span class="fstat-no" title="function not covered" >loadSkillContent(s</span>kill: SkillDefinition): string {
+  // Check cache first
+  const cached = <span class="cstat-no" title="statement not covered" >skillContentCache.get(skill.id);</span>
+<span class="cstat-no" title="statement not covered" >  if (cached) <span class="cstat-no" title="statement not covered" >return cached;</span></span>
+  
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    const <span class="cstat-no" title="statement not covered" >skillPath = join(getSkillsDir(), skill.fileName);</span>
+    const <span class="cstat-no" title="statement not covered" >content = readFileSync(skillPath, 'utf-8');</span>
+<span class="cstat-no" title="statement not covered" >    skillContentCache.set(skill.id, content);</span>
+<span class="cstat-no" title="statement not covered" >    return content;</span>
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    console.warn(`[SkillLoader] Failed to load skill ${skill.id}:`, error);</span>
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+  }
+}
 &nbsp;
-  /**
-   * Ingest a single email into the vector store
-   */
-  async <span class="fstat-no" title="function not covered" >ingestEmail(e</span>mail: EmailData): Promise&lt;EmailIngestionResult&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      // Validate email data
-<span class="cstat-no" title="statement not covered" >      if (!EmailParser.validateEmailData(email)) {</span>
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          success: false,
-          messageId: email.messageId || "unknown",
-          error: "Invalid email data format",
-        };
+/**
+ * Determine which skills are relevant for a query
+ */
+export function identifyRelevantSkills(
+  query: string,
+  options?: {
+    queryType?: QueryType;
+    sourceTypes?: SourceType[];
+    forceSkills?: string[];  // Skill IDs to always include
+  }
+): SkillDefinition[] {
+  const relevantSkills: SkillDefinition[] = [];
+  const seenIds = new Set&lt;string&gt;();
+  
+  // Always include base personality
+  const baseSkill = SKILL_DEFINITIONS.find(s =&gt; s.id === 'base-personality');
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (baseSkill) {
+    relevantSkills.push(baseSkill);
+    seenIds.add(baseSkill.id);
+  }
+  
+  // Add forced skills
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (options?.forceSkills) {
+<span class="cstat-no" title="statement not covered" >    for (const skillId of options.forceSkills) {</span>
+      const skill = <span class="cstat-no" title="statement not covered" >SKILL_DEFINITIONS.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === skillId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      if (skill &amp;&amp; !seenIds.has(skill.id)) {</span>
+<span class="cstat-no" title="statement not covered" >        relevantSkills.push(skill);</span>
+<span class="cstat-no" title="statement not covered" >        seenIds.add(skill.id);</span>
       }
-&nbsp;
-      // Parse email to extract context
-      const parsed = <span class="cstat-no" title="statement not covered" >EmailParser.parseEmail(email);</span>
-&nbsp;
-      // Generate embedding and store in vector database
-      const vectorId = <span class="cstat-no" title="statement not covered" >await this.storeEmailVector(parsed);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        success: true,
-        messageId: email.messageId,
-        vectorId,
-      };
-    } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error(`Failed to ingest email ${email.messageId}:`, error);</span>
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        success: false,
-        messageId: email.messageId,
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
     }
   }
-&nbsp;
-  /**
-   * Ingest multiple emails in batch
-   */
-  async <span class="fstat-no" title="function not covered" >ingestEmailBatch(e</span>mails: EmailData[]): Promise&lt;BatchIngestionResult&gt; {
-    const results: EmailIngestionResult[] = <span class="cstat-no" title="statement not covered" >[];</span>
-    let successful = <span class="cstat-no" title="statement not covered" >0;</span>
-    let failed = <span class="cstat-no" title="statement not covered" >0;</span>
-&nbsp;
-    // Process emails in parallel batches for efficiency
-    const batchSize = <span class="cstat-no" title="statement not covered" >parseInt(process.env.EMAIL_BATCH_SIZE || "10", 10);</span>
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0; i</span> &lt; emails.length; i += batchSize) {</span>
-      const batch = <span class="cstat-no" title="statement not covered" >emails.slice(i, i + batchSize);</span>
-&nbsp;
-      const batchResults = <span class="cstat-no" title="statement not covered" >await Promise.all(batch.map(<span class="fstat-no" title="function not covered" >(e</span>mail) =&gt; <span class="cstat-no" title="statement not covered" >this.ingestEmail(email))</span>);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      batchResults.forEach(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        results.push(result);</span>
-<span class="cstat-no" title="statement not covered" >        if (result.success) {</span>
-<span class="cstat-no" title="statement not covered" >          successful++;</span>
-        } else {
-<span class="cstat-no" title="statement not covered" >          failed++;</span>
+  
+  // Check each skill's triggers
+  for (const skill of SKILL_DEFINITIONS) {
+    if (seenIds.has(skill.id)) continue;
+    
+    let shouldInclude = false;
+    
+    // Check regex patterns against query
+    for (const pattern of skill.triggerPatterns) {
+      if (pattern.test(query)) {
+        shouldInclude = true;
+        break;
+      }
+    }
+    
+    // Check query type match
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!shouldInclude &amp;&amp; options?.queryType &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >skill.queryTypes.includes(options.queryType)) {</span>
+<span class="cstat-no" title="statement not covered" >      shouldInclude = true;</span>
+    }
+    
+    // Check source type match
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!shouldInclude &amp;&amp; options?.sourceTypes) {
+<span class="cstat-no" title="statement not covered" >      for (const sourceType of options.sourceTypes) {</span>
+<span class="cstat-no" title="statement not covered" >        if (skill.sourceTypes.includes(sourceType)) {</span>
+<span class="cstat-no" title="statement not covered" >          shouldInclude = true;</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
         }
-      });
-&nbsp;
-      // Log progress for large batches
-<span class="cstat-no" title="statement not covered" >      if (emails.length &gt; batchSize) {</span>
-<span class="cstat-no" title="statement not covered" >        console.log(</span>
-          `Email ingestion progress: ${results.length}/${emails.length} ` +
-            `(${successful} successful, ${failed} failed)`
-        );
       }
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      total: emails.length,
-      successful,
-      failed,
-      results,
-    };
-  }
-&nbsp;
-  /**
-   * Store parsed email context as a vector
-   */
-  private async <span class="fstat-no" title="function not covered" >storeEmailVector(p</span>arsed: ParsedEmailContext): Promise&lt;string&gt; {
-    const vectorId = <span class="cstat-no" title="statement not covered" >await this.vectorService.upsertVector(</span>
-      parsed.content,
-      "email",
-      parsed.messageId,
-      {
-        ...parsed.metadata,
-        threadId: parsed.threadId,
-      }
-    );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return vectorId;</span>
-  }
-&nbsp;
-  /**
-   * Search for emails by content similarity
-   */
-  async <span class="fstat-no" title="function not covered" >searchEmails(</span>
-    query: string,
-    options: {
-      matchThreshold?: number;
-      matchCount?: number;
-      dateFrom?: string;
-      dateTo?: string;
-      participants?: string[];
-    } = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
-  ) {
-    const results = <span class="cstat-no" title="statement not covered" >await this.vectorService.searchVectors(query, {</span>
-      matchThreshold: options.matchThreshold || 0.78,
-      matchCount: options.matchCount || 10,
-      sourceTypes: ["email"],
-    });
-&nbsp;
-    // Apply additional filters if provided
-    let filtered = <span class="cstat-no" title="statement not covered" >results;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (options.dateFrom) {</span>
-<span class="cstat-no" title="statement not covered" >      filtered = filtered.filter(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >new Date(r.metadata.date) &gt;= new Date(options.dateFrom!))</span>;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (options.dateTo) {</span>
-<span class="cstat-no" title="statement not covered" >      filtered = filtered.filter(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >new Date(r.metadata.date) &lt;= new Date(options.dateTo!))</span>;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (options.participants &amp;&amp; options.participants.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      filtered = filtered.filter(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; {</span>
-        const threadParticipants = <span class="cstat-no" title="statement not covered" >r.metadata.threadParticipants || [];</span>
-<span class="cstat-no" title="statement not covered" >        return options.participants!.some(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >threadParticipants.includes(p))</span>;</span>
-      });
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return filtered;</span>
-  }
-&nbsp;
-  /**
-   * Get email statistics from vector store
-   */
-  async <span class="fstat-no" title="function not covered" >getEmailStats(): Promise&lt;{</span>
-    totalEmails: number;
-    dateRange: { earliest: string; latest: string } | null;
-    topParticipants: Array&lt;{ email: string; count: number }&gt;;
-  }&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const stats = <span class="cstat-no" title="statement not covered" >await this.vectorService.getVectorStats();</span>
-&nbsp;
-      // Find email-specific stats
-      const emailStats = <span class="cstat-no" title="statement not covered" >Array.isArray(stats)</span>
-        ? stats.find(<span class="fstat-no" title="function not covered" >(s</span>: any) =&gt; <span class="cstat-no" title="statement not covered" >s.source_type === "email")</span>
-        : null;
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (!emailStats) {</span>
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          totalEmails: 0,
-          dateRange: null,
-          topParticipants: [],
-        };
-      }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        totalEmails: emailStats.total_count || 0,
-        dateRange: emailStats.date_range || null,
-        topParticipants: emailStats.top_participants || [],
-      };
-    } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error("Failed to get email stats:", error);</span>
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        totalEmails: 0,
-        dateRange: null,
-        topParticipants: [],
-      };
+    
+    if (shouldInclude) {
+      relevantSkills.push(skill);
+      seenIds.add(skill.id);
     }
   }
-&nbsp;
-  /**
-   * Delete email vectors by message ID
-   */
-  async <span class="fstat-no" title="function not covered" >deleteEmail(m</span>essageId: string): Promise&lt;boolean&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const count = <span class="cstat-no" title="statement not covered" >await this.vectorService.deleteVectorsBySource("email", messageId);</span>
-<span class="cstat-no" title="statement not covered" >      return count &gt; 0;</span>
-    } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error(`Failed to delete email ${messageId}:`, error);</span>
-<span class="cstat-no" title="statement not covered" >      return false;</span>
-    }
-  }
-&nbsp;
-  /**
-   * Delete all email vectors (use with caution!)
-   */
-  async <span class="fstat-no" title="function not covered" >deleteAllEmails(): Promise&lt;number&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return await this.vectorService.deleteVectorsBySource("email");</span>
-    } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error("Failed to delete all emails:", error);</span>
-<span class="cstat-no" title="statement not covered" >      throw error;</span>
-    }
-  }
-&nbsp;
-  /**
-   * Re-index an existing email (useful if parsing logic changes)
-   */
-  async <span class="fstat-no" title="function not covered" >reindexEmail(e</span>mail: EmailData): Promise&lt;EmailIngestionResult&gt; {
-    // Delete existing vector first
-<span class="cstat-no" title="statement not covered" >    await this.deleteEmail(email.messageId);</span>
-&nbsp;
-    // Re-ingest with updated parsing
-<span class="cstat-no" title="statement not covered" >    return await this.ingestEmail(email);</span>
-  }
-&nbsp;
-  /**
-   * Validate and repair email vectors
-   * Useful for maintenance and data quality checks
-   */
-  async <span class="fstat-no" title="function not covered" >validateEmailVectors(): Promise&lt;{</span>
-    total: number;
-    valid: number;
-    invalid: number;
-    issues: Array&lt;{ messageId: string; issue: string }&gt;;
-  }&gt; {
-    // This would query all email vectors and check for:
-    // - Missing required metadata fields
-    // - Malformed dates
-    // - Empty content
-    // - Invalid message IDs
-    // Implementation depends on your specific validation rules
-&nbsp;
-    // Placeholder implementation
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      total: 0,
-      valid: 0,
-      invalid: 0,
-      issues: [],
-    };
-  }
+  
+  // Sort by priority (descending)
+  relevantSkills.sort((a, b) =&gt; b.priority - a.priority);
+  
+  return relevantSkills;
 }
 &nbsp;
-// Singleton instance
-let instance: EmailContextService | null = null;
-&nbsp;
-export function getEmailContextService(): EmailContextService {
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (!instance) {
-    instance = new EmailContextService();
+/**
+ * Build a dynamic system prompt by loading only relevant skills
+ */
+export function <span class="fstat-no" title="function not covered" >buildDynamicPrompt(</span>
+  query: string,
+  options?: {
+    queryType?: QueryType;
+    sourceTypes?: SourceType[];
+    forceSkills?: string[];
+    aomaContext?: string;  // RAG context to inject
   }
-  return instance;
+): { prompt: string; skills: string[]; estimatedTokens: number } {
+  const relevantSkills = <span class="cstat-no" title="statement not covered" >identifyRelevantSkills(query, options);</span>
+  
+  // Load skill content
+  const skillContents: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
+  let totalTokens = <span class="cstat-no" title="statement not covered" >0;</span>
+  
+<span class="cstat-no" title="statement not covered" >  for (const skill of relevantSkills) {</span>
+    const content = <span class="cstat-no" title="statement not covered" >loadSkillContent(skill);</span>
+<span class="cstat-no" title="statement not covered" >    if (content) {</span>
+<span class="cstat-no" title="statement not covered" >      skillContents.push(content);</span>
+<span class="cstat-no" title="statement not covered" >      totalTokens += skill.estimatedTokens;</span>
+    }
+  }
+  
+  // Build the prompt
+  let prompt = <span class="cstat-no" title="statement not covered" >skillContents.join('\n\n---\n\n');</span>
+  
+  // Inject AOMA context if provided
+<span class="cstat-no" title="statement not covered" >  if (options?.aomaContext) {</span>
+<span class="cstat-no" title="statement not covered" >    prompt += `\n\n**YOUR KNOWLEDGE:**\n${options.aomaContext}`;</span>
+<span class="cstat-no" title="statement not covered" >    totalTokens += Math.ceil(options.aomaContext.length / 4); // Rough token estimate</span>
+  }
+  
+<span class="cstat-no" title="statement not covered" >  console.log(`[SkillLoader] Loaded ${relevantSkills.length} skills (~${totalTokens} tokens):`, </span>
+    relevantSkills.map(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id)</span>);
+  
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    prompt,
+    skills: relevantSkills.map(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id)</span>,
+    estimatedTokens: totalTokens,
+  };
 }
 &nbsp;
-export default EmailContextService;
+/**
+ * Clear the skill content cache (for development/testing)
+ */
+export function <span class="fstat-no" title="function not covered" >clearSkillCache(): void {</span>
+<span class="cstat-no" title="statement not covered" >  skillContentCache.clear();</span>
+<span class="cstat-no" title="statement not covered" >  console.log('[SkillLoader] Cache cleared');</span>
+}
+&nbsp;
+/**
+ * Get skill statistics
+ */
+export function <span class="fstat-no" title="function not covered" >getSkillStats(): {</span>
+  totalSkills: number;
+  totalPossibleTokens: number;
+  cachedSkills: number;
+} {
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    totalSkills: SKILL_DEFINITIONS.length,
+    totalPossibleTokens: SKILL_DEFINITIONS.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, s) =&gt; <span class="cstat-no" title="statement not covered" >sum + s.estimatedTokens, 0</span>),
+    cachedSkills: skillContentCache.size,
+  };
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -883,7 +1111,7 @@ export default EmailContextService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-22T20:55:23.777Z
+                at 2026-01-07T15:19:03.585Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

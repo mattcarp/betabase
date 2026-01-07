@@ -158,8 +158,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                   <Badge
                     variant="outline"
                     className={cn(
-                      "text-green-400 border-green-400/30 font-light",
-                      "bg-green-400/10"
+                      "text-[var(--mac-status-connected)] border-[var(--mac-status-connected)]/30 font-light",
+                      "bg-[var(--mac-status-connected)]/10"
                     )}
                   >
                     <Check className="h-3 w-3 mr-1" />
@@ -209,8 +209,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                 className={cn(
                   "h-8 font-light border transition-all",
                   feedbackType === "thumbs_up"
-                    ? "bg-[var(--mac-success-green)]/20 border-[var(--mac-success-green)]/40 text-[var(--mac-success-green)]"
-                    : "border-[var(--mac-utility-border)] text-[var(--mac-text-secondary)] hover:border-[var(--mac-success-green)]/40 hover:bg-[var(--mac-success-green)]/10"
+                    ? "bg-[var(--mac-status-connected)]/20 border-[var(--mac-status-connected)]/40 text-[var(--mac-status-connected)]"
+                    : "border-[var(--mac-utility-border)] text-[var(--mac-text-secondary)] hover:border-[var(--mac-status-connected)]/40 hover:bg-[var(--mac-status-connected)]/10"
                 )}
               >
                 <ThumbsUp className="h-3.5 w-3.5 mr-1" />
@@ -224,8 +224,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                 className={cn(
                   "h-8 font-light border transition-all",
                   feedbackType === "thumbs_down"
-                    ? "bg-[var(--mac-error-red)]/20 border-[var(--mac-error-red)]/40 text-[var(--mac-error-red)]"
-                    : "border-[var(--mac-utility-border)] text-[var(--mac-text-secondary)] hover:border-[var(--mac-error-red)]/40 hover:bg-[var(--mac-error-red)]/10"
+                    ? "bg-[var(--mac-status-error-text)]/20 border-[var(--mac-status-error-text)]/40 text-[var(--mac-status-error-text)]"
+                    : "border-[var(--mac-utility-border)] text-[var(--mac-text-secondary)] hover:border-[var(--mac-status-error-text)]/40 hover:bg-[var(--mac-status-error-text)]/10"
                 )}
               >
                 <ThumbsDown className="h-3.5 w-3.5 mr-1" />
@@ -319,8 +319,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                           className={cn(
                             "h-8 w-8 p-0 border transition-all",
                             docRelevance[doc.id] === true
-                              ? "bg-[var(--mac-success-green)]/20 border-[var(--mac-success-green)]/40 text-[var(--mac-success-green)]"
-                              : "border-[var(--mac-utility-border)] text-[var(--mac-text-muted)] hover:border-[var(--mac-success-green)]/40 hover:bg-[var(--mac-success-green)]/10"
+                              ? "bg-[var(--mac-status-connected)]/20 border-[var(--mac-status-connected)]/40 text-[var(--mac-status-connected)]"
+                              : "border-[var(--mac-utility-border)] text-[var(--mac-text-muted)] hover:border-[var(--mac-status-connected)]/40 hover:bg-[var(--mac-status-connected)]/10"
                           )}
                         >
                           <Check className="h-4 w-4" />
@@ -332,8 +332,8 @@ function CurationCard({ item, onSubmitFeedback }: CurationCardProps) {
                           className={cn(
                             "h-8 w-8 p-0 border transition-all",
                             docRelevance[doc.id] === false
-                              ? "bg-[var(--mac-error-red)]/20 border-[var(--mac-error-red)]/40 text-[var(--mac-error-red)]"
-                              : "border-[var(--mac-utility-border)] text-[var(--mac-text-muted)] hover:border-[var(--mac-error-red)]/40 hover:bg-[var(--mac-error-red)]/10"
+                              ? "bg-[var(--mac-status-error-text)]/20 border-[var(--mac-status-error-text)]/40 text-[var(--mac-status-error-text)]"
+                              : "border-[var(--mac-utility-border)] text-[var(--mac-text-muted)] hover:border-[var(--mac-status-error-text)]/40 hover:bg-[var(--mac-status-error-text)]/10"
                           )}
                         >
                           <X className="h-4 w-4" />
@@ -641,8 +641,8 @@ export function RLHFFeedbackTab() {
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <div className="h-6 w-6 rounded bg-[var(--mac-success-green)]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-light text-[var(--mac-success-green)]">
+                    <div className="h-6 w-6 rounded bg-[var(--mac-status-connected)]/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-light text-[var(--mac-status-connected)]">
                         3
                       </span>
                     </div>
@@ -664,45 +664,24 @@ export function RLHFFeedbackTab() {
 
       {/* Stats Bar */}
       <div className="grid grid-cols-3 gap-4">
-        <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[var(--mac-text-muted)] font-light">Pending</p>
-                <p className="mac-body text-2xl font-light text-[var(--mac-text-primary)]">{stats.pending}</p>
-              </div>
-              <AlertCircle className="h-8 w-8 text-[var(--mac-warning-yellow)]" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[var(--mac-text-muted)] font-light">Submitted</p>
-                <p className="mac-body text-2xl font-light text-[var(--mac-text-primary)]">
-                  {stats.submitted}
-                </p>
-              </div>
-              <Check className="h-8 w-8 text-[var(--mac-success-green)]" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className={cn("mac-card-elevated", "border-[var(--mac-utility-border)]")}>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[var(--mac-text-muted)] font-light">Avg Rating</p>
-                <p className="mac-body text-2xl font-light text-[var(--mac-text-primary)]">
-                  {stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "N/A"}
-                </p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-[var(--mac-accent-primary-400)]" />
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard 
+          label="Pending" 
+          value={stats.pending} 
+          icon={<AlertCircle className="h-4 w-4" />} 
+          color="yellow" 
+        />
+        <StatCard 
+          label="Submitted" 
+          value={stats.submitted} 
+          icon={<Check className="h-4 w-4" />} 
+          color="green" 
+        />
+        <StatCard 
+          label="Avg Rating" 
+          value={stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "N/A"} 
+          icon={<TrendingUp className="h-4 w-4" />} 
+          color="blue" 
+        />
       </div>
 
       {/* Refresh Button */}
@@ -736,5 +715,49 @@ export function RLHFFeedbackTab() {
         </AnimatePresence>
       </ScrollArea>
     </div>
+  );
+}
+
+function StatCard({ 
+  label, 
+  value, 
+  icon, 
+  color = "blue" 
+}: { 
+  label: string; 
+  value: string | number; 
+  icon: React.ReactNode; 
+  color?: "blue" | "green" | "yellow" | "purple";
+}) {
+  const colorMap = {
+    blue: "text-[var(--mac-primary-blue-400)]",
+    green: "text-[var(--mac-status-connected)]",
+    yellow: "text-[var(--mac-warning-yellow)]",
+    purple: "text-[var(--mac-accent-primary-400)]",
+  };
+
+  const bgMap = {
+    blue: "bg-[var(--mac-primary-blue-400)]/10",
+    green: "bg-[var(--mac-status-connected)]/10",
+    yellow: "bg-[var(--mac-warning-yellow)]/10",
+    purple: "bg-[var(--mac-accent-primary-400)]/10",
+  };
+
+  return (
+    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)] group hover:border-[var(--mac-utility-border-elevated)] transition-all">
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <p className="text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{label}</p>
+            <p className={cn("text-2xl font-light", colorMap[color])}>
+              {value}
+            </p>
+          </div>
+          <div className={cn("p-2 rounded-lg border border-[var(--mac-utility-border)] transition-colors", bgMap[color])}>
+            <div className={colorMap[color]}>{icon}</div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

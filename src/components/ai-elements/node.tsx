@@ -42,17 +42,17 @@ export const NodeHeader = ({ className, ...props }: NodeHeaderProps) => (
 
 export type NodeTitleProps = ComponentProps<typeof CardTitle>;
 
-export const NodeTitle = (props: NodeTitleProps) => <CardTitle {...props} / className="mac-card">;
+export const NodeTitle = ({ className, ...props }: NodeTitleProps) => <CardTitle className={cn("mac-card", className)} {...props} />;
 
 export type NodeDescriptionProps = ComponentProps<typeof CardDescription>;
 
-export const NodeDescription = (props: NodeDescriptionProps) => (
-  <CardDescription {...props} / className="mac-card">
+export const NodeDescription = ({ className, ...props }: NodeDescriptionProps) => (
+  <CardDescription className={cn("mac-card", className)} {...props} />
 );
 
 export type NodeActionProps = ComponentProps<typeof CardAction>;
 
-export const NodeAction = (props: NodeActionProps) => <CardAction {...props} / className="mac-card">;
+export const NodeAction = ({ className, ...props }: NodeActionProps) => <CardAction className={cn("mac-card", className)} {...props} />;
 
 export type NodeContentProps = ComponentProps<typeof CardContent>;
 

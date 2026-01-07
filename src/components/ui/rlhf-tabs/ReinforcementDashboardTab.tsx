@@ -78,24 +78,28 @@ export function ReinforcementDashboardTab() {
           value="85.2%" 
           delta="+3.2%" 
           icon={<Target className="h-4 w-4 text-[var(--mac-primary-blue-400)]" />} 
+          trend="up"
         />
         <MetricCard 
           title="Training Batches" 
           value="12" 
           delta="+2" 
           icon={<Lightbulb className="h-4 w-4 text-[var(--mac-accent-primary-400)]" />} 
+          trend="up"
         />
         <MetricCard 
           title="Feedback Loop" 
           value="1.2s" 
           delta="-0.3s" 
           icon={<Zap className="h-4 w-4 text-[var(--mac-status-connected)]" />} 
+          trend="down"
         />
         <MetricCard 
           title="Active Curators" 
           value="8" 
           delta="Stable" 
           icon={<Users className="h-4 w-4 text-[var(--mac-text-secondary)]" />} 
+          trend="stable"
         />
       </div>
 
@@ -109,9 +113,9 @@ export function ReinforcementDashboardTab() {
                   <TrendingUp className="h-5 w-5 text-[var(--mac-primary-blue-400)]" />
                   Quality Improvement Timeline
                 </CardTitle>
-                <CardDescription className="font-light">AI response accuracy tracking over last 30 days</CardDescription>
+                <CardDescription className="font-light text-[var(--mac-text-secondary)]">AI response accuracy tracking over last 30 days</CardDescription>
               </div>
-              <Badge className="bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-[var(--mac-primary-blue-400)]/20 font-light">
+              <Badge variant="outline" className="bg-[var(--mac-primary-blue-400)]/10 text-[var(--mac-primary-blue-400)] border-[var(--mac-primary-blue-400)]/20 font-light">
                 Learning Phase: Active
               </Badge>
             </div>
@@ -163,11 +167,11 @@ export function ReinforcementDashboardTab() {
         {/* Top Improved Topics */}
         <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
           <CardHeader className="mac-card">
-            <CardTitle className="font-light text-xl flex items-center gap-2">
+            <CardTitle className="font-light text-xl flex items-center gap-2 text-[var(--mac-text-primary)]">
               <Sparkles className="h-5 w-5 text-[var(--mac-accent-primary-400)]" />
               Top Gains
             </CardTitle>
-            <CardDescription className="font-light">Topics with highest quality improvement</CardDescription>
+            <CardDescription className="font-light text-[var(--mac-text-secondary)]">Topics with highest quality improvement</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -183,7 +187,7 @@ export function ReinforcementDashboardTab() {
                 <Tooltip cursor={{ fill: 'transparent' }} />
                 <Bar dataKey="improvement" radius={[0, 4, 4, 0]}>
                   {topicData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? "var(--mac-primary-blue-400)" : "var(--mac-primary-blue-400-muted, #3b82f640)"} />
+                    <Cell key={`cell-${index}`} fill={index === 0 ? "var(--mac-primary-blue-400)" : "var(--mac-primary-blue-400-muted, rgba(59, 130, 246, 0.25))"} />
                   ))}
                 </Bar>
               </BarChart>
@@ -196,11 +200,11 @@ export function ReinforcementDashboardTab() {
         {/* Source Weights */}
         <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
           <CardHeader className="mac-card">
-            <CardTitle className="font-light text-lg flex items-center gap-2">
+            <CardTitle className="font-light text-lg flex items-center gap-2 text-[var(--mac-text-primary)]">
               <Shield className="h-5 w-5 text-[var(--mac-text-secondary)]" />
               Source Reinforcement Weights
             </CardTitle>
-            <CardDescription className="font-light">System-wide boosts/penalties based on curator feedback</CardDescription>
+            <CardDescription className="font-light text-[var(--mac-text-secondary)]">System-wide boosts/penalties based on curator feedback</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {sourceWeights.map((s, i) => (
@@ -229,7 +233,7 @@ export function ReinforcementDashboardTab() {
         {/* Leaderboard & Stats */}
         <Card className="mac-card mac-glass bg-[var(--mac-surface-elevated)] border-[var(--mac-utility-border)]">
           <CardHeader className="mac-card">
-            <CardTitle className="font-light text-lg flex items-center gap-2">
+            <CardTitle className="font-light text-lg flex items-center gap-2 text-[var(--mac-text-primary)]">
               <Users className="h-5 w-5 text-[var(--mac-text-secondary)]" />
               Curator Contributions
             </CardTitle>
@@ -247,23 +251,38 @@ export function ReinforcementDashboardTab() {
   );
 }
 
-function MetricCard({ title, value, delta, icon }: { title: string, value: string, delta: string, icon: React.ReactNode }) {
+function MetricCard({ 
+  title, 
+  value, 
+  delta, 
+  icon, 
+  trend 
+}: { 
+  title: string, 
+  value: string, 
+  delta: string, 
+  icon: React.ReactNode,
+  trend: 'up' | 'down' | 'stable'
+}) {
+  const trendColor = {
+    up: "text-[var(--mac-status-connected)]",
+    down: "text-[var(--mac-status-error-text)]",
+    stable: "text-[var(--mac-text-muted)]"
+  };
+
   return (
-    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)] hover:border-[var(--mac-utility-border-elevated)] transition-all duration-300">
+    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border-[var(--mac-utility-border)] hover:border-[var(--mac-primary-blue-400)]/30 transition-all duration-300 group">
       <CardContent className="p-4 flex items-center justify-between">
         <div className="space-y-1">
           <p className="mac-body text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
           <div className="flex items-baseline gap-2">
-            <h4 className="mac-title">{value}</h4>
-            <span className={cn(
-              "text-[10px] font-normal",
-              delta.startsWith("+") ? "text-[var(--mac-status-connected)]" : delta === "Stable" ? "text-[var(--mac-text-muted)]" : "text-[var(--mac-status-error-text)]"
-            )}>
+            <h4 className="mac-title text-[var(--mac-text-primary)]">{value}</h4>
+            <span className={cn("text-[10px] font-normal", trendColor[trend])}>
               {delta}
             </span>
           </div>
         </div>
-        <div className="p-2 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)]">
+        <div className="p-2 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)] group-hover:border-[var(--mac-primary-blue-400)]/40 transition-colors">
           {icon}
         </div>
       </CardContent>

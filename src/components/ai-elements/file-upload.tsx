@@ -16,6 +16,7 @@ import {
   FileImage,
   FileCode,
   FileSpreadsheet,
+  FolderOpen,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Action } from "./actions";
@@ -38,9 +39,10 @@ interface FileUploadProps {
   onDDPDetected?: (ddp: ParsedDDP) => void; // Callback for DDP folder detection
   assistantId?: string;
   maxFileSize?: number; // in bytes
-  acceptedFileTypes?: string[];
+  acceptedFileTypes?: string[]; // Empty array = accept all
   compact?: boolean;
   apiEndpoint?: string; // Add API endpoint for flexibility
+  allowFolderUpload?: boolean; // Enable folder upload for DDP
 }
 
 const getFileIcon = (fileType: string) => {
@@ -64,25 +66,16 @@ export function FileUpload({
   onUploadError,
   onDDPDetected,
   maxFileSize = 20 * 1024 * 1024, // 20MB default
-  acceptedFileTypes = [
-    ".pdf",
-    ".txt",
-    ".md",
-    ".doc",
-    ".docx",
-    ".json",
-    ".csv",
-    ".png",
-    ".jpg",
-    ".jpeg",
-  ],
+  acceptedFileTypes = [], // Empty = accept all file types (needed for DDP)
   compact = false,
   apiEndpoint = "/api/assistant", // Use assistant API
+  allowFolderUpload = true, // Enable folder upload by default for DDP support
 }: FileUploadProps) {
   const [uploadQueue, setUploadQueue] = useState<FileUploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isParsingDDP, setIsParsingDDP] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = useCallback(
     async (files: FileList | null, inputElement?: HTMLInputElement) => {
@@ -231,22 +224,46 @@ export function FileUpload({
   };
 
   if (compact) {
+    // Determine accept attribute - empty string means accept all
+    const acceptAttr = acceptedFileTypes.length > 0 ? acceptedFileTypes.join(",") : undefined;
+    
     return (
       <>
-        {/* File input - auto-detects DDP when multiple files selected */}
+        {/* Hidden file input for regular files */}
         <input
           ref={fileInputRef}
           type="file"
           multiple
-          accept={acceptedFileTypes.join(",")}
+          accept={acceptAttr}
           onChange={(e) => handleFileSelect(e.target.files, e.target)}
           className="hidden"
           suppressHydrationWarning
         />
-        {/* Single file upload button - handles both regular files and DDP */}
+        {/* Hidden folder input for DDP folders */}
+        {allowFolderUpload && (
+          <input
+            ref={folderInputRef}
+            type="file"
+            multiple
+            // @ts-ignore - webkitdirectory is not in standard types
+            webkitdirectory=""
+            directory=""
+            onChange={(e) => handleFileSelect(e.target.files, e.target)}
+            className="hidden"
+            suppressHydrationWarning
+          />
+        )}
+        {/* Upload button - click for files, long-press or right-click hint for folders */}
         <Action
-          onClick={() => fileInputRef.current?.click()}
-          tooltip={onDDPDetected ? "Upload files (DDP auto-detected)" : "Upload files to knowledge base"}
+          onClick={() => {
+            // If folder upload is enabled, use folder input (better for DDP)
+            if (allowFolderUpload && folderInputRef.current) {
+              folderInputRef.current.click();
+            } else {
+              fileInputRef.current?.click();
+            }
+          }}
+          tooltip={allowFolderUpload ? "Upload DDP folder or files" : "Upload files to knowledge base"}
           disabled={isUploading || isParsingDDP}
         >
           {isUploading || isParsingDDP ? (
@@ -297,6 +314,9 @@ export function FileUpload({
     );
   }
 
+  // Determine accept attribute - empty/undefined means accept all
+  const acceptAttr = acceptedFileTypes.length > 0 ? acceptedFileTypes.join(",") : undefined;
+
   return (
     <div className={cn("space-y-4", className)}>
       <div
@@ -314,15 +334,30 @@ export function FileUpload({
           isUploading && "pointer-events-none opacity-50"
         )}
       >
+        {/* Hidden file input */}
         <input
           ref={fileInputRef}
           type="file"
           multiple
-          accept={acceptedFileTypes.join(",")}
-          onChange={(e) => handleFileSelect(e.target.files)}
+          accept={acceptAttr}
+          onChange={(e) => handleFileSelect(e.target.files, e.target)}
           className="hidden"
           suppressHydrationWarning
         />
+        {/* Hidden folder input for DDP */}
+        {allowFolderUpload && (
+          <input
+            ref={folderInputRef}
+            type="file"
+            multiple
+            // @ts-ignore - webkitdirectory is not in standard types
+            webkitdirectory=""
+            directory=""
+            onChange={(e) => handleFileSelect(e.target.files, e.target)}
+            className="hidden"
+            suppressHydrationWarning
+          />
+        )}
 
         <div className="space-y-4">
           <div className="mx-auto w-12 h-12 rounded-full bg-[var(--mac-primary-blue-400)]/10 flex items-center justify-center">
@@ -331,29 +366,53 @@ export function FileUpload({
 
           <div>
             <h3 className="mac-title text-lg font-light mb-2 text-[var(--mac-text-primary)]">
-              Upload to Knowledge Base
+              {allowFolderUpload ? "Upload DDP Folder or Files" : "Upload to Knowledge Base"}
             </h3>
             <p className="text-sm text-[var(--mac-text-secondary)] mb-4 font-light">
-              Drag and drop files or click to browse
+              {allowFolderUpload 
+                ? "Select a DDP folder or drag and drop files" 
+                : "Drag and drop files or click to browse"}
             </p>
-            <Button
-              className="mac-button mac-button-primary"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              variant="outline"
-            >
-              {isUploading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <Upload className="mr-2 h-4 w-4" />
-                  Select Files
-                </>
+            <div className="flex items-center justify-center gap-3">
+              {allowFolderUpload && (
+                <Button
+                  className="mac-button mac-button-primary"
+                  onClick={() => folderInputRef.current?.click()}
+                  disabled={isUploading}
+                  variant="default"
+                >
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Select Folder
+                    </>
+                  )}
+                </Button>
               )}
-            </Button>
+              <Button
+                className="mac-button mac-button-outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                variant="outline"
+              >
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    Select Files
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
 
           <p className="text-xs text-[var(--mac-text-muted)] font-light">

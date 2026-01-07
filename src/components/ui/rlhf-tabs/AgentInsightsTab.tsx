@@ -21,20 +21,20 @@ import { cn } from "../../../lib/utils";
 const FlowDiagram = ({ chart: _chart }: { chart: string }) => {
   // Static visualization of agent decision path using useMemo for derived data
   const svg = useMemo(() => `
-    <div class="flow-diagram p-6 bg-card/50 rounded-xl border border-border text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
+    <div class="flow-diagram p-6 bg-[var(--mac-surface-elevated)]/50 rounded-xl border border-[var(--mac-utility-border)] text-[var(--mac-text-primary)] font-light text-sm w-full h-full flex flex-col items-center">
       <div class="flex flex-col items-center space-y-4">
-        <div class="p-3 bg-[var(--mac-info-bg)] border border-[var(--mac-info-border)] rounded-lg text-[var(--mac-info)]">Query: "SACD Sector Specs"</div>
-        <div class="h-8 w-px bg-muted"></div>
-        <div class="p-3 bg-[var(--mac-purple-bg)] border border-[var(--mac-purple-border)] rounded-lg text-[var(--mac-purple)]">Intent: Knowledge Retrieval</div>
-        <div class="h-8 w-px bg-muted"></div>
+        <div class="p-3 bg-[var(--mac-primary-blue-400)]/10 border border-[var(--mac-primary-blue-400)]/20 rounded-lg text-[var(--mac-primary-blue-400)]">Query: "SACD Sector Specs"</div>
+        <div class="h-8 w-px bg-[var(--mac-utility-border)]"></div>
+        <div class="p-3 bg-[var(--mac-accent-primary-400)]/10 border border-[var(--mac-accent-primary-400)]/20 rounded-lg text-[var(--mac-accent-primary-400)]">Intent: Knowledge Retrieval</div>
+        <div class="h-8 w-px bg-[var(--mac-utility-border)]"></div>
         <div class="flex gap-8">
-          <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Vector Search (0.92)</div>
-          <div class="p-3 bg-muted border border-border rounded-lg text-xs text-muted-foreground">Cross-Ref Jira (0.45)</div>
+          <div class="p-3 bg-[var(--mac-surface-background)] border border-[var(--mac-utility-border)] rounded-lg text-xs text-[var(--mac-text-secondary)]">Vector Search (0.92)</div>
+          <div class="p-3 bg-[var(--mac-surface-background)] border border-[var(--mac-utility-border)] rounded-lg text-xs text-[var(--mac-text-secondary)]">Cross-Ref Jira (0.45)</div>
         </div>
-        <div class="h-8 w-px bg-muted"></div>
-        <div class="p-3 bg-[var(--mac-tier1-bg)] border border-[var(--mac-tier1-border)] rounded-lg text-[var(--mac-tier1)]">Reranking (Gemini 3.0)</div>
-        <div class="h-8 w-px bg-muted"></div>
-        <div class="p-3 bg-[var(--mac-info-bg)] border border-[var(--mac-info-border)] rounded-lg font-normal text-[var(--mac-info)]">Final Response Generation</div>
+        <div class="h-8 w-px bg-[var(--mac-utility-border)]"></div>
+        <div class="p-3 bg-[var(--mac-status-connected)]/10 border border-[var(--mac-status-connected)]/20 rounded-lg text-[var(--mac-status-connected)]">Reranking (Gemini 3.0)</div>
+        <div class="h-8 w-px bg-[var(--mac-utility-border)]"></div>
+        <div class="p-3 bg-[var(--mac-primary-blue-400)]/10 border border-[var(--mac-primary-blue-400)]/20 rounded-lg font-normal text-[var(--mac-primary-blue-400)]">Final Response Generation</div>
       </div>
     </div>
   `, []);
@@ -228,11 +228,11 @@ export function AgentInsightsTab() {
 
 function InsightCard({ title, value, icon }: { title: string, value: string, icon: React.ReactNode }) {
   return (
-    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)]">
+    <Card className="mac-card mac-glass bg-[var(--mac-surface-card)] border border-[var(--mac-utility-border)] hover:border-[var(--mac-primary-blue-400)]/30 transition-all duration-300">
       <CardContent className="p-4 flex items-center justify-between">
         <div className="space-y-1">
           <p className="mac-body text-[10px] font-normal uppercase tracking-wider text-[var(--mac-text-secondary)]">{title}</p>
-          <h4 className="mac-title">{value}</h4>
+          <h4 className="mac-title text-[var(--mac-text-primary)]">{value}</h4>
         </div>
         <div className="p-2 rounded-lg bg-[var(--mac-surface-elevated)] border border-[var(--mac-utility-border)]">
           {icon}

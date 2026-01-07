@@ -107,20 +107,19 @@ async function generateQuestionsFromContent(vectors: any[]): Promise<ZeitgeistQu
     return `[${i + 1}] ${v.source_type}: ${title}\n${preview}...`;
   }).join("\n\n");
 
-  // Use Groq for speed (or fall back to Gemini)
+  // Use Gemini 3 Flash Preview for question generation
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${process.env.GOOGLE_GENERATIVE_AI_API_KEY}`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
+        contents: [
           {
-            role: "system",
-            content: `You are an expert at analyzing enterprise knowledge bases and generating helpful questions.
+            role: "user",
+            parts: [{
+              text: `You are an expert at analyzing enterprise knowledge bases and generating helpful questions.
 Given recent content from AOMA (Asset and Offering Management Application) at Sony Music, generate 6 questions that users would likely ask.
 
 Rules:
@@ -134,25 +133,30 @@ Example output:
 [
   {"question": "How do I link a product to a master in AOMA?", "category": "common_problem", "relevanceScore": 0.95},
   {"question": "What new features are in the latest release?", "category": "new_feature", "relevanceScore": 0.9}
-]`
-          },
-          {
-            role: "user",
-            content: `Here's the recent content from our knowledge base:\n\n${contentSummary}\n\nGenerate 6 suggested questions.`
+]
+
+Here's the recent content from our knowledge base:
+
+${contentSummary}
+
+Generate 6 suggested questions.`
+            }]
           }
         ],
-        temperature: 0.7,
-        max_tokens: 1000,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1000,
+        },
       }),
     });
 
     if (!response.ok) {
-      console.error("[Zeitgeist] Groq API error:", response.status);
+      console.error("[Zeitgeist] Gemini API error:", response.status);
       return getDefaultQuestions();
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "[]";
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "[]";
 
     // Parse JSON from response
     const jsonMatch = content.match(/\[[\s\S]*\]/);

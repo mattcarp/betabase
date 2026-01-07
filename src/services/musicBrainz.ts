@@ -389,3 +389,63 @@ export function getArtistNames(artistCredit?: MusicBrainzArtist[]): string {
   if (!artistCredit || artistCredit.length === 0) return 'Unknown Artist';
   return artistCredit.map(a => a.name).join(', ');
 }
+
+// ============================================================================
+// Enhanced Lookup - Get Full Release Details
+// ============================================================================
+
+/**
+ * Get full release details by MBID with all available metadata.
+ * Use this after initial lookup to get comprehensive data for display.
+ */
+export async function getFullReleaseDetails(releaseId: string): Promise<MusicBrainzRelease | null> {
+  try {
+    const data = await mbFetch(`release/${releaseId}`, {
+      inc: 'artist-credits+labels+recordings+release-groups+media+genres+tags+ratings',
+    });
+
+    return data as MusicBrainzRelease;
+  } catch (error) {
+    console.error('Failed to get full release details:', error);
+    return null;
+  }
+}
+
+/**
+ * Check if cover art exists for a release.
+ * Returns the front cover URL or null.
+ */
+export async function checkCoverArt(releaseId: string): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://coverartarchive.org/release/${releaseId}`,
+      { method: 'HEAD' }
+    );
+    
+    if (response.ok) {
+      return `https://coverartarchive.org/release/${releaseId}/front-500`;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Enhanced lookup that includes cover art check.
+ * Returns both MusicBrainz data and cover art URL.
+ */
+export async function lookupWithCoverArt(
+  query: DDPMusicBrainzQuery
+): Promise<{ result: MusicBrainzLookupResult; coverArtUrl: string | null }> {
+  const result = await lookupFromDDP(query);
+  
+  let coverArtUrl: string | null = null;
+  
+  if (result.success && result.releases.length > 0) {
+    // Check cover art for the first release
+    coverArtUrl = await checkCoverArt(result.releases[0].id);
+  }
+  
+  return { result, coverArtUrl };
+}

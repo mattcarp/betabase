@@ -55,11 +55,11 @@ interface TrainingDataset {
 }
 
 const STATUS_CONFIG = {
-  draft: { color: "bg-muted", label: "Draft", icon: Edit2 },
-  curating: { color: "bg-yellow-500", label: "Curating", icon: Clock },
-  ready: { color: "bg-blue-500", label: "Ready", icon: CheckCircle2 },
-  exported: { color: "bg-green-500", label: "Exported", icon: Download },
-  archived: { color: "bg-muted", label: "Archived", icon: Archive },
+  draft: { color: "bg-[var(--mac-utility-border)]", label: "Draft", icon: Edit2 },
+  curating: { color: "bg-[var(--mac-warning-yellow)]", label: "Curating", icon: Clock },
+  ready: { color: "bg-[var(--mac-primary-blue-400)]", label: "Ready", icon: CheckCircle2 },
+  exported: { color: "bg-[var(--mac-status-connected)]", label: "Exported", icon: Download },
+  archived: { color: "bg-[var(--mac-surface-elevated)]", label: "Archived", icon: Archive },
 };
 
 const TYPE_LABELS = {
@@ -240,16 +240,16 @@ export function TrainingDatasetsPanel() {
               New Dataset
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="mac-glass border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]">
             <DialogHeader>
-              <DialogTitle>Create Training Dataset</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-[var(--mac-text-primary)]">Create Training Dataset</DialogTitle>
+              <DialogDescription className="text-[var(--mac-text-secondary)]">
                 Create a new dataset to collect and curate training examples.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <label className="text-sm font-normal">Name</label>
+                <label className="text-sm font-normal text-[var(--mac-text-primary)]">Name</label>
                 <Input className="mac-input"
                   placeholder="e.g., AOMA Support Q1 2026"
                   value={newDataset.name}
@@ -257,7 +257,7 @@ export function TrainingDatasetsPanel() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-normal">Description</label>
+                <label className="text-sm font-normal text-[var(--mac-text-primary)]">Description</label>
                 <Input className="mac-input"
                   placeholder="Describe the purpose of this dataset"
                   value={newDataset.description}
@@ -267,17 +267,17 @@ export function TrainingDatasetsPanel() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-normal">Type</label>
+                <label className="text-sm font-normal text-[var(--mac-text-primary)]">Type</label>
                 <Select
                   value={newDataset.dataset_type}
                   onValueChange={(value: any) =>
                     setNewDataset((prev) => ({ ...prev, dataset_type: value }))
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="mac-input">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="mac-glass border-[var(--mac-utility-border)] bg-[var(--mac-surface-elevated)]">
                     <SelectItem value="dpo">DPO (Direct Preference Optimization)</SelectItem>
                     <SelectItem value="preference_pairs">Preference Pairs</SelectItem>
                     <SelectItem value="instruction_tuning">Instruction Tuning</SelectItem>
@@ -301,9 +301,9 @@ export function TrainingDatasetsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Database className="h-8 w-8 text-primary-400" />
+              <Database className="h-8 w-8 text-[var(--mac-accent-primary-400)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">{datasets.length}</p>
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">{datasets.length}</p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Datasets</p>
               </div>
             </div>
@@ -312,9 +312,9 @@ export function TrainingDatasetsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Layers className="h-8 w-8 text-blue-400" />
+              <Layers className="h-8 w-8 text-[var(--mac-primary-blue-400)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">
                   {datasets.reduce((sum, d) => sum + d.sample_count, 0).toLocaleString()}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Total Samples</p>
@@ -325,9 +325,9 @@ export function TrainingDatasetsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-8 w-8 text-green-400" />
+              <CheckCircle2 className="h-8 w-8 text-[var(--mac-status-connected)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">
                   {datasets.filter((d) => d.status === "ready" || d.status === "exported").length}
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Ready</p>
@@ -338,14 +338,14 @@ export function TrainingDatasetsPanel() {
         <Card className="mac-card-elevated border-[var(--mac-utility-border)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <BarChart3 className="h-8 w-8 text-yellow-400" />
+              <BarChart3 className="h-8 w-8 text-[var(--mac-warning-yellow)]" />
               <div>
-                <p className="mac-body text-2xl font-normal">
-                  {(datasets
+                <p className="mac-body text-2xl font-normal text-[var(--mac-text-primary)]">
+                  {Math.round((datasets
                     .filter((d) => d.quality_score !== null)
                     .reduce((sum, d) => sum + (d.quality_score || 0), 0) /
                     Math.max(datasets.filter((d) => d.quality_score !== null).length, 1)) *
-                    100 || 0}
+                    100) || 0}
                   %
                 </p>
                 <p className="text-xs text-[var(--mac-text-muted)]">Avg Quality</p>
@@ -372,7 +372,7 @@ export function TrainingDatasetsPanel() {
                     className={cn(
                       "mac-card-elevated",
                       "border-[var(--mac-utility-border)]",
-                      "hover:border-primary-500/50 transition-colors"
+                      "hover:border-[var(--mac-primary-blue-400)]/50 transition-colors"
                     )}
                   >
                     <CardContent className="py-4">
@@ -381,13 +381,13 @@ export function TrainingDatasetsPanel() {
                           <div
                             className={cn(
                               "h-10 w-10 rounded-lg flex items-center justify-center",
-                              "bg-primary-500/10"
+                              "bg-[var(--mac-accent-primary-400)]/10"
                             )}
                           >
-                            <Database className="h-5 w-5 text-primary-400" />
+                            <Database className="h-5 w-5 text-[var(--mac-accent-primary-400)]" />
                           </div>
                           <div>
-                            <h3 className="mac-title">
+                            <h3 className="mac-title text-[var(--mac-text-primary)]">
                               {dataset.name}
                             </h3>
                             <p className="text-sm text-[var(--mac-text-muted)] font-light">
@@ -402,12 +402,12 @@ export function TrainingDatasetsPanel() {
                             </p>
                             <p className="text-xs text-[var(--mac-text-muted)]">samples</p>
                           </div>
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs text-[var(--mac-text-muted)] border-[var(--mac-utility-border)]">
                             {TYPE_LABELS[dataset.dataset_type]}
                           </Badge>
                           <Badge
                             className={cn(
-                              "text-xs text-white",
+                              "text-xs text-white border-0",
                               STATUS_CONFIG[dataset.status].color
                             )}
                           >

@@ -2,13 +2,12 @@
  * Synthesis Service for Knowledge API
  *
  * Generates natural language answers from vector search results
- * Primary: Gemini 3.0 Flash Preview
- * Fallback: Groq llama-3.3-70b
+ * Primary: Gemini 3 Flash Preview
+ * Fall forward: Gemini 3 Pro Preview
  */
 
 import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
-import { groq } from '@ai-sdk/groq';
 import type { VectorResult } from '../types';
 
 const SYNTHESIS_TIMEOUT_MS = 5000;
@@ -78,10 +77,10 @@ export async function synthesizeAnswer(
   const context = prepareContext(results);
   const prompt = buildPrompt(query, context);
 
-  // Try Gemini 3.0 Flash Preview first
+  // Try Gemini 3 Flash Preview first
   try {
     const { text } = await generateText({
-      model: google('gemini-2.0-flash'),
+      model: google('gemini-3-flash-preview'),
       prompt,
       maxTokens: 500,
       temperature: 0.3,
@@ -91,17 +90,17 @@ export async function synthesizeAnswer(
     return {
       text: text.trim(),
       duration_ms: Math.round(performance.now() - start),
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3-flash-preview',
       fallback_used: false,
     };
   } catch (geminiError) {
-    console.warn('Gemini synthesis failed, trying Groq fallback:', geminiError);
+    console.warn('Gemini 3 Flash failed, trying Gemini 3 Pro fallback:', geminiError);
   }
 
-  // Fallback to Groq
+  // Fall forward to Gemini 3 Pro Preview
   try {
     const { text } = await generateText({
-      model: groq('llama-3.3-70b-versatile'),
+      model: google('gemini-3-pro-preview'),
       prompt,
       maxTokens: 500,
       temperature: 0.3,
@@ -111,11 +110,11 @@ export async function synthesizeAnswer(
     return {
       text: text.trim(),
       duration_ms: Math.round(performance.now() - start),
-      model: 'llama-3.3-70b-versatile',
+      model: 'gemini-3-pro-preview',
       fallback_used: true,
     };
-  } catch (groqError) {
-    console.error('Both Gemini and Groq synthesis failed:', groqError);
+  } catch (fallbackError) {
+    console.error('Both Gemini 3 models failed:', fallbackError);
     throw new Error('LLM synthesis failed with all providers');
   }
 }

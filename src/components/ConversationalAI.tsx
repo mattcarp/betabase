@@ -19,6 +19,7 @@ interface ConversationalAIRef {
   stopConversation: () => Promise<void>;
   toggleConversation: () => Promise<void>;
   interruptAgent: () => void;
+  toggleMute: () => void;
 }
 
 const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
@@ -52,6 +53,8 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
       aiAudioLevel,
       isUserSpeaking,
       isAISpeaking,
+      isMuted,
+      toggleMute,
       error: conversationError,
       audioFeatures,
       audioMetrics,
@@ -97,6 +100,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
         }
       },
       interruptAgent,
+      toggleMute,
     }));
 
     // Handler for toggle button
@@ -274,6 +278,22 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
                 ? "Stop Conversation"
                 : "Start Conversation"}
           </button>
+
+          {/* Mute button */}
+          {isConnected && (
+            <button
+              onClick={toggleMute}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-normal transition-all ${
+                isMuted
+                  ? "bg-red-600 hover:bg-red-700 text-white"
+                  : "bg-gray-600 hover:bg-gray-700 text-white"
+              }`}
+              data-testid="mute-button"
+            >
+              {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
+              {isMuted ? "Unmute Mic" : "Mute Mic"}
+            </button>
+          )}
 
           {/* Interrupt button (only when AI is speaking) */}
           {isAISpeaking && (

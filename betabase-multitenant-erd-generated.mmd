@@ -1,0 +1,58 @@
+erDiagram
+    %% LOGICAL TENANT HIERARCHY
+    ORGANIZATION {
+        string name PK
+    }
+    DIVISION {
+        string name PK
+        string organization FK
+    }
+    APP_UNDER_TEST {
+        string name PK
+        string division FK
+    }
+
+    APPLICATION {
+        INTEGER id
+    }
+
+    USER {
+        INTEGER id
+        VARCHAR(255) org
+    }
+
+    ORGANIZATION ||--o{ USER : "tenancy"
+    ROUND {
+        INTEGER id
+        VARCHAR(255) app
+    }
+
+    APP_UNDER_TEST ||--o{ ROUND : "context"
+    VARIATION {
+        INTEGER id
+    }
+
+    CASES {
+        VARCHAR(5) app_under_test
+    }
+
+    APP_UNDER_TEST ||--o{ CASES : "context"
+    DEPLOYMENT {
+        INTEGER id
+        VARCHAR(255) app_under_test
+    }
+
+    APP_UNDER_TEST ||--o{ DEPLOYMENT : "context"
+    SCENARIO {
+        INTEGER id
+        VARCHAR(255) app_under_test
+    }
+
+    APP_UNDER_TEST ||--o{ SCENARIO : "context"
+    TEST {
+        INTEGER id
+    }
+
+
+    ORGANIZATION ||--o{ DIVISION : "contains"
+    DIVISION ||--o{ APP_UNDER_TEST : "contains"

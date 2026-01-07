@@ -1,0 +1,23 @@
+[1A[2K[2m[WebServer] [22m[90m2026-01-06T15:27:04+01:00[0m [32mINF[0m Injecting 51 Infisical secrets into your application process
+
+[1A[2K[2m[WebServer] [22mRequest timed out after 3000ms
+[2m[WebServer] [22m
+[2m[WebServer] [22mRetrying 1/3...
+
+[1A[2K[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22mRetrying 2/3...
+
+[1A[2K[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22mRetrying 3/3...
+
+[1A[2K[2m[WebServer] [22m[AggregateError: ] { code: [32m'ETIMEDOUT'[39m }
+
+[1A[2K[2m[WebServer] [22m [31m[1m⨯[22m[39m Failed to download `Inter` from Google Fonts. Using fallback font instead.
+[2m[WebServer] [22m
+[2m[WebServer] [22mFailed to fetch `Inter` from Google Fonts.}
+
+Error: Timed out waiting 120000ms from config.webServer.
+
+[1A[2K

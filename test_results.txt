@@ -1,0 +1,98 @@
+
+Running 24 tests using 1 worker
+
+[1A[2K[1/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:104:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-001: App loads on localhost
+[1A[2K[2/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:111:7 › MC Edit Demo - Section 1: Preamble @demo @mc-edit › DEMO-002: Welcome screen renders
+[1A[2K[3/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:128:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-010: Hard but answerable question
+[1A[2K[4/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:145:7 › MC Edit Demo - Section 2: Knowledge Base @demo @mc-edit › DEMO-011: Upcoming release info (JIRAs)
+[1A[2K[5/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:176:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation
+[1A[2K[chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:176:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation
+[CONSOLE ERROR CAPTURED] [MermaidDiagram] Render error: Error: Parse error on line 6:
+...    Upload --> Path
+----------------------^
+Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'subgraph', 'end', 'acc_title', 'acc_descr', 'acc_descr_multiline_value', 'AMP', 'COLON', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DOWN', 'DEFAULT', 'NUM', 'COMMA', 'NODE_STRING', 'BRKT', 'MINUS', 'MULT', 'UNICODE_TEXT', 'direction_tb', 'direction_bt', 'direction_rl', 'direction_lr', got '1'
+    at Parser.parseError (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:1436:21)
+    at Parser.parse (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:1508:16)
+    at newParser.parse (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:2310:23)
+    at Diagram.fromText (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/mermaid.core.mjs:720:18)
+    at async Object.render (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/mermaid.core.mjs:1007:12)
+
+[1A[2K
+========== ERROR SUMMARY ==========
+
+[1A[2K
+Console Errors (1):
+
+[1A[2K  1. [console.error] [MermaidDiagram] Render error: Error: Parse error on line 6:
+...    Upload --> Path
+----------------------^
+Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'subgraph', 'end', 'acc_title', 'acc_descr', 'a
+
+[1A[2K     URL: http://localhost:3000/#chat
+
+[1A[2K
+===================================
+
+
+[1A[2K  1) [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:176:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation 
+
+    Error: Test "DEMO-020: Mermaid diagram generation" passed but had 1 console error(s):
+
+    [console.error] [MermaidDiagram] Render error: Error: Parse error on line 6:
+    ...    Upload --> Path
+    ----------------------^
+    Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'subgraph', 'end', 'acc_title', 'acc_descr', 'acc_descr_multiline_value', 'AMP', 'COLON', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DOWN', 'DEFAULT', 'NUM', 'COMMA', 'NODE_STRING', 'BRKT', 'MINUS', 'MULT', 'UNICODE_TEXT', 'direction_tb', 'direction_bt', 'direction_rl', 'direction_lr', got '1'
+
+       at fixtures/base-test.ts:210
+
+      208 |     });
+      209 |
+    > 210 |     throw new Error(
+          |           ^
+      211 |       `Test "${testInfo.title}" passed but had ${realErrors.length} console error(s):\n\n${errorMessages}\n\n` +
+      212 |       `To temporarily disable this check, use: test.use({ failOnConsoleError: false })`
+      213 |     );
+        at Parser.parseError (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:1436:21)
+        at Parser.parse (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:1508:16)
+        at newParser.parse (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:2310:23)
+        at Diagram.fromText (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/mermaid.core.mjs:720:18)
+        at async Object.render (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/mermaid.core.mjs:1007:12)
+
+    To temporarily disable this check, use: test.use({ failOnConsoleError: false })
+        at Parser.parseError (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:1436:21)
+        at Parser.parse (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:1508:16)
+        at newParser.parse (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-NV44I4VS.mjs:2310:23)
+        at Diagram.fromText (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/mermaid.core.mjs:720:18)
+        at async Object.render (webpack-internal:///(app-pages-browser)/./node_modules/mermaid/dist/mermaid.core.mjs:1007:12)
+        at /Users/matt/Documents/projects/mc-thebetabase/tests/fixtures/base-test.ts:210:11
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-demo-demo-mc-edit-offi-6badd--Mermaid-diagram-generation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-demo-demo-mc-edit-offi-6badd--Mermaid-diagram-generation-chromium/error-context.md
+
+
+[1A[2K[6/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:212:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-022: DDP parsing tool call
+[1A[2K[7/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:229:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-023: DDP Advanced Parsing (CD-TEXT, DDPMS)
+[1A[2K[8/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:260:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-030: Blockchain trick question
+[1A[2K[9/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:293:7 › MC Edit Demo - Section 4: Anti-Hallucination @demo @mc-edit › DEMO-031: Thumbs down feedback flow
+[1A[2K[10/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:326:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-040: Navigate to Curate tab
+[1A[2K[11/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:335:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-041: Upload area visible
+[1A[2K[12/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:348:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-042: Delete functionality visible
+[1A[2K[13/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:361:7 › MC Edit Demo - Section 5: Curate Tab @demo @mc-edit › DEMO-043: Curation queue renders
+[1A[2K[14/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:383:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-050: Navigate to Test tab
+[1A[2K[15/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:392:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-051: Test list scrollable
+[1A[2K[16/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:412:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-053: Auto-ranking visible
+[1A[2K[17/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:425:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-054: Self-healing tab
+[1A[2K[18/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:443:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-058: Self-Healing Blast Radius
+[1A[2K[19/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:466:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-055: Ladybug Tester Mode visible
+[1A[2K[20/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:538:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-056: Ladybug Context Switching (TDD/FAILING)
+[1A[2K[21/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:565:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-057: Three-Tier Ranking System
+[1A[2K[22/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:589:7 › MC Edit Demo - Section 6: Test Tab @demo @mc-edit › DEMO-040: Curation Segue
+[1A[2K[23/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:637:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-060: Three-pillar navigation
+[1A[2K[24/24] [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:668:7 › MC Edit Demo - Section 7: Full Flow @demo @mc-edit › DEMO-061: Screenshot capture all tabs
+[1A[2K  1 failed
+    [chromium] › tests/e2e/demo/demo-mc-edit-official.spec.ts:176:7 › MC Edit Demo - Section 3: Visual Intelligence @demo @mc-edit › DEMO-020: Mermaid diagram generation 
+  19 did not run
+  4 passed (34.4s)

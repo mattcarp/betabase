@@ -165,7 +165,7 @@ export function CuratorWorkspaceContainer({
   // Loading state
   if (isLoading) {
     return (
-      <Card className={cn("mac-card", `bg-card/50 border-border ${className)}`}>
+      <Card className={cn("mac-card", `bg-card/50 border-border ${className}`)}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <Loader2 className="h-10 w-10 text-primary-400 animate-spin mb-4" />
           <p className="mac-body text-muted-foreground">Loading annotation queue...</p>
@@ -177,7 +177,7 @@ export function CuratorWorkspaceContainer({
   // Error state
   if (error && queue.length === 0) {
     return (
-      <Card className={cn("mac-card", `bg-card/50 border-border ${className)}`}>
+      <Card className={cn("mac-card", `bg-card/50 border-border ${className}`)}>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <AlertCircle className="h-10 w-10 text-red-400 mb-4" />
           <p className="mac-body text-foreground font-normal mb-2">Failed to load queue</p>

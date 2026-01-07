@@ -3,34 +3,84 @@
 /**
  * DDP Display Component
  *
- * Displays parsed DDP (Disc Description Protocol) data in beautiful shadcn tables.
- * Shows album info, track listing, file components, and MusicBrainz metadata.
+ * Beautiful display panel for parsed DDP data.
+ * Uses shadcn/ui components with separator lines between items.
  */
 
 import React from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Disc3, Music2, FileText, Database, Loader2, AlertCircle, X } from 'lucide-react';
-import type { ParsedDDP, DDPTrack } from '@/types/ddp';
-import type { MusicBrainzLookupResult, MusicBrainzRelease } from '@/services/musicBrainz';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Disc3,
+  Music2,
+  FileText,
+  Database,
+  AlertCircle,
+  X,
+  Clock,
+  Hash,
+  Barcode,
+  Building2,
+  Calendar,
+  MapPin,
+  ExternalLink,
+  CheckCircle2,
+  Timer,
+} from 'lucide-react';
+import type { MusicBrainzLookupResult } from '@/services/musicBrainz';
 
 // ============================================================================
-// Types
+// Types (matches API response)
 // ============================================================================
+
+interface ParsedDDPResponse {
+  parseTime?: string;
+  referencedFiles?: string[];
+  id?: {
+    ddpid: string;
+    upc: string;
+    mid: string;
+  };
+  cdText?: {
+    album: string;
+    artist: string;
+    upc: string;
+    tracks: Array<{ track: number; title?: string; isrc?: string }>;
+  };
+  pqEntries?: Array<{
+    trk: string;
+    idx: string;
+    min: string;
+    sec: string;
+    frm: string;
+    isrc: string;
+    dur?: string;
+  }>;
+  tracks: Array<{
+    number: number;
+    title?: string;
+    performer?: string;
+    duration?: string;
+    isrc?: string;
+  }>;
+  summary: {
+    albumTitle?: string;
+    performer?: string;
+    upc?: string;
+    trackCount: number;
+    totalDuration?: string;
+    hasCdText: boolean;
+    hasPq: boolean;
+  };
+}
 
 interface DDPDisplayProps {
-  ddp: ParsedDDP;
+  ddp: ParsedDDPResponse;
   musicBrainz?: MusicBrainzLookupResult | null;
   isLoadingMusicBrainz?: boolean;
   className?: string;
@@ -38,141 +88,151 @@ interface DDPDisplayProps {
 }
 
 // ============================================================================
-// Helper Functions
-// ============================================================================
-
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function formatDuration(duration?: string): string {
-  if (!duration) return '-';
-  // Duration is in mm:ss:ff format, convert to mm:ss
-  const parts = duration.split(':');
-  if (parts.length >= 2) {
-    return `${parts[0]}:${parts[1]}`;
-  }
-  return duration;
-}
-
-function formatPreGap(frames?: number): string {
-  if (!frames) return '-';
-  const seconds = frames / 75;
-  return `${seconds.toFixed(2)}s`;
-}
-
-// ============================================================================
 // Album Header
 // ============================================================================
 
-function AlbumHeader({ ddp }: { ddp: ParsedDDP }) {
-  const { summary, id } = ddp;
+function AlbumHeader({ ddp, coverArtUrl, onDismiss }: { 
+  ddp: ParsedDDPResponse; 
+  coverArtUrl?: string | null;
+  onDismiss?: () => void;
+}) {
+  const { summary, parseTime } = ddp;
+  const [imageError, setImageError] = React.useState(false);
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-3">
-        <div className="p-2 bg-primary/10 rounded-lg">
-          <Disc3 className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h2 className="mac-heading">
-            {summary.albumTitle || 'Untitled Album'}
-          </h2>
-          {summary.performer && (
-            <p className="mac-body text-muted-foreground">{summary.performer}</p>
-          )}
-        </div>
+    <div className="flex gap-4">
+      {/* Cover Art or Disc Icon */}
+      <div className="shrink-0">
+        {coverArtUrl && !imageError ? (
+          <div className="relative w-20 h-20 rounded-lg overflow-hidden shadow-md bg-muted">
+            <Image
+              src={coverArtUrl}
+              alt={summary.albumTitle || 'Album cover'}
+              fill
+              className="object-cover"
+              onError={() => setImageError(true)}
+              unoptimized
+            />
+          </div>
+        ) : (
+          <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center shadow-sm border border-border">
+            <Disc3 className="h-10 w-10 text-primary/60" />
+          </div>
+        )}
       </div>
 
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        This DDP (Disc Description Protocol) master contains{' '}
-        <span className="font-normal text-foreground">{summary.trackCount} tracks</span>
-        {summary.totalDuration && (
-          <>
-            {' '}with a total duration of{' '}
-            <span className="font-normal text-foreground">{formatDuration(summary.totalDuration)}</span>
-          </>
-        )}
-        .{' '}
-        {summary.hasCdText && (
-          <Badge variant="secondary" className="ml-1 text-xs">CD-TEXT</Badge>
-        )}{' '}
-        {summary.hasPq && (
-          <Badge variant="secondary" className="ml-1 text-xs">PQ Subcode</Badge>
-        )}
-      </p>
-
-      {(summary.upc || id?.mid) && (
-        <div className="flex flex-wrap gap-4 text-sm">
-          {summary.upc && (
-            <div>
-              <span className="text-muted-foreground">UPC: </span>
-              <span className="font-mono text-foreground">{summary.upc}</span>
-            </div>
-          )}
-          {id?.mid && (
-            <div>
-              <span className="text-muted-foreground">Master ID: </span>
-              <span className="font-mono text-foreground">{id.mid}</span>
-            </div>
+      {/* Album Info */}
+      <div className="flex-1 min-w-0 space-y-1.5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h2 className="text-lg font-semibold text-foreground truncate">
+              {summary.albumTitle || 'Untitled Album'}
+            </h2>
+            {summary.performer && (
+              <p className="text-sm text-muted-foreground truncate">{summary.performer}</p>
+            )}
+          </div>
+          {onDismiss && (
+            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 -mt-1 -mr-2" onClick={onDismiss}>
+              <X className="h-4 w-4" />
+            </Button>
           )}
         </div>
-      )}
+
+        {/* Badges */}
+        <div className="flex flex-wrap gap-1.5">
+          {parseTime && (
+            <Badge variant="outline" className="text-xs gap-1 bg-blue-500/10 text-blue-600 border-blue-500/20">
+              <Timer className="h-3 w-3" />
+              {parseTime}s
+            </Badge>
+          )}
+          <Badge variant="secondary" className="text-xs gap-1">
+            <Music2 className="h-3 w-3" />
+            {summary.trackCount} tracks
+          </Badge>
+          {summary.totalDuration && (
+            <Badge variant="secondary" className="text-xs gap-1">
+              <Clock className="h-3 w-3" />
+              {summary.totalDuration}
+            </Badge>
+          )}
+          {summary.hasCdText && (
+            <Badge variant="outline" className="text-xs bg-green-500/10 text-green-600 border-green-500/20">
+              CD-TEXT
+            </Badge>
+          )}
+          {summary.hasPq && (
+            <Badge variant="outline" className="text-xs">
+              PQ
+            </Badge>
+          )}
+        </div>
+
+        {/* UPC */}
+        {summary.upc && (
+          <p className="text-xs text-muted-foreground flex items-center gap-1">
+            <Barcode className="h-3 w-3" />
+            <span className="font-mono">{summary.upc}</span>
+          </p>
+        )}
+      </div>
     </div>
   );
 }
 
 // ============================================================================
-// Track Listing
+// Track List
 // ============================================================================
 
-function TrackListing({ tracks }: { tracks: DDPTrack[] }) {
+function TrackItem({ track, isLast }: { 
+  track: ParsedDDPResponse['tracks'][0]; 
+  isLast: boolean;
+}) {
+  return (
+    <>
+      <div className="flex items-center gap-3 py-3 px-1">
+        <span className="w-6 text-sm font-mono text-muted-foreground text-right shrink-0">
+          {track.number.toString().padStart(2, '0')}
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground truncate">
+            {track.title || <span className="italic text-muted-foreground">Untitled</span>}
+          </p>
+          {track.performer && (
+            <p className="text-xs text-muted-foreground truncate">{track.performer}</p>
+          )}
+        </div>
+        <span className="text-sm font-mono text-muted-foreground shrink-0">
+          {track.duration || '—'}
+        </span>
+        {track.isrc && (
+          <Badge variant="outline" className="text-xs font-mono shrink-0 hidden sm:inline-flex">
+            {track.isrc}
+          </Badge>
+        )}
+      </div>
+      {!isLast && <Separator className="bg-border/50" />}
+    </>
+  );
+}
+
+function TrackListing({ tracks }: { tracks: ParsedDDPResponse['tracks'] }) {
   if (tracks.length === 0) return null;
 
   return (
-    <Card className="mac-card border-border">
-      <CardHeader className="mac-card pb-3">
+    <Card className="border-border">
+      <CardHeader className="pb-2 pt-4 px-4">
         <div className="flex items-center gap-2">
           <Music2 className="h-4 w-4 text-muted-foreground" />
-          <CardTitle className="text-base">Track Listing</CardTitle>
+          <CardTitle className="text-sm font-medium">Track Listing</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="pt-0">
+      <CardContent className="px-4 pb-4">
         <div className="rounded-md border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border">
-                <TableHead className="w-12">#</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Performer</TableHead>
-                <TableHead className="w-24 text-right">Duration</TableHead>
-                <TableHead className="w-32">ISRC</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tracks.map((track) => (
-                <TableRow key={track.number} className="border-border">
-                  <TableCell className="font-mono text-muted-foreground">
-                    {track.number.toString().padStart(2, '0')}
-                  </TableCell>
-                  <TableCell className="font-normal">
-                    {track.title || <span className="text-muted-foreground italic">Untitled</span>}
-                  </TableCell>
-                  <TableCell>
-                    {track.performer || <span className="text-muted-foreground">-</span>}
-                  </TableCell>
-                  <TableCell className="text-right font-mono">
-                    {formatDuration(track.duration)}
-                  </TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">
-                    {track.isrc || '-'}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {tracks.map((track, idx) => (
+            <TrackItem key={track.number} track={track} isLast={idx === tracks.length - 1} />
+          ))}
         </div>
       </CardContent>
     </Card>
@@ -180,77 +240,26 @@ function TrackListing({ tracks }: { tracks: DDPTrack[] }) {
 }
 
 // ============================================================================
-// DDP Files Table
+// MusicBrainz Card
 // ============================================================================
 
-function DDPFilesTable({ files }: { files: ParsedDDP['summary']['files'] }) {
-  if (files.length === 0) return null;
-
-  return (
-    <Card className="mac-card border-border">
-      <CardHeader className="mac-card pb-3">
-        <div className="flex items-center gap-2">
-          <FileText className="h-4 w-4 text-muted-foreground" />
-          <CardTitle className="text-base">DDP Files</CardTitle>
-        </div>
-        <CardDescription className="mac-card">Components of this DDP master</CardDescription>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <div className="rounded-md border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border">
-                <TableHead>Filename</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead className="text-right">Size</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {files.map((file, idx) => (
-                <TableRow key={idx} className="border-border">
-                  <TableCell className="font-mono">{file.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="text-xs">
-                      {file.type}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right font-mono text-muted-foreground">
-                    {formatBytes(file.size)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// ============================================================================
-// MusicBrainz Results
-// ============================================================================
-
-function MusicBrainzResults({
-  result,
-  isLoading,
-}: {
-  result?: MusicBrainzLookupResult;
+function MusicBrainzCard({ result, isLoading }: { 
+  result?: MusicBrainzLookupResult | null; 
   isLoading?: boolean;
 }) {
+  const [imageError, setImageError] = React.useState(false);
+
   if (isLoading) {
     return (
-      <Card className="mac-card border-border">
-        <CardHeader className="mac-card pb-3">
-          <div className="flex items-center gap-2">
-            <Database className="h-4 w-4 text-muted-foreground" />
-            <CardTitle className="text-base">From MusicBrainz</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Looking up metadata...</span>
+      <Card className="border-border">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-16 w-16 rounded-lg" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
+              <Skeleton className="h-3 w-1/3" />
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -261,17 +270,16 @@ function MusicBrainzResults({
 
   if (!result.success || result.releases.length === 0) {
     return (
-      <Card className="mac-card border-border">
-        <CardHeader className="mac-card pb-3">
-          <div className="flex items-center gap-2">
-            <Database className="h-4 w-4 text-muted-foreground" />
-            <CardTitle className="text-base">From MusicBrainz</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <AlertCircle className="h-4 w-4" />
-            <span>No data available from MusicBrainz</span>
+      <Card className="border-border bg-muted/30">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <div className="p-2 rounded-lg bg-muted">
+              <AlertCircle className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">No MusicBrainz match</p>
+              <p className="text-xs">This release isn't in the database yet.</p>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -280,80 +288,85 @@ function MusicBrainzResults({
 
   const release = result.releases[0];
   const artists = release.artistCredit?.map(a => a.name).join(', ') || 'Unknown Artist';
+  const labelInfo = release.labelInfo?.[0];
+  const coverArtUrl = `https://coverartarchive.org/release/${release.id}/front-250`;
 
   return (
-    <Card className="mac-card border-border">
-      <CardHeader className="mac-card pb-3">
+    <Card className="border-border overflow-hidden">
+      <CardHeader className="pb-2 pt-4 px-4">
         <div className="flex items-center gap-2">
           <Database className="h-4 w-4 text-muted-foreground" />
-          <CardTitle className="text-base">From MusicBrainz</CardTitle>
-          <Badge variant="secondary" className="text-xs ml-auto">
-            via {result.source}
+          <CardTitle className="text-sm font-medium">MusicBrainz</CardTitle>
+          <Badge 
+            variant="outline" 
+            className={cn(
+              "text-xs ml-auto",
+              result.source === 'discid' && "bg-green-500/10 text-green-600 border-green-500/20"
+            )}
+          >
+            {result.source === 'discid' ? (
+              <><CheckCircle2 className="h-3 w-3 mr-1" />Disc ID</>
+            ) : (
+              `via ${result.source}`
+            )}
           </Badge>
         </div>
-        <CardDescription className="mac-card">
-          Additional metadata from the MusicBrainz database
-        </CardDescription>
       </CardHeader>
-      <CardContent className="pt-0 space-y-4">
-        {/* Release Info */}
-        <div className="space-y-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-normal">{release.title}</span>
-            {release.date && (
-              <span className="text-muted-foreground">({release.date.substring(0, 4)})</span>
+      <CardContent className="px-4 pb-4">
+        <div className="flex gap-4">
+          <div className="shrink-0">
+            {!imageError ? (
+              <div className="relative w-16 h-16 rounded-md overflow-hidden bg-muted">
+                <Image
+                  src={coverArtUrl}
+                  alt={release.title}
+                  fill
+                  className="object-cover"
+                  onError={() => setImageError(true)}
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <div className="w-16 h-16 rounded-md bg-muted flex items-center justify-center">
+                <Disc3 className="h-8 w-8 text-muted-foreground/50" />
+              </div>
             )}
           </div>
-          <p className="mac-body text-muted-foreground">{artists}</p>
-        </div>
-
-        {/* Metadata Grid */}
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          {release.country && (
+          <div className="flex-1 min-w-0 space-y-2">
             <div>
-              <span className="text-muted-foreground">Country: </span>
-              <span>{release.country}</span>
+              <h3 className="text-sm font-semibold text-foreground truncate">{release.title}</h3>
+              <p className="text-xs text-muted-foreground truncate">{artists}</p>
             </div>
-          )}
-          {release.status && (
-            <div>
-              <span className="text-muted-foreground">Status: </span>
-              <span>{release.status}</span>
-            </div>
-          )}
-          {release.barcode && (
-            <div>
-              <span className="text-muted-foreground">Barcode: </span>
-              <span className="font-mono">{release.barcode}</span>
-            </div>
-          )}
-          {release.releaseGroup?.primaryType && (
-            <div>
-              <span className="text-muted-foreground">Type: </span>
-              <span>{release.releaseGroup.primaryType}</span>
-            </div>
-          )}
-          {release.labelInfo?.[0]?.label?.name && (
-            <div className="col-span-2">
-              <span className="text-muted-foreground">Label: </span>
-              <span>{release.labelInfo[0].label.name}</span>
-              {release.labelInfo[0].catalogNumber && (
-                <span className="ml-2 font-mono text-muted-foreground">
-                  ({release.labelInfo[0].catalogNumber})
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              {release.date && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  {release.date.substring(0, 4)}
+                </span>
+              )}
+              {release.country && (
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  {release.country}
+                </span>
+              )}
+              {labelInfo?.label?.name && (
+                <span className="flex items-center gap-1">
+                  <Building2 className="h-3 w-3" />
+                  {labelInfo.label.name}
                 </span>
               )}
             </div>
-          )}
+          </div>
         </div>
-
-        {/* MusicBrainz Link */}
-        <div className="pt-2">
+        <div className="mt-3 pt-3 border-t border-border">
           <a
             href={`https://musicbrainz.org/release/${release.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
           >
+            <ExternalLink className="h-3 w-3" />
             View on MusicBrainz
           </a>
         </div>
@@ -373,34 +386,16 @@ export function DDPDisplay({
   className,
   onDismiss,
 }: DDPDisplayProps) {
+  const coverArtUrl = musicBrainz?.releases?.[0]?.id 
+    ? `https://coverartarchive.org/release/${musicBrainz.releases[0].id}/front-250`
+    : null;
+
   return (
-    <div className={cn('space-y-6', className)}>
-      {/* Album Header with dismiss button */}
-      <div className="flex items-start justify-between gap-4">
-        <AlbumHeader ddp={ddp} />
-        {onDismiss && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="mac-button h-8 w-8 shrink-0"
-            onClick={onDismiss}
-            title="Dismiss"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
-
+    <div className={cn('space-y-4', className)}>
+      <AlbumHeader ddp={ddp} coverArtUrl={coverArtUrl} onDismiss={onDismiss} />
       <Separator className="bg-border" />
-
-      {/* Track Listing */}
       <TrackListing tracks={ddp.tracks} />
-
-      {/* DDP Files */}
-      <DDPFilesTable files={ddp.summary.files} />
-
-      {/* MusicBrainz Results */}
-      <MusicBrainzResults result={musicBrainz} isLoading={isLoadingMusicBrainz} />
+      <MusicBrainzCard result={musicBrainz} isLoading={isLoadingMusicBrainz} />
     </div>
   );
 }

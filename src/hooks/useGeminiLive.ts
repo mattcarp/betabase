@@ -16,6 +16,7 @@ export interface UseGeminiLiveOptions {
   voiceName?: string;
   onConnectionStatusChange?: (status: "connected" | "disconnected" | "error") => void;
   onError?: (error: Error) => void;
+  onText?: (text: string) => void;
 }
 
 export function useGeminiLive({
@@ -25,6 +26,7 @@ export function useGeminiLive({
   voiceName = "Aoede", // Example voice
   onConnectionStatusChange,
   onError,
+  onText,
 }: UseGeminiLiveOptions) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -154,6 +156,7 @@ export function useGeminiLive({
                 }
                 if (part.text) {
                     console.log("🔌 Live: Received text:", part.text);
+                    onText?.(part.text);
                 }
               }
             }
@@ -198,7 +201,7 @@ export function useGeminiLive({
         connectionReadyRef.current = null;
         return false;
     }
-  }, [apiKey, model, systemInstruction, voiceName, onConnectionStatusChange, onError, isConnected]);
+  }, [apiKey, model, systemInstruction, voiceName, onConnectionStatusChange, onError, onText, isConnected]);
 
   const disconnect = useCallback(async () => {
     console.log("🔌 Live: Disconnecting...");
