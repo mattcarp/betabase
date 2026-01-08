@@ -2211,7 +2211,7 @@ export function AiSdkChatPanel({
                             />
                           ))}
                           {loadingSeconds >= 8 && (
-                            <ChainOfThoughtSpinner message={`Synthesizing... (${loadingSeconds}s)`} />
+                            <ChainOfThoughtSpinner message="Synthesizing..." />
                           )}
                         </ChainOfThoughtContent>
                       </ChainOfThought>
@@ -2532,7 +2532,7 @@ export function AiSdkChatPanel({
                 {isGroqSpeaking ? <Volume2 className="h-4 w-4 animate-pulse text-green-400" /> : <VolumeX className="h-4 w-4" />}
               </Button>
 
-              {/* Voice Input Button - Groq */}
+              {/* Voice Input Button - Groq (Hold to Record) */}
               <Button
                 data-testid="voice-input-button"
                 type="button"
@@ -2544,17 +2544,43 @@ export function AiSdkChatPanel({
                     ? ["bg-red-500 hover:bg-red-600 border-red-400", "text-white shadow-none animate-pulse"]
                     : ["text-primary hover:text-primary/80", "hover:bg-primary/10"]
                 )}
-                onClick={() => {
-                  if (isGroqRecording) {
-                    console.log("🎤 Stopping recording...");
-                    stopGroqRecording();
-                  } else {
-                    console.log("🎤 Starting recording...");
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  if (!isGroqRecording && !isGroqTranscribing) {
+                    console.log("🎤 Starting recording (mouse down)...");
                     startGroqRecording();
                   }
                 }}
+                onMouseUp={(e) => {
+                  e.preventDefault();
+                  if (isGroqRecording) {
+                    console.log("🎤 Stopping recording (mouse up)...");
+                    stopGroqRecording();
+                  }
+                }}
+                onMouseLeave={() => {
+                  // Stop recording if user drags mouse away while holding
+                  if (isGroqRecording) {
+                    console.log("🎤 Stopping recording (mouse leave)...");
+                    stopGroqRecording();
+                  }
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  if (!isGroqRecording && !isGroqTranscribing) {
+                    console.log("🎤 Starting recording (touch start)...");
+                    startGroqRecording();
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  if (isGroqRecording) {
+                    console.log("🎤 Stopping recording (touch end)...");
+                    stopGroqRecording();
+                  }
+                }}
                 disabled={isLoading || isGroqTranscribing}
-                title={isGroqTranscribing ? "Transcribing..." : isGroqRecording ? "Stop Recording" : "Start Voice Input"}
+                title={isGroqTranscribing ? "Transcribing..." : isGroqRecording ? "Release to Send" : "Hold to Record"}
               >
                 {isGroqTranscribing ? (
                   <Sparkles className="h-4 w-4 animate-spin text-yellow-400" />
