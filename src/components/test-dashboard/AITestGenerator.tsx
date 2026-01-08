@@ -10,6 +10,14 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import {
   Lightbulb,
   Sparkles,
   FileText,
@@ -28,6 +36,10 @@ import {
   Clock,
   History,
   Video,
+  X,
+  Bug,
+  ArrowRight,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useToast } from "../../hooks/use-toast";
@@ -64,6 +76,17 @@ export const AITestGenerator: React.FC = () => {
     videoPath: string;
     consoleErrors: string[];
   } | null>(null);
+  const [showTroubleshootDialog, setShowTroubleshootDialog] = useState(false);
+  const [troubleshootAnalysis, setTroubleshootAnalysis] = useState<{
+    errors: Array<{
+      original: string;
+      category: string;
+      severity: "critical" | "warning" | "info";
+      suggestion: string;
+    }>;
+    summary: string;
+  } | null>(null);
+  const [isTroubleshooting, setIsTroubleshooting] = useState(false);
   const [generatedTests, setGeneratedTests] = useState<GeneratedTest[]>([
     {
       id: "1",
@@ -146,6 +169,104 @@ describe('API Integration Tests', () => {
   ]);
 
   const [selectedTest, setSelectedTest] = useState<GeneratedTest | null>(generatedTests[0]);
+
+  // Analyze console errors and provide troubleshooting suggestions
+  const analyzeConsoleErrors = (errors: string[]) => {
+    const analyzed = errors.map((error) => {
+      const lowerError = error.toLowerCase();
+
+      // Categorize and provide suggestions based on error patterns
+      if (lowerError.includes("failed to fetch") || lowerError.includes("network") || lowerError.includes("cors")) {
+        return {
+          original: error,
+          category: "Network / CORS",
+          severity: "critical" as const,
+          suggestion: "Check API endpoint availability and CORS configuration. Ensure the server is running and accessible.",
+        };
+      }
+      if (lowerError.includes("undefined") || lowerError.includes("null") || lowerError.includes("cannot read property")) {
+        return {
+          original: error,
+          category: "Null Reference",
+          severity: "critical" as const,
+          suggestion: "Add null checks or optional chaining (?.) before accessing nested properties. Verify data is loaded before use.",
+        };
+      }
+      if (lowerError.includes("hydration") || lowerError.includes("mismatch")) {
+        return {
+          original: error,
+          category: "React Hydration",
+          severity: "warning" as const,
+          suggestion: "Server and client render different content. Check for browser-only code, use useEffect for client-side state, or add suppressHydrationWarning.",
+        };
+      }
+      if (lowerError.includes("warning") || lowerError.includes("deprecated")) {
+        return {
+          original: error,
+          category: "Deprecation Warning",
+          severity: "info" as const,
+          suggestion: "Update to the recommended API. Check documentation for migration guides.",
+        };
+      }
+      if (lowerError.includes("timeout") || lowerError.includes("abort")) {
+        return {
+          original: error,
+          category: "Timeout / Abort",
+          severity: "warning" as const,
+          suggestion: "Increase timeout duration or optimize slow operations. Consider adding loading states.",
+        };
+      }
+      if (lowerError.includes("403") || lowerError.includes("401") || lowerError.includes("unauthorized")) {
+        return {
+          original: error,
+          category: "Authentication",
+          severity: "critical" as const,
+          suggestion: "Check authentication tokens, API keys, or user permissions. Ensure session is valid.",
+        };
+      }
+      if (lowerError.includes("404") || lowerError.includes("not found")) {
+        return {
+          original: error,
+          category: "Not Found",
+          severity: "warning" as const,
+          suggestion: "Verify the resource path or URL. Check for typos in routes or API endpoints.",
+        };
+      }
+
+      // Default category for unrecognized errors
+      return {
+        original: error,
+        category: "General Error",
+        severity: "warning" as const,
+        suggestion: "Review the error message and stack trace for debugging clues.",
+      };
+    });
+
+    const criticalCount = analyzed.filter((e) => e.severity === "critical").length;
+    const warningCount = analyzed.filter((e) => e.severity === "warning").length;
+
+    const summary = criticalCount > 0
+      ? `Found ${criticalCount} critical issue${criticalCount > 1 ? "s" : ""} that need immediate attention.`
+      : warningCount > 0
+        ? `Found ${warningCount} warning${warningCount > 1 ? "s" : ""} to review.`
+        : "No major issues detected. Review the info items for optimization opportunities.";
+
+    return { errors: analyzed, summary };
+  };
+
+  const handleTroubleshoot = () => {
+    if (!recordingResult?.consoleErrors.length) return;
+
+    setIsTroubleshooting(true);
+    setShowTroubleshootDialog(true);
+
+    // Simulate brief analysis delay for UX
+    setTimeout(() => {
+      const analysis = analyzeConsoleErrors(recordingResult.consoleErrors);
+      setTroubleshootAnalysis(analysis);
+      setIsTroubleshooting(false);
+    }, 500);
+  };
 
   const handleGenerate = async () => {
     if (recordScreencast) {
@@ -581,13 +702,7 @@ describe('API Integration Tests', () => {
                         <Button variant="teal-solid"
                           size="sm"
                           className="flex-1"
-                          onClick={() => {
-                            // TODO: Implement troubleshoot flow
-                            toast({
-                              title: "Troubleshoot",
-                              description: "Analyzing console errors...",
-                            });
-                          }}
+                          onClick={handleTroubleshoot}
                         >
                           Troubleshoot Errors
                         </Button>
@@ -797,6 +912,109 @@ describe('API Integration Tests', () => {
           </Card>
         )}
       </div>
+
+      {/* Troubleshoot Console Errors Dialog */}
+      <Dialog open={showTroubleshootDialog} onOpenChange={setShowTroubleshootDialog}>
+        <DialogContent className="mac-card border-border sm:max-w-[600px] max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bug className="h-5 w-5 text-red-500" />
+              Console Error Analysis
+            </DialogTitle>
+            <DialogDescription>
+              AI-powered analysis of {recordingResult?.consoleErrors.length || 0} console errors
+            </DialogDescription>
+          </DialogHeader>
+
+          <ScrollArea className="max-h-[50vh] py-4">
+            {isTroubleshooting ? (
+              <div className="flex flex-col items-center justify-center py-8 gap-4">
+                <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                <p className="text-sm text-muted-foreground">Analyzing errors...</p>
+              </div>
+            ) : troubleshootAnalysis ? (
+              <div className="space-y-4">
+                {/* Summary */}
+                <div className="p-3 rounded-lg bg-muted/50 border border-border">
+                  <p className="text-sm font-medium">{troubleshootAnalysis.summary}</p>
+                </div>
+
+                {/* Individual Errors */}
+                <div className="space-y-3">
+                  {troubleshootAnalysis.errors.map((error, idx) => (
+                    <div
+                      key={idx}
+                      className={cn(
+                        "p-3 rounded-lg border",
+                        error.severity === "critical" && "border-red-500/30 bg-red-500/5",
+                        error.severity === "warning" && "border-amber-500/30 bg-amber-500/5",
+                        error.severity === "info" && "border-blue-500/30 bg-blue-500/5"
+                      )}
+                    >
+                      {/* Header */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-xs",
+                            error.severity === "critical" && "border-red-500 text-red-500",
+                            error.severity === "warning" && "border-amber-500 text-amber-500",
+                            error.severity === "info" && "border-blue-500 text-blue-500"
+                          )}
+                        >
+                          {error.severity.toUpperCase()}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">{error.category}</span>
+                      </div>
+
+                      {/* Error Message */}
+                      <div className="text-xs font-mono p-2 bg-background rounded border border-border mb-2 break-words">
+                        {error.original.length > 150 ? error.original.slice(0, 150) + "..." : error.original}
+                      </div>
+
+                      {/* Suggestion */}
+                      <div className="flex items-start gap-2">
+                        <ArrowRight className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                        <p className="text-xs text-muted-foreground">{error.suggestion}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </ScrollArea>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowTroubleshootDialog(false)}
+              className="mac-button mac-button-outline"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Close
+            </Button>
+            <Button
+              onClick={() => {
+                // Copy error summary to clipboard for sharing
+                if (troubleshootAnalysis) {
+                  const summary = troubleshootAnalysis.errors
+                    .map((e) => `[${e.severity.toUpperCase()}] ${e.category}: ${e.original}\nSuggestion: ${e.suggestion}`)
+                    .join("\n\n");
+                  navigator.clipboard.writeText(summary);
+                  toast({
+                    title: "Copied to clipboard",
+                    description: "Error analysis has been copied for sharing",
+                  });
+                }
+              }}
+              className="mac-button-primary"
+            >
+              <Copy className="h-4 w-4 mr-2" />
+              Copy Analysis
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

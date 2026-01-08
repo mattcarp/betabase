@@ -3,6 +3,6 @@
  */
 
 export { DDPDisplay } from './DDPDisplay';
-export { DDPUploader } from './DDPUploader';
+export { DDPUploader, type DDPProcessingStage } from './DDPUploader';
 export { DDPResultsPanel } from './DDPResultsPanel';
 export { MusicBrainzResultsCard, MusicBrainzResultsSkeleton } from './MusicBrainzResultsCard';

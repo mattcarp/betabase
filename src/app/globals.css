@@ -273,7 +273,13 @@ body {
   border-color: var(--mac-primary-blue-400);
 }
 
-/* Shimmer Effect */
+/* Shimmer Effect - Skeleton Loading States */
+.mac-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--mac-utility-border);
+}
+
 .mac-shimmer::before {
   content: "";
   position: absolute;
@@ -281,8 +287,8 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 3s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {

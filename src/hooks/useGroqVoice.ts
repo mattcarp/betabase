@@ -15,6 +15,65 @@ interface UseGroqVoiceReturn {
   isSpeaking: boolean;
 }
 
+/**
+ * Convert AudioBuffer to WAV format
+ * WAV is more universally supported by transcription APIs
+ */
+function audioBufferToWav(buffer: AudioBuffer): Blob {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const format = 1; // PCM
+  const bitDepth = 16;
+
+  const bytesPerSample = bitDepth / 8;
+  const blockAlign = numChannels * bytesPerSample;
+
+  const dataLength = buffer.length * blockAlign;
+  const bufferLength = 44 + dataLength;
+
+  const arrayBuffer = new ArrayBuffer(bufferLength);
+  const view = new DataView(arrayBuffer);
+
+  // WAV header
+  const writeString = (offset: number, string: string) => {
+    for (let i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  };
+
+  writeString(0, "RIFF");
+  view.setUint32(4, bufferLength - 8, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true); // fmt chunk size
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * blockAlign, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitDepth, true);
+  writeString(36, "data");
+  view.setUint32(40, dataLength, true);
+
+  // Write audio data
+  const channelData: Float32Array[] = [];
+  for (let i = 0; i < numChannels; i++) {
+    channelData.push(buffer.getChannelData(i));
+  }
+
+  let offset = 44;
+  for (let i = 0; i < buffer.length; i++) {
+    for (let channel = 0; channel < numChannels; channel++) {
+      const sample = Math.max(-1, Math.min(1, channelData[channel][i]));
+      const intSample = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+      view.setInt16(offset, intSample, true);
+      offset += 2;
+    }
+  }
+
+  return new Blob([arrayBuffer], { type: "audio/wav" });
+}
+
 export function useGroqVoice(): UseGroqVoiceReturn {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -29,7 +88,17 @@ export function useGroqVoice(): UseGroqVoiceReturn {
     try {
       setError(null);
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+
+      // Try to use a format that Groq supports well
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : MediaRecorder.isTypeSupported("audio/webm")
+          ? "audio/webm"
+          : undefined;
+
+      const mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      console.log("[useGroqVoice] Recording with mimeType:", mediaRecorder.mimeType);
+
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -39,7 +108,8 @@ export function useGroqVoice(): UseGroqVoiceReturn {
         }
       };
 
-      mediaRecorder.start();
+      // Request data every 100ms for better quality
+      mediaRecorder.start(100);
       setIsRecording(true);
     } catch (err) {
       console.error("Failed to start recording:", err);
@@ -59,26 +129,71 @@ export function useGroqVoice(): UseGroqVoiceReturn {
         mediaRecorderRef.current?.stream.getTracks().forEach(track => track.stop());
 
         try {
-          const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+          // Use the actual mimeType from the recorder
+          const actualMimeType = mediaRecorderRef.current?.mimeType || "audio/webm";
+          const webmBlob = new Blob(chunksRef.current, { type: actualMimeType });
+
+          console.log("[useGroqVoice] Original blob:", {
+            size: webmBlob.size,
+            type: webmBlob.type,
+          });
+
+          // Convert webm to WAV for better Groq compatibility
+          let audioBlob: Blob;
+          let filename: string;
+
+          try {
+            // Create AudioContext to decode the webm (local variable - no need for ref)
+            const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+
+            const arrayBuffer = await webmBlob.arrayBuffer();
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+            // Convert to WAV
+            audioBlob = audioBufferToWav(audioBuffer);
+            filename = "recording.wav";
+
+            console.log("[useGroqVoice] Converted to WAV:", {
+              size: audioBlob.size,
+              type: audioBlob.type,
+            });
+
+            // Clean up
+            await audioContext.close();
+          } catch (conversionError) {
+            console.warn("[useGroqVoice] WAV conversion failed, using original format:", conversionError);
+            audioBlob = webmBlob;
+            filename = "recording.webm";
+          }
+
           const formData = new FormData();
-          formData.append("file", audioBlob, "recording.webm");
+          formData.append("file", audioBlob, filename);
+
+          console.log("[useGroqVoice] Sending to Groq API...");
 
           const response = await fetch("/api/groq/transcribe", {
             method: "POST",
             body: formData,
           });
 
-          if (!response.ok) {
-            throw new Error("Transcription failed");
-          }
+          console.log("[useGroqVoice] Groq API response status:", response.status);
 
           const data = await response.json();
+          console.log("[useGroqVoice] Groq API response data:", data);
+
+          if (!response.ok) {
+            const errorMessage = data.error || `Transcription failed (${response.status})`;
+            console.error("[useGroqVoice] Transcription error:", errorMessage);
+            throw new Error(errorMessage);
+          }
+
           if (data.text) {
             setTranscript(data.text);
           }
         } catch (err) {
-          console.error("Transcription error:", err);
-          setError("Failed to transcribe audio");
+          console.error("[useGroqVoice] Transcription error:", err);
+          const message = err instanceof Error ? err.message : "Failed to transcribe audio";
+          setError(message);
         } finally {
           setIsTranscribing(false);
           resolve();

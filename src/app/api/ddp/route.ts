@@ -26,16 +26,18 @@ const PACK_TYPES: Record<number, string> = {
 function parseDDPMS(buffer: Buffer): string[] {
   const files: string[] = [];
   const packetCount = Math.floor(buffer.length / DDPMS_BLOCK_SIZE);
-  
+
   for (let i = 0; i < packetCount; i++) {
     const offset = i * DDPMS_BLOCK_SIZE;
     const str = buffer.toString('ascii', offset, offset + DDPMS_BLOCK_SIZE);
-    if (str.substring(0, 4) !== 'VVVM') continue;
-    
+    const magic = str.substring(0, 4);
+    // Accept both VVVM (old) and DDP2 (DDP 2.00 spec) formats
+    if (magic !== 'VVVM' && magic !== 'DDP2') continue;
+
     const dsi = str.substring(74, 91).trim(); // Data Stream Identifier (filename)
     if (dsi) files.push(dsi);
   }
-  
+
   return files;
 }
 
@@ -139,12 +141,14 @@ function parseDDPPQ(buffer: Buffer) {
   const entries: Array<{
     trk: string; idx: string; min: string; sec: string; frm: string; isrc: string; dur?: string;
   }> = [];
-  
+
   const packetCount = Math.floor(buffer.length / DDPPQ_BLOCK_SIZE);
   for (let i = 0; i < packetCount; i++) {
     const offset = i * DDPPQ_BLOCK_SIZE;
     const str = buffer.toString('ascii', offset, offset + DDPPQ_BLOCK_SIZE);
-    if (str.substring(0, 4) !== 'VVVS') continue;
+    const magic = str.substring(0, 4);
+    // Accept both VVVS (old) and PQ01 (DDP 2.00 spec) formats
+    if (magic !== 'VVVS' && magic !== 'PQ01') continue;
     entries.push({
       trk: str.substring(4, 6).trim(),
       idx: str.substring(6, 8).trim(),

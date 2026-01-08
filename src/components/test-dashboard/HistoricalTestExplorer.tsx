@@ -64,6 +64,8 @@ import {
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { sanitizeHtml } from "../../lib/dom-purify";
+import { ConfidenceGauge, ConfidenceGaugeSkeleton } from "../ui/ConfidenceGauge";
+import { TestListItemSkeleton, TestDetailSkeleton } from "../ui/TestSkeleton";
 
 interface HistoricalTest {
   id: number;
@@ -592,9 +594,11 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
           data-test-id="test-list"
         >
           {!initialLoadComplete ? (
-            <div className="flex flex-col items-center justify-center h-48 gap-3">
-              <RefreshCw className="h-5 w-5 text-[var(--mac-primary-blue-400)] animate-spin" />
-              <span className="text-[11px] text-muted-foreground font-normal uppercase tracking-widest">Warming cache...</span>
+            <div className="space-y-0">
+              {/* Skeleton loading states - FEAT-017 */}
+              {Array.from({ length: 8 }).map((_, i) => (
+                <TestListItemSkeleton key={i} />
+              ))}
             </div>
           ) : tests.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 opacity-40 grayscale">
@@ -810,6 +814,41 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
             {/* Detail Body - Scrollable */}
             <ScrollArea className="flex-1 p-6 bg-background/40">
               <div className="max-w-4xl mx-auto space-y-6">
+                {/* Automation Confidence Gauge - FEAT-017 */}
+                <div className="p-6 rounded-2xl bg-card/40 border border-border shadow-lg">
+                  <div className="flex items-start gap-8">
+                    <ConfidenceGauge
+                      value={Math.round(calculateAutomationConfidence(selectedTest) * 100)}
+                      size="lg"
+                      showBreakdown
+                      breakdown={{
+                        scriptDepth: selectedTest.test_script?.toLowerCase().includes("expect") ||
+                          selectedTest.test_script?.toLowerCase().includes("assert") ? 20 : 0,
+                        context: selectedTest.preconditions && selectedTest.preconditions.length > 50 ? 15 : 0,
+                        stability: selectedTest.execution_count > 5 &&
+                          (selectedTest.pass_count / selectedTest.execution_count) > 0.8 ? 10 : 0,
+                        visualPenalty: /\b(ui|layout|font|color|alignment|looks|look|feel)\b/i.test(selectedTest.test_name) ? -15 : 0,
+                      }}
+                    />
+                    <div className="flex-1 space-y-4">
+                      <div>
+                        <h3 className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-2">Automation Readiness</h3>
+                        <p className="text-sm text-foreground font-light leading-relaxed">
+                          {calculateAutomationConfidence(selectedTest) >= 0.7
+                            ? "This test has strong indicators for reliable automation. Script depth and context are well-defined."
+                            : calculateAutomationConfidence(selectedTest) >= 0.4
+                            ? "This test may require some refinement before full automation. Consider adding more explicit assertions."
+                            : "This test needs significant work before automation. Visual/layout tests often require human verification."
+                          }
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {getTierBadge(calculateAutomationConfidence(selectedTest))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Description */}
                 {selectedTest.description && (
                   <div className="group border-l border-border/50 pl-6 ml-1 transition-colors hover:border-[var(--mac-primary-blue-400)]/30">
@@ -1207,7 +1246,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                             </div>
                           </div>
                         )}
-                        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
+                        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
                       </div>
                     </ArtifactContent>
 
@@ -1454,7 +1493,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <div className="grid grid-cols-3 gap-4">
                       {demoScreenshots.map((screenshot, index) => (
                         <div key={screenshot.id} className="group relative">
-                          <div className="aspect-video rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 border border-border/50 overflow-hidden relative">
+                          <div className="aspect-video rounded-lg bg-gradient-to-br from-card to-background border border-border/50 overflow-hidden relative">
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="text-center">
                                 <ImageIcon className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
@@ -1642,7 +1681,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <div className="flex flex-col items-center justify-center h-full text-center p-12">
                 <div className="relative mb-8">
                   <div className="absolute -inset-4 bg-[var(--mac-primary-blue-400)]/10 rounded-full blur-2xl" />
-                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative shadow-2xl border border-border/50">
+                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-card to-background flex items-center justify-center relative shadow-2xl border border-border/50">
                     <FileSearch className="h-10 w-10 text-muted-foreground" />
                   </div>
                 </div>

@@ -5,6 +5,22 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
+import { Textarea } from "../ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import {
   Circle,
   Square,
@@ -21,8 +37,14 @@ import {
   Clock,
   MousePointerClick,
   Maximize2,
+  Check,
+  X,
+  AlertTriangle,
+  AlertCircle,
+  Info,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { toast } from "sonner";
 
 type ViewportMode = "desktop" | "tablet" | "mobile";
 type RecordingState = "idle" | "recording" | "paused";
@@ -35,6 +57,39 @@ interface SessionInfo {
   issues: number;
   annotations: number;
 }
+
+interface ScreenshotEntry {
+  id: string;
+  timestamp: Date;
+  url: string;
+  viewport: ViewportMode;
+  description: string;
+}
+
+interface AnnotationEntry {
+  id: string;
+  timestamp: Date;
+  text: string;
+  url: string;
+  element?: string;
+}
+
+interface IssueEntry {
+  id: string;
+  timestamp: Date;
+  severity: "critical" | "major" | "minor" | "suggestion";
+  title: string;
+  description: string;
+  url: string;
+  steps?: string;
+}
+
+const SEVERITY_CONFIG = {
+  critical: { label: "Critical", icon: AlertTriangle, color: "text-red-500" },
+  major: { label: "Major", icon: AlertCircle, color: "text-amber-500" },
+  minor: { label: "Minor", icon: Info, color: "text-blue-500" },
+  suggestion: { label: "Suggestion", icon: Edit3, color: "text-muted-foreground" },
+};
 
 const VIEWPORT_SIZES = {
   desktop: { width: "100%", height: "100%", label: "Desktop", icon: Monitor },
@@ -54,6 +109,22 @@ export const ManualTestingPanel: React.FC = () => {
     screenshots: 0,
     issues: 0,
     annotations: 0,
+  });
+
+  // Data storage for session artifacts
+  const [screenshots, setScreenshots] = useState<ScreenshotEntry[]>([]);
+  const [annotations, setAnnotations] = useState<AnnotationEntry[]>([]);
+  const [issues, setIssues] = useState<IssueEntry[]>([]);
+
+  // Dialog states
+  const [showAnnotationDialog, setShowAnnotationDialog] = useState(false);
+  const [showIssueDialog, setShowIssueDialog] = useState(false);
+  const [annotationText, setAnnotationText] = useState("");
+  const [issueForm, setIssueForm] = useState({
+    severity: "minor" as IssueEntry["severity"],
+    title: "",
+    description: "",
+    steps: "",
   });
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -120,34 +191,105 @@ export const ManualTestingPanel: React.FC = () => {
     }
   };
 
-  const handleScreenshot = () => {
+  const handleScreenshot = async () => {
+    // Create a screenshot entry (in a real implementation, we'd capture the iframe)
+    const newScreenshot: ScreenshotEntry = {
+      id: `ss-${Date.now()}`,
+      timestamp: new Date(),
+      url: currentUrl,
+      viewport,
+      description: `Screenshot at ${new Date().toLocaleTimeString()}`,
+    };
+
+    setScreenshots((prev) => [...prev, newScreenshot]);
     setSessionInfo((prev) => ({
       ...prev,
       screenshots: prev.screenshots + 1,
       interactionCount: prev.interactionCount + 1,
     }));
-    // TODO: Implement screenshot capture
-    console.log("📸 Screenshot captured");
+
+    toast.success("Screenshot captured", {
+      description: `Saved screenshot of ${viewport} view`,
+    });
   };
 
   const handleAnnotate = () => {
+    setAnnotationText("");
+    setShowAnnotationDialog(true);
+  };
+
+  const handleAnnotationSubmit = () => {
+    if (!annotationText.trim()) {
+      toast.error("Please enter annotation text");
+      return;
+    }
+
+    const newAnnotation: AnnotationEntry = {
+      id: `ann-${Date.now()}`,
+      timestamp: new Date(),
+      text: annotationText.trim(),
+      url: currentUrl,
+    };
+
+    setAnnotations((prev) => [...prev, newAnnotation]);
     setSessionInfo((prev) => ({
       ...prev,
       annotations: prev.annotations + 1,
       interactionCount: prev.interactionCount + 1,
     }));
-    // TODO: Implement annotation mode
-    console.log("✏️ Annotation mode activated");
+
+    setShowAnnotationDialog(false);
+    setAnnotationText("");
+
+    toast.success("Annotation added", {
+      description: "Your note has been recorded",
+    });
   };
 
   const handleFlagIssue = () => {
+    setIssueForm({
+      severity: "minor",
+      title: "",
+      description: "",
+      steps: "",
+    });
+    setShowIssueDialog(true);
+  };
+
+  const handleIssueSubmit = () => {
+    if (!issueForm.title.trim()) {
+      toast.error("Please enter an issue title");
+      return;
+    }
+
+    const newIssue: IssueEntry = {
+      id: `issue-${Date.now()}`,
+      timestamp: new Date(),
+      severity: issueForm.severity,
+      title: issueForm.title.trim(),
+      description: issueForm.description.trim(),
+      url: currentUrl,
+      steps: issueForm.steps.trim() || undefined,
+    };
+
+    setIssues((prev) => [...prev, newIssue]);
     setSessionInfo((prev) => ({
       ...prev,
       issues: prev.issues + 1,
       interactionCount: prev.interactionCount + 1,
     }));
-    // TODO: Implement issue flagging
-    console.log("🚩 Issue flagged");
+
+    setShowIssueDialog(false);
+    setIssueForm({
+      severity: "minor",
+      title: "",
+      description: "",
+      steps: "",
+    });
+
+    toast.success("Issue flagged", {
+      description: `${SEVERITY_CONFIG[issueForm.severity].label} issue recorded`,
+    });
   };
 
   const handleReload = () => {
@@ -515,6 +657,164 @@ export const ManualTestingPanel: React.FC = () => {
           </Card>
         </div>
       </div>
+
+      {/* Annotation Dialog */}
+      <Dialog open={showAnnotationDialog} onOpenChange={setShowAnnotationDialog}>
+        <DialogContent className="mac-card border-border">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Edit3 className="h-5 w-5 text-primary" />
+              Add Annotation
+            </DialogTitle>
+            <DialogDescription>
+              Add a note about what you observed at {currentUrl}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <Textarea
+              value={annotationText}
+              onChange={(e) => setAnnotationText(e.target.value)}
+              placeholder="Describe what you noticed or want to remember..."
+              className="min-h-[120px] mac-input border-border focus:border-primary"
+            />
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowAnnotationDialog(false)}
+              className="mac-button mac-button-outline"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAnnotationSubmit}
+              className="mac-button-primary"
+            >
+              <Check className="h-4 w-4 mr-2" />
+              Save Annotation
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Issue Flagging Dialog */}
+      <Dialog open={showIssueDialog} onOpenChange={setShowIssueDialog}>
+        <DialogContent className="mac-card border-border sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Flag className="h-5 w-5 text-red-500" />
+              Flag Issue
+            </DialogTitle>
+            <DialogDescription>
+              Report a bug or issue found at {currentUrl}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* Severity Select */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Severity
+              </label>
+              <Select
+                value={issueForm.severity}
+                onValueChange={(value: IssueEntry["severity"]) =>
+                  setIssueForm((prev) => ({ ...prev, severity: value }))
+                }
+              >
+                <SelectTrigger className="mac-input border-border">
+                  <SelectValue placeholder="Select severity" />
+                </SelectTrigger>
+                <SelectContent className="mac-card border-border">
+                  {(Object.keys(SEVERITY_CONFIG) as Array<keyof typeof SEVERITY_CONFIG>).map(
+                    (sev) => {
+                      const config = SEVERITY_CONFIG[sev];
+                      const Icon = config.icon;
+                      return (
+                        <SelectItem key={sev} value={sev}>
+                          <div className="flex items-center gap-2">
+                            <Icon className={cn("h-4 w-4", config.color)} />
+                            {config.label}
+                          </div>
+                        </SelectItem>
+                      );
+                    }
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Title Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Issue Title <span className="text-red-500">*</span>
+              </label>
+              <Input
+                value={issueForm.title}
+                onChange={(e) =>
+                  setIssueForm((prev) => ({ ...prev, title: e.target.value }))
+                }
+                placeholder="Brief description of the issue"
+                className="mac-input border-border focus:border-primary"
+              />
+            </div>
+
+            {/* Description */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Description
+              </label>
+              <Textarea
+                value={issueForm.description}
+                onChange={(e) =>
+                  setIssueForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Detailed description of what went wrong..."
+                className="min-h-[80px] mac-input border-border focus:border-primary"
+              />
+            </div>
+
+            {/* Steps to Reproduce */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Steps to Reproduce
+              </label>
+              <Textarea
+                value={issueForm.steps}
+                onChange={(e) =>
+                  setIssueForm((prev) => ({ ...prev, steps: e.target.value }))
+                }
+                placeholder="1. Click on...&#10;2. Enter...&#10;3. Observe..."
+                className="min-h-[80px] mac-input border-border focus:border-primary"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowIssueDialog(false)}
+              className="mac-button mac-button-outline"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+            <Button
+              onClick={handleIssueSubmit}
+              className="mac-button-primary bg-red-600 hover:bg-red-500"
+            >
+              <Flag className="h-4 w-4 mr-2" />
+              Submit Issue
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

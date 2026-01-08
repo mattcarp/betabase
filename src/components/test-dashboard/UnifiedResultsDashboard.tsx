@@ -136,8 +136,11 @@ export const UnifiedResultsDashboard: React.FC = () => {
         metadata: r.metadata,
       }));
 
-      // TODO: Fetch manual test sessions when table is created
-      // For now, use mock manual test data
+      // Manual test sessions will be stored in ManualTestingPanel state for now
+      // Future: Create manual_test_sessions table with columns:
+      //   id, user_id, url, viewport, recording_state, screenshots[], issues[], annotations[],
+      //   duration, interaction_count, created_at, ended_at
+      // For demo purposes, continue using mock data
       const mockManualTests: UnifiedTestResult[] = generateMockManualTests();
 
       // Combine both types

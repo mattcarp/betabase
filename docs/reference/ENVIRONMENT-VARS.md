@@ -27,6 +27,18 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase-anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 ```
 
+## Caching (Optional - FEAT-006)
+
+Redis caching for RAG query results. Uses Upstash Redis for serverless compatibility.
+
+```bash
+# Upstash Redis (get from https://upstash.com)
+UPSTASH_REDIS_REST_URL=<upstash-rest-url>
+UPSTASH_REDIS_REST_TOKEN=<upstash-rest-token>
+```
+
+**Note:** Caching is optional. If Redis is not configured, the app continues without caching.
+
 ## Variable Prefixes
 
 - `NEXT_PUBLIC_*` - Exposed to browser (client-side)

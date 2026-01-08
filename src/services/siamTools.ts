@@ -14,8 +14,9 @@ import { getSupabaseVectorService } from './supabaseVectorService';
 import { DEFAULT_APP_CONTEXT } from '@/lib/supabase';
 import type { VectorSearchResult } from '@/lib/supabase';
 
-// Import the existing CDTEXT tool (it's already well-implemented!)
+// Import the existing tools (they're already well-implemented!)
 import { cdtextTool } from '@/tools/cdtext';
+import { ddpParseTool, ddpMusicBrainzLookupTool } from '@/tools/ddp';
 
 // ============================================
 // Tool 1: Search Knowledge Base
@@ -419,6 +420,8 @@ export const siamTools = {
   searchCode,
   searchCommits,
   parseCdtext,
+  parseDdp: ddpParseTool,
+  ddpMusicBrainzLookup: ddpMusicBrainzLookupTool,
   getTicketCount,
   getMultiTenantERD,
   getAssetIngestionWorkflow,

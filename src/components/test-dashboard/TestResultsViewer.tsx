@@ -10,6 +10,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { toast } from "sonner";
 import {
   CheckCircle,
   XCircle,
@@ -306,7 +307,6 @@ export const TestResultsViewer: React.FC = () => {
   };
 
   const handleExportResults = () => {
-    // TODO: Implement export functionality
     const data = filteredResults.map((r) => ({
       name: r.name,
       suite: r.suite,
@@ -322,8 +322,13 @@ export const TestResultsViewer: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `test-results-${new Date().toISOString()}.json`;
+    a.download = `test-results-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
+    URL.revokeObjectURL(url);
+
+    toast.success("Export complete", {
+      description: `Exported ${data.length} test results to JSON`,
+    });
   };
 
   const toggleSuite = (suite: string) => {

@@ -15,7 +15,8 @@ import { TestCaseGenerator } from "../TestCaseGenerator";
 import { FeedbackTimeline } from "../FeedbackTimeline";
 
 import { RLHFTestSuite } from "../../test-dashboard/RLHFTestSuite";
-import { RLHFImpactDashboard } from "../../test-dashboard/RLHFImpactDashboard";
+// REACT 19 FIX: RLHFImpactDashboard uses recharts which depends on react-transition-group
+// that uses findDOMNode (removed in React 19). Dynamic import defers loading.
 import { LiveRAGMonitor } from "../../test-dashboard/LiveRAGMonitor";
 import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplorer";
 import { TestDashboardErrorBoundary } from "../../test-dashboard/TestDashboardErrorBoundary";
@@ -82,6 +83,23 @@ const CurateTab = dynamic(
     loading: () => (
       <div className="flex items-center justify-center h-full">
         <div>Loading Curate...</div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+// REACT 19 FIX: RLHFImpactDashboard uses recharts -> react-smooth -> react-transition-group
+// which uses findDOMNode (removed in React 19). Dynamic import prevents crash on page load.
+const RLHFImpactDashboard = dynamic(
+  () =>
+    import("../../test-dashboard/RLHFImpactDashboard").then((mod) => ({
+      default: mod.RLHFImpactDashboard,
+    })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-muted-foreground">Loading Impact Dashboard...</div>
       </div>
     ),
     ssr: false,

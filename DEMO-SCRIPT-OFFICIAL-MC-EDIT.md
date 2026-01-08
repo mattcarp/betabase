@@ -28,9 +28,8 @@
    Start with hard, but answerable question
    > **ASK**: "What are the steps to link a product to a master in AOMA?"
 
-2. Also what's in the upcoming release and how to prepare for it (maybe see JIRAs)
-   > **ASK**: "What's in the upcoming release and how should we prepare for it?"
-
+2. > What are the steps for doing a cover hot swap.
+   
 3. Diagramming - mermaid to nano banana pro - pick good question/answer candidate ("visual intelligence")
    > **ASK**: "Use your visual intelligence to show me a diagram of the AOMA asset ingestion workflow"
 

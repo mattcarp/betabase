@@ -1,8 +1,7 @@
 import React, { useImperativeHandle, forwardRef, useEffect } from "react";
 import { Mic, MicOff, Loader2, AlertCircle, Radio, Activity } from "lucide-react";
-import AudioWaveform from "./AudioWaveform";
-import { useElevenLabsConversation } from "../hooks/useElevenLabsConversation";
-import type { ConversationState } from "../hooks/useElevenLabsConversation";
+import { VoiceWaveformRealtime } from "./ui/VoiceWaveformRealtime";
+import { useElevenLabsConversation, type ConversationState } from "../hooks/useElevenLabsConversation";
 
 interface ConversationalAIProps {
   agentId?: string;
@@ -235,7 +234,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           {isConnected && (
             <div className="flex items-center gap-4">
               <label className="text-xs text-muted-foreground min-w-[80px]">AI Volume:</label>
-              <input className="mac-input"
+              <input
                 type="range"
                 min="0"
                 max="1"
@@ -243,11 +242,11 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
                 defaultValue="1"
                 onChange={(e) => {
                   const volume = parseFloat(e.target.value);
-                  console.log(`🔊 Setting AI volume to ${(volume * 100).toFixed(0)}%`);
+                  console.log(`Setting AI volume to ${(volume * 100).toFixed(0)}%`);
                   // Volume control temporarily disabled due to missing reference
                   // (conversation as any).setVolume?.({ volume });
                 }}
-                className="flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+                className="mac-input flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer"
               />
             </div>
           )}
@@ -348,10 +347,37 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
           </div>
         </div>
 
-        {/* Audio waveform visualization */}
-        {isConnected && (
-          <div className="mt-4">
-            <AudioWaveform isRecording={isUserSpeaking || isAISpeaking} />
+        {/* Audio waveform visualization - temporarily disabled for debugging */}
+        {/* TODO: Re-enable VoiceWaveformRealtime after fixing findDOMNode error */}
+        {false && isConnected && (
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+              <span>Audio Visualization</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+            <VoiceWaveformRealtime
+              isActive={isUserSpeaking || isAISpeaking}
+              sourceType="microphone"
+              style="mirrored"
+              height={60}
+              barCount={48}
+              barGap={2}
+              primaryColor={isAISpeaking ? "rgb(74, 222, 128)" : "rgb(96, 165, 250)"}
+              secondaryColor={isAISpeaking ? "rgb(34, 197, 94)" : "rgb(59, 130, 246)"}
+              showGlow={true}
+              className="rounded-lg border border-border bg-card/30"
+              data-testid="conversation-waveform"
+            />
+            <div className="flex justify-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-blue-400" />
+                <span>You</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-green-400" />
+                <span>AI</span>
+              </div>
+            </div>
           </div>
         )}
 
