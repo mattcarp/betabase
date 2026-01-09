@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Healing Test Gallery | SIAM</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 1.1rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00d9ff;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+      gap: 30px;
+    }
+
+    .video-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(0, 217, 255, 0.3);
+    }
+
+    .video-wrapper {
+      position: relative;
+      background: #000;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+    }
+
+    .card-content {
+      padding: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .test-number {
+      background: linear-gradient(135deg, #00d9ff, #00ff88);
+      color: #000;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .test-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .status-pass {
+      color: #00ff88;
+    }
+
+    .status-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .description {
+      color: #888;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .healing-details {
+      background: rgba(0, 217, 255, 0.05);
+      border: 1px solid rgba(0, 217, 255, 0.15);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 0.85rem;
+    }
+
+    .healing-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+
+    .healing-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .healing-label {
+      color: #666;
+      min-width: 120px;
+    }
+
+    .healing-value {
+      color: #00d9ff;
+    }
+
+    .healing-value.original {
+      color: #ff6b6b;
+      text-decoration: line-through;
+    }
+
+    .healing-value.healed {
+      color: #00ff88;
+    }
+
+    .confidence-bar {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .semantic-tag {
+      display: inline-block;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: #00ff88;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-top: 12px;
+    }
+
+    .rejected-tag {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      color: #ff6b6b;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 30px;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #00d9ff;
+      text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-bar {
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Self-Healing Test Gallery</h1>
+      <p class="subtitle">Semantic selector recovery demonstrations</p>
+
+      <div class="stats-bar">
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Tests Run</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Pass Rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Healed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Rejected</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="gallery">
+      <!-- Test 1: button to btn -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls preload="metadata">
+            <source src="videos/01-button-to-btn.webm" type="video/webm">
+          </video>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <span class="test-number">TEST 01</span>
+            <span class="test-status status-pass">
+              <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              HEALED
+            </span>
+          </div>
+          <h3>button to btn</h3>
+          <p class="description">
+            Tests semantic equivalence between "button" and "btn" - a common abbreviation pattern.
+            The self-healing engine recognizes these as functionally identical.
+          </p>
+          <div class="healing-details">
+            <div class="healing-row">
+              <span class="healing-label">Original:</span>
+              <span class="healing-value original">[data-test-id="login-button"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Healed to:</span>
+              <span class="healing-value healed">[data-test-id="login-btn"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Confidence:</span>
+              <span class="healing-value">100%</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: 100%"></div>
+            </div>
+            <span class="semantic-tag">"button" ~ "btn" semantic equivalence</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test 2: user to username -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls preload="metadata">
+            <source src="videos/02-user-to-username.webm" type="video/webm">
+          </video>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <span class="test-number">TEST 02</span>
+            <span class="test-status status-pass">
+              <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              HEALED
+            </span>
+          </div>
+          <h3>user to username</h3>
+          <p class="description">
+            Demonstrates healing when "user-input" changes to "username-input".
+            The engine identifies "user" and "username" as semantically related.
+          </p>
+          <div class="healing-details">
+            <div class="healing-row">
+              <span class="healing-label">Original:</span>
+              <span class="healing-value original">[data-test-id="user-input"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Healed to:</span>
+              <span class="healing-value healed">[data-test-id="username-input"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Confidence:</span>
+              <span class="healing-value">100%</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: 100%"></div>
+            </div>
+            <span class="semantic-tag">"user" ~ "username" semantic equivalence</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test 3: signin to login -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls preload="metadata">
+            <source src="videos/03-signin-to-login.webm" type="video/webm">
+          </video>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <span class="test-number">TEST 03</span>
+            <span class="test-status status-pass">
+              <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              HEALED
+            </span>
+          </div>
+          <h3>signin to login</h3>
+          <p class="description">
+            Shows cross-terminology healing. "signin-btn" heals to "login-btn" because
+            "signin" and "login" represent the same user action.
+          </p>
+          <div class="healing-details">
+            <div class="healing-row">
+              <span class="healing-label">Original:</span>
+              <span class="healing-value original">[data-test-id="signin-btn"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Healed to:</span>
+              <span class="healing-value healed">[data-test-id="login-btn"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Confidence:</span>
+              <span class="healing-value">100%</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: 100%"></div>
+            </div>
+            <span class="semantic-tag">"signin" ~ "login" semantic equivalence</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test 4: Unrelated - Rejected -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls preload="metadata">
+            <source src="videos/04-unrelated-rejected.webm" type="video/webm">
+          </video>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <span class="test-number">TEST 04</span>
+            <span class="test-status status-pass">
+              <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              REJECTED
+            </span>
+          </div>
+          <h3>Unrelated Selector (Correctly Rejected)</h3>
+          <p class="description">
+            Validates the engine's safety: "shopping-cart-checkout" has no semantic relationship
+            to any element on the login page. Healing is correctly refused.
+          </p>
+          <div class="healing-details">
+            <div class="healing-row">
+              <span class="healing-label">Original:</span>
+              <span class="healing-value original">[data-test-id="shopping-cart-checkout"]</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Result:</span>
+              <span class="healing-value" style="color: #ff6b6b;">No match found</span>
+            </div>
+            <div class="healing-row">
+              <span class="healing-label">Confidence:</span>
+              <span class="healing-value">Below threshold (&lt;60%)</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: 0%; background: #ff6b6b;"></div>
+            </div>
+            <span class="semantic-tag rejected-tag">Correctly rejected - no semantic match</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        Self-Healing Test Infrastructure |
+        <a href="/demo/aoma-login/">AOMA Login Page</a> |
+        Generated by Playwright
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

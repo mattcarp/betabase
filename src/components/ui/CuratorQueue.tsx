@@ -565,9 +565,10 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
             Review Details
           </CardTitle>
         </CardHeader>
-        <CardContent className="mac-card">
+        <CardContent className="mac-card p-0">
           {selectedItem ? (
-            <div className="space-y-6">
+            <ScrollArea className="h-[calc(100vh-280px)] px-6 py-4">
+              <div className="space-y-6">
               {/* Header */}
               <div className="flex items-start justify-between">
                 <div>
@@ -594,7 +595,7 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                         <textarea
                           value={editedText}
                           onChange={(e) => setEditedText(e.target.value)}
-                          className="w-full h-32 p-2 text-sm bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                          className="w-full min-h-[200px] max-h-[400px] p-3 text-sm bg-background border border-border rounded-md resize-y overflow-y-auto focus:outline-none focus:ring-2 focus:ring-primary"
                         />
                         <div className="flex gap-2">
                           <Button
@@ -724,9 +725,10 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            </div>
+              </div>
+            </ScrollArea>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
+            <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground px-6">
               <MessageSquare className="h-12 w-12 mb-4 opacity-50" />
               <p className="text-sm">Select an item to review</p>
               <p className="text-xs">Click on any queue item to see details</p>
