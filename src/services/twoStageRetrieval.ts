@@ -8,9 +8,10 @@
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-// UPGRADED: Using Cohere Reranker with AI SDK v6 native rerank()
-// Purpose-built model - 4x faster than Gemini, no prompt engineering
-import { getCohereReranker, type RerankingOptions } from "./cohereReranker";
+// UPGRADED: Using ZeRank-2 (primary) with Cohere fallback
+// ZeRank-2 outperforms Cohere by ~15% on NDCG@10 benchmarks
+import { getZeroEntropyReranker } from "./zeroEntropyReranker";
+import { type RerankingOptions } from "./cohereReranker";
 import { VectorSearchResult } from "../lib/supabase";
 
 export interface TwoStageRetrievalOptions {
@@ -48,7 +49,7 @@ export interface TwoStageRetrievalResult {
 
 export class TwoStageRetrieval {
   private vectorService = getSupabaseVectorService();
-  private reranker = getCohereReranker();
+  private reranker = getZeroEntropyReranker();
 
   /**
    * Execute two-stage retrieval: Vector Search → Re-ranking

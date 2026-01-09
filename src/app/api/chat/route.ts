@@ -770,6 +770,28 @@ export async function POST(req: Request) {
     // END MEM0 INJECTION
     // ========================================
 
+    // ========================================
+    // CONFIDENCE-BASED UNCERTAINTY WARNING
+    // ========================================
+    // When RAG confidence is low, warn the LLM to acknowledge uncertainty
+    const LOW_CONFIDENCE_THRESHOLD = 0.5;
+    if (ragMetadata && ragMetadata.confidence < LOW_CONFIDENCE_THRESHOLD) {
+      const uncertaintyWarning = `
+**IMPORTANT: LOW RETRIEVAL CONFIDENCE (${(ragMetadata.confidence * 100).toFixed(0)}%)**
+The knowledge base search returned results with low confidence. This means:
+- The retrieved documents may not fully answer the user's question
+- You should acknowledge when you're uncertain
+- If the provided context doesn't clearly answer the question, say: "I don't have specific information about this in the knowledge base"
+- DO NOT make up information to fill gaps
+- It's better to admit uncertainty than to hallucinate an answer
+`;
+      enhancedSystemPrompt = enhancedSystemPrompt + "\n\n" + uncertaintyWarning;
+      console.log(`⚠️ [Confidence] Low confidence (${(ragMetadata.confidence * 100).toFixed(1)}%) - injected uncertainty warning`);
+    }
+    // ========================================
+    // END CONFIDENCE WARNING
+    // ========================================
+
     // Determine model based on AOMA involvement
     const hasAomaContent = aomaContext.trim() !== "";
     const useCase = hasAomaContent ? "aoma-query" : "chat";

@@ -1,62 +1,31 @@
 /**
- * Cohere Re-ranker Service
- * 
- * Replaces the fragile Gemini JSON-based reranker with Cohere's
- * purpose-built rerank-v3.5 model via AI SDK v6.
- * 
- * Benefits:
- * - No JSON parsing failures (direct API response)
- * - Purpose-built for relevance scoring
- * - Consistent, reliable scores
- * - 4x faster than Gemini reranking
- * 
- * Part of RAG Overhaul - Phase 1
+ * ZeroEntropy ZeRank-2 Reranker Service
+ *
+ * Primary reranker using ZeRank-2 which outperforms Cohere rerank-v3.5
+ * by ~15% on NDCG@10 benchmarks across all domains.
+ *
+ * Key advantages:
+ * - Calibrated scores (0.8 actually means ~80% relevance)
+ * - Instruction-following support
+ * - 100+ languages with near-English performance
+ * - 50% cheaper than Cohere ($0.025/1M tokens)
+ *
+ * Falls back to Cohere if ZeRank-2 fails.
  */
 
-import { rerank } from "ai";
-import { cohere } from "@ai-sdk/cohere";
 import { VectorSearchResult, supabase } from "../lib/supabase";
+import { getCohereReranker, RankedDocument, RerankingOptions, RerankingResult } from "./cohereReranker";
 
-export interface RankedDocument extends VectorSearchResult {
-  rerankScore: number;
-  rerankReasoning?: string;
-  originalRank: number;
-  originalSimilarity: number;
-  rlhfBoost?: number;
-  sourceTypeBoost?: number;
-}
-
-export interface RerankingOptions {
-  topK?: number;
-  batchSize?: number; // Not used by Cohere, kept for interface compatibility
-  useRLHFSignals?: boolean;
-  organization?: string;
-  division?: string;
-  app_under_test?: string;
-  useSourceTypeBoost?: boolean;
-}
-
-export interface RerankingResult {
-  documents: RankedDocument[];
-  metrics: {
-    totalCandidates: number;
-    rerankedCount: number;
-    avgRerankScore: number;
-    rankChanges: number;
-    processingTimeMs: number;
-  };
-}
+const ZEROENTROPY_API_URL = "https://api.zeroentropy.dev/v1/models/rerank";
 
 /**
- * Cohere Reranker using AI SDK v6
- * 
- * Uses Cohere's rerank-v3.5 model which is specifically trained
- * for relevance scoring - no JSON parsing, no prompt engineering.
+ * ZeroEntropy Reranker using ZeRank-2
  */
-export class CohereReranker {
-  
+export class ZeroEntropyReranker {
+  private cohereReranker = getCohereReranker();
+
   /**
-   * Re-rank documents using Cohere rerank-v3.5
+   * Re-rank documents using ZeRank-2 with Cohere fallback
    */
   async rerankDocuments(
     query: string,
@@ -94,45 +63,47 @@ export class CohereReranker {
       originalSimilarity: doc.similarity,
     }));
 
-    console.log(`🎯 Cohere Reranker: Processing ${documents.length} documents...`);
+    const zeroEntropyKey = process.env.ZEROENTROPY_API_KEY;
+
+    // If no ZeroEntropy key, fall back to Cohere immediately
+    if (!zeroEntropyKey) {
+      console.log("⚠️ ZEROENTROPY_API_KEY not configured - using Cohere");
+      return this.cohereReranker.rerankDocuments(query, documents, options);
+    }
+
+    console.log(`🎯 ZeRank-2 Reranker: Processing ${documents.length} documents...`);
 
     try {
-      // FIX 3: Call Cohere rerank API directly (bypass broken SDK)
-      const cohereApiKey = process.env.COHERE_API_KEY;
-      if (!cohereApiKey) {
-        throw new Error("COHERE_API_KEY not configured - falling back to similarity ranking");
-      }
-
-      const response = await fetch('https://api.cohere.ai/v1/rerank', {
+      const response = await fetch(ZEROENTROPY_API_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${cohereApiKey}`,
+          'Authorization': `Bearer ${zeroEntropyKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'rerank-v3.5',
+          model: 'zerank-2',
           query: query,
           documents: documentsWithRank.map(doc => doc.content || ''),
           top_n: Math.min(topK * 2, documents.length),
-          return_documents: false,
+          latency: 'fast',
         }),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Cohere API error: ${response.status} - ${errorText}`);
+        throw new Error(`ZeroEntropy API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
       const results = data.results as Array<{ index: number; relevance_score: number }>;
 
-      console.log(`✅ Cohere returned ${results.length} ranked results`);
+      console.log(`✅ ZeRank-2 returned ${results.length} ranked results`);
 
       // Map results back to documents with scores
       let rankedDocuments: RankedDocument[] = results.map(result => ({
         ...documentsWithRank[result.index],
         rerankScore: result.relevance_score,
-        rerankReasoning: `Cohere rerank-v3.5 score: ${(result.relevance_score * 100).toFixed(1)}%`,
+        rerankReasoning: `ZeRank-2 score: ${(result.relevance_score * 100).toFixed(1)}% (calibrated)`,
       }));
 
       // Apply RLHF boosts if enabled
@@ -166,13 +137,13 @@ export class CohereReranker {
         (doc, idx) => doc.originalRank !== idx + 1
       ).length;
 
-      const avgRerankScore = 
+      const avgRerankScore =
         topDocuments.reduce((sum, doc) => sum + doc.rerankScore, 0) / topDocuments.length;
 
       const processingTimeMs = performance.now() - startTime;
 
-      console.log(`⏱️  Cohere rerank completed in ${processingTimeMs.toFixed(0)}ms`);
-      console.log(`📊 Avg score: ${(avgRerankScore * 100).toFixed(1)}%, Rank changes: ${rankChanges}`);
+      console.log(`⏱️  ZeRank-2 rerank completed in ${processingTimeMs.toFixed(0)}ms`);
+      console.log(`📊 Avg score: ${(avgRerankScore * 100).toFixed(1)}% (calibrated), Rank changes: ${rankChanges}`);
 
       return {
         documents: topDocuments,
@@ -186,48 +157,27 @@ export class CohereReranker {
       };
 
     } catch (error) {
-      console.error("❌ Cohere rerank failed:", error);
-      
-      // Graceful fallback: use original similarity scores
-      // This is MUCH better than the Gemini fallback which assigned 50 to all docs
-      console.log("⚠️ Falling back to vector similarity ranking");
-      
-      const fallbackDocs = documentsWithRank
-        .map(doc => ({
-          ...doc,
-          rerankScore: doc.originalSimilarity,
-          rerankReasoning: "Fallback: using original vector similarity",
-        }))
-        .sort((a, b) => b.rerankScore - a.rerankScore)
-        .slice(0, topK);
+      console.error("❌ ZeRank-2 rerank failed:", error);
+      console.log("⚠️ Falling back to Cohere reranker...");
 
-      return {
-        documents: fallbackDocs,
-        metrics: {
-          totalCandidates: documents.length,
-          rerankedCount: documents.length,
-          avgRerankScore: fallbackDocs.reduce((sum, doc) => sum + doc.rerankScore, 0) / fallbackDocs.length,
-          rankChanges: 0,
-          processingTimeMs: performance.now() - startTime,
-        },
-      };
+      // Fall back to Cohere
+      return this.cohereReranker.rerankDocuments(query, documents, options);
     }
   }
 
   /**
    * Apply source type boosts - knowledge docs get priority over Jira
-   * 
-   * IMPORTANT: These boosts are now REDUCED compared to Gemini version
-   * because Cohere's rerank scores are already high quality.
-   * We only need small nudges, not large overrides.
+   *
+   * Note: ZeRank-2's calibrated scores are already high quality,
+   * so we use minimal boosts (same as Cohere version).
    */
   private applySourceTypeBoosts(documents: RankedDocument[]): RankedDocument[] {
-    // Reduced boosts - Cohere's relevance scores are already accurate
     const SOURCE_TYPE_BOOSTS: Record<string, number> = {
-      knowledge: 0.10,   // +10% for knowledge base docs (was 20%)
-      pdf: 0.08,         // +8% for uploaded PDFs (was 15%)
-      firecrawl: 0.05,   // +5% for crawled content (was 10%)
-      git: 0.03,         // +3% for git/code context (was 5%)
+      knowledge: 0.10,   // +10% for knowledge base docs
+      wiki: 0.10,        // +10% for wiki documents
+      pdf: 0.08,         // +8% for uploaded PDFs
+      firecrawl: 0.05,   // +5% for crawled content
+      git: 0.03,         // +3% for git/code context
       jira: 0.0,         // No boost for JIRA tickets
     };
 
@@ -252,7 +202,7 @@ export class CohereReranker {
   ): Promise<RankedDocument[]> {
     try {
       console.log('📊 Loading RLHF feedback for document boosts...');
-      
+
       const { data: positiveFeedback, error } = await (supabase!)
         .from('rlhf_feedback')
         .select('retrieved_contexts, feedback_type, feedback_value')
@@ -276,7 +226,7 @@ export class CohereReranker {
       for (const feedback of positiveFeedback) {
         const markedDocs = feedback.retrieved_contexts || [];
         const rating = feedback.feedback_value?.score || (feedback.feedback_type === 'thumbs_up' ? 5 : 3);
-        
+
         for (const markedDoc of markedDocs) {
           const docId = markedDoc.doc_id || markedDoc.id;
           if (docId) {
@@ -300,14 +250,14 @@ export class CohereReranker {
           return { ...doc, rlhfBoost: 0 };
         }
 
-        // Calculate boost (reduced from Gemini version)
-        let boost = 0.05; // Base boost (was 10%)
-        boost += boostData.count * 0.01; // +1% per approval (was 2%)
+        // Calculate boost
+        let boost = 0.05; // Base boost
+        boost += boostData.count * 0.01; // +1% per approval
         if (boostData.avgRating >= 4.5) {
-          boost += 0.03; // +3% for highly rated (was 5%)
+          boost += 0.03; // +3% for highly rated
         }
 
-        // Cap at 15% (was 30%)
+        // Cap at 15%
         boost = Math.min(boost, 0.15);
 
         return {
@@ -323,14 +273,14 @@ export class CohereReranker {
 }
 
 // Singleton instance
-let cohereReranker: CohereReranker | null = null;
+let zeroEntropyReranker: ZeroEntropyReranker | null = null;
 
-export function getCohereReranker(): CohereReranker {
-  if (!cohereReranker) {
-    cohereReranker = new CohereReranker();
+export function getZeroEntropyReranker(): ZeroEntropyReranker {
+  if (!zeroEntropyReranker) {
+    zeroEntropyReranker = new ZeroEntropyReranker();
   }
-  return cohereReranker;
+  return zeroEntropyReranker;
 }
 
-// Alias for drop-in replacement of Gemini reranker
-export const getReranker = getCohereReranker;
+// Primary reranker export - use this instead of getCohereReranker
+export const getReranker = getZeroEntropyReranker;

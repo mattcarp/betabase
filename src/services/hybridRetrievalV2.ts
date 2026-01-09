@@ -15,7 +15,8 @@
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-import { getCohereReranker, type RerankingOptions, type RankedDocument } from "./cohereReranker";
+import { getZeroEntropyReranker } from "./zeroEntropyReranker";
+import { type RerankingOptions, type RankedDocument } from "./cohereReranker";
 import {
   reciprocalRankFusion,
   mergeAndDeduplicate,
@@ -92,7 +93,7 @@ export interface HybridRetrievalResult {
  */
 export class HybridRetrievalV2 {
   private vectorService = getSupabaseVectorService();
-  private reranker = getCohereReranker();
+  private reranker = getZeroEntropyReranker();
 
   /**
    * Execute hybrid retrieval with RRF fusion and optional reranking
@@ -124,19 +125,22 @@ export class HybridRetrievalV2 {
     console.log(`⚙️  Config: ${initialCandidates} candidates → ${rerankCandidates} rerank → ${topK} final`);
 
     // ========== STEP 1: Parallel Search ==========
+    // FIX 1: Use searchMultiSource to query BOTH siam_vectors AND wiki_documents
     const searchStart = performance.now();
 
     const [vectorResults, keywordResults] = await Promise.all([
-      // Vector search
-      this.vectorService.searchVectors(query, {
+      // Multi-source vector search (siam_vectors + wiki_documents)
+      this.vectorService.searchMultiSource(query, {
         organization,
         division,
         app_under_test,
         matchThreshold: vectorThreshold,
         matchCount: initialCandidates,
-        useGemini,
+        includeWikiDocs: true,
+        includeSiamVectors: true,
+        appNameFilter: 'AOMA',
       }).catch(err => {
-        console.error("❌ Vector search failed:", err);
+        console.error("❌ Multi-source vector search failed:", err);
         return [] as VectorSearchResult[];
       }),
 

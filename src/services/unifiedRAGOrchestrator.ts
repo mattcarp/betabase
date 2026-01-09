@@ -13,9 +13,10 @@ import { getContextAwareRetrieval } from "./contextAwareRetrieval";
 import { getAgenticRAGAgent } from "./agenticRAG/agent";
 import { getSessionStateManager, type RLHFFeedback } from "../lib/sessionStateManager";
 import { getTwoStageRetrieval, type TwoStageRetrievalResult } from "./twoStageRetrieval"; // Import types
-import { getCohereReranker } from "./cohereReranker";
+import { getZeroEntropyReranker } from "./zeroEntropyReranker";
 import { getHybridRetrievalV2 } from "./hybridRetrievalV2"; // NEW: Hybrid retrieval with RRF
 import { VectorSearchResult } from "../lib/supabase";
+import { expandQuery, type QueryExpansionResult } from "./queryExpansion"; // Query expansion for better retrieval
 
 export interface UnifiedRAGOptions {
   sessionId: string;
@@ -58,7 +59,7 @@ export class UnifiedRAGOrchestrator {
   private agenticRAG = getAgenticRAGAgent();
   private sessionManager = getSessionStateManager();
   private twoStageRetrieval = getTwoStageRetrieval();
-  private reranker = getCohereReranker();
+  private reranker = getZeroEntropyReranker();
   private hybridRetrieval = getHybridRetrievalV2(); // NEW: Hybrid search with RRF
 
   /**
@@ -86,8 +87,19 @@ export class UnifiedRAGOrchestrator {
 
     const startTime = performance.now();
 
+    // ========================================
+    // QUERY EXPANSION (Step 0 - Highest Impact)
+    // Expand acronyms and add semantic variations BEFORE search
+    // ========================================
+    const queryExpansion = expandQuery(query);
+    const searchQuery = queryExpansion.expandedQuery;
+
     console.log("\n🌟 ========== UNIFIED RAG ORCHESTRATOR (PARALLEL) ==========");
-    console.log(`📝 Query: "${query.substring(0, 100)}${query.length > 100 ? '...' : ''}"`);
+    console.log(`📝 Original: "${query.substring(0, 80)}${query.length > 80 ? '...' : ''}"`);
+    if (queryExpansion.wasExpanded) {
+      console.log(`🔄 Expanded: "${searchQuery.substring(0, 100)}${searchQuery.length > 100 ? '...' : ''}"`);
+      console.log(`📚 Expansions: ${queryExpansion.expansions.map(e => `${e.original}→${e.expanded}`).join(', ')}`);
+    }
     console.log(`🎯 Strategy: ${useAgenticRAG ? 'AGENTIC' : useHybridSearch ? 'HYBRID' : useContextAware ? 'PARALLEL CONTEXT-AWARE' : 'STANDARD'}`);
     console.log(`🔐 RLHF Signals: ${useRLHFSignals ? 'ENABLED' : 'DISABLED'}`);
     console.log(`🔀 Hybrid Search: ${useHybridSearch ? 'ENABLED' : 'DISABLED'}`);
@@ -103,7 +115,7 @@ export class UnifiedRAGOrchestrator {
         console.log("\n🤖 Using Agentic RAG with self-correction");
         
         const agentResult = await this.agenticRAG.executeWithSelfCorrection(
-          query,
+          searchQuery, // Use expanded query
           {
             sessionId,
             organization,
@@ -136,7 +148,7 @@ export class UnifiedRAGOrchestrator {
         strategy = "hybrid";
         console.log("\n🔀 Using Hybrid Search (Vector + Keyword + RRF + Gemini Reranking)");
 
-        const hybridResult = await this.hybridRetrieval.search(query, {
+        const hybridResult = await this.hybridRetrieval.search(searchQuery, { // Use expanded query
           organization,
           division,
           app_under_test,
@@ -190,7 +202,7 @@ export class UnifiedRAGOrchestrator {
         console.log("⚡ Starting parallel execution: Transformation + Initial Search");
         
         // Use ANY for internal private method access to avoid complex refactoring
-        const transformPromise = (this.contextAware as any).transformQuery(query, 
+        const transformPromise = (this.contextAware as any).transformQuery(searchQuery, // Use expanded query
           this.sessionManager.getOrCreateSession(sessionId, {
             organization, 
             division, 
@@ -201,8 +213,8 @@ export class UnifiedRAGOrchestrator {
           })
         );
 
-        // MULTI-SOURCE SEARCH: Query both wiki_documents (OpenAI 1536d) AND siam_vectors (Gemini 768d)
-        const initialVectorSearchPromise = (this.twoStageRetrieval as any).vectorService.searchMultiSource(query, {
+        // MULTI-SOURCE SEARCH: Query both wiki_documents AND siam_vectors (both Gemini 768d)
+        const initialVectorSearchPromise = (this.twoStageRetrieval as any).vectorService.searchMultiSource(searchQuery, { // Use expanded query
           organization,
           division,
           app_under_test,
@@ -229,14 +241,14 @@ export class UnifiedRAGOrchestrator {
         // Step 3: Fire Enhanced Vector Search (with transformed query) AND Speculative Reranking (of initial results)
         // If the query wasn't changed much, we can skip the second search!
         
-        const queryChanged = transformation.enhancedQuery !== query;
+        const queryChanged = transformation.enhancedQuery !== searchQuery;
         let finalDocuments: any[] = [];
         const metadata: any = {};
 
         if (!queryChanged) {
             console.log("⚡ Query unchanged, proceeding with standard reranking of initial results");
             // Just rerank initial results
-            const rerankResult = await this.reranker.rerankDocuments(query, initialVectorResults, {
+            const rerankResult = await this.reranker.rerankDocuments(searchQuery, initialVectorResults, { // Use expanded query
                 topK,
                 organization,
                 division,
@@ -271,7 +283,7 @@ export class UnifiedRAGOrchestrator {
             })();
 
             // Branch B: Speculative Reranking of Initial Results (in case Enhanced Search yields nothing or fails)
-            const speculativeRerankPromise = this.reranker.rerankDocuments(query, initialVectorResults, {
+            const speculativeRerankPromise = this.reranker.rerankDocuments(searchQuery, initialVectorResults, { // Use expanded query
                 topK,
                 organization,
                 division,
@@ -321,7 +333,7 @@ export class UnifiedRAGOrchestrator {
         strategy = "standard";
         console.log("\n⚡ Using Standard Two-Stage Retrieval");
         
-        const twoStageResult = await this.twoStageRetrieval.query(query, {
+        const twoStageResult = await this.twoStageRetrieval.query(searchQuery, { // Use expanded query
           organization,
           division,
           app_under_test,
