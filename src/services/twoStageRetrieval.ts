@@ -1,17 +1,14 @@
 /**
  * Two-Stage Retrieval System
- * 
+ *
  * Stage 1: High-recall vector search (retrieves top N candidates)
- * Stage 2: High-precision Gemini re-ranking (selects best K documents)
- * 
- * Part of the Advanced RLHF RAG Implementation - Phase 2
+ * Stage 2: Sort by vector similarity (external rerankers removed)
+ *
+ * Note: External rerankers (Cohere, ZeRank-2) were tested and removed
+ * because Gemini 768d embeddings produce quality rankings without them.
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-// UPGRADED: Using ZeRank-2 (primary) with Cohere fallback
-// ZeRank-2 outperforms Cohere by ~15% on NDCG@10 benchmarks
-import { getZeroEntropyReranker } from "./zeroEntropyReranker";
-import { type RerankingOptions } from "./cohereReranker";
 import { VectorSearchResult } from "../lib/supabase";
 
 export interface TwoStageRetrievalOptions {
@@ -49,7 +46,6 @@ export interface TwoStageRetrievalResult {
 
 export class TwoStageRetrieval {
   private vectorService = getSupabaseVectorService();
-  private reranker = getZeroEntropyReranker();
 
   /**
    * Execute two-stage retrieval: Vector Search → Re-ranking
@@ -167,40 +163,21 @@ export class TwoStageRetrieval {
     console.log(`   Avg Similarity: ${(avgSimilarity * 100).toFixed(1)}%`);
     console.log(`   Top Result: ${(vectorResults[0].similarity * 100).toFixed(1)}%`);
 
-    // ========== STAGE 2: High-Precision Re-ranking ==========
+    // ========== STAGE 2: Sort by Similarity (No External Reranking) ==========
+    // Note: External rerankers were tested but removed - Gemini embeddings are sufficient
     const stage2Start = performance.now();
 
-    const rerankOptions: RerankingOptions = {
-      topK,
-      batchSize: rerankBatchSize,
-      useRLHFSignals,
-      organization,
-      division,
-      app_under_test,
-    };
-
-    const rerankResult = await this.reranker.rerankDocuments(
-      query,
-      vectorResults,
-      rerankOptions
-    );
+    // Sort by similarity and take topK
+    const sortedResults = [...vectorResults]
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, topK);
 
     const stage2Time = performance.now() - stage2Start;
 
     console.log(`\n✅ STAGE 2 COMPLETE`);
-    console.log(`   Re-ranked: ${rerankResult.metrics.rerankedCount} documents`);
-    console.log(`   Returned: ${rerankResult.documents.length} top documents`);
+    console.log(`   Sorted: ${vectorResults.length} -> ${sortedResults.length} documents`);
     console.log(`   Time: ${stage2Time.toFixed(0)}ms`);
-    console.log(`   Avg Re-rank Score: ${(rerankResult.metrics.avgRerankScore * 100).toFixed(1)}%`);
-    console.log(`   Rank Changes: ${rerankResult.metrics.rankChanges}`);
-    
-    if (useRLHFSignals) {
-      const docsWithBoost = rerankResult.documents.filter(d => d.rlhfBoost && d.rlhfBoost !== 0);
-      if (docsWithBoost.length > 0) {
-        const avgBoost = docsWithBoost.reduce((sum, d) => sum + (d.rlhfBoost || 0), 0) / docsWithBoost.length;
-        console.log(`   RLHF Boosts Applied: ${docsWithBoost.length} docs (avg: ${(avgBoost * 100).toFixed(1)}%)`);
-      }
-    }
+    console.log(`   Top Score: ${sortedResults.length > 0 ? (sortedResults[0].similarity * 100).toFixed(1) : 0}%`);
 
     const totalTime = performance.now() - startTime;
     console.log(`\n⏱️  TOTAL TIME: ${totalTime.toFixed(0)}ms`);
@@ -209,16 +186,18 @@ export class TwoStageRetrieval {
     console.log("==========================================\n");
 
     return {
-      documents: rerankResult.documents,
+      documents: sortedResults,
       stage1Metrics: {
         candidatesRetrieved: vectorResults.length,
         vectorSearchTimeMs: stage1Time,
         avgSimilarity,
       },
       stage2Metrics: {
-        rerankedCount: rerankResult.metrics.rerankedCount,
-        avgRerankScore: rerankResult.metrics.avgRerankScore,
-        rankChanges: rerankResult.metrics.rankChanges,
+        rerankedCount: sortedResults.length,
+        avgRerankScore: sortedResults.length > 0
+          ? sortedResults.reduce((sum, d) => sum + d.similarity, 0) / sortedResults.length
+          : 0,
+        rankChanges: 0, // No reranking changes
         rerankingTimeMs: stage2Time,
       },
       totalTimeMs: totalTime,

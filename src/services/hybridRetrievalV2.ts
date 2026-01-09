@@ -1,22 +1,20 @@
 /**
  * Hybrid Retrieval V2
- * 
- * Combines vector search + keyword search with RRF fusion and
- * Gemini structured reranking for maximum retrieval quality.
- * 
+ *
+ * Combines vector search + keyword search with RRF fusion.
+ * Relies on Gemini 768d embeddings for semantic understanding.
+ *
  * Pipeline:
  * 1. Parallel: Vector search + Keyword (BM25) search
  * 2. Merge & deduplicate results
  * 3. RRF fusion to combine ranking signals
- * 4. Gemini structured reranker on top candidates
- * 5. Return top K with confidence scores
- * 
- * Part of RAG Overhaul - Option C (Google-only, no Cohere)
+ * 4. Return top K with confidence scores
+ *
+ * Note: External rerankers (Cohere, ZeRank-2) were tested and removed
+ * because Gemini embeddings + RRF produced better results without them.
  */
 
 import { getSupabaseVectorService } from "./supabaseVectorService";
-import { getZeroEntropyReranker } from "./zeroEntropyReranker";
-import { type RerankingOptions, type RankedDocument } from "./cohereReranker";
 import {
   reciprocalRankFusion,
   mergeAndDeduplicate,
@@ -25,6 +23,17 @@ import {
 } from "./reciprocalRankFusion";
 import { VectorSearchResult } from "../lib/supabase";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+
+/**
+ * Document with ranking information (used for retrieval results)
+ */
+export interface RankedDocument extends VectorSearchResult {
+  rerankScore: number;
+  rerankReasoning?: string;
+  originalRank: number;
+  originalSimilarity: number;
+  rlhfBoost?: number;
+}
 
 // Get admin client lazily to avoid null at module load time
 function getAdminClient(): SupabaseClient | null {
@@ -62,11 +71,9 @@ export interface HybridRetrievalOptions {
   keywordWeight?: number; // Weight for keyword signal in RRF (default: 1.0)
   rrfK?: number; // RRF constant (default: 60)
 
-  // Reranking configuration
-  rerankCandidates?: number; // How many to send to reranker (default: 15)
+  // Final selection configuration
+  rerankCandidates?: number; // How many candidates for RRF selection (default: 15)
   topK?: number; // Final results to return (default: 5)
-  useRLHFSignals?: boolean; // Apply RLHF boosts (default: true)
-  skipReranking?: boolean; // Skip LLM reranking, use RRF only (default: false)
 }
 
 export interface HybridRetrievalResult {
@@ -93,7 +100,6 @@ export interface HybridRetrievalResult {
  */
 export class HybridRetrievalV2 {
   private vectorService = getSupabaseVectorService();
-  private reranker = getZeroEntropyReranker();
 
   /**
    * Execute hybrid retrieval with RRF fusion and optional reranking
@@ -116,8 +122,6 @@ export class HybridRetrievalV2 {
       rrfK = 60,
       rerankCandidates = 15,
       topK = 5,
-      useRLHFSignals = true,
-      skipReranking = false,
     } = options;
 
     console.log("\n🔍 ========== HYBRID RETRIEVAL V2 ==========");
@@ -208,43 +212,19 @@ export class HybridRetrievalV2 {
 
     console.log(`\n🎯 RRF selected ${candidatesForRerank.length} candidates for reranking`);
 
-    // ========== STEP 4: Gemini Reranking (Optional) ==========
-    let finalDocuments: RankedDocument[];
-    let rerankingMs = 0;
+    // ========== STEP 4: Apply RRF Scores (No External Reranking) ==========
+    // Note: External rerankers were tested (Cohere, ZeRank-2) but removed
+    // because Gemini embeddings + RRF fusion produce better results.
+    const finalDocuments: RankedDocument[] = candidatesForRerank.slice(0, topK).map((doc, idx) => ({
+      ...doc,
+      rerankScore: rrfResults[idx].rrfScore,
+      rerankReasoning: `RRF score: ${rrfResults[idx].rrfScore.toFixed(4)}`,
+      originalRank: idx + 1,
+      originalSimilarity: doc.similarity ?? 0,
+    } as RankedDocument));
+    const rerankingMs = 0; // No external reranking
 
-    if (skipReranking) {
-      console.log("⏭️  Skipping LLM reranking (skipReranking=true)");
-      finalDocuments = candidatesForRerank.slice(0, topK).map((doc, idx) => ({
-        ...doc,
-        rerankScore: rrfResults[idx].rrfScore,
-        rerankReasoning: `RRF score: ${rrfResults[idx].rrfScore.toFixed(4)}`,
-        originalRank: idx + 1,
-        originalSimilarity: doc.similarity ?? 0,
-      } as RankedDocument));
-    } else {
-      const rerankStart = performance.now();
-
-      const rerankOptions: RerankingOptions = {
-        topK,
-        useRLHFSignals,
-        organization,
-        division,
-        app_under_test,
-        useSourceTypeBoost: false, // Let reranker decide relevance
-      };
-
-      const rerankResult = await this.reranker.rerankDocuments(
-        query,
-        candidatesForRerank as VectorSearchResult[],
-        rerankOptions
-      );
-
-      finalDocuments = rerankResult.documents;
-      rerankingMs = performance.now() - rerankStart;
-
-      console.log(`\n✅ Reranking complete: ${finalDocuments.length} documents`);
-      console.log(`   Avg score: ${(rerankResult.metrics.avgRerankScore * 100).toFixed(1)}%`);
-    }
+    console.log(`\n✅ RRF fusion complete: ${finalDocuments.length} documents`);
 
     // ========== FINAL RESULTS ==========
     const totalMs = performance.now() - startTime;

@@ -12,9 +12,8 @@
 import { getContextAwareRetrieval } from "./contextAwareRetrieval";
 import { getAgenticRAGAgent } from "./agenticRAG/agent";
 import { getSessionStateManager, type RLHFFeedback } from "../lib/sessionStateManager";
-import { getTwoStageRetrieval, type TwoStageRetrievalResult } from "./twoStageRetrieval"; // Import types
-import { getZeroEntropyReranker } from "./zeroEntropyReranker";
-import { getHybridRetrievalV2 } from "./hybridRetrievalV2"; // NEW: Hybrid retrieval with RRF
+import { getTwoStageRetrieval, type TwoStageRetrievalResult } from "./twoStageRetrieval";
+import { getHybridRetrievalV2 } from "./hybridRetrievalV2";
 import { VectorSearchResult } from "../lib/supabase";
 import { expandQuery, type QueryExpansionResult } from "./queryExpansion"; // Query expansion for better retrieval
 
@@ -59,8 +58,7 @@ export class UnifiedRAGOrchestrator {
   private agenticRAG = getAgenticRAGAgent();
   private sessionManager = getSessionStateManager();
   private twoStageRetrieval = getTwoStageRetrieval();
-  private reranker = getZeroEntropyReranker();
-  private hybridRetrieval = getHybridRetrievalV2(); // NEW: Hybrid search with RRF
+  private hybridRetrieval = getHybridRetrievalV2();
 
   /**
    * Execute unified RAG query with all three strategies
@@ -148,20 +146,18 @@ export class UnifiedRAGOrchestrator {
         strategy = "hybrid";
         console.log("\n🔀 Using Hybrid Search (Vector + Keyword + RRF + Gemini Reranking)");
 
-        const hybridResult = await this.hybridRetrieval.search(searchQuery, { // Use expanded query
+        const hybridResult = await this.hybridRetrieval.search(searchQuery, {
           organization,
           division,
           app_under_test,
           initialCandidates: initialCandidates,
-          vectorThreshold: 0.40, // Slightly stricter threshold
+          vectorThreshold: 0.40,
           useGemini: true,
           vectorWeight: 1.0,
           keywordWeight: 1.0,
           rrfK: 60,
           rerankCandidates: 15,
           topK,
-          useRLHFSignals,
-          skipReranking: false, // Always use Gemini reranking for quality
         });
 
         // Calculate confidence based on rerank scores
@@ -246,72 +242,40 @@ export class UnifiedRAGOrchestrator {
         const metadata: any = {};
 
         if (!queryChanged) {
-            console.log("⚡ Query unchanged, proceeding with standard reranking of initial results");
-            // Just rerank initial results
-            const rerankResult = await this.reranker.rerankDocuments(searchQuery, initialVectorResults, { // Use expanded query
-                topK,
-                organization,
-                division,
-                app_under_test,
-                useRLHFSignals
-            });
-            finalDocuments = rerankResult.documents;
+            console.log("⚡ Query unchanged, using vector similarity ranking");
+            // Sort by similarity and take topK (no external reranking needed)
+            finalDocuments = initialVectorResults
+                .sort((a: any, b: any) => b.similarity - a.similarity)
+                .slice(0, topK);
         } else {
-            console.log("⚡ Query changed, executing parallel Enhanced Search + Speculative Reranking");
-            
-            // Branch A: Enhanced Search -> Rerank (MULTI-SOURCE)
-            const enhancedSearchPromise = (async () => {
-                const results = await (this.twoStageRetrieval as any).vectorService.searchMultiSource(transformation.enhancedQuery, {
-                    organization,
-                    division,
-                    app_under_test,
-                    matchThreshold: 0.3,
-                    matchCount: initialCandidates,
-                    includeWikiDocs: true,
-                    includeSiamVectors: true,
-                    appNameFilter: 'AOMA',
-                });
-                // Rerank these new results immediately? Or merge first?
-                // Reranking is the bottleneck, so we should try to batch or just rerank the new ones.
-                return this.reranker.rerankDocuments(transformation.enhancedQuery, results, {
-                    topK,
-                    organization,
-                    division,
-                    app_under_test,
-                    useRLHFSignals
-                });
-            })();
+            console.log("⚡ Query changed, executing parallel Enhanced Search + merging");
 
-            // Branch B: Speculative Reranking of Initial Results (in case Enhanced Search yields nothing or fails)
-            const speculativeRerankPromise = this.reranker.rerankDocuments(searchQuery, initialVectorResults, { // Use expanded query
-                topK,
+            // Enhanced Search with transformed query (MULTI-SOURCE)
+            const enhancedResults = await (this.twoStageRetrieval as any).vectorService.searchMultiSource(transformation.enhancedQuery, {
                 organization,
                 division,
                 app_under_test,
-                useRLHFSignals
+                matchThreshold: 0.3,
+                matchCount: initialCandidates,
+                includeWikiDocs: true,
+                includeSiamVectors: true,
+                appNameFilter: 'AOMA',
             });
 
-            // Wait for both
-            const [enhancedReranked, speculativeReranked] = await Promise.all([
-                enhancedSearchPromise,
-                speculativeRerankPromise
-            ]);
-
-            // Merge results based on score
-            // Deduplicate by ID
-            const allDocs = [...enhancedReranked.documents, ...speculativeReranked.documents];
+            // Merge results: deduplicate by ID, keeping highest similarity
+            const allDocs = [...initialVectorResults, ...enhancedResults];
             const uniqueDocsMap = new Map();
-            allDocs.forEach(doc => {
-                if (!uniqueDocsMap.has(doc.id) || uniqueDocsMap.get(doc.id).rerankScore < doc.rerankScore) {
+            allDocs.forEach((doc: any) => {
+                if (!uniqueDocsMap.has(doc.id) || uniqueDocsMap.get(doc.id).similarity < doc.similarity) {
                     uniqueDocsMap.set(doc.id, doc);
                 }
             });
-            
+
             finalDocuments = Array.from(uniqueDocsMap.values())
-                .sort((a: any, b: any) => b.rerankScore - a.rerankScore)
+                .sort((a: any, b: any) => b.similarity - a.similarity)
                 .slice(0, topK);
-                
-             console.log(`✅ Merged results: ${enhancedReranked.documents.length} enhanced + ${speculativeReranked.documents.length} speculative -> ${finalDocuments.length} final`);
+
+            console.log(`✅ Merged results: ${initialVectorResults.length} initial + ${enhancedResults.length} enhanced -> ${finalDocuments.length} final`);
         }
 
         result = {
