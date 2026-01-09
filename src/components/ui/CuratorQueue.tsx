@@ -219,6 +219,8 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
   const [items, setItems] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [editingResponse, setEditingResponse] = useState<string | null>(null);
+  const [editedText, setEditedText] = useState<string>("");
 
   // Fetch feedback from the API
   const loadQueue = useCallback(async () => {
@@ -331,6 +333,58 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
     } finally {
       setActionLoading(null);
     }
+  };
+
+  const handleEditResponse = (item: QueueItem) => {
+    setEditingResponse(item.id);
+    setEditedText(item.metadata?.response || "");
+  };
+
+  const handleSaveEdit = async (itemId: string) => {
+    setActionLoading(itemId);
+    try {
+      const response = await fetch(`/api/rlhf/feedback/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          corrected_response: editedText,
+          curator_notes: "Response edited by curator",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save edit");
+
+      // Update local state
+      setItems(items.map(item =>
+        item.id === itemId
+          ? { ...item, metadata: { ...item.metadata, response: editedText } }
+          : item
+      ));
+      if (selectedItem?.id === itemId) {
+        setSelectedItem({
+          ...selectedItem,
+          metadata: { ...selectedItem.metadata, response: editedText }
+        });
+      }
+      setEditingResponse(null);
+      toast.success("Response updated");
+    } catch (error) {
+      console.error("Error saving edit:", error);
+      toast.error("Failed to save edit");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingResponse(null);
+    setEditedText("");
+  };
+
+  const handleSkip = (itemId: string) => {
+    setItems(items.filter(item => item.id !== itemId));
+    if (selectedItem?.id === itemId) setSelectedItem(null);
+    toast.success("Item skipped");
   };
 
   const getTypeIcon = (type: QueueItem["type"]) => {
@@ -535,7 +589,36 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                   </div>
                   <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20">
                     <p className="text-xs font-normal text-blue-600 mb-2">AI Response</p>
-                    <p className="text-sm">{selectedItem.metadata.response}</p>
+                    {editingResponse === selectedItem.id ? (
+                      <div className="space-y-2">
+                        <textarea
+                          value={editedText}
+                          onChange={(e) => setEditedText(e.target.value)}
+                          className="w-full h-32 p-2 text-sm bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleSaveEdit(selectedItem.id)}
+                            disabled={actionLoading === selectedItem.id}
+                          >
+                            {actionLoading === selectedItem.id ? (
+                              <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                            ) : null}
+                            Save
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={handleCancelEdit}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm">{selectedItem.metadata.response}</p>
+                    )}
                   </div>
                 </div>
               )}
@@ -618,15 +701,26 @@ export const CuratorQueue: React.FC<CuratorQueueProps> = ({ className, onItemSel
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button className="mac-button" variant="ghost" className="mac-button mac-button-outline" size="icon">
+                    <Button variant="ghost" className="mac-button mac-button-outline" size="icon">
                       <MoreVertical className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>View full context</DropdownMenuItem>
-                    <DropdownMenuItem>Edit response</DropdownMenuItem>
-                    <DropdownMenuItem>Add note</DropdownMenuItem>
-                    <DropdownMenuItem className="text-rose-600">Skip</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onItemSelect?.(selectedItem)}>
+                      View full context
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleEditResponse(selectedItem)}>
+                      Edit response
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info("Add note feature coming soon")}>
+                      Add note
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-rose-600"
+                      onClick={() => handleSkip(selectedItem.id)}
+                    >
+                      Skip
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
