@@ -1,0 +1,108 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+  <h2>SMS and Flash Conference Calls</h2>
+
+  <article>
+    <div class="header-flex">
+      <h3>Setup Flash Bridge</h3>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onSetupConferenceClick()" color="primary">
+        <i class="fas fa-user-cog"></i>
+        <span>Setup Conference</span>
+      </button>
+    </div>
+
+    <ng-container *ngIf="isSetupConference">
+      <fieldset>
+        <h4>Conference number: +1 646 663 5100</h4>
+        <mat-form-field class="full-width">
+          <mat-label>Conference Call Name</mat-label>
+          <input matInput type="text" placeholder="Enter a short conference name…">
+        </mat-form-field>
+        <div class="row">The call name will be read by a synthesized voice (you may want to write it phonetically)</div>
+        <div class="header-flex">
+          <mat-slide-toggle>
+            <span>Dial me on + and connect me to the conference</span>
+          </mat-slide-toggle>
+          <div class="spacer"></div>
+          <button mat-flat-button color="accent">
+            <i class="fas fa-phone-square-alt"></i>
+            <span>Initiate Call</span>
+          </button>
+        </div>
+      </fieldset>
+    </ng-container>
+  </article>
+
+  <article>
+    <div class="contact">
+      <div>
+        <h3>Compose SMS</h3>
+        <div>Select contacts on the right hand panel</div>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-chip-list>
+            <mat-chip *ngFor="let contact of selectedContacts">{{contact?.mobilePhone}}</mat-chip>
+          </mat-chip-list>
+        </mat-form-field>
+
+        <div>Message</div>
+        <mat-form-field class="full-width">
+          <input matInput #message maxlength="140" placeholder="Ex. I need help with...">
+          <mat-hint align="end">{{message?.value?.length}} / 140</mat-hint>
+        </mat-form-field>
+
+        <div class="row">
+          <mat-slide-toggle (change)="onChangeSendEmail($event.checked)">
+            <span>Also send email</span>
+          </mat-slide-toggle>
+        </div>
+
+
+        <ng-container *ngIf="isSendEmail">
+          <div class="row">From: user&#64;gmail.com</div>
+          <div class="row">
+            <div>To:</div>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-chip-list>
+                <mat-chip *ngFor="let contact of selectedContacts">{{contact?.email}}</mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <div>Subject:</div>
+            <mat-form-field class="full-width">
+              <input matInput [(ngModel)]="emailSubject">
+            </mat-form-field>
+          </div>
+        </ng-container>
+
+        <button
+          mat-flat-button
+          color="accent"
+          [disabled]="!selectedContacts?.length"
+          (click)="onSendSmsClick(message?.value!)">
+          <i class="fas fa-user-cog"></i>
+          <span>Send SMS<ng-container *ngIf="isSendEmail"> & Email</ng-container></span>
+        </button>
+      </div>
+
+      <div>
+        <h3>Selected Contacts</h3>
+        <div *ngFor="let item of contacts; let id = index">
+          <mat-checkbox
+            [attr.id]="'checkbox-' + id"
+            (change)="onChangeContact($event.checked, item)"
+            class="contact-checkbox">
+            <div class="header-flex">
+              {{getContactName(item)}}
+              <div class="spacer"></div>
+              {{item?.mobilePhone}}
+            </div>
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</section>

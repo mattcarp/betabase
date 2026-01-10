@@ -1,0 +1,7 @@
+.grid {
+  grid-template-columns: minmax(120px, 1fr)
+  repeat(3, minmax(64px, 140px))
+  64px
+  70px
+  minmax(64px, 80px);
+}

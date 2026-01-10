@@ -1,0 +1,24 @@
+pre {
+  overflow: hidden;
+  overflow-x: auto;
+  background-color: #2F2F2FFF;
+
+  code {
+    display: block;
+    color: #c5c8c6;
+  }
+
+  .tag,
+  .xml .tag .title {
+    color: #c66;
+  }
+
+  .javascript {
+    color: white;
+  }
+
+  .string,
+  .value {
+    color: #b5bd68;
+  }
+}

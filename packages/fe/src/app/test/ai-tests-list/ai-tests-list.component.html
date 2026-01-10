@@ -1,0 +1,28 @@
+<div class="ai-tests-list">
+  <h2>AI-Generated Tests</h2>
+  <button routerLink="generate">Generate New AI Test</button>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Created At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let test of aiTests">
+        <td>{{ test.id }}</td>
+        <td>{{ test.aiGeneratedType }}</td>
+        <td>{{ test.description }}</td>
+        <td>{{ test.createdAt | date:'short' }}</td>
+        <td>
+          <button (click)="viewTest(test.id)">View</button>
+          <button (click)="editTest(test.id)">Edit</button>
+          <button (click)="runTest(test.id)">Run</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

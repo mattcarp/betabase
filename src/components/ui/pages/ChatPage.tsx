@@ -4,7 +4,6 @@ import { AiSdkChatPanel } from "../../ai/ai-sdk-chat-panel"; // Re-enabled after
 // import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
 import { AppSidebar } from "../app-sidebar";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "../sidebar";
-import { RightSidebar } from "../layout/RightSidebar";
 import { useConversationStore } from "../../../lib/conversation-store";
 import { WisdomLibrary } from "../WisdomLibrary";
 import { DocumentUpload as DocumentUploadComponent } from "../../DocumentUpload";
@@ -21,11 +20,9 @@ import { HistoricalTestExplorer } from "../../test-dashboard/HistoricalTestExplo
 import { TestDashboardErrorBoundary } from "../../test-dashboard/TestDashboardErrorBoundary";
 import {
   Upload,
-  Settings,
   Bot,
   Sparkles,
   Lightbulb,
-  Database,
   FileText,
   MessageSquare,
   TestTube,
@@ -47,7 +44,6 @@ import { ConnectionStatusIndicator } from "../ConnectionStatusIndicator";
 import { CompactThemeSwitcher } from "../theme-switcher";
 import { SiamLogo } from "../SiamLogo";
 import { AOMAKnowledgePanel } from "../AOMAKnowledgePanel";
-import EnhancedKnowledgePanel from "../EnhancedKnowledgePanel";
 import { IntrospectionDropdown } from "../IntrospectionDropdown";
 import {
   Tooltip,
@@ -57,6 +53,11 @@ import {
 } from "../tooltip";
 import { DraggableLadybug } from "../../tester/DraggableLadybug";
 import { FeedbackDialog } from "../../tester/FeedbackDialog";
+import { SettingsMenu } from "../settings-menu";
+import { FixitPage } from "../../fixit/FixitPage";
+import { useTechSupportStore } from "../../../lib/use-tech-support-store";
+import { useTesterStore } from "../../../lib/use-tester-store";
+import { useProgrammerStore } from "../../../lib/use-programmer-store";
 
 // PERFORMANCE OPTIMIZATION: Dynamic imports for heavy components
 // These components contain charts and heavy dependencies (recharts, etc.)
@@ -132,10 +133,33 @@ const VALID_MODES: ComponentMode["mode"][] = ["chat", "test", "fix", "curate"];
 export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   // Track if component has hydrated to prevent SSR/client mismatch
   const [isHydrated, setIsHydrated] = useState(false);
-  
+
   // Always initialize with "chat" to prevent hydration mismatch
   // The URL hash will be read and applied in a useEffect after hydration
   const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>("chat");
+
+  // Role stores for tab visibility
+  const { isTechSupportEnabled } = useTechSupportStore();
+  const { isTesterModeEnabled } = useTesterStore();
+  const { isProgrammerModeEnabled } = useProgrammerStore();
+
+  // Filter visible modes based on enabled roles
+  // Each role gates access to its corresponding tab
+  const visibleModes = COMPONENT_MODES.filter((mode) => {
+    switch (mode.mode) {
+      case "chat":
+        return isTechSupportEnabled;
+      case "test":
+        return isTesterModeEnabled;
+      case "fix":
+        return isProgrammerModeEnabled;
+      case "curate":
+        // Curate is always visible for authenticated users
+        return true;
+      default:
+        return false;
+    }
+  });
 
   // Mark as hydrated after first render on client
   useEffect(() => {
@@ -146,7 +170,17 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
       setActiveMode(hash as ComponentMode["mode"]);
     }
   }, []);
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+
+  // Redirect to first available tab when current tab becomes unavailable
+  // This handles the case when user disables their current role
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    const isCurrentModeVisible = visibleModes.some((m) => m.mode === activeMode);
+    if (!isCurrentModeVisible && visibleModes.length > 0) {
+      setActiveMode(visibleModes[0].mode);
+    }
+  }, [isHydrated, activeMode, visibleModes]);
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
@@ -308,9 +342,10 @@ Be helpful, concise, and professional in your responses.`;
 
               {/* Navigation Tabs - Hidden on mobile, shown on tablet+ */}
               {/* Use hydration-safe mode: always "chat" during SSR, actual mode after hydration */}
+              {/* Tabs are filtered based on enabled roles */}
               <TooltipProvider delayDuration={200}>
                 <div className="hidden md:flex items-center space-x-1 bg-card/50 p-1 rounded-lg border border-border/50 flex-shrink-0">
-                  {COMPONENT_MODES.map((mode) => {
+                  {visibleModes.map((mode) => {
                     // Only use actual activeMode after hydration to prevent SSR mismatch
                     const isActive = isHydrated ? activeMode === mode.mode : mode.mode === "chat";
                     return (
@@ -352,9 +387,10 @@ Be helpful, concise, and professional in your responses.`;
               </TooltipProvider>
 
               {/* Mobile Navigation - Compact tabs for small screens */}
+              {/* Tabs are filtered based on enabled roles */}
               <TooltipProvider delayDuration={300}>
                 <div className="flex md:hidden items-center space-x-0.5 bg-card/50 p-1 rounded-lg border border-border/50">
-                  {COMPONENT_MODES.map((mode) => {
+                  {visibleModes.map((mode) => {
                     const isActive = isHydrated ? activeMode === mode.mode : mode.mode === "chat";
                     return (
                       <Tooltip key={mode.mode}>
@@ -405,17 +441,6 @@ Be helpful, concise, and professional in your responses.`;
                 {/* Sidebar trigger with MAC styling */}
                 <SidebarTrigger className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors" />
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted/50 mac-button mac-button-outline"
-                  onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-                  title="Knowledge Base"
-                  aria-label="Toggle knowledge base panel"
-                >
-                  <Database className="h-4 w-4" />
-                </Button>
-
                 {/* Performance Dashboard Link - Hidden on small mobile */}
                 <Button
                   variant="ghost"
@@ -427,6 +452,9 @@ Be helpful, concise, and professional in your responses.`;
                 >
                   <Activity className="h-4 w-4" />
                 </Button>
+
+                {/* Settings Menu - gear icon in header (rightmost position) */}
+                <SettingsMenu variant="header" />
 
                 {onLogout && (
                   <Button
@@ -588,37 +616,45 @@ Be helpful, concise, and professional in your responses.`;
               )}
 
               {activeMode === "fix" && (
-                <div className="h-full p-6 space-y-6">
-                  <div>
+                <div className="h-full flex flex-col">
+                  <div className="px-6 pt-4 pb-2">
                     <h2 className="mac-heading">
                       Debug & Fix Assistant
                     </h2>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      Analyze responses, make corrections, and generate tests
+                      Code assistant, response analysis, corrections, and test generation
                     </p>
                   </div>
 
-                  <Tabs defaultValue="debugger" className="h-[calc(100%-80px)]">
-                    <TabsList className="grid w-full grid-cols-4">
+                  <Tabs defaultValue="code-assistant" className="flex-1 flex flex-col px-6 pb-4">
+                    <TabsList className="grid w-full grid-cols-5 mb-4">
+                      <TabsTrigger value="code-assistant" className="flex items-center gap-1.5">
+                        <Wrench className="h-3.5 w-3.5" />
+                        Code Assistant
+                      </TabsTrigger>
                       <TabsTrigger value="debugger">Response Debugger</TabsTrigger>
                       <TabsTrigger value="quickfix">Quick Fix</TabsTrigger>
                       <TabsTrigger value="generator">Test Generator</TabsTrigger>
                       <TabsTrigger value="timeline">Feedback Timeline</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="debugger" className="h-full">
+                    <TabsContent value="code-assistant" className="flex-1 mt-0" style={{ height: "calc(100vh - 200px)" }}>
+                      <FixitPage className="h-full" />
+                    </TabsContent>
+
+                    <TabsContent value="debugger" className="flex-1 mt-0">
                       <ResponseDebugger />
                     </TabsContent>
 
-                    <TabsContent value="quickfix" className="h-full">
+                    <TabsContent value="quickfix" className="flex-1 mt-0">
                       <QuickFixPanel />
                     </TabsContent>
 
-                    <TabsContent value="generator" className="h-full">
+                    <TabsContent value="generator" className="flex-1 mt-0">
                       <TestCaseGenerator />
                     </TabsContent>
 
-                    <TabsContent value="timeline" className="h-full">
+                    <TabsContent value="timeline" className="flex-1 mt-0">
                       <FeedbackTimeline className="h-full" />
                     </TabsContent>
                   </Tabs>
@@ -632,15 +668,6 @@ Be helpful, concise, and professional in your responses.`;
               )}
             </div>
           </SidebarInset>
-
-          {/* Right Sidebar */}
-          {isRightSidebarOpen && (
-            <aside className="w-96 border-l border-border/50 bg-background/50 backdrop-blur-sm supports-[backdrop-filter]:bg-background/30">
-              <RightSidebar onToggle={() => setIsRightSidebarOpen(false)}>
-                <EnhancedKnowledgePanel className="h-full" />
-              </RightSidebar>
-            </aside>
-          )}
         </div>
       </div>
       <DraggableLadybug onOpenFeedback={() => setIsFeedbackOpen(true)} />

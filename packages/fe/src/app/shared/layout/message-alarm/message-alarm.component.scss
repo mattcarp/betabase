@@ -1,0 +1,13 @@
+.alert-error {
+  position: absolute;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  min-width: 380px;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  .fas {
+    font-size: 26px;
+  }
+}

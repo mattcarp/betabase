@@ -1,0 +1,41 @@
+@import '../../../../scss/variables';
+
+.dialog {
+  &-content {
+    display: flex;
+    align-items: center;
+    min-height: 160px;
+
+    .note {
+      position: relative;
+      display: flex;
+      overflow-y: auto;
+      align-items: flex-start;
+      justify-content: center;
+      width: 80%;
+      margin: 0 auto;
+      font-size: 16px;
+      background-color: rgba($color-white, 0.05);
+
+      p {
+        width: 100%;
+        max-width: 80%;
+        line-height: 1.2;
+        white-space: break-spaces;
+      }
+
+      .fa-exclamation-triangle {
+        font-size: 48px;
+        color: $color-orange;
+      }
+    }
+  }
+
+  &-actions {
+    button {
+      span {
+        text-transform: capitalize;
+      }
+    }
+  }
+}

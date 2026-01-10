@@ -1,0 +1,175 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+  <div *ngIf="isLoading" class="spinner">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
+
+  <div *ngIf="!isLoading && test && scenario">
+    <h2>{{test?.id ? 'Edit' : 'New'}} Test for Case {{scenario?.id}}</h2>
+
+    <h3>The Case</h3>
+
+    <div class="grid-container">
+      <div class="grid two-columns">
+        <div>Name</div>
+        <div>{{scenario?.name}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Preconditions</div>
+        <div [innerHTML]="scenario?.preconditions" class="inner-html"></div>
+      </div>
+      <ng-container *ngIf="scenario?.mode === 'Automated'; else script">
+        <div class="grid two-columns">
+          <div>Automation Code</div>
+          <div>
+            <pre><code>{{scenario?.script}}</code></pre>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #script>
+        <div class="grid two-columns">
+          <div>Script</div>
+          <div [innerHTML]="scenario?.script" class="inner-html"></div>
+        </div>
+      </ng-template>
+      <div class="grid two-columns">
+        <div>Expected Result</div>
+        <div [innerHTML]="scenario?.expectedResult" class="inner-html"></div>
+      </div>
+      <div class="grid two-columns">
+        <div>Created By</div>
+        <div>{{scenario?.createdBy}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Created</div>
+        <div>{{scenario?.createdAt | date: 'yyyy-MM-dd'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Updated By</div>
+        <div>{{scenario?.updatedBy}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Updated</div>
+        <div>{{scenario?.updatedAt | date: 'yyyy-MM-dd'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Coverage</div>
+        <div>{{scenario?.coverage}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Flagged for Review</div>
+        <div>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
+      </div>
+      <ng-container *ngIf="scenario?.flagReason">
+        <div class="grid two-columns">
+          <div>Reason for Review</div>
+          <div>{{scenario?.flagReason}}</div>
+        </div>
+      </ng-container>
+    </div>
+
+    <br>
+
+    <div class="row">
+      <label>Input</label>
+      <ngx-editor-menu [editor]="inputEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [outputFormat]="'html'" [editor]="inputEditor" [(ngModel)]="test.input"></ngx-editor>
+    </div>
+
+    <div class="row">
+      <label>Result</label>
+      <ngx-editor-menu [editor]="resultEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [outputFormat]="'html'" [editor]="resultEditor" [(ngModel)]="test.result"></ngx-editor>
+    </div>
+
+    <div class="grid option">
+      <div class="row">
+        <label>Browser</label>
+
+        <mat-form-field class="select-name">
+          <mat-label>Name</mat-label>
+          <mat-select [(ngModel)]="test.browserName">
+            <mat-option *ngFor="let option of browserNameOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="select-version">
+          <mat-label>Major Version</mat-label>
+          <mat-select [(ngModel)]="test.browserMajor">
+            <mat-option *ngFor="let option of browserVersionOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="select-version">
+          <mat-label>Minor Version</mat-label>
+          <input matInput [(ngModel)]="test.browserMinor" type="text">
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <label>Operating System</label>
+
+        <mat-form-field class="select-name">
+          <mat-label>Name</mat-label>
+          <mat-select [(ngModel)]="test.osName">
+            <mat-option *ngFor="let option of osNameOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="select-version">
+          <mat-label>Major Version</mat-label>
+          <mat-select [(ngModel)]="test.osMajor">
+            <mat-option *ngFor="let option of osVersionOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="select-version">
+          <mat-label>Minor Version</mat-label>
+          <input matInput [(ngModel)]="test.osMinor" type="text">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Pass/Fail</label>
+      <mat-form-field>
+        <mat-select [(ngModel)]="test.passFail">
+          <mat-option *ngFor="let option of passFailOptions" [value]="option">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <label>Comments</label>
+      <ngx-editor-menu [editor]="commentsEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [outputFormat]="'html'" [editor]="commentsEditor" [(ngModel)]="test.comments"></ngx-editor>
+    </div>
+
+    <div>JIRA Ticket (can be added later) - use the form ABCD-1234</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="test.ticket" type="text">
+    </mat-form-field>
+
+    <div class="row">
+      <label>In Production?</label>
+      <mat-form-field>
+        <mat-select [(ngModel)]="test.inProd">
+          <mat-option *ngFor="let option of inProdOptions" [value]="option">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="actions-container">
+      <button mat-flat-button
+              [disabled]="isCreateTestBtnDisabled"
+              (click)="onSaveClick()"
+              color="accent"
+              class="actions-button">
+        <i class="fas fa-save"></i>
+        <span>{{saveBtnLabel}}</span>
+      </button>
+    </div>
+  </div>
+</section>

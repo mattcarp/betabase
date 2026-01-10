@@ -1,0 +1,18 @@
+<nav>
+  <a mat-flat-button
+     (click)="onBackClick()"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+  <a mat-flat-button
+     (click)="onNewClick()"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-plus-circle"></i>
+    <span>New user</span>
+  </a>
+</nav>
+
+<router-outlet></router-outlet>

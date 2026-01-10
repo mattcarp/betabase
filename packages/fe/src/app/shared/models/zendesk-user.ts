@@ -1,0 +1,30 @@
+export interface ZendeskUser {
+  active: boolean;
+  createdAt: Date | string;
+  email: string;
+  externalId: number;
+  ianaTimeZone: string;
+  id: number;
+  lastLoginAt: Date | string | null;
+  locale: string;
+  localeId: number;
+  moderator: boolean;
+  name: string;
+  notes: string;
+  onlyPrivateComments: boolean;
+  organizationId: number;
+  phone: string;
+  reportCsv: boolean;
+  restrictedAgent: boolean;
+  role: string;
+  shared: boolean;
+  sharedAgent: boolean;
+  sharedPhoneNumber: string;
+  suspended: boolean;
+  ticketRestriction: string;
+  timeZone: string;
+  twoFactorAuthEnabled: boolean;
+  updatedAt: Date | string;
+  url: string;
+  verified: boolean;
+}

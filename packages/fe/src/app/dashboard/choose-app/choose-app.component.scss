@@ -1,0 +1,89 @@
+@import '../../../scss/variables';
+
+.container {
+  margin: 2vw auto;
+
+  h2 {
+    text-align: center;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 402px);
+    grid-template-rows: repeat(3, 200px);
+    grid-auto-flow: dense;
+    background-color: $color-read-only;
+  }
+
+  .card {
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-bottom: 14px solid white;
+    background-color: $color-read-only;
+
+    &:last-child,
+    &:nth-last-child(2):nth-child(odd) {
+      border-bottom: none;
+    }
+
+    &:nth-child(odd) {
+      border-right: 14px solid white;
+    }
+
+    &:before {
+      position: absolute;
+      right: -174px;
+      bottom: -104px;
+      display: block;
+      width: 300px;
+      height: 300px;
+      content: '';
+      transition: transform 0.4s ease-out, bottom 0.4s ease-out;
+      transform: rotate(-30deg);
+      opacity: 0.08;
+    }
+
+    section {
+      &:before {
+        content: unset;
+      }
+    }
+
+    &:hover {
+      background-color: $color-active;
+
+      &:before {
+        bottom: -90px;
+        transform: rotate(-25deg) scale(1.2);
+        filter: grayscale(100%);
+      }
+    }
+
+    &.partner {
+      &:before {
+        background: url(/assets/logos/partner-logo.png) no-repeat;
+      }
+    }
+    &.aoma {
+      &:before {
+        background: url(/assets/logos/aoma-logo.gif) no-repeat;
+      }
+    }
+    &.promo-admin {
+      &:before {
+        background: url(/assets/logos/promo-admin-logo.png) no-repeat;
+      }
+    }
+    &.promo {
+      &:before {
+        background: url(/assets/logos/promo-logo.png) no-repeat;
+      }
+    }
+    &.dx {
+      &:before {
+        background: url(/assets/logos/dx-logo.png) no-repeat;
+      }
+    }
+  }
+}

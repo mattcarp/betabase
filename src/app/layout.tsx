@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import React, { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { WebVitalsReporter } from "@/components/performance/WebVitalsReporter";
 
 // Inter font - MAC Design System primary typeface
 const inter = Inter({
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/styles/theme-transitions.css" />
       </head>
       <body className="dark font-sans antialiased" suppressHydrationWarning>
+        <WebVitalsReporter />
         {children}
       </body>
     </html>

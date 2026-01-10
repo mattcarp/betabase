@@ -1,0 +1,81 @@
+<nav>
+  <a mat-flat-button
+     (click)="onBackClick()"
+     color="primary"
+     class="nav-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+</nav>
+
+<ng-container *ngIf="isLoading; else template">
+  <app-spinner></app-spinner>
+</ng-container>
+
+<ng-template #template>
+  <div class="user">
+    <div class="user-container">
+      <h2>{{user?.id ? 'Edit' : 'Create New'}} User</h2>
+
+      <mat-form-field class="full-width">
+        <mat-label>Email:</mat-label>
+        <input type="email" matInput required [(ngModel)]="user.email">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Username:</mat-label>
+        <input matInput required [(ngModel)]="user.username">
+      </mat-form-field>
+
+      <div class="row">
+        <mat-checkbox [(ngModel)]="user.enabled" color="primary">
+          <span>Enabled</span>
+        </mat-checkbox>
+        <mat-checkbox [checked]="isAdmin" (change)="onAdminRoleChange($event)" color="warn">
+          <span>Is Admin</span>
+        </mat-checkbox>
+      </div>
+
+      <mat-form-field class="full-width" *ngIf="!user?.id">
+        <mat-label>Password:</mat-label>
+        <input matInput required [(ngModel)]="user.password">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>First Name:</mat-label>
+        <input matInput [(ngModel)]="user.fName">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Last Name:</mat-label>
+        <input matInput [(ngModel)]="user.lName">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Jira Username:</mat-label>
+        <input matInput [(ngModel)]="user.jiraUsername">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Mobile Phone:</mat-label>
+        <input matInput [(ngModel)]="user.mobilePhone">
+      </mat-form-field>
+
+      <button
+        (click)="onSaveClick()"
+        mat-raised-button
+        color="accent"
+        [disabled]="!user?.email?.length">
+        <ng-container *ngIf="!user?.id">
+          <i class="fas fa-plus"></i>
+          <span>Create</span>
+        </ng-container>
+        <ng-container *ngIf="user?.id">
+          <i class="fas fa-edit"></i>
+          <span>Update</span>
+        </ng-container>
+      </button>
+
+    </div>
+  </div>
+</ng-template>

@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import { Bug, Disc } from "lucide-react";
+import { Bug } from "lucide-react";
 import { useTesterStore } from "../../lib/use-tester-store";
-// feedback-dialog import will be added later
 
 export const DraggableLadybug = ({ onOpenFeedback }: { onOpenFeedback: () => void }) => {
   const { isTesterModeEnabled, ladybugPosition, setLadybugPosition } = useTesterStore();
   const [isDragging, setIsDragging] = useState(false);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   if (!isTesterModeEnabled) return null;
 
@@ -23,13 +23,13 @@ export const DraggableLadybug = ({ onOpenFeedback }: { onOpenFeedback: () => voi
 
   return (
     <Draggable
+      nodeRef={nodeRef}
       position={ladybugPosition}
       onDrag={handleDrag}
       onStop={handleStop}
-       // Bounds "parent" or specfic coordinates could be used, but "body" might be safer or just unbounded.
-       // unbounded allows dragging anywhere.
     >
-      <div 
+      <div
+        ref={nodeRef} 
         className="fixed z-[9999] cursor-grab active:cursor-grabbing group"
         style={{ touchAction: 'none' }} // Prevent scrolling on mobile while dragging
       >

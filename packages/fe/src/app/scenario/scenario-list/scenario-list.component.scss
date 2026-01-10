@@ -1,0 +1,38 @@
+.grid {
+  grid-template-columns: minmax(60px, 80px)
+  minmax(120px, 1fr)
+  minmax(64px, 120px)
+  120px
+  minmax(64px, 120px)
+  120px
+  68px
+  minmax(64px, 120px);
+}
+
+header {
+  &.grid {
+    padding: 0;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+
+  .spinner {
+    &.generating {
+      position: relative;
+      display: inline-flex;
+      transform: unset;
+      height: 30px;
+      left: unset;
+    }
+
+    &-progress {
+      width: 30px;
+      height: 30px;
+      margin: 0;
+    }
+  }
+}
+

@@ -1,0 +1,44 @@
+<app-nav *ngIf="!ticketId" [isBackActive]="true"></app-nav>
+
+<section [class.tooltip]="ticketId">
+  <ng-container *ngIf="isLoading; else template">
+    <app-spinner></app-spinner>
+  </ng-container>
+
+  <ng-template #template>
+    <div *ngIf="ticket" class="ticket">
+      <header class="grid">
+        <div class="flex">
+          <label *ngIf="ticket?.status === 'open'" class="label-warning">{{ticket?.status}}</label>
+          <label *ngIf="ticket?.status === 'close'" class="label-success">{{ticket?.status}}</label>
+          <label>Incident #{{ticket?.id}} <span *ngIf="ticket?.priority">({{ticket?.priority}})</span></label>
+        </div>
+        <div>
+          <h3>{{ticket?.subject}}</h3>
+        </div>
+        <div class="link">
+          <a mat-icon-button href="https://miosofthelp.zendesk.com/agent/tickets/{{ticket.id}}" target="_blank">
+            <i class="fas fa-external-link"></i>
+          </a>
+        </div>
+      </header>
+
+      <ng-container *ngIf="comments?.length">
+        <div *ngFor="let comment of comments">
+          <div class="{{getUserNameById(comment?.authorId!) === 'The Customer' ? 'requester' : 'assignee'}}">
+            <div class="icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="bubble">
+              <div class="info">
+                <div class="info-name">{{getUserNameById(comment?.authorId!)}}</div>
+                <div class="info-time">{{comment?.createdAt | date: 'yyyy-MM-dd HH:mm'}}</div>
+              </div>
+              <div class="text">{{comment?.plainBody}}</div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</section>
