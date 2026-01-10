@@ -447,7 +447,7 @@ function TestResultRow({ test }: { test: TestResult }) {
     passed: { icon: CheckCircle, color: "text-green-400", bg: "bg-green-500/10" },
     failed: { icon: XCircle, color: "text-red-400", bg: "bg-red-500/10" },
     skipped: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10" },
-    pending: { icon: Clock, color: "text-gray-400", bg: "bg-gray-500/10" },
+    pending: { icon: Clock, color: "text-muted-foreground", bg: "bg-muted/50" },
   };
 
   const config = statusConfig[test.status];

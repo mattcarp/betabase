@@ -454,7 +454,7 @@ export const TestResultsViewer: React.FC = () => {
                               id="filter-photos"
                               checked={filterPhotos}
                               onChange={(e) => setFilterPhotos(e.target.checked)}
-                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              className="h-4 w-4 rounded border-input text-primary focus:ring-primary"
                             />
                           </div>
                           <div className="flex items-center justify-between">
@@ -464,7 +464,7 @@ export const TestResultsViewer: React.FC = () => {
                               id="filter-long-titles"
                               checked={filterLongTitles}
                               onChange={(e) => setFilterLongTitles(e.target.checked)}
-                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              className="h-4 w-4 rounded border-input text-primary focus:ring-primary"
                             />
                           </div>
                         </div>

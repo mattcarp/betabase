@@ -621,7 +621,7 @@ export const SessionPlaybackViewer: React.FC = () => {
                 )}
               >
                 {/* Browser viewport simulation */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800">
+                <div className="absolute inset-0 bg-card">
                   <div className="p-8 text-white">
                     {sessionSteps[currentStep]?.screenshot ? (
                       <div className="text-center">

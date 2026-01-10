@@ -147,7 +147,7 @@ export const AudioWaveformResponse: React.FC<{
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-border/50 backdrop-blur-sm">
+    <div className="bg-card rounded-xl p-6 border border-border/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">

@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
-import { 
+import {
   Table,
   TableBody,
   TableCell,
@@ -22,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { CodeBlock } from "../ui/code-block";
 import { 
   Artifact, 
   ArtifactHeader, 
@@ -585,10 +586,10 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
         </div>
 
         {/* Scrollable Table Container */}
-        <div 
+        <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto bg-background/20 custom-scrollbar"
+          className="flex-1 overflow-y-auto bg-background/20 mac-scrollbar"
           data-test-id="test-list"
         >
           {!initialLoadComplete ? (
@@ -1154,7 +1155,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               <textarea
                                 value={editedCode}
                                 onChange={(e) => setEditedCode(e.target.value)}
-                                className="w-full text-xs text-emerald-400 font-mono p-5 bg-black/60 border-0 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 resize-none min-h-[400px] max-h-[500px] overflow-auto custom-scrollbar leading-loose tracking-tight"
+                                className="w-full text-xs text-emerald-400 font-mono p-5 bg-black/60 border-0 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 resize-none min-h-[400px] max-h-[500px] overflow-auto mac-scrollbar leading-loose tracking-tight"
                                 spellCheck={false}
                               />
                               <div className="absolute bottom-3 right-3 flex gap-2">
@@ -1181,9 +1182,14 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                               </div>
                             </div>
                           ) : (
-                            <pre className="text-xs text-emerald-400/80 font-mono p-5 overflow-x-auto max-h-[500px] shadow-2xl custom-scrollbar leading-loose tracking-tight">
-                              {generatedCode}
-                            </pre>
+                            <div className="max-h-[500px] overflow-auto mac-scrollbar">
+                              <CodeBlock
+                                code={generatedCode || ""}
+                                language="typescript"
+                                showLineNumbers
+                                className="text-xs shadow-2xl"
+                              />
+                            </div>
                           )
                         ) : (
                           <div className="p-6 prose prose-invert prose-sm max-w-none">
@@ -1207,7 +1213,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                             </div>
                           </div>
                         )}
-                        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
+                        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background to-transparent pointer-events-none" />
                       </div>
                     </ArtifactContent>
 
@@ -1380,7 +1386,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
           </div>
         ) : (
           // Blast from the Past - Featured Historical Test
-          <div className="flex flex-col h-full overflow-y-auto bg-background/20 backdrop-blur-3xl">
+          <div className="flex flex-col h-full overflow-y-auto bg-background/20 backdrop-blur-3xl mac-scrollbar">
             {/* Featured Test Header */}
             {featuredTest && showFeaturedTest ? (
               <div className="p-6 space-y-6">
@@ -1454,7 +1460,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
                     <div className="grid grid-cols-3 gap-4">
                       {demoScreenshots.map((screenshot, index) => (
                         <div key={screenshot.id} className="group relative">
-                          <div className="aspect-video rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 border border-border/50 overflow-hidden relative">
+                          <div className="aspect-video rounded-lg bg-card border border-border/50 overflow-hidden relative">
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="text-center">
                                 <ImageIcon className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
@@ -1642,7 +1648,7 @@ export function HistoricalTestExplorer({ prefetchedData }: HistoricalTestExplore
               <div className="flex flex-col items-center justify-center h-full text-center p-12">
                 <div className="relative mb-8">
                   <div className="absolute -inset-4 bg-[var(--mac-primary-blue-400)]/10 rounded-full blur-2xl" />
-                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative shadow-2xl border border-border/50">
+                  <div className="w-24 h-24 rounded-3xl bg-card flex items-center justify-center relative shadow-2xl border border-border/50">
                     <FileSearch className="h-10 w-10 text-muted-foreground" />
                   </div>
                 </div>

@@ -1,6 +1,19 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# MAC Design System Check (warning only - does not block commits)
+if grep -rq "zinc-\|gray-\|neutral-" --include="*.tsx" src/components/ 2>/dev/null; then
+  echo ""
+  echo "WARNING: Found hardcoded colors in components. Use MAC design system classes instead:"
+  echo "  - text-gray-400 -> text-muted-foreground"
+  echo "  - bg-zinc-800 -> bg-card"
+  echo "  - border-gray-300 -> border-input"
+  echo ""
+  echo "Violations found:"
+  grep -rn "zinc-\|gray-\|neutral-" --include="*.tsx" src/components/ 2>/dev/null | head -10
+  echo ""
+fi
+
 # Run prettier on staged files
 npx lint-staged
 

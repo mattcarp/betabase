@@ -99,7 +99,7 @@ const JiraTicketRenderer: React.FC<{ response: JiraTicketResponse }> = ({ respon
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-border/50 backdrop-blur-sm">
+    <div className="bg-card rounded-xl p-6 border border-border/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
@@ -183,7 +183,7 @@ const ChartRenderer: React.FC<{ response: ChartResponse }> = ({ response }) => {
   const { data } = response;
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-border/50">
+    <div className="bg-card rounded-xl p-6 border border-border/50">
       <h3 className="mac-title">{data.title}</h3>
 
       {/* Simple bar chart visualization */}
@@ -227,7 +227,7 @@ const CodeBlockRenderer: React.FC<{ response: CodeBlockResponse }> = ({ response
   const { data } = response;
 
   return (
-    <div className="bg-gradient-to-br from-gray-900/90 to-black/90 rounded-xl overflow-hidden border border-border/50">
+    <div className="bg-card rounded-xl overflow-hidden border border-border/50">
       {/* Header */}
       <div className="bg-muted/80 px-4 py-4 border-b border-border/50">
         <div className="flex items-center justify-between">
@@ -282,7 +282,7 @@ const DashboardRenderer: React.FC<{ response: DashboardResponse }> = ({ response
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-border/50">
+    <div className="bg-card rounded-xl p-6 border border-border/50">
       <h3 className="mac-title">{data.title}</h3>
 
       <div className="grid grid-cols-4 gap-4">

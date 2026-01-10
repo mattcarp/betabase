@@ -348,11 +348,11 @@ export const UnifiedResultsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-blue-400" />
-                <span className="text-sm font-light text-neutral-400">Total Tests</span>
+                <span className="text-sm font-light text-muted-foreground">Total Tests</span>
               </div>
               <span className="text-2xl font-light text-white">{metrics.combined.total}</span>
             </div>
-            <div className="mt-2 flex gap-2 text-xs text-neutral-400">
+            <div className="mt-2 flex gap-2 text-xs text-muted-foreground">
               <span className="text-blue-400">{metrics.manual.total} manual</span>
               <span className="text-emerald-400">{metrics.automated.total} auto</span>
             </div>
@@ -364,13 +364,13 @@ export const UnifiedResultsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-500" />
-                <span className="text-sm font-light text-neutral-400">Passed</span>
+                <span className="text-sm font-light text-muted-foreground">Passed</span>
               </div>
               <span className="text-2xl font-light text-emerald-500">
                 {metrics.combined.passed}
               </span>
             </div>
-            <div className="mt-2 text-xs text-neutral-400">
+            <div className="mt-2 text-xs text-muted-foreground">
               {metrics.combined.coverage}% success rate
             </div>
           </CardContent>
@@ -381,11 +381,11 @@ export const UnifiedResultsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <XCircle className="h-4 w-4 text-rose-500" />
-                <span className="text-sm font-light text-neutral-400">Failed</span>
+                <span className="text-sm font-light text-muted-foreground">Failed</span>
               </div>
               <span className="text-2xl font-light text-rose-500">{metrics.combined.failed}</span>
             </div>
-            <div className="mt-2 flex gap-2 text-xs text-neutral-400">
+            <div className="mt-2 flex gap-2 text-xs text-muted-foreground">
               <span className="text-blue-400">{metrics.manual.failed} manual</span>
               <span className="text-emerald-400">{metrics.automated.failed} auto</span>
             </div>
@@ -397,13 +397,13 @@ export const UnifiedResultsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Grid3x3 className="h-4 w-4 text-primary-400" />
-                <span className="text-sm font-light text-neutral-400">Areas Tested</span>
+                <span className="text-sm font-light text-muted-foreground">Areas Tested</span>
               </div>
               <span className="text-2xl font-light text-primary-400">
                 {metrics.combined.uniqueAreas}
               </span>
             </div>
-            <div className="mt-2 text-xs text-neutral-400">UI/feature coverage</div>
+            <div className="mt-2 text-xs text-muted-foreground">UI/feature coverage</div>
           </CardContent>
         </Card>
 
@@ -411,14 +411,14 @@ export const UnifiedResultsDashboard: React.FC = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-neutral-400" />
-                <span className="text-sm font-light text-neutral-400">Avg Duration</span>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-light text-muted-foreground">Avg Duration</span>
               </div>
               <span className="text-2xl font-light text-white">
                 {formatDuration((metrics.manual.avgDuration + metrics.automated.avgDuration) / 2)}
               </span>
             </div>
-            <div className="mt-2 text-xs text-neutral-400">Per test execution</div>
+            <div className="mt-2 text-xs text-muted-foreground">Per test execution</div>
           </CardContent>
         </Card>
       </div>
@@ -635,7 +635,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                       {getTypeIcon(selectedResult.type)}
                       {selectedResult.name}
                     </CardTitle>
-                    <p className="text-sm text-neutral-400 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {selectedResult.area} • {selectedResult.timestamp.toLocaleString()}
                       {selectedResult.tester && ` • by ${selectedResult.tester}`}
                     </p>
@@ -682,7 +682,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                         <CardContent className="p-4">
                           <h4 className="mac-title">Duration</h4>
                           <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4 text-neutral-400" />
+                            <Clock className="h-4 w-4 text-muted-foreground" />
                             <span className="font-light text-white">
                               {formatDuration(selectedResult.duration)}
                             </span>
@@ -701,7 +701,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           {selectedResult.error.stack && (
                             <>
                               <h4 className="mac-title">Stack Trace</h4>
-                              <pre className="text-xs font-mono bg-[var(--mac-surface-elevated)] p-3 rounded overflow-x-auto text-neutral-300">
+                              <pre className="text-xs font-mono bg-[var(--mac-surface-elevated)] p-3 rounded overflow-x-auto text-muted-foreground">
                                 {selectedResult.error.stack}
                               </pre>
                             </>
@@ -718,7 +718,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                             {selectedResult.findings.map((finding, index) => (
                               <li
                                 key={index}
-                                className="flex items-start gap-2 text-sm text-neutral-300"
+                                className="flex items-start gap-2 text-sm text-muted-foreground"
                               >
                                 <Eye className="h-4 w-4 mt-0.5 text-blue-400 flex-shrink-0" />
                                 <span>{finding}</span>
@@ -747,7 +747,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
                             ))}
                           </div>
                         ) : (
-                          <p className="text-sm text-neutral-400">
+                          <p className="text-sm text-muted-foreground">
                             No specific coverage areas recorded
                           </p>
                         )}
@@ -762,15 +762,15 @@ export const UnifiedResultsDashboard: React.FC = () => {
                           <Card key={index} className="mac-card bg-[var(--mac-surface-elevated)] border-white/10">
                             <CardContent className="p-4">
                               <div className="aspect-video bg-[#0a0a0a] rounded flex items-center justify-center">
-                                <Eye className="h-8 w-8 text-neutral-500" />
+                                <Eye className="h-8 w-8 text-muted-foreground" />
                               </div>
-                              <p className="text-sm mt-2 truncate text-neutral-300">{screenshot}</p>
+                              <p className="text-sm mt-2 truncate text-muted-foreground">{screenshot}</p>
                             </CardContent>
                           </Card>
                         ))}
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center h-[300px] text-neutral-400">
+                      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                         No media attachments
                       </div>
                     )}
@@ -780,7 +780,7 @@ export const UnifiedResultsDashboard: React.FC = () => {
             </Card>
           ) : (
             <Card className="mac-card h-full bg-[var(--mac-surface-bg)] border-white/10">
-              <CardContent className="flex items-center justify-center h-full text-neutral-400">
+              <CardContent className="flex items-center justify-center h-full text-muted-foreground">
                 Select a test result to view details
               </CardContent>
             </Card>

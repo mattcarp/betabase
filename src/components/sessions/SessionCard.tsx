@@ -130,7 +130,7 @@ export function SessionCard({
 
       <CardContent className="space-y-4" onClick={() => onPlay(session)}>
         {/* Thumbnail Placeholder */}
-        <div className="aspect-video bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 rounded-lg border border-white/10 flex items-center justify-center group-hover:border-primary-500/30 transition-colors">
+        <div className="aspect-video bg-card rounded-lg border border-border flex items-center justify-center group-hover:border-primary-500/30 transition-colors">
           <Play className="h-12 w-12 text-white/20 group-hover:text-primary-400/50 transition-colors" />
         </div>
 

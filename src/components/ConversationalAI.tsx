@@ -286,7 +286,7 @@ const ConversationalAI = forwardRef<ConversationalAIRef, ConversationalAIProps>(
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-normal transition-all ${
                 isMuted
                   ? "bg-red-600 hover:bg-red-700 text-white"
-                  : "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-muted hover:bg-muted/80 text-foreground"
               }`}
               data-testid="mute-button"
             >

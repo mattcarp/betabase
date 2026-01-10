@@ -134,7 +134,7 @@ const ResultCard: React.FC<{
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-lg p-6 border border-border/50 hover:border-border/50 transition-all duration-200 group">
+    <div className="bg-card rounded-lg p-6 border border-border/50 hover:border-border/50 transition-all duration-200 group">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4 flex-1">
@@ -281,7 +281,7 @@ export const SearchResultsResponse: React.FC<{
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl p-6 border border-border/50 backdrop-blur-sm">
+    <div className="bg-card rounded-xl p-6 border border-border/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
