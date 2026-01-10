@@ -10,13 +10,16 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Activity,
   AlertCircle,
+  ArrowLeft,
   CheckCircle,
+  Clock,
   Database,
   HardDrive,
   RefreshCw,
   Server,
   Zap,
 } from "lucide-react";
+import { SiamLogo } from "@/components/ui/SiamLogo";
 import {
   LineChart,
   Line,
@@ -50,9 +53,27 @@ interface PerformanceMetrics {
   systemMetrics: {
     cpuUsage: number;
     memoryUsage: number;
+    memoryUsedMB: number;
+    memoryTotalMB: number;
+    heapUsedMB: number;
+    heapTotalMB: number;
     diskUsage: number;
     networkLatency: number;
     uptime: number;
+    nodeVersion: string;
+    platform: string;
+  };
+  testMetrics: {
+    totalTests: number;
+    passedTests: number;
+    failedTests: number;
+    passRate: number;
+    recentRuns: number;
+    avgDurationMs: number;
+    historicalTestCount: number;
+    rlhfFeedbackCount: number;
+    selfHealingPending: number;
+    selfHealingApproved: number;
   };
   dataFreshness: {
     vectorStore: {
@@ -76,6 +97,14 @@ interface PerformanceMetrics {
     requestCount: number;
     errorCount: number;
   }[];
+  webVitals: {
+    lcp: { avg: number; p75: number; samples: number };
+    fid: { avg: number; p75: number; samples: number };
+    cls: { avg: number; p75: number; samples: number };
+    fcp: { avg: number; p75: number; samples: number };
+    ttfb: { avg: number; p75: number; samples: number };
+    inp: { avg: number; p75: number; samples: number };
+  };
   timestamp: string;
 }
 
@@ -134,27 +163,33 @@ export default function PerformanceDashboard() {
     return `${days}d ${hours}h ${minutes}m`;
   };
 
+  // Format metric value, showing N/A for unavailable metrics (-1)
+  const formatMetricValue = (value: number, suffix: string = "") => {
+    if (value < 0) return "N/A";
+    return `${value.toFixed(1)}${suffix}`;
+  };
+
   // Calculate health status
   const getHealthStatus = () => {
     if (!metrics) return { status: "unknown", color: "gray" };
 
-    const { systemMetrics, queryMetrics, dataFreshness } = metrics;
+    const { systemMetrics, testMetrics, dataFreshness } = metrics;
 
-    // Critical conditions
+    // Critical conditions (skip if value is -1 meaning unavailable)
     if (
-      systemMetrics.cpuUsage > 90 ||
-      systemMetrics.memoryUsage > 90 ||
-      queryMetrics.errorRate > 10 ||
+      (systemMetrics.cpuUsage >= 0 && systemMetrics.cpuUsage > 90) ||
+      (systemMetrics.memoryUsage >= 0 && systemMetrics.memoryUsage > 90) ||
+      (testMetrics && testMetrics.passRate < 50 && testMetrics.totalTests > 0) ||
       dataFreshness.vectorStore.staleness > 72
     ) {
       return { status: "critical", color: "red" };
     }
 
-    // Warning conditions
+    // Warning conditions (skip if value is -1 meaning unavailable)
     if (
-      systemMetrics.cpuUsage > 70 ||
-      systemMetrics.memoryUsage > 70 ||
-      queryMetrics.errorRate > 5 ||
+      (systemMetrics.cpuUsage >= 0 && systemMetrics.cpuUsage > 70) ||
+      (systemMetrics.memoryUsage >= 0 && systemMetrics.memoryUsage > 70) ||
+      (testMetrics && testMetrics.passRate < 80 && testMetrics.totalTests > 0) ||
       dataFreshness.vectorStore.staleness > 24
     ) {
       return { status: "warning", color: "yellow" };
@@ -206,8 +241,38 @@ export default function PerformanceDashboard() {
   }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-8">
-      {/* Header */}
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Navigation Header */}
+      <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="px-6 py-4 h-16">
+          <div className="flex items-center justify-between h-full">
+            {/* Back Navigation + Brand */}
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => (window.location.href = "/")}
+                className="text-muted-foreground hover:text-foreground hover:bg-muted/50 mac-button"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to App
+              </Button>
+              <div className="h-6 w-px bg-border" />
+              <div className="flex items-center space-x-3">
+                <SiamLogo size="md" variant="icon" />
+                <div>
+                  <h1 className="text-sm font-medium text-foreground">Performance Dashboard</h1>
+                  <p className="text-xs text-muted-foreground">Real-time monitoring</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="p-8">
+      {/* Page Header */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <div>
@@ -345,10 +410,13 @@ export default function PerformanceDashboard() {
       </div>
 
       {/* Detailed Metrics */}
-      <Tabs defaultValue="queries" className="space-y-4">
-        <TabsList className="bg-white/5 border-white/10">
-          <TabsTrigger value="queries" className="data-[state=active]:bg-white/10">
-            Query Analytics
+      <Tabs defaultValue="tests" className="space-y-4">
+        <TabsList className="bg-white/5 border-white/10 flex-wrap">
+          <TabsTrigger value="tests" className="data-[state=active]:bg-white/10">
+            Test Metrics
+          </TabsTrigger>
+          <TabsTrigger value="vitals" className="data-[state=active]:bg-white/10">
+            Web Vitals
           </TabsTrigger>
           <TabsTrigger value="system" className="data-[state=active]:bg-white/10">
             System Health
@@ -361,7 +429,240 @@ export default function PerformanceDashboard() {
           </TabsTrigger>
         </TabsList>
 
-        {/* Query Analytics Tab */}
+        {/* Test Metrics Tab */}
+        <TabsContent value="tests" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card pb-2">
+                <CardTitle className="text-sm font-normal text-muted-foreground">Test Pass Rate</CardTitle>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="text-2xl font-normal text-white">
+                  {metrics.testMetrics?.passRate || 0}%
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {metrics.testMetrics?.passedTests || 0} passed / {metrics.testMetrics?.failedTests || 0} failed
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card pb-2">
+                <CardTitle className="text-sm font-normal text-muted-foreground">Recent Test Runs</CardTitle>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="text-2xl font-normal text-white">
+                  {metrics.testMetrics?.recentRuns || 0}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Avg duration: {formatDuration(metrics.testMetrics?.avgDurationMs || 0)}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card pb-2">
+                <CardTitle className="text-sm font-normal text-muted-foreground">Historical Tests</CardTitle>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="text-2xl font-normal text-white">
+                  {(metrics.testMetrics?.historicalTestCount || 0).toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Total test cases in bb_case table
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card pb-2">
+                <CardTitle className="text-sm font-normal text-muted-foreground">RLHF Feedback</CardTitle>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="text-2xl font-normal text-white">
+                  {metrics.testMetrics?.rlhfFeedbackCount || 0}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  User feedback entries collected
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card">
+                <CardTitle className="text-white">Self-Healing Tests</CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  AI-suggested test fixes awaiting review
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Pending Review</span>
+                    <Badge variant={metrics.testMetrics?.selfHealingPending > 0 ? "secondary" : "default"}>
+                      {metrics.testMetrics?.selfHealingPending || 0}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Approved/Applied</span>
+                    <Badge variant="default">{metrics.testMetrics?.selfHealingApproved || 0}</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card">
+                <CardTitle className="text-white">Data Sources</CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Real data from Supabase tables
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">test_results</span>
+                    <span className="text-white">Recent test executions</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">bb_case</span>
+                    <span className="text-white">Historical test cases</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">rlhf_feedback</span>
+                    <span className="text-white">User feedback</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">self_healing_attempts</span>
+                    <span className="text-white">AI test fixes</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Web Vitals Tab */}
+        <TabsContent value="vitals" className="space-y-4">
+          <Card className="mac-card bg-white/5 border-white/10">
+            <CardHeader className="mac-card">
+              <CardTitle className="text-white">Core Web Vitals</CardTitle>
+              <CardDescription className="text-muted-foreground">
+                Google&apos;s metrics for user experience. Collected from client-side page loads.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="mac-card">
+              {metrics.webVitals?.lcp?.samples === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No Web Vitals data collected yet.</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Web Vitals are reported from client-side page loads. Navigate through the app to collect data.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-normal text-white">LCP</span>
+                      <span className="text-xs text-muted-foreground">Largest Contentful Paint</span>
+                    </div>
+                    <div className="text-2xl font-normal text-white">
+                      {metrics.webVitals?.lcp?.p75 ? `${(metrics.webVitals.lcp.p75 / 1000).toFixed(2)}s` : 'N/A'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      P75 ({metrics.webVitals?.lcp?.samples || 0} samples) | Good: &lt;2.5s
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-normal text-white">INP</span>
+                      <span className="text-xs text-muted-foreground">Interaction to Next Paint</span>
+                    </div>
+                    <div className="text-2xl font-normal text-white">
+                      {metrics.webVitals?.inp?.p75 ? `${metrics.webVitals.inp.p75.toFixed(0)}ms` : 'N/A'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      P75 ({metrics.webVitals?.inp?.samples || 0} samples) | Good: &lt;200ms
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-normal text-white">CLS</span>
+                      <span className="text-xs text-muted-foreground">Cumulative Layout Shift</span>
+                    </div>
+                    <div className="text-2xl font-normal text-white">
+                      {metrics.webVitals?.cls?.p75 !== undefined ? metrics.webVitals.cls.p75.toFixed(3) : 'N/A'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      P75 ({metrics.webVitals?.cls?.samples || 0} samples) | Good: &lt;0.1
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-normal text-white">FCP</span>
+                      <span className="text-xs text-muted-foreground">First Contentful Paint</span>
+                    </div>
+                    <div className="text-2xl font-normal text-white">
+                      {metrics.webVitals?.fcp?.p75 ? `${(metrics.webVitals.fcp.p75 / 1000).toFixed(2)}s` : 'N/A'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      P75 ({metrics.webVitals?.fcp?.samples || 0} samples) | Good: &lt;1.8s
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-normal text-white">TTFB</span>
+                      <span className="text-xs text-muted-foreground">Time to First Byte</span>
+                    </div>
+                    <div className="text-2xl font-normal text-white">
+                      {metrics.webVitals?.ttfb?.p75 ? `${metrics.webVitals.ttfb.p75.toFixed(0)}ms` : 'N/A'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      P75 ({metrics.webVitals?.ttfb?.samples || 0} samples) | Good: &lt;800ms
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-normal text-white">FID</span>
+                      <span className="text-xs text-muted-foreground">First Input Delay (legacy)</span>
+                    </div>
+                    <div className="text-2xl font-normal text-white">
+                      {metrics.webVitals?.fid?.p75 ? `${metrics.webVitals.fid.p75.toFixed(0)}ms` : 'N/A'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      P75 ({metrics.webVitals?.fid?.samples || 0} samples) | Good: &lt;100ms
+                    </p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="mac-card bg-white/5 border-white/10">
+            <CardHeader className="mac-card">
+              <CardTitle className="text-white">How to Collect Web Vitals</CardTitle>
+            </CardHeader>
+            <CardContent className="mac-card">
+              <p className="text-sm text-muted-foreground">
+                Web Vitals are automatically collected from page loads when the web-vitals reporter is installed.
+                The data shown here is aggregated from all users of the application.
+              </p>
+              <p className="text-xs text-muted-foreground mt-2">
+                Note: Web Vitals data resets when the server restarts. In production, consider using a persistent
+                storage solution like Render&apos;s metrics or a dedicated monitoring service.
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Query Analytics Tab (kept for reference but removed from tabs) */}
         <TabsContent value="queries" className="space-y-4">
           <Card className="mac-card bg-white/5 border-white/10">
             <CardHeader className="mac-card">
@@ -474,9 +775,9 @@ export default function PerformanceDashboard() {
         <TabsContent value="system" className="space-y-4">
           <Card className="mac-card bg-white/5 border-white/10">
             <CardHeader className="mac-card">
-              <CardTitle className="text-white">System Resource Usage</CardTitle>
+              <CardTitle className="text-white">Node.js Process Metrics</CardTitle>
               <CardDescription className="text-muted-foreground">
-                CPU, Memory, and Disk usage over time
+                Real-time metrics from the Node.js runtime (not simulated)
               </CardDescription>
             </CardHeader>
             <CardContent className="mac-card">
@@ -486,7 +787,7 @@ export default function PerformanceDashboard() {
                   <XAxis dataKey="time" stroke="#ffffff60" />
                   <YAxis
                     stroke="#ffffff60"
-                    label={{ value: "Usage (%)", angle: -90, position: "insideLeft" }}
+                    label={{ value: "Memory %", angle: -90, position: "insideLeft" }}
                   />
                   <Tooltip
                     contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #ffffff20" }}
@@ -495,72 +796,33 @@ export default function PerformanceDashboard() {
                   <Legend />
                   <Area
                     type="monotone"
-                    dataKey="cpu"
-                    stackId="1"
-                    stroke="#ef4444"
-                    fill="#ef444440"
-                    name="CPU"
-                  />
-                  <Area
-                    type="monotone"
                     dataKey="memory"
-                    stackId="2"
+                    stackId="1"
                     stroke="#3b82f6"
                     fill="#3b82f640"
-                    name="Memory"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="disk"
-                    stackId="3"
-                    stroke="#10b981"
-                    fill="#10b98140"
-                    name="Disk"
+                    name="Heap Memory %"
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="mac-card bg-white/5 border-white/10">
-              <CardHeader className="mac-card">
-                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                  <Server className="h-4 w-4" />
-                  CPU Usage
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="mac-card">
-                <div className="text-3xl font-normal text-white mb-2">
-                  {metrics.systemMetrics.cpuUsage.toFixed(1)}%
-                </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${
-                      metrics.systemMetrics.cpuUsage > 80
-                        ? "bg-red-500"
-                        : metrics.systemMetrics.cpuUsage > 60
-                          ? "bg-yellow-500"
-                          : "bg-green-500"
-                    }`}
-                    style={{ width: `${metrics.systemMetrics.cpuUsage}%` }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card className="mac-card bg-white/5 border-white/10">
               <CardHeader className="mac-card">
                 <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Database className="h-4 w-4" />
-                  Memory Usage
+                  Heap Memory
                 </CardTitle>
               </CardHeader>
               <CardContent className="mac-card">
                 <div className="text-3xl font-normal text-white mb-2">
-                  {metrics.systemMetrics.memoryUsage.toFixed(1)}%
+                  {metrics.systemMetrics.heapUsedMB || 0} MB
                 </div>
-                <div className="w-full bg-muted rounded-full h-2">
+                <p className="text-xs text-muted-foreground">
+                  of {metrics.systemMetrics.heapTotalMB || 0} MB allocated
+                </p>
+                <div className="w-full bg-muted rounded-full h-2 mt-2">
                   <div
                     className={`h-2 rounded-full ${
                       metrics.systemMetrics.memoryUsage > 80
@@ -569,7 +831,7 @@ export default function PerformanceDashboard() {
                           ? "bg-yellow-500"
                           : "bg-green-500"
                     }`}
-                    style={{ width: `${metrics.systemMetrics.memoryUsage}%` }}
+                    style={{ width: `${Math.min(metrics.systemMetrics.memoryUsage, 100)}%` }}
                   />
                 </div>
               </CardContent>
@@ -578,26 +840,51 @@ export default function PerformanceDashboard() {
             <Card className="mac-card bg-white/5 border-white/10">
               <CardHeader className="mac-card">
                 <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                  <HardDrive className="h-4 w-4" />
-                  Disk Usage
+                  <Activity className="h-4 w-4" />
+                  Total Memory
                 </CardTitle>
               </CardHeader>
               <CardContent className="mac-card">
                 <div className="text-3xl font-normal text-white mb-2">
-                  {metrics.systemMetrics.diskUsage.toFixed(1)}%
+                  {metrics.systemMetrics.memoryUsedMB || 0} MB
                 </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${
-                      metrics.systemMetrics.diskUsage > 80
-                        ? "bg-red-500"
-                        : metrics.systemMetrics.diskUsage > 60
-                          ? "bg-yellow-500"
-                          : "bg-green-500"
-                    }`}
-                    style={{ width: `${metrics.systemMetrics.diskUsage}%` }}
-                  />
+                <p className="text-xs text-muted-foreground">
+                  RSS + External memory
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
+                  <Server className="h-4 w-4" />
+                  Runtime Info
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="text-xl font-normal text-white mb-2">
+                  {metrics.systemMetrics.nodeVersion || 'Unknown'}
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Platform: {metrics.systemMetrics.platform || 'Unknown'}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="mac-card bg-white/5 border-white/10">
+              <CardHeader className="mac-card">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Uptime
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="mac-card">
+                <div className="text-3xl font-normal text-white mb-2">
+                  {formatUptime(metrics.systemMetrics.uptime)}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Since server start
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -754,6 +1041,7 @@ export default function PerformanceDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }
