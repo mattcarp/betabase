@@ -1,4 +1,4 @@
-# Feature Specification: Role-Based Contextual Chat System
+# FEAT-018: Role-Based Contextual Chat System
 
 **Feature Branch**: `FEAT-018-role-based-chat`
 **Created**: 2025-01-10
@@ -7,12 +7,12 @@
 
 ## Overview
 
-The settings menu (gear icon, upper right) contains three toggleable roles:
-1. **Tech Support Staff** (base role, default ON) - Unlocks Chat tab
-2. **Tester** (additive) - Unlocks Test tab with test-oriented chat
-3. **Programmer** (additive) - Unlocks Fix tab with code-focused chat
+The settings menu (gear icon, upper right) contains three roles:
+1. **Tech Support Staff** (primary role, always ON, non-toggleable) - Chat tab always visible
+2. **Tester** (additive, toggleable) - Unlocks Test tab with test-oriented chat
+3. **Programmer** (additive, toggleable) - Unlocks Fix tab with code-focused chat
 
-Roles are **additive**: users can enable all three simultaneously. Each tab maintains its own conversation context with specialized system prompts and data sources.
+The primary role (Tech Support Staff) is **always enabled** and cannot be turned off - this ensures users always have access to the base Chat functionality. Tester and Programmer are **additive**: users can enable either, both, or neither. Each tab maintains its own conversation context with specialized system prompts and data sources.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -30,24 +30,24 @@ As a user, I want tabs to appear/disappear based on my enabled roles, so I only 
 2. **Given** Tech Support Staff + Tester are enabled, **When** I view the tab bar, **Then** I see Chat and Test tabs
 3. **Given** Tech Support Staff + Programmer are enabled, **When** I view the tab bar, **Then** I see Chat and Fix tabs
 4. **Given** all three roles are enabled, **When** I view the tab bar, **Then** I see Chat, Test, and Fix tabs
-5. **Given** only Tester + Programmer are enabled (no Tech Support), **When** I view the tab bar, **Then** I see only Test and Fix tabs (no Chat)
+5. **Given** only Tester is enabled (in addition to Tech Support), **When** I view the tab bar, **Then** I see Chat and Test tabs
 
 ---
 
-### User Story 2 - Tech Support Staff Role & Settings Menu (Priority: P1)
+### User Story 2 - Settings Menu Role Display (Priority: P1)
 
-As a user, I want to see Tech Support Staff as the first role option in settings, so I understand it's the base role that controls the main Chat tab.
+As a user, I want to see Tech Support Staff displayed as the primary role in settings (non-toggleable), with Tester and Programmer as optional toggles below it.
 
-**Why this priority**: Foundation for role system - settings menu must show all three roles correctly.
+**Why this priority**: Foundation for role system - settings menu must clearly communicate the role hierarchy.
 
-**Independent Test**: Can be tested by opening settings menu and verifying three toggles appear in correct order with correct labels.
+**Independent Test**: Can be tested by opening settings menu and verifying Tech Support Staff appears as always-on, with two toggles below.
 
 **Acceptance Scenarios**:
 
-1. **Given** I click the gear icon, **When** the settings dropdown opens, **Then** I see three role toggles in order: Tech Support Staff, Tester, Programmer
-2. **Given** I am a new user, **When** I first open the app, **Then** Tech Support Staff is ON by default, Tester and Programmer are OFF
-3. **Given** Tech Support Staff is enabled, **When** I view the toggle, **Then** it shows a green accent color (matching design system)
-4. **Given** I toggle Tech Support Staff OFF, **When** I view the tab bar, **Then** the Chat tab disappears
+1. **Given** I click the gear icon, **When** the settings dropdown opens, **Then** I see Tech Support Staff displayed as active (no toggle), with Tester and Programmer toggles below
+2. **Given** I am a new user, **When** I first open the app, **Then** Tech Support Staff is ON (always), Tester and Programmer are OFF
+3. **Given** I view the settings, **When** I look at Tech Support Staff, **Then** there is no toggle - it shows as permanently enabled
+4. **Given** I toggle Tester ON, **When** I view the tab bar, **Then** I see both Chat and Test tabs
 
 ---
 
@@ -102,27 +102,24 @@ As a user with multiple roles, I want each tab to maintain separate conversation
 
 ### Edge Cases
 
-- What happens when NO roles are enabled? (Force Tech Support ON, or show empty state with prompt to enable a role?)
-- What happens when user navigates to `/#test` via URL but Tester role is disabled? (Redirect to first available tab)
 - What happens to existing conversations after upgrade? (Tag as 'chat' context by default)
-- What happens when user disables a role while on that tab? (Switch to next available tab)
+- What happens when user disables a role while on that tab? (Switch to Chat tab)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
 **Role Infrastructure**
-- **FR-001**: System MUST provide three toggleable roles in settings: Tech Support Staff, Tester, Programmer
-- **FR-002**: System MUST persist role settings across browser sessions via localStorage
-- **FR-003**: Tech Support Staff MUST default to ON for new users
+- **FR-001**: System MUST provide Tech Support Staff as always-on primary role (not toggleable)
+- **FR-002**: System MUST provide Tester and Programmer as toggleable additive roles
+- **FR-003**: System MUST persist Tester and Programmer role settings across browser sessions via localStorage
 - **FR-004**: Tester and Programmer MUST default to OFF for new users
 
 **Tab Visibility**
-- **FR-005**: System MUST show Chat tab only when Tech Support Staff role is enabled
+- **FR-005**: System MUST always show Chat tab (Tech Support Staff is always enabled)
 - **FR-006**: System MUST show Test tab only when Tester role is enabled
 - **FR-007**: System MUST show Fix tab only when Programmer role is enabled
-- **FR-008**: System MUST allow multiple roles to be enabled simultaneously (additive model)
-- **FR-009**: System MUST handle the case where no roles are enabled gracefully
+- **FR-008**: System MUST allow Tester and Programmer to be enabled simultaneously (additive model)
 
 **Chat Contexts**
 - **FR-010**: Each tab with a chat interface MUST use a role-specific system prompt
