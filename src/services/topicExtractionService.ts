@@ -48,6 +48,10 @@ if (typeof window === "undefined") {
       }
       return this;
     }
+
+    off(event: string, listener: Function) {
+      return this.removeListener(event, listener);
+    }
   };
 }
 

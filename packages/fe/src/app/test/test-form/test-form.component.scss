@@ -1,0 +1,25 @@
+.grid {
+  &.option {
+    &:hover {
+      background-color: transparent;
+    }
+
+    & > div {
+      border: none;
+    }
+
+    .select-name {
+      width: 144px;
+      margin: 0 10px 0 0;
+    }
+
+    .select-version {
+      width: 88px;
+      margin: 0 10px 0 0;
+    }
+
+    .row {
+      margin: 0;
+    }
+  }
+}

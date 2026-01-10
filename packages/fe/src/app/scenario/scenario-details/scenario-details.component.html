@@ -1,0 +1,303 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+  <ng-container *ngIf="!scenario; else template">
+    <app-spinner></app-spinner>
+  </ng-container>
+
+  <ng-template #template>
+    <div class="header-flex">
+      <h2>Case {{scenario?.id}}</h2>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onEditMaserCaseClick(scenario?.appUnderTest, scenario?.id)" color="primary">
+        <i class="fas fa-edit"></i>
+        <span>Edit Maser Case</span>
+      </button>
+      <button *ngIf="isAdmin" mat-flat-button (click)="onDeleteClick()" color="warn">
+        <i class="fas fa-trash"></i>
+        <span>Delete Maser Case</span>
+      </button>
+    </div>
+
+    <div *ngIf="scenario?.coverage === 'Archived'" class="alert-error">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>This case has been archived because it is no longer relevant. Please refrain from testing it!</span>
+    </div>
+    <div *ngIf="scenario?.coverage === 'In Development'" class="alert-error">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>This case is currently under development, and probably not ready to test!</span>
+    </div>
+
+    <div class="grid-container">
+      <div class="grid two-columns">
+        <div>Case ID</div>
+        <div>{{scenario?.id}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Name</div>
+        <div>{{scenario?.name}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Preconditions</div>
+        <div [innerHTML]="scenario?.preconditions" class="inner-html"></div>
+      </div>
+      <ng-container *ngIf="scenario?.mode === 'Automated'; else script">
+        <div class="grid two-columns">
+          <div>Automation Code</div>
+          <div>
+            <pre><code>{{scenario?.script}}</code></pre>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #script>
+        <div class="grid two-columns">
+          <div>Script</div>
+          <div [innerHTML]="scenario?.script" class="inner-html"></div>
+        </div>
+      </ng-template>
+      <div class="grid two-columns">
+        <div>Expected Result</div>
+        <div [innerHTML]="scenario?.expectedResult" class="inner-html"></div>
+      </div>
+      <div class="grid two-columns">
+        <div>Created</div>
+        <div>{{scenario?.createdAt | date: 'yyyy-MM-dd'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Updated</div>
+        <div>{{scenario?.updatedAt | date: 'yyyy-MM-dd'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Coverage</div>
+        <div>{{scenario?.coverage}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Flagged for Review</div>
+        <div>{{scenario?.reviewFlag ? 'Yes' : 'No'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <div>Covers Security</div>
+        <div>{{scenario?.isSecurity ? 'Yes' : 'No'}}</div>
+      </div>
+      <div class="grid two-columns">
+        <ng-container *ngIf="scenario?.flagReason">
+          <div>Reason for Review</div>
+          <div>{{scenario?.flagReason}}</div>
+        </ng-container>
+      </div>
+      <div class="grid two-columns">
+        <div>Priority</div>
+        <div>{{scenario?.clientPriority ? 'Yes' : 'No'}}</div>
+      </div>
+    </div>
+
+    <div class="header-flex">
+      <div *ngIf="!variations?.length" class="warning">There are no variations on this case</div>
+
+      <ng-container *ngIf="variations?.length">
+        <h2>
+          <small>{{variations?.length}} variations</small>
+        </h2>
+        <div class="card span12" *ngFor="let variation of variations">
+          <div class="content">
+            <p class="bb-card-notes">created by {{variation?.createdBy}} <span>{{variation?.createdAt | date: 'yyyy-MM-dd'}}</span>
+              <span *ngIf="variation?.updatedBy"> and updated by {{variation?.updatedBy}} <span>{{variation?.updatedAt | date: 'yyyy-MM-dd'}}</span></span>
+            </p>
+            <mat-form-field class="full-width">
+              <mat-label>Variation script</mat-label>
+              <input matInput
+                     type="text"
+                     (keyup.enter)="onUpdateVariationClick(variation)"
+                     [(ngModel)]="variation.variationText"
+                     [ngModelOptions]="{ standalone: true }"
+                     placeholder="Please enter a variation on this script">
+              <button
+                *ngIf="variation.variationText"
+                (click)="variation.variationText = ''"
+                matSuffix mat-icon-button color="warn">
+                <i class="fas fa-times"></i>
+              </button>
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onAddVariationClick()" [disabled]="isShowInput" color="primary">
+        <i class="fas fa-plus-circle"></i>
+        <span>Add variation</span>
+      </button>
+    </div>
+
+    <form *ngIf="isShowInput" novalidate class="variations-form">
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Variation script</mat-label>
+          <input matInput
+                 type="text"
+                 [(ngModel)]="variationText"
+                 [ngModelOptions]="{ standalone: true }"
+                 placeholder="Please enter a variation on this script">
+          <button
+            *ngIf="variationText"
+            (click)="variationText = ''"
+            matSuffix mat-icon-button color="warn">
+            <i class="fas fa-times"></i>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="actions">
+        <button mat-flat-button (click)="onCancelVariationClick()" color="warn">
+          <i class="fas fa-ban"></i>
+          <span>Cancel</span>
+        </button>
+
+        <button mat-flat-button (click)="onSaveVariationClick()" [disabled]="!variationText" color="accent">
+          <i class="fas fa-save"></i>
+          <span>Save</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="header-flex">
+      <h2>Tests for case {{scenario?.id}}</h2>
+      <div class="spacer"></div>
+      <button mat-flat-button (click)="onNewTestClick(scenario?.appUnderTest, scenario?.id)" color="primary">
+        <i class="fas fa-edit"></i>
+        <span>Create new test</span>
+      </button>
+    </div>
+
+    <ng-container *ngIf="!tests?.length; else testTemplate">
+      <div class="warning">There are no tests for this Case</div>
+    </ng-container>
+
+    <ng-template #testTemplate>
+      <div class="header-flex">
+        <mat-form-field class="form-search">
+          <input
+            matInput
+            #searchTerm
+            [type]="'text'"
+            [attr.id]="'search'"
+            [placeholder]="'Search'"
+            (keyup.enter)="onSearchStart(searchTerm?.value)"
+            (keyup.esc)="searchTerm.value = ''; onSearchStart('')"
+            (input)="onSearchStart(searchTerm?.value)"
+            autocomplete="off">
+          <button
+            (click)="searchTerm.value = ''; onSearchStart('')"
+            *ngIf="searchTerm?.value"
+            matSuffix mat-icon-button color="warn">
+            <i class="fas fa-times-circle"></i>
+          </button>
+          <button
+            [disabled]="!searchTerm?.value?.length"
+            (click)="onSearchStart(searchTerm?.value)"
+            matSuffix mat-icon-button>
+            <i class="fas fa-search"></i>
+          </button>
+        </mat-form-field>
+
+        <div class="spacer"></div>
+
+        <div class="flex">
+          <label>
+            Show Entries:
+            <mat-form-field class="pagination-select">
+              <mat-select [(ngModel)]="pageSize">
+                <mat-option *ngFor="let option of listOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </label>
+
+          <pagination-controls (pageChange)="paginationParams.page = $event"></pagination-controls>
+        </div>
+      </div>
+
+      <div class="grid-container">
+        <header class="grid tests">
+          <div #1>Creator</div>
+          <div #2>JIRA</div>
+          <div #3
+               (click)="onToggleSort('input')"
+               class="clickable"
+               [ngClass]="getClassSortField('input')">
+            Input <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #4
+               (click)="onToggleSort('result')"
+               class="clickable"
+               [ngClass]="getClassSortField('result')">
+            Result <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #5
+               (click)="onToggleSort('createdAt')"
+               class="clickable"
+               [ngClass]="getClassSortField('createdAt')">
+            Created <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #6
+               (click)="onToggleSort('deploymentStamp')"
+               class="clickable"
+               [ngClass]="getClassSortField('deploymentStamp')">
+            Deployment Timestamp <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #7
+               (click)="onToggleSort('browserName')"
+               class="clickable"
+               [ngClass]="getClassSortField('browserName')">
+            Browser <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #8
+               (click)="onToggleSort('osMajor')"
+               class="clickable"
+               [ngClass]="getClassSortField('osMajor')">
+            OS <span [ngClass]="getClassDirection()"></span>
+          </div>
+          <div #9>Pass/Fail</div>
+          <div #10>Actions</div>
+        </header>
+
+        <div *ngFor="let test of tests | paginate: { itemsPerPage: pageSize, currentPage: paginationParams.page };
+              let i = index"
+             class="grid tests">
+          <div #1>{{test?.createdBy}}</div>
+          <div #2 class="center">
+            <div *ngIf="test?.ticket?.length">
+              <a href="https://jira.smedigitalapps.com/jira/browse/{{test?.ticket}}" target="_blank" class="ext">
+                {{test?.ticket}}
+              </a>
+            </div>
+          </div>
+          <div #3 [innerHTML]="test.input | slice:0:300 | highlightSearch: paginationParams.searchTerm"
+               class="inner-html">
+          </div>
+          <div #4 [innerHTML]="test.result | slice:0:200 | highlightSearch: paginationParams.searchTerm"
+               class="inner-html">
+          </div>
+          <div #5 [innerHTML]="test?.createdAt | date: 'yyyy-MM-dd' | highlightSearch: paginationParams.searchTerm"></div>
+          <div #6 [innerHTML]="(test?.deploymentStamp | date: 'yyyy-MM-dd') | highlightSearch: paginationParams.searchTerm || 'None'"></div>
+          <div #7>{{test?.browserName}} {{test?.browserMajor}}{{test?.browserMinor}}</div>
+          <div #8>{{test?.osName}} {{test?.osMajor}} {{test?.osMinor}}</div>
+          <div #9 class="center">
+            <label *ngIf="test?.passFail === 'Fail'" class="label-warning">{{test?.passFail}}</label>
+            <label *ngIf="test?.passFail === 'Pass'" class="label-success">{{test?.passFail}}</label>
+          </div>
+          <div #10 class="center actions">
+            <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/show" mat-icon-button>
+              <i class="fas fa-eye"></i>
+            </a>
+            <a routerLink="/test/{{scenario?.appUnderTest}}/{{test?.id}}/edit" mat-icon-button>
+              <i class="fas fa-edit"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+  </ng-template>
+</section>

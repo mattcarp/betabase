@@ -1,0 +1,149 @@
+@import 'theme';
+
+@font-face {
+  font-family: 'Helvetica-Light';
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  src: local('Helvetica Light'), url('../assets/fonts/helvetica/Helvetica-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Helvetica;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: local('Helvetica Regular'), url('../assets/fonts/helvetica/Helvetica.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Helvetica-Bold';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: local('Helvetica Bold'), url('../assets/fonts/helvetica/Helvetica-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Dancing Script';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: local('Dancing Script OT'), local('DancingScriptOT'), url('../assets/fonts/dancingscript/dancingscriptot.woff2') format('woff2'), url('../assets/fonts/dancingscript/dancingscriptot.woff') format('woff'), url('../assets/fonts/dancingscript/dancingscriptot.ttf') format('truetype');
+}
+
+// sizes
+$size-headerHeight: 66px;
+$size-navHeight: 40px;
+$size-uploaderHeight: 250px;
+$size-mainWidth: 1600px;
+$size-footerHeight: 60px;
+$size-inputHeight: 36px;
+
+@mixin layout {
+  @include flex-grow;
+  width: 100%;
+  max-width: $size-mainWidth;
+  margin: 0 auto;
+}
+
+@mixin flex-grow {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+@mixin container-width {
+  position: relative;
+  width: 100%;
+  max-width: $size-mainWidth;
+  margin: 0 auto;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($color-black, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 1rem rgba($color-black, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 1rem rgba($color-black, 0);
+  }
+}
+
+// Spinner -- Material design loader
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  12.5% {
+    transform: rotate(180deg);
+    animation-timing-function: linear;
+  }
+  25% {
+    transform: rotate(630deg);
+  }
+  37.5% {
+    transform: rotate(810deg);
+    animation-timing-function: linear;
+  }
+  50% {
+    transform: rotate(1260deg);
+  }
+  62.5% {
+    transform: rotate(1440deg);
+    animation-timing-function: linear;
+  }
+  75% {
+    transform: rotate(1890deg);
+  }
+  87.5% {
+    transform: rotate(2070deg);
+    animation-timing-function: linear;
+  }
+  100% {
+    transform: rotate(2520deg);
+  }
+}
+
+@keyframes rotate-shrink {
+  0% {
+    transform: rotate(-30deg);
+  }
+  29.4% {
+    border-left-color: transparent;
+  }
+  29.41% {
+    border-left-color: currentColor;
+  }
+  64.7% {
+    border-bottom-color: transparent;
+  }
+  64.71% {
+    border-bottom-color: currentColor;
+  }
+  100% {
+    transform: rotate(225deg);
+    border-bottom-color: currentColor;
+    border-left-color: currentColor;
+  }
+}
+
+@keyframes marching-ants {
+  0% {
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+  }
+  100% {
+    background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px;
+  }
+}

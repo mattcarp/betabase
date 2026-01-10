@@ -1,0 +1,29 @@
+<div class="ai-test-generator">
+  <h2>Generate AI Test</h2>
+  <form (ngSubmit)="generateTest()">
+    <div>
+      <label for="testType">Test Type:</label>
+      <select id="testType" [(ngModel)]="testType" name="testType">
+        <option value="unit">Unit Test</option>
+        <option value="e2e">E2E Test</option>
+      </select>
+    </div>
+
+    <div *ngIf="testType === 'unit'">
+      <label for="functionCode">Function Code:</label>
+      <textarea id="functionCode" [(ngModel)]="functionCode" name="functionCode" rows="10"></textarea>
+    </div>
+
+    <div *ngIf="testType === 'e2e'">
+      <label for="url">URL:</label>
+      <input type="text" id="url" [(ngModel)]="url" name="url">
+    </div>
+
+    <div>
+      <label for="testDescription">Test Description:</label>
+      <textarea id="testDescription" [(ngModel)]="testDescription" name="testDescription" rows="5"></textarea>
+    </div>
+
+    <button type="submit">Generate Test</button>
+  </form>
+</div>

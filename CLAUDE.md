@@ -137,6 +137,34 @@ Before any UI code is considered complete:
 2. If found, replace with design system equivalents
 3. Run `/design-review` skill to validate
 
+### Code Rendering - THE RULE
+
+**ALL rendered code MUST use the Shiki-powered `CodeBlock` component** - provides Japanese-style syntax highlighting with the "catppuccin-mocha" theme.
+
+```tsx
+// BAD - Plain pre/code tags without syntax highlighting
+<pre className="font-mono">{code}</pre>
+<code>{snippet}</code>
+
+// GOOD - Use CodeBlock component with Shiki
+import { CodeBlock } from "@/components/ui/code-block";
+
+<CodeBlock
+  code={generatedCode}
+  language="typescript"  // or "javascript", "python", etc.
+  showLineNumbers       // optional
+  className="text-xs"   // optional size override
+/>
+```
+
+**Component location**: `src/components/ui/code-block.tsx`
+
+**Supported features**:
+- Auto theme switching (catppuccin-mocha for dark, github-light for light)
+- Line numbers with `showLineNumbers` prop
+- Copy button included
+- Mermaid diagram rendering with `language="mermaid"`
+
 ## 🎯 Vercel AI SDK v5 & AI Elements
 
 **ALWAYS use AI Elements** for chat UI - See `docs/AI-ELEMENTS-USAGE-GUIDE.md`

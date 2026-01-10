@@ -1,0 +1,116 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+  <div *ngIf="isLoading" class="spinner">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
+
+  <div *ngIf="!isLoading && scenario">
+    <h2>
+      <ng-container *ngIf="id?.length; else newItem">Edit</ng-container>
+      <ng-template #newItem>New</ng-template>
+      <ng-container> Case {{scenario?.id}}</ng-container>
+      </h2>
+
+    <div>Name</div>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="scenario.name" type="text">
+    </mat-form-field>
+
+    <div class="row">
+      <label>Preconditions</label>
+      <ngx-editor-menu [editor]="preconditionsEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [outputFormat]="'html'" [editor]="preconditionsEditor" [(ngModel)]="scenario.preconditions"></ngx-editor>
+    </div>
+
+    <div class="row">
+      <label>Script</label>
+      <ngx-editor-menu [editor]="scriptEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [outputFormat]="'html'" [editor]="scriptEditor" [(ngModel)]="scenario.script"></ngx-editor>
+    </div>
+
+    <div class="row">
+      <label>Expected Result</label>
+      <ngx-editor-menu [editor]="expectedResultEditor" [toolbar]="toolbarEditor"></ngx-editor-menu>
+      <ngx-editor [outputFormat]="'html'" [editor]="expectedResultEditor" [(ngModel)]="scenario.expectedResult"></ngx-editor>
+    </div>
+
+    <div class="grid">
+      <div>
+        <mat-form-field>
+          <mat-label>Coverage</mat-label>
+          <mat-select [(ngModel)]="scenario.coverage">
+            <mat-option *ngFor="let option of coverageOptions" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Mode</mat-label>
+            <mat-select [(ngModel)]="scenario.mode">
+              <mat-option *ngFor="let option of modeOptions" [value]="option">{{option}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="row">
+          <mat-slide-toggle
+            [ngModel]="scenario.isSecurity"
+            (ngModelChange)="onCheckboxChange($event, 'isSecurity')">
+            <span>Security</span>
+            <i matTooltip="Does this case cover application security?" class="fas fa-question-circle"></i>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="row">
+          <mat-slide-toggle
+            [ngModel]="scenario.reviewFlag"
+            (ngModelChange)="onCheckboxChange($event, 'reviewFlag')">
+            <span>Flag for Review</span>
+            <i matTooltip="Is the script incomplete?  See a problem with this case? Flag it for review."
+               class="fas fa-question-circle">
+            </i>
+          </mat-slide-toggle>
+        </div>
+
+        <ng-container *ngIf="scenario?.reviewFlag">
+          <div class="row">
+            <mat-form-field class="full-width textarea">
+              <mat-label>Reason for Review</mat-label>
+              <textarea matInput [(ngModel)]="scenario.flagReason"></textarea>
+            </mat-form-field>
+          </div>
+        </ng-container>
+
+        <div class="row">
+          <mat-slide-toggle
+            [ngModel]="scenario.clientPriority"
+            (ngModelChange)="onCheckboxChange($event, 'clientPriority')">
+            <span>Priority</span>
+            <i matTooltip="Has this case been deemed a priority?" class="fas fa-question-circle"></i>
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-container">
+      <button mat-flat-button (click)="onSaveClick()" color="accent" class="actions-button">
+        <i class="fas fa-save"></i>
+        <span>{{saveBtnLabel}}</span>
+      </button>
+
+      <button
+        *ngIf="isAdmin && scenario?.id"
+        (click)="onDeleteClick()"
+        mat-flat-button
+        color="warn"
+        class="actions-button">
+        <i class="fas fa-trash-alt"></i>
+        <span>Delete</span>
+      </button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+.grid {
+  &:hover {
+    background-color: transparent;
+  }
+
+  & > div {
+    border: none;
+  }
+}
+
+span + .fa-question-circle {
+  margin-left: 8px;
+}

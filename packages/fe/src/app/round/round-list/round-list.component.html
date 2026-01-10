@@ -1,0 +1,53 @@
+<app-nav [isBackActive]="true"></app-nav>
+
+<section>
+
+  <ng-container *ngIf="isLoading; else template">
+    <app-spinner></app-spinner>
+  </ng-container>
+
+  <ng-template #template>
+    <div class="header-flex">
+      <h2>
+        Round List
+        <span matBadge="{{rounds?.length}}" matBadgeOverlap="false" matBadgeColor="accent"></span>
+      </h2>
+      <div class="spacer"></div>
+      <button routerLink="/round/{{app}}/new" mat-flat-button color="warn">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create a New Round</span>
+      </button>
+    </div>
+
+    <div class="grid-container">
+      <header class="grid">
+        <div>Name</div>
+        <div>Starts</div>
+        <div>Ends</div>
+        <div>Updated</div>
+        <div>Release</div>
+        <div>Current?</div>
+        <div>Actions</div>
+      </header>
+
+      <div *ngFor="let round of rounds" class="grid">
+        <div>{{round?.name}}</div>
+        <div>{{(round?.startsAt | date: 'yyyy-MM-dd') || ''}}</div>
+        <div>{{(round?.endsAt | date: 'yyyy-MM-dd') || ''}}</div>
+        <div>{{(round?.updatedAt | date: 'yyyy-MM-dd') || ''}}</div>
+        <div>{{round?.releaseNum}}</div>
+        <div class="center">
+          <label *ngIf="round?.currentFlag" class="label-info">Yes</label>
+        </div>
+        <div class="center actions">
+          <a routerLink="/round/{{app}}/{{round?.id}}/show" mat-icon-button>
+            <i class="fas fa-eye"></i>
+          </a>
+          <a routerLink="/round/{{app}}/{{round?.id}}/edit" mat-icon-button>
+            <i class="fas fa-edit"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</section>

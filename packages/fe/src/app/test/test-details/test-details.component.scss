@@ -1,0 +1,5 @@
+.grid {
+  &.test {
+    grid-template-columns: minmax(80px, 200px) minmax(240px, 1fr);
+  }
+}

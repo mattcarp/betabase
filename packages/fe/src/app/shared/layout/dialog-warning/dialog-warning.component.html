@@ -1,0 +1,28 @@
+<div mat-dialog-title class="dialog-title">
+  <button mat-icon-button mat-dialog-close>
+    <i class="fas fa-times-circle"></i>
+  </button>
+  <h2>Warning</h2>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <div class="note">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{message}}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+  <button mat-dialog-close mat-flat-button color="primary">
+    <i class="fas fa-undo"></i>
+    <span>Cancel</span>
+  </button>
+  <button
+    *ngIf="data === 'delete'"
+    (click)="onDeleteClick()"
+    mat-flat-button
+    color="warn">
+    <i class="fas fa-check-circle"></i>
+    <span>{{data}}</span>
+  </button>
+</mat-dialog-actions>

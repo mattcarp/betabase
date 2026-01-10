@@ -1,0 +1,621 @@
+<app-nav></app-nav>
+
+<section>
+  <ng-container *ngIf="isLoading; else template">
+    <app-spinner></app-spinner>
+  </ng-container>
+
+  <ng-template #template>
+    <mat-card *ngIf="reportData?.enhancementCount" class="card">
+      <mat-card-header class="card-header">
+        <div mat-card-avatar class="card-header-avatar">
+          <ng-container *ngIf="imageUrl.length; else nullCover">
+            <img src="{{ imageUrl }}" alt="logo" />
+          </ng-container>
+
+          <ng-template #nullCover>
+            <div class="null-cover">
+              <i class="fas fa-image"></i>
+            </div>
+          </ng-template>
+        </div>
+        <mat-card-title>{{ appTitle }}</mat-card-title>
+        <mat-card-subtitle *ngIf="reportData?.roundNotes?.releaseNum">
+          release: {{ reportData?.roundNotes?.releaseNum }} | <strong>{{ reportData?.roundNotes?.name }}</strong>
+        </mat-card-subtitle>
+        <!-- Add the text input here -->
+        <mat-form-field class="full-width">
+          <input matInput placeholder="ask anything about AOMA..." />
+        </mat-form-field>
+
+        <!-- TODOmc fill in the openai logic and uncomment -->
+        <!-- <mat-form-field class="full-width">
+          <input matInput placeholder="ask anything about AOMA..." [(ngModel)]="userQuestion" (keydown.enter)="sendMessage()" />
+        </mat-form-field> -->
+
+        <!-- Div to display streamed responses -->
+        <!-- <div class="chat-container">
+          <div *ngFor="let message of messages" class="message">
+            <div [class]="message.sender">{{ message.text }}</div>
+          </div>
+        </div> -->
+
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <div class="flex">
+          <div>
+            <span class="right">Testing Period:</span>
+            <ng-container *ngIf="roundStart?.length; else nullRound">{{ roundStart }} ─ {{ roundEnd }}</ng-container>
+            <ng-template #nullRound>─</ng-template>
+          </div>
+          <div>
+            <span class="right">Days Remaining:</span>
+            {{ daysLeft || '─' }} <span *ngIf="daysLeft" class="grey">({{ percentRemain }})</span>
+          </div>
+          <div>
+            <span>Release Date:</span>
+            {{ releaseDate || '─' }}
+          </div>
+          <div>
+            <span class="right">Latest Test Deployment:</span>
+            {{ deployDiff || '─' }} <span class="grey">{{ deployDate }}</span>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart">
+            <ng-container *ngIf="chartDisplayOptions?.completion?.isLoading; else completionChart">
+              <ng-template [ngTemplateOutlet]="spinner"></ng-template>
+            </ng-container>
+            <ng-template #completionChart>
+              <app-chart [inputOptions]="chartDisplayOptions?.completion"></app-chart>
+            </ng-template>
+          </div>
+          <div class="chart">
+            <ng-container *ngIf="chartDisplayOptions?.browser?.isLoading; else browserChart">
+              <ng-template [ngTemplateOutlet]="spinner"></ng-template>
+            </ng-container>
+            <ng-template #browserChart>
+              <app-chart [inputOptions]="chartDisplayOptions?.browser"></app-chart>
+            </ng-template>
+          </div>
+          <div class="chart total">
+            <ng-container *ngIf="chartDisplayOptions?.total?.isLoading; else totalChart">
+              <ng-template [ngTemplateOutlet]="spinner"></ng-template>
+            </ng-container>
+            <ng-template #totalChart>
+              <app-chart [inputOptions]="chartDisplayOptions?.total"></app-chart>
+              <div class="period">
+                <b>Period selection</b>
+                <div>
+                  <ng-container *ngIf="chartDisplayOptions.yearSlider.value; else totalChartNoData">
+                    <span>Year(s)</span>
+                    <div class="slider" [class.disabled]="yearsUnique?.length === 1">
+                      <ngx-slider (mouseup)="yearSliderEvent()" [(value)]="chartDisplayOptions.yearSlider.value"
+                        [(highValue)]="chartDisplayOptions.yearSlider.highValue"
+                        [options]="chartDisplayOptions.yearSlider.options">
+                      </ngx-slider>
+                    </div>
+                    <span>Month(s)</span>
+                    <div class="slider" [class.disabled]="!isMonthsMode">
+                      <ngx-slider (mouseup)="monthSliderEvent()" [(value)]="chartDisplayOptions.monthSlider.value"
+                        [(highValue)]="chartDisplayOptions.monthSlider.highValue"
+                        [options]="chartDisplayOptions.monthSlider.options">
+                      </ngx-slider>
+                    </div>
+                  </ng-container>
+                  <ng-template #totalChartNoData>
+                    <h4>No Data</h4>
+                  </ng-template>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="grid-row">
+          <div>
+            <span>Progress:</span>
+          </div>
+          <div>
+            {{ getRatio('priorities') }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.priorityScenarios?.length; else prioritiesLink">
+                priorities
+              </ng-container>
+              <ng-template #prioritiesLink>
+                <a (click)="onClickScrollToElement('priorities')">priorities</a>
+              </ng-template>
+            </span>
+          </div>
+          <div>
+            {{ getRatio('enhancementScenarios') }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else newFeaturesLink">
+                new features
+              </ng-container>
+              <ng-template #newFeaturesLink>
+                <a (click)="onClickScrollToElement('new-features')">new features</a>
+              </ng-template>
+            </span>
+          </div>
+          <div>
+            {{ getRatio('regressionScenarios') }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.regressionScenarios?.length; else regressionsLink">
+                regressions
+              </ng-container>
+              <ng-template #regressionsLink>
+                <a (click)="onClickScrollToElement('regressions')">regressions</a>
+              </ng-template>
+            </span>
+          </div>
+          <div>
+            {{ overallRatio }}
+            <span class="grey">overall</span>
+          </div>
+          <div></div>
+        </div>
+
+        <div class="grid-row">
+          <div>
+            <span>Tests on this Round:</span>
+          </div>
+          <div>
+            {{ reportData?.testCount }}
+            <span class="grey">total</span>
+          </div>
+          <div>
+            {{ reportData?.testsToday }}
+            <span class="grey">today</span>
+          </div>
+          <div>
+            {{ reportData?.testsYesterday }}
+            <span class="grey">yesterday</span>
+          </div>
+          <div>
+            {{ reportData?.testsThisWeek }}
+            <span class="grey">past 7 days</span>
+          </div>
+          <div>
+            {{ reportData?.jiras?.length }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.jiras?.length; else jirasLink">JIRA ticket</ng-container>
+              <ng-template #jirasLink>
+                <a (click)="onClickScrollToElement('jiras')">
+                  JIRA ticket<ng-container *ngIf="reportData?.jiras?.length !== 1">s</ng-container>
+                </a>
+              </ng-template>
+            </span>
+          </div>
+        </div>
+
+        <div class="grid-row">
+          <div>
+            <span>Cases for this Round:</span>
+          </div>
+          <div>
+            <!--            {{(reportData?.enhancementCount || 0) + (reportData?.regressionCount || 0)}}-->
+            <!--            {{reportData?.regressionCount}}-->
+            <!--            <ng-container *ngIf="reportData?.enhancementCount !== 0; else nullForTesting">-->
+            <!--              {{(reportData?.enhancementCount || 0) + (reportData?.regressionCount || 0)}}-->
+            <!--            </ng-container>-->
+            <!--            <ng-template #nullForTesting>0</ng-template>-->
+            {{ forTesting }}
+            <span class="grey">for testing</span>
+          </div>
+          <div>
+            {{ reportData?.priorityCount }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.priorityScenarios?.length; else prioritiesCase">
+                priorities
+              </ng-container>
+              <ng-template #prioritiesCase>
+                <a (click)="onClickScrollToElement('priorities')">priorities</a>
+              </ng-template>
+            </span>
+          </div>
+          <div>
+            {{ reportData?.enhancementCount }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else forNewFeaturesCase">for new features
+              </ng-container>
+              <ng-template #forNewFeaturesCase>
+                <a (click)="onClickScrollToElement('new-features')">for new features</a>
+              </ng-template>
+            </span>
+          </div>
+          <div>
+            {{ reportData?.regressionCount }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.regressionScenarios?.length; else regressionsCase">
+                regressions
+              </ng-container>
+              <ng-template #regressionsCase>
+                <a (click)="onClickScrollToElement('regressions')">for regressions</a>
+              </ng-template>
+            </span>
+          </div>
+          <div>
+            {{ reportData?.flaggedCount }}
+            <span class="grey">
+              <ng-container *ngIf="!reportData?.flaggedScenarios?.length; else flaggedCase">
+                flagged for review
+              </ng-container>
+              <ng-template #flaggedCase>
+                <a (click)="onClickScrollToElement('flagged')">flagged for review</a>
+              </ng-template>
+            </span>
+          </div>
+        </div>
+
+        <details *ngIf="reportData?.roundNotes?.notes?.length" open>
+          <summary>Notes</summary>
+          <div [innerHTML]="reportData?.roundNotes?.notes"></div>
+        </details>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-container *ngIf="!reportData?.jiras?.length; else jiras">
+      <div class="warning">No JIRA Tickets Yet</div>
+    </ng-container>
+
+    <ng-template #jiras>
+      <div [attr.id]="'jiras'" class="header-grid">
+        <h2>
+          Current JIRA Tickets
+          <span matBadge="{{ reportData?.jiras?.length }}" matBadgeOverlap="false" matBadgeColor="accent"></span>
+        </h2>
+      </div>
+
+      <div class="grid-container">
+        <header class="grid jiras">
+          <div #1>Ticket</div>
+          <div #2>Fix</div>
+          <div #3>In Prod</div>
+          <div #4>Case</div>
+          <div #5>JIRA Title</div>
+          <div #6>Test Result</div>
+          <div #7>Last Comment</div>
+          <div #8>Status</div>
+          <div #9>Assignee</div>
+          <div #10>Actions</div>
+        </header>
+
+        <div class="scrolling">
+          <div *ngFor="let test of reportData?.jiras" class="grid jiras">
+            <div #1 class="center">
+              <div>
+                <a href="https://jira.smedigitalapps.com/jira/browse/{{ test?.ticket }}" target="_blank" class="ext">
+                  {{ test?.ticket }}
+                </a>
+              </div>
+            </div>
+            <div #2></div>
+            <div #3 class="center">
+              <label *ngIf="test?.inProd === 'Yes'" class="label-default" title="Exists in Production Environment">{{
+                test?.inProd
+                }}</label>
+              <label *ngIf="test?.inProd === 'No'" class="label-warning" title="Does Not Occur in Production">{{
+                test?.inProd
+                }}</label>
+              <label *ngIf="test?.inProd === 'Unsure'" class="label-info" title="Not Tested in Production">{{
+                test?.inProd
+                }}</label>
+            </div>
+            <div #4 class="center">
+              <div>
+                <a routerLink="/scenario/{{ app }}/{{ test?.scenarioId }}/show">
+                  <i *ngIf="test?.isSecurity" class="fas fa-shield-check"></i>
+                  <span>{{ test?.scenarioId }}</span>
+                </a>
+              </div>
+            </div>
+            <div #5></div>
+            <div #6 [innerHTML]="test.result | slice : 0 : 200" class="inner-html"></div>
+            <div #7></div>
+            <div #8></div>
+            <div #9></div>
+            <div #10 class="center actions">
+              <a routerLink="/test/{{ app }}/{{ test?.id }}/show" mat-icon-button>
+                <i class="fas fa-eye"></i>
+              </a>
+              <a routerLink="/test/{{ app }}/{{ test?.id }}/edit" mat-icon-button>
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="!reportData?.enhancementScenarios?.length; else newFeatures">
+      <div class="warning">No Cases For New Features Yet</div>
+    </ng-container>
+
+    <ng-template #newFeatures>
+      <div [attr.id]="'new-features'" class="header-grid">
+        <h2>
+          Cases for New Enhancements
+          <span matBadge="{{ reportData?.enhancementScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
+        </h2>
+        <div>
+          <mat-checkbox [(ngModel)]="isNewFeaturesChecked">
+            Hide passing cases
+            <span *ngIf="isNewFeaturesChecked" class="green">
+              ─ hiding {{ getPassedItemsQuantity(reportData?.enhancementScenarios) }} case<ng-container
+                *ngIf="getPassedItemsQuantity(reportData?.enhancementScenarios) > 1">s</ng-container>
+              that have passed during this round
+            </span>
+          </mat-checkbox>
+          <div class="flex">
+            <button [disabled]="!draggedItems?.enhancementScenarios" (click)="onSaveItemOrder('enhancementScenarios')"
+              mat-icon-button color="accent">
+              <i class="fas fa-save"></i>
+            </button>
+            <div class="ellipsis">
+              <span>You can reorder this list and save to preserve the new order or cancel reorder</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'enhancementScenarios')" class="grid-container"
+        [class.dragged]="draggedItems?.enhancementScenarios">
+        <button *ngIf="draggedItems?.enhancementScenarios" (click)="onCancelItemOrder('enhancementScenarios')"
+          mat-icon-button color="warn" class="cancel-button">
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <header class="grid new-features">
+          <div #1>ID</div>
+          <div #2>Name</div>
+          <div #3>Last Test</div>
+          <div #4>Recent Date</div>
+          <div #5>Actions</div>
+        </header>
+
+        <div class="scrolling">
+          <div *ngFor="let item of getItemsByStatus(reportData?.enhancementScenarios, isNewFeaturesChecked)" cdkDrag
+            cdkDragLockAxis="y" class="grid new-features"
+            [ngClass]="{ pass: item?.lastTest === 'Pass', fail: item?.lastTest === 'Fail' }">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
+            <div #3 class="center">
+              <ng-container *ngIf="item?.lastTest; else neverTested">
+                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{ item?.lastTest }}</label>
+              </ng-container>
+              <ng-template #neverTested>
+                <div class="red">never tested</div>
+              </ng-template>
+            </div>
+            <div #4 class="center">
+              <div class="{{ getMostRecentText(item?.mostRecent)[1] }}">
+                {{ getMostRecentText(item?.mostRecent)[0] }}
+              </div>
+            </div>
+            <div #5 class="center actions">
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
+                <i class="fas fa-eye"></i>
+              </a>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="!reportData?.priorityScenarios?.length; else prioritiesTemplate">
+      <div class="warning">No Prioritized Cases Yet</div>
+    </ng-container>
+
+    <ng-template #prioritiesTemplate>
+      <div [attr.id]="'priorities'" class="header-grid">
+        <h2>
+          Prioritized Cases
+          <span matBadge="{{ reportData?.priorityScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
+        </h2>
+        <div>
+          <mat-checkbox [(ngModel)]="isPrioritiesChecked">
+            Hide passing cases
+            <span *ngIf="isPrioritiesChecked" class="green">
+              ─ hiding {{ getPassedItemsQuantity(reportData?.priorityScenarios) }} case<ng-container
+                *ngIf="getPassedItemsQuantity(reportData?.priorityScenarios) > 1">s</ng-container>
+              that have passed during this round
+            </span>
+          </mat-checkbox>
+          <div class="flex">
+            <button [disabled]="!draggedItems?.priorityScenarios" (click)="onSaveItemOrder('priorityScenarios')"
+              mat-icon-button color="accent">
+              <i class="fas fa-save"></i>
+            </button>
+            <div class="ellipsis">
+              <span>You can reorder this list and save to preserve the new order or cancel reorder</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'priorityScenarios')" class="grid-container"
+        [class.dragged]="draggedItems?.priorityScenarios">
+        <button *ngIf="draggedItems?.priorityScenarios" (click)="onCancelItemOrder('priorityScenarios')" mat-icon-button
+          color="warn" class="cancel-button">
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <header class="grid priorities">
+          <div #1>ID</div>
+          <div #2>Name</div>
+          <div #3>Last Test</div>
+          <div #4>Recent Date</div>
+          <div #5>Actions</div>
+        </header>
+
+        <div class="scrolling">
+          <div *ngFor="let item of getItemsByStatus(reportData?.priorityScenarios, isPrioritiesChecked)" cdkDrag
+            cdkDragLockAxis="y" class="grid priorities"
+            [ngClass]="{ pass: item?.lastTest === 'Pass', fail: item?.lastTest === 'Fail' }">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
+            <div #3 class="center">
+              <ng-container *ngIf="item?.lastTest; else neverTested">
+                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{ item?.lastTest }}</label>
+              </ng-container>
+              <ng-template #neverTested>
+                <div class="red">never tested</div>
+              </ng-template>
+            </div>
+            <div #4 class="center">
+              <div class="{{ getMostRecentText(item?.mostRecent)[1] }}">
+                {{ getMostRecentText(item?.mostRecent)[0] }}
+              </div>
+            </div>
+            <div #5 class="center actions">
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
+                <i class="fas fa-eye"></i>
+              </a>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="!reportData?.regressionScenarios?.length; else regressionsTemplate">
+      <div class="warning">No Regressions Cases Yet</div>
+    </ng-container>
+
+    <ng-template #regressionsTemplate>
+      <div [attr.id]="'regressions'" class="header-grid">
+        <h2>
+          Cases for Regression
+          <span matBadge="{{ reportData?.regressionScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
+        </h2>
+        <div>
+          <mat-checkbox [(ngModel)]="isRegressionsChecked">
+            Hide passing cases
+            <span *ngIf="isRegressionsChecked" class="green">
+              ─ hiding {{ getPassedItemsQuantity(reportData?.regressionScenarios) }} case<ng-container
+                *ngIf="getPassedItemsQuantity(reportData?.regressionScenarios) > 1">s</ng-container>
+              that have passed during this round
+            </span>
+          </mat-checkbox>
+          <div class="flex">
+            <button [disabled]="!draggedItems?.regressionScenarios" (click)="onSaveItemOrder('regressionScenarios')"
+              mat-icon-button color="accent">
+              <i class="fas fa-save"></i>
+            </button>
+            <div class="ellipsis">
+              <span>You can reorder this list and save to preserve the new order or cancel reorder</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div cdkDropList (cdkDropListDropped)="onChangeItemOrder($event, 'regressionScenarios')" class="grid-container"
+        [class.dragged]="draggedItems?.regressionScenarios">
+        <button *ngIf="draggedItems?.regressionScenarios" (click)="onCancelItemOrder('regressionScenarios')"
+          mat-icon-button color="warn" class="cancel-button">
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <header class="grid regressions">
+          <div #1>ID</div>
+          <div #2>Name</div>
+          <div #3>Last Test</div>
+          <div #4>Recent Date</div>
+          <div #5>Actions</div>
+        </header>
+
+        <div class="scrolling">
+          <div *ngFor="let item of getItemsByStatus(reportData?.regressionScenarios, isRegressionsChecked)" cdkDrag
+            cdkDragLockAxis="y" class="grid priorities"
+            [ngClass]="{ pass: item?.lastTest === 'Pass', fail: item?.lastTest === 'Fail' }">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
+            <div #3 class="center">
+              <ng-container *ngIf="item?.lastTest; else neverTested">
+                <label *ngIf="item?.lastTest === 'Fail'" class="label-warning">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pass'" class="label-success">{{ item?.lastTest }}</label>
+                <label *ngIf="item?.lastTest === 'Pending'" class="label-default">{{ item?.lastTest }}</label>
+              </ng-container>
+              <ng-template #neverTested>
+                <div class="red">never tested</div>
+              </ng-template>
+            </div>
+            <div #4 class="center">
+              <div class="{{ getMostRecentText(item?.mostRecent)[1] }}">
+                {{ getMostRecentText(item?.mostRecent)[0] }}
+              </div>
+            </div>
+            <div #5 class="center actions">
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
+                <i class="fas fa-eye"></i>
+              </a>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="!reportData?.flaggedScenarios?.length; else flaggedTemplate">
+      <div class="warning">No Cases Are Currently Flagged for Review</div>
+    </ng-container>
+
+    <ng-template #flaggedTemplate>
+      <div [attr.id]="'flagged'" class="header-grid">
+        <h2>
+          Flagged Cases
+          <span matBadge="{{ reportData?.flaggedScenarios?.length }}" matBadgeOverlap="false"
+            matBadgeColor="accent"></span>
+        </h2>
+      </div>
+
+      <div class="grid-container">
+        <header class="grid flagged">
+          <div #1>ID</div>
+          <div #2>Name</div>
+          <div #3>Updated</div>
+          <div #4>Flag Reason</div>
+          <div #5>Actions</div>
+        </header>
+
+        <div class="scrolling">
+          <div *ngFor="let item of reportData?.flaggedScenarios" class="grid flagged">
+            <div #1 class="center">{{ item?.id }}</div>
+            <div #2>{{ item?.name }}</div>
+            <div #3>{{ item?.updatedAt | date }}</div>
+            <div #4>{{ item?.flagReason | slice : 0 : 80 }}</div>
+            <div #5 class="center actions">
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/show" mat-icon-button>
+                <i class="fas fa-eye"></i>
+              </a>
+              <a routerLink="/scenario/{{ app }}/{{ item?.id }}/edit" mat-icon-button>
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</section>
+
+<ng-template #spinner>
+  <div class="spinner">
+    <div class="spinner-progress"></div>
+    <div class="spinner-info">Loading...</div>
+  </div>
+</ng-template>

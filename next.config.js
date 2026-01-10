@@ -5,7 +5,7 @@ const nextConfig = {
   output: "standalone",
   outputFileTracingRoot: __dirname,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   reactStrictMode: true,
   devIndicators: false,

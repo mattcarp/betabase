@@ -1,0 +1,9 @@
+<ng-container *ngIf="isSmallScreen">
+  <app-message-alarm></app-message-alarm>
+</ng-container>
+
+<app-header></app-header>
+
+<main>
+  <router-outlet *ngIf="!isSmallScreen"></router-outlet>
+</main>

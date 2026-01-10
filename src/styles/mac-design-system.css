@@ -734,6 +734,95 @@ nav button:focus-visible {
   }
 }
 
+/* ========================
+   MAC SCROLLBAR STYLES
+   ======================== */
+
+/**
+ * MAC Design System Scrollbars
+ * Dark, subtle scrollbars that blend with the dark theme
+ * Uses semi-transparent grays for professional appearance
+ */
+
+/* Scrollbar CSS Variables */
+:root {
+  --mac-scrollbar-track: rgba(255, 255, 255, 0.02);
+  --mac-scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --mac-scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
+  --mac-scrollbar-width: 8px;
+  --mac-scrollbar-width-thin: 6px;
+}
+
+/* Base scrollbar styles for webkit browsers */
+.mac-scrollbar::-webkit-scrollbar,
+.mac-scrollbar-thin::-webkit-scrollbar {
+  width: var(--mac-scrollbar-width);
+  height: var(--mac-scrollbar-width);
+}
+
+.mac-scrollbar-thin::-webkit-scrollbar {
+  width: var(--mac-scrollbar-width-thin);
+  height: var(--mac-scrollbar-width-thin);
+}
+
+.mac-scrollbar::-webkit-scrollbar-track,
+.mac-scrollbar-thin::-webkit-scrollbar-track {
+  background: var(--mac-scrollbar-track);
+  border-radius: 4px;
+}
+
+.mac-scrollbar::-webkit-scrollbar-thumb,
+.mac-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--mac-scrollbar-thumb);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.mac-scrollbar::-webkit-scrollbar-thumb:hover,
+.mac-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--mac-scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+/* Firefox scrollbar styles */
+.mac-scrollbar,
+.mac-scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mac-scrollbar-thumb) var(--mac-scrollbar-track);
+}
+
+/* Corner piece for both scrollbars */
+.mac-scrollbar::-webkit-scrollbar-corner,
+.mac-scrollbar-thin::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Override custom-scrollbar to use MAC design system colors */
+.custom-scrollbar::-webkit-scrollbar {
+  width: var(--mac-scrollbar-width);
+  height: var(--mac-scrollbar-width);
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--mac-scrollbar-track);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--mac-scrollbar-thumb);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--mac-scrollbar-thumb-hover);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mac-scrollbar-thumb) var(--mac-scrollbar-track);
+}
+
 /* Specific adjustments for ~750-800px (half of 15" Mac screen) */
 @media (min-width: 45rem) and (max-width: 53rem) {
   :root {

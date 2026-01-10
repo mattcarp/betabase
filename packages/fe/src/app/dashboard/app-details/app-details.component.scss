@@ -1,0 +1,304 @@
+@import '../../../scss/variables';
+
+.card {
+  padding: 0;
+  background-color: $color-light;
+
+  &-header {
+    padding: 16px 16px 8px;
+
+    &-avatar {
+      img {
+        width: 100%;
+      }
+
+      .null-cover {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: $color-lightgrey;
+
+        .fas {
+          font-size: 26px;
+          color: $color-grey;
+        }
+      }
+    }
+  }
+
+  &-content {
+    padding: 8px 16px 16px;
+    background-color: rgba($color-white, 0.3);
+
+    .flex,
+    .grid-row {
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+      width: 100%;
+      margin: 8px 0 16px;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: calc(14px + 1vw - 0.6vmin);
+        font-weight: bold;
+
+        span {
+          font-size: 14px;
+          font-weight: normal;
+        }
+      }
+    }
+
+    .flex {
+      & > div {
+        span:not(.grey) {
+          text-align: right;
+        }
+      }
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      grid-template-rows: auto;
+      margin: 16px 0 0;
+    }
+  }
+
+  details {
+    margin: 20px 0 0;
+
+    summary {
+      color: #3488d4;
+
+      ::marker {
+        color: $color-medium;
+      }
+    }
+
+    div {
+      margin: 5px 0 0;
+      padding: 10px;
+      background-color: $color-white;
+
+      ::ng-deep {
+        img {
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.grid {
+  &.jiras {
+    grid-template-columns: minmax(64px, 120px) repeat(3, 70px) minmax(70px, 100px) minmax(120px, 1fr) minmax(92px, 120px) repeat(2, minmax(64px, 80px)) minmax(64px, 100px);
+  }
+
+  &.new-features,
+  &.priorities {
+    grid-template-columns: 80px 1fr 100px 120px minmax(64px, 100px);
+    cursor: move;
+  }
+
+  &.flagged {
+    grid-template-columns: 80px 2fr 120px 1fr minmax(64px, 100px);
+    cursor: move;
+  }
+
+  &-container {
+    &.dragged {
+      &:after {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: '';
+        animation: marching-ants 1s linear;
+        animation-play-state: running;
+        animation-iteration-count: infinite;
+        background-image: linear-gradient(to right, $color-white 50%, $color-red 50%),
+        linear-gradient(to right, $color-white 50%, $color-red 50%),
+        linear-gradient(to bottom, $color-white 50%, $color-red 50%),
+        linear-gradient(to bottom, $color-white 50%, $color-red 50%);
+        background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+        background-position: 0 0, 0 100%, 0 0, 100% 0;
+        background-size: 20px 1px, 20px 1px, 1px 20px, 1px 20px;
+      }
+    }
+
+    .scrolling {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      max-height: 50vh;
+    }
+
+    .cancel-button {
+      position: absolute;
+      z-index: 2;
+      top: -20px;
+      right: -18px;
+
+      &:before {
+        position: absolute;
+        z-index: -1;
+        top: 12px;
+        right: 12px;
+        width: 16px;
+        height: 16px;
+        content: '';
+        border-radius: 8px;
+        background-color: $color-white;
+      }
+    }
+  }
+
+  &:nth-child(even),
+  &:nth-child(odd) {
+    &.fail {
+      background-color: #f9d0d1;
+    }
+  }
+}
+
+.ellipsis {
+  @include ellipsis;
+}
+
+.chart-container {
+  display: flex;
+  overflow-x: auto;
+  min-height: 244px;
+  margin: 10px 0 0;
+  padding: 10px;
+  background-color: white;
+
+  @media only screen and (min-width: 1250px) {
+    justify-content: center;
+  }
+
+  .chart {
+    position: relative;
+    width: 300px;
+
+    &.total {
+      display: grid;
+      grid-template-columns: 300px 250px;
+      column-gap: 10px;
+      width: 550px;
+
+      .period {
+        position: relative;
+        display: grid;
+        grid-template-rows: 20px 1fr;
+        margin: 0 16px 0 0;
+
+        h4 {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin: 12px 0 0;
+          transform: translate(-50%, -50%);
+          color: #919191;
+        }
+
+        b,
+        span {
+          display: block;
+          text-align: center;
+        }
+
+        span {
+          font-size: 12px;
+          color: #717171;
+        }
+
+        & > div {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        ::ng-deep {
+          .ngx-slider {
+            margin: 28px 0 12px;
+
+            .ngx-slider-bar {
+              height: 2px;
+              background-color: #e5e5e5;
+            }
+
+            .ngx-slider-selection {
+              background-color: $color-blue;
+            }
+
+            .ngx-slider-pointer {
+              top: auto;
+              bottom: 0;
+              width: 8px;
+              height: 16px;
+              border-top-left-radius: 3px;
+              border-top-right-radius: 3px;
+              background-color: $color-medium;
+
+              &:after {
+                display: none;
+              }
+            }
+
+            .ngx-slider-bubble {
+              bottom: 18px;
+              font-size: 12px;
+            }
+
+            .ngx-slider-limit {
+              font-weight: bold;
+              color: $color-blue;
+            }
+
+            .ngx-slider-tick {
+              top: -1px;
+              width: 1px;
+              height: 10px;
+              margin-left: 4px;
+              border-radius: 0;
+              background: $color-lightgrey;
+
+              &ngx-slider-selected {
+                background-color: $color-blue;
+              }
+            }
+          }
+        }
+
+        .slider {
+          position: relative;
+
+          &.disabled {
+            &:after {
+              position: absolute;
+              z-index: 10;
+              top: 0;
+              display: block;
+              width: 100%;
+              height: 100%;
+              content: '';
+              background-color: rgba($color-white, 0.5);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.spinner-info {
+  font-size: 18px;
+}

@@ -1,0 +1,28 @@
+@import '../../../../scss/variables';
+
+:host {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+label {
+  display: block;
+  height: auto;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+h2,
+h4 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 22px 0 0;
+  transform: translate(-50%, -50%);
+}
+
+h4 {
+  color: $color-grey;
+}

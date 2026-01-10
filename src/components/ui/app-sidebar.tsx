@@ -34,11 +34,8 @@ import {
   Archive,
   Download,
   Upload,
-  Settings,
   ChevronDown,
-  Bug,
 } from "lucide-react";
-import { SettingsMenu } from "./settings-menu";
 import { Badge } from "./badge";
 import { Button } from "./button";
 import { Actions } from "../ai-elements/actions";
@@ -390,11 +387,6 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
       <SidebarFooter className="mac-surface-elevated border-t border-mac-border">
         <div className="px-3 py-2 space-y-2">
-          {/* Settings Menu */}
-          <div className="mb-2">
-             <SettingsMenu />
-          </div>
-
           <div className="flex items-center justify-between">
             <div className="text-xs text-mac-text-muted">
               {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}

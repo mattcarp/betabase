@@ -1,0 +1,232 @@
+<ng-container *ngIf="isLoading; else template">
+  <app-spinner></app-spinner>
+</ng-container>
+
+<ng-template #template>
+  <div class="container">
+    <h2>Choose An Application:</h2>
+    <div class="cards">
+      <mat-card (click)="onButtonClick('/dashboard/Partner Previewer/show')" class="card partner">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar">
+            <img src="/assets/logos/partner-logo.png" alt="logo">
+          </div>
+          <mat-card-title>Partner Previewer</mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="data?.partnerPreviewerRound?.releaseNum">release: {{data?.partnerPreviewerRound?.releaseNum}}</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <section>
+            <div>Current Round:</div>
+            <div>
+              <ng-container *ngIf="!data?.partnerPreviewerRound?.releaseNum">No Current Round</ng-container>
+              <ng-container
+                *ngIf="data?.partnerPreviewerRound?.releaseNum">{{data?.partnerPreviewerRound?.name}}</ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Testing Period:</div>
+            <div>
+              <ng-container *ngIf="!data?.partnerPreviewerRound?.releaseNum">None Scheduled</ng-container>
+              <ng-container *ngIf="data?.partnerPreviewerRound?.releaseNum">
+                {{getFormattedDate(data?.partnerPreviewerRound?.startsAt)}}
+                to
+                {{getFormattedDate(data?.partnerPreviewerRound?.endsAt)}}
+              </ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Tests This Round:</div>
+            <div>{{data?.partnerPreviewerTestCount || 0}} total, {{data?.partnerPreviewerFails || 0}} fails</div>
+          </section>
+
+          <section>
+            <div>Cases Available:</div>
+            <div>{{data?.partnerPreviewerScenarios?.scenarioCount || 0}}</div>
+          </section>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card (click)="onButtonClick('/dashboard/aoma/show')" class="card aoma">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar">
+            <img src="/assets/logos/aoma-logo.gif" alt="logo">
+          </div>
+          <mat-card-title>AOMA</mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="data?.aomaRound?.releaseNum">release: {{data?.aomaRound?.releaseNum}}</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <section>
+            <div>Current Round:</div>
+            <div>
+              <ng-container *ngIf="!data?.aomaRound?.releaseNum">No Current Round</ng-container>
+              <ng-container *ngIf="data?.aomaRound?.releaseNum">{{data?.aomaRound?.name}}</ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Testing Period:</div>
+            <div>
+              <ng-container *ngIf="!data?.aomaRound?.releaseNum">None Scheduled</ng-container>
+              <ng-container *ngIf="data?.aomaRound?.releaseNum">
+                {{getFormattedDate(data?.aomaRound?.startsAt)}}
+                to
+                {{getFormattedDate(data?.aomaRound?.endsAt)}}
+              </ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Tests This Round:</div>
+            <div>{{data?.aomaTestCount || 0}} total, {{data?.aomaFails || 0}} fails</div>
+          </section>
+
+          <section>
+            <div>Cases Available:</div>
+            <div>{{data?.aomaScenarios?.scenarioCount || 0}}</div>
+          </section>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card (click)="onButtonClick('/dashboard/promo-admin/show')" class="card promo-admin">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar">
+            <img src="/assets/logos/promo-admin-logo.png" alt="logo">
+          </div>
+          <mat-card-title>Promo Portal Admin</mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="data?.promoAdminRound?.releaseNum">release: {{data?.promoAdminRound?.releaseNum}}</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <section>
+            <div>Current Round:</div>
+            <div>
+              <ng-container *ngIf="!data?.promoAdminRound?.releaseNum">No Current Round</ng-container>
+              <ng-container *ngIf="data?.promoAdminRound?.releaseNum">{{data?.promoAdminRound?.name}}</ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Testing Period:</div>
+            <div>
+              <ng-container *ngIf="!data?.promoAdminRound?.releaseNum">None Scheduled</ng-container>
+              <ng-container *ngIf="data?.promoAdminRound?.releaseNum">
+                {{getFormattedDate(data?.promoAdminRound?.startsAt)}}
+                to
+                {{getFormattedDate(data?.promoAdminRound?.endsAt)}}
+              </ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Tests This Round:</div>
+            <div>{{data?.promoAdminTestCount || 0}} total, {{data?.promoAdminFails || 0}} fails</div>
+          </section>
+
+          <section>
+            <div>Cases Available:</div>
+            <div>{{data?.promoAdminScenarios?.scenarioCount || 0}}</div>
+          </section>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card (click)="onButtonClick('/dashboard/promo/show')" class="card promo">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar">
+            <img src="/assets/logos/promo-logo.png" alt="logo">
+          </div>
+          <mat-card-title>Promo Portal</mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="data?.promoRound?.releaseNum">release: {{data?.promoRound?.releaseNum}}</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <section>
+            <div>Current Round:</div>
+            <div>
+              <ng-container *ngIf="!data?.promoRound?.releaseNum">No Current Round</ng-container>
+              <ng-container *ngIf="data?.promoRound?.releaseNum">{{data?.promoRound?.name}}</ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Testing Period:</div>
+            <div>
+              <ng-container *ngIf="!data?.promoRound?.releaseNum">None Scheduled</ng-container>
+              <ng-container *ngIf="data?.promoRound?.releaseNum">
+                {{getFormattedDate(data?.promoRound?.startsAt)}}
+                to
+                {{getFormattedDate(data?.promoRound?.endsAt)}}
+              </ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Tests This Round:</div>
+            <div>{{data?.promoTestCount || 0}} total, {{data?.promoFails || 0}} fails</div>
+          </section>
+
+          <section>
+            <div>Cases Available:</div>
+            <div>{{data?.promoScenarios?.scenarioCount || 0}}</div>
+          </section>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card (click)="onButtonClick('/dashboard/dx/show')" class="card dx">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar">
+            <img src="/assets/logos/dx-logo.png" alt="logo">
+          </div>
+          <mat-card-title>Digital Exchange</mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="data?.dxRound?.releaseNum">release: {{data?.dxRound?.releaseNum}}</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <section>
+            <div>Current Round:</div>
+            <div>
+              <ng-container *ngIf="!data?.dxRound?.releaseNum">No Current Round</ng-container>
+              <ng-container *ngIf="data?.dxRound?.releaseNum">{{data?.dxRound?.name}}</ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Testing Period:</div>
+            <div>
+              <ng-container *ngIf="!data?.dxRound?.releaseNum">None Scheduled</ng-container>
+              <ng-container *ngIf="data?.dxRound?.releaseNum">
+                {{getFormattedDate(data?.dxRound?.startsAt)}}
+                to
+                {{getFormattedDate(data?.dxRound?.endsAt)}}
+              </ng-container>
+            </div>
+          </section>
+
+          <section>
+            <div>Tests This Round:</div>
+            <div>{{data?.dxTestCount || 0}} total, {{data?.dxFails || 0}} fails</div>
+          </section>
+
+          <section>
+            <div>Cases Available:</div>
+            <div>{{data?.dxScenarios?.scenarioCount || 0}}</div>
+          </section>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+</ng-template>

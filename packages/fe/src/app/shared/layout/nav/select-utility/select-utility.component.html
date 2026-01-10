@@ -1,0 +1,24 @@
+<button mat-flat-button [matMenuTriggerFor]="menu" color="primary">
+  <i class="fas fa-wrench"></i>
+  <span>Utilities</span>
+</button>
+
+<mat-menu #menu>
+  <ng-container *ngFor="let item of utilityItems">
+    <button (click)="onMenuItemClick(item.url)" mat-menu-item>
+      <span class="{{item?.class}}">{{item?.title}}</span>
+    </button>
+  </ng-container>
+
+  <div class="label">Documentation:</div>
+
+  <ng-container *ngFor="let item of docItems">
+    <button
+      (click)="onMenuItemClick(item.url)"
+      [disabled]="!selectedApp"
+      mat-menu-item
+      class="utility-button">
+      <span class="{{item?.class}}">{{item?.title}}</span>
+    </button>
+  </ng-container>
+</mat-menu>

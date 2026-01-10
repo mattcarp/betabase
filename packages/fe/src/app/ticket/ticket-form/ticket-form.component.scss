@@ -1,0 +1,154 @@
+.ticket {
+  width: 100%;
+  min-width: 800px;
+  max-width: 60%;
+  margin: 0 auto 20px auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  header {
+    &.grid {
+      grid-template-columns: minmax(80px, 1fr) minmax(120px, 2fr) 40px;
+      height: auto;
+
+      & > div {
+        justify-content: flex-start;
+
+        label {
+          margin: 0 0 0 16px;
+        }
+      }
+    }
+  }
+
+  .requester,
+  .assignee {
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      margin: 0 10px 0 0;
+      color: white;
+      border-radius: 50%;
+      background-color: #a400a4;
+    }
+
+    .bubble {
+      max-width: 450px;
+      padding: 15px;
+      border-radius: 15px;
+      background-color: rgba(226, 228, 255, 0.8);
+
+      .info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        &-name {
+          margin-right: 10px;
+          font-weight: bold;
+        }
+
+        &-time {
+          font-size: 0.85em;
+        }
+      }
+    }
+  }
+
+  .requester {
+    .bubble {
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .assignee {
+    flex-direction: row-reverse;
+
+    .icon {
+      margin: 0 0 0 10px;
+      background-color: #ccc;
+    }
+
+    .bubble {
+      border-bottom-right-radius: 0;
+      background: #eee;
+    }
+  }
+}
+
+.tooltip {
+  display: block;
+  height: 100%;
+
+  .ticket {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    height: 100%;
+    margin: 0;
+    border: none;
+
+    header {
+      &.grid {
+        display: block;
+        padding: 0;
+        background-color: transparent;
+
+        & > div {
+          padding: 0;
+        }
+
+        .flex {
+          padding: 0;
+
+          & > label:first-child {
+            margin: 0;
+          }
+        }
+
+        .link {
+          display: none;
+        }
+
+        h3 {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .requester,
+    .assignee {
+      align-items: flex-start;
+      flex-direction: row;
+      padding: 0;
+
+      .icon {
+        display: none;
+      }
+
+      .bubble {
+        max-width: unset;
+        margin: 0 0 10px;
+        padding: 0;
+        background-color: transparent;
+
+        .info {
+          justify-content: flex-start;
+
+          &-time {
+            font-size: 1em;
+            color: #aaa;
+          }
+        }
+      }
+    }
+  }
+}

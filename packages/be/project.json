@@ -1,0 +1,52 @@
+{
+  "name": "be",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/be/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/be",
+        "main": "packages/be/src/main.ts",
+        "tsConfig": "packages/be/tsconfig.app.json",
+        "assets": ["packages/be/src/assets"],
+        "compiler": "tsc",
+        "target": "node",
+        "webpackConfig": "packages/be/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "packages/be/src/environments/environment.ts",
+              "with": "packages/be/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "be:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["coverage/packages/be"],
+      "options": {
+        "jestConfig": "packages/be/jest.config.js"
+      }
+    }
+  },
+  "tags": []
+}
