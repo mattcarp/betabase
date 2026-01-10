@@ -4,7 +4,7 @@ import { AiSdkChatPanel } from "../../ai/ai-sdk-chat-panel"; // Re-enabled after
 // import { ChatPanel } from "../../ai/chat-panel"; // For legacy tabs
 import { AppSidebar } from "../app-sidebar";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "../sidebar";
-import { useConversationStore } from "../../../lib/conversation-store";
+import { useConversationStore, type ConversationContext } from "../../../lib/conversation-store";
 import { WisdomLibrary } from "../WisdomLibrary";
 import { DocumentUpload as DocumentUploadComponent } from "../../DocumentUpload";
 import { getChatAPIEndpoint } from "../../../config/featureFlags";
@@ -474,8 +474,14 @@ Be helpful, concise, and professional in your responses.`;
 
         {/* Main Layout with proper sidebar */}
         <div className="flex flex-1 min-h-0 relative w-full">
-          {/* Enhanced Sidebar with persistence - Only show on Chat tab */}
-          {activeMode === "chat" && <AppSidebar className="border-r border-border/50" />}
+          {/* Enhanced Sidebar with persistence - Show on tabs with conversations */}
+          {/* Each tab (chat, test, fix) has isolated conversations via context filtering */}
+          {(activeMode === "chat" || activeMode === "test" || activeMode === "fix") && (
+            <AppSidebar
+              className="border-r border-border/50"
+              context={activeMode as ConversationContext}
+            />
+          )}
 
           {/* Main Content with SidebarInset */}
           <SidebarInset className="flex-1 min-h-0 bg-transparent flex flex-col">
