@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "../../styles/sidebar-mac.css";
 import { cn } from "../../lib/utils";
-import { useConversationStore } from "../../lib/conversation-store";
+import { useConversationStore, type ConversationContext } from "../../lib/conversation-store";
 import {
   Sidebar,
   SidebarContent,
@@ -52,9 +52,14 @@ import {
 
 interface AppSidebarProps {
   className?: string;
+  /**
+   * Current context/tab - determines which conversations to display.
+   * Defaults to 'chat' for backward compatibility.
+   */
+  context?: ConversationContext;
 }
 
-export function AppSidebar({ className }: AppSidebarProps) {
+export function AppSidebar({ className, context = "chat" }: AppSidebarProps) {
   const {
     conversations,
     activeConversationId,
@@ -65,21 +70,45 @@ export function AppSidebar({ className }: AppSidebarProps) {
     searchConversations,
     clearAllConversations,
     removeDuplicateConversations,
+    getConversationsByContext,
+    setActiveConversationForContext,
+    getActiveConversationForContext,
   } = useConversationStore();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredConversations, setFilteredConversations] = useState(conversations);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Filter conversations based on search
+  // Get conversations filtered by current context
+  const contextConversations = useMemo(() => {
+    return getConversationsByContext(context);
+  }, [getConversationsByContext, context, conversations]);
+
+  // Get active conversation ID for current context
+  const contextActiveId = useMemo(() => {
+    return getActiveConversationForContext(context);
+  }, [getActiveConversationForContext, context]);
+
+  const [filteredConversations, setFilteredConversations] = useState(contextConversations);
+
+  // Filter conversations based on search (within current context)
   useEffect(() => {
     if (searchQuery) {
-      const filtered = searchConversations(searchQuery);
+      // Filter within context conversations only
+      const lowerQuery = searchQuery.toLowerCase();
+      const filtered = contextConversations.filter(
+        (c) =>
+          c.title.toLowerCase().includes(lowerQuery) ||
+          c.messages.some((m) => {
+            const content = typeof m.content === "string" ? m.content : "";
+            return content.toLowerCase().includes(lowerQuery);
+          }) ||
+          c.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
+      );
       setFilteredConversations(filtered);
     } else {
-      setFilteredConversations(conversations);
+      setFilteredConversations(contextConversations);
     }
-  }, [searchQuery, conversations, searchConversations]);
+  }, [searchQuery, contextConversations]);
 
   // Sort conversations: pinned first, then by updated date
   const sortedConversations = [...filteredConversations].sort((a, b) => {
@@ -129,8 +158,9 @@ export function AppSidebar({ className }: AppSidebarProps) {
   };
 
   const handleNewConversation = () => {
-    const newConvo = createConversation();
-    setActiveConversation(newConvo.id);
+    // Create new conversation with current context
+    const newConvo = createConversation("New Conversation", context);
+    setActiveConversationForContext(context, newConvo.id);
   };
 
   const handleExportConversations = () => {
@@ -183,7 +213,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
         </div>
 
         {/* Quick Filters - compact icon buttons */}
-        {!searchQuery && conversations.length > 3 && (
+        {!searchQuery && contextConversations.length > 3 && (
           <div className="px-2 pb-2 flex gap-1">
             <button
               onClick={() => setSearchQuery("pinned")}
@@ -196,7 +226,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
               onClick={() => {
                 const today = new Date().toDateString();
                 setFilteredConversations(
-                  conversations.filter((c) => new Date(c.updatedAt).toDateString() === today)
+                  contextConversations.filter((c) => new Date(c.updatedAt).toDateString() === today)
                 );
               }}
               title="Today only"
@@ -235,19 +265,19 @@ export function AppSidebar({ className }: AppSidebarProps) {
                 {sortedConversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton
-                      onClick={() => setActiveConversation(conversation.id)}
-                      isActive={activeConversationId === conversation.id}
+                      onClick={() => setActiveConversationForContext(context, conversation.id)}
+                      isActive={contextActiveId === conversation.id}
                       size="conversation"
                       className={cn(
                         "group relative mac-conversation-item",
-                        activeConversationId === conversation.id && "active"
+                        contextActiveId === conversation.id && "active"
                       )}
                     >
                       <div className="flex items-start gap-3 w-full">
                         <MessageCircle
                           className={cn(
                             "h-4 w-4 mt-0.5 shrink-0",
-                            activeConversationId === conversation.id
+                            contextActiveId === conversation.id
                               ? "text-mac-primary-blue-400"
                               : "text-mac-text-muted"
                           )}
@@ -350,7 +380,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
         )}
 
         {/* AI-Powered Actions Section */}
-        {conversations.length > 0 && (
+        {contextConversations.length > 0 && (
           <SidebarGroup>
             <SidebarGroupLabel className="text-mac-text-muted pl-0">
               Quick Actions
@@ -389,12 +419,12 @@ export function AppSidebar({ className }: AppSidebarProps) {
         <div className="px-3 py-2 space-y-2">
           <div className="flex items-center justify-between">
             <div className="text-xs text-mac-text-muted">
-              {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}
+              {contextConversations.length} conversation{contextConversations.length !== 1 ? "s" : ""}
             </div>
-            {conversations.filter((c) => c.isPinned).length > 0 && (
+            {contextConversations.filter((c) => c.isPinned).length > 0 && (
               <Badge variant="outline" className="mac-badge text-xs px-2.5 py-0">
                 <Pin className="h-3 w-3 mr-2" />
-                {conversations.filter((c) => c.isPinned).length}
+                {contextConversations.filter((c) => c.isPinned).length}
               </Badge>
             )}
           </div>
@@ -405,7 +435,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
             <div className="h-1 bg-mac-surface-bg rounded-full overflow-hidden mac-storage-bar">
               <div
                 className="h-full bg-gradient-to-r from-mac-primary-blue-400 to-mac-accent-primary-400"
-                style={{ width: `${Math.min((conversations.length / 100) * 100, 100)}%` }}
+                style={{ width: `${Math.min((contextConversations.length / 100) * 100, 100)}%` }}
               />
             </div>
           </div>
