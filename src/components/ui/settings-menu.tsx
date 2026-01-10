@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Settings, Bug, Code, Headset } from "lucide-react";
-import { useTechSupportStore } from "../../lib/use-tech-support-store";
+import { Settings, Bug, Code, Headset, Check } from "lucide-react";
 import { useTesterStore } from "../../lib/use-tester-store";
 import { useProgrammerStore } from "../../lib/use-programmer-store";
 import {
@@ -22,7 +21,6 @@ interface SettingsMenuProps {
 }
 
 export function SettingsMenu({ variant = "sidebar" }: SettingsMenuProps) {
-  const { isTechSupportEnabled, setTechSupport } = useTechSupportStore();
   const { isTesterModeEnabled, setTesterMode } = useTesterStore();
   const { isProgrammerModeEnabled, setProgrammerMode } = useProgrammerStore();
 
@@ -42,22 +40,21 @@ export function SettingsMenu({ variant = "sidebar" }: SettingsMenuProps) {
       </DropdownMenuLabel>
       <DropdownMenuSeparator className="bg-mac-border" />
       <div className="p-2 space-y-1">
-        {/* Tech Support Staff Toggle - Base role */}
-        <div className="flex items-center justify-between space-x-2 rounded-md p-2 hover:bg-mac-surface-elevated/50">
+        {/* Tech Support Staff - Primary role, always ON */}
+        <div className="flex items-center justify-between space-x-2 rounded-md p-2 bg-green-500/10 border border-green-500/20">
           <div className="flex items-center space-x-2">
-            <div className={`p-1 rounded ${isTechSupportEnabled ? 'bg-green-500/20 text-green-500' : 'bg-mac-surface-elevated text-mac-text-muted'}`}>
+            <div className="p-1 rounded bg-green-500/20 text-green-500">
               <Headset className="h-4 w-4" />
             </div>
             <div className="flex flex-col space-y-0.5">
               <span className="text-sm font-medium text-mac-text-primary">Tech Support Staff</span>
-              <span className="text-xs text-mac-text-secondary">Base chat access</span>
+              <span className="text-xs text-mac-text-secondary">Always active</span>
             </div>
           </div>
-          <Switch
-            checked={isTechSupportEnabled}
-            onCheckedChange={setTechSupport}
-            className="data-[state=checked]:bg-green-500"
-          />
+          <div className="flex items-center space-x-1 text-green-500">
+            <Check className="h-4 w-4" />
+            <span className="text-xs font-medium">ON</span>
+          </div>
         </div>
         {/* Tester Mode Toggle */}
         <div className="flex items-center justify-between space-x-2 rounded-md p-2 hover:bg-mac-surface-elevated/50">

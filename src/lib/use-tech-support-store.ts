@@ -1,21 +1,12 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+
+// Tech Support Staff is the primary role - always enabled, non-toggleable
+// This ensures users always have access to the base Chat functionality
 
 interface TechSupportStore {
-  isTechSupportEnabled: boolean;
-  toggleTechSupport: () => void;
-  setTechSupport: (enabled: boolean) => void;
+  isTechSupportEnabled: true; // Always true - this is a constant
 }
 
-export const useTechSupportStore = create<TechSupportStore>()(
-  persist(
-    (set) => ({
-      isTechSupportEnabled: true, // Default ON - this is the base role
-      toggleTechSupport: () => set((state) => ({ isTechSupportEnabled: !state.isTechSupportEnabled })),
-      setTechSupport: (enabled) => set({ isTechSupportEnabled: enabled }),
-    }),
-    {
-      name: 'tech-support-mode-storage',
-    }
-  )
-);
+export const useTechSupportStore = create<TechSupportStore>()(() => ({
+  isTechSupportEnabled: true, // Primary role - always ON, cannot be disabled
+}));

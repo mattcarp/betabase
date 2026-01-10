@@ -1,6 +1,9 @@
 /**
  * E2E tests for role-based tab visibility
  * Tests FEAT-018: Role-Based Contextual Chat System
+ *
+ * Tech Support Staff is always-on (non-toggleable) - Chat tab always visible
+ * Tester and Programmer are toggleable additive roles
  */
 
 import { test, expect } from "@playwright/test";
@@ -8,44 +11,40 @@ import { test, expect } from "@playwright/test";
 test.describe("Role-Based Tab Visibility", () => {
   test.beforeEach(async ({ page }) => {
     // Clear localStorage to ensure clean state
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000", { timeout: 60000 });
     await page.evaluate(() => {
       localStorage.clear();
     });
-    // Reload to apply clean state
-    await page.reload();
-    await page.waitForLoadState("networkidle");
+    // Reload to apply clean state with extended timeout
+    await page.reload({ timeout: 60000 });
+    // Wait for main UI to be visible instead of networkidle (more reliable)
+    await page.waitForSelector('button:has-text("Chat"), a:has-text("Chat")', { timeout: 30000 });
   });
 
-  test("default state shows only Chat tab (Tech Support Staff default ON)", async ({ page }) => {
-    // Wait for the page to fully load
-    await page.waitForSelector('[data-testid="mode-tabs"], nav', { timeout: 10000 });
+  test("Chat tab is always visible (Tech Support Staff always-on)", async ({ page }) => {
+    // beforeEach already waits for Chat tab, so page is ready
 
-    // With default settings (Tech Support ON, Tester OFF, Programmer OFF),
-    // only Chat and Curate tabs should be visible
-    // Chat tab should be visible
+    // Chat tab should always be visible
     const chatTab = page.locator('button:has-text("Chat"), a:has-text("Chat")').first();
     await expect(chatTab).toBeVisible();
 
     // Curate tab should always be visible
     const curateTab = page.locator('button:has-text("Curate"), a:has-text("Curate")').first();
     await expect(curateTab).toBeVisible();
-
-    // Test and Fix tabs should NOT be visible (roles disabled by default)
-    const testTab = page.locator('button:has-text("Test"), a:has-text("Test")').first();
-    const fixTab = page.locator('button:has-text("Fix"), a:has-text("Fix")').first();
-
-    // These should not be visible when their roles are disabled
-    await expect(testTab).toHaveCount(0).catch(() => {
-      // If it exists, it should be hidden
-      return expect(testTab).not.toBeVisible();
-    });
-    await expect(fixTab).toHaveCount(0).catch(() => {
-      return expect(fixTab).not.toBeVisible();
-    });
   });
 
-  test("settings menu shows all three role toggles", async ({ page }) => {
+  test("default state shows only Chat and Curate tabs", async ({ page }) => {
+    // beforeEach already waits for page ready
+
+    // Test and Fix tabs should NOT be visible (roles disabled by default)
+    const testTabCount = await page.locator('button:has-text("Test"), a:has-text("Test")').count();
+    const fixTabCount = await page.locator('button:has-text("Fix"), a:has-text("Fix")').count();
+
+    expect(testTabCount).toBe(0);
+    expect(fixTabCount).toBe(0);
+  });
+
+  test("settings menu shows Tech Support Staff as always-on", async ({ page }) => {
     // Find and click settings button (gear icon)
     const settingsButton = page.locator('button[aria-label="Open settings menu"], button:has(svg.lucide-settings)').first();
     await settingsButton.click();
@@ -53,8 +52,15 @@ test.describe("Role-Based Tab Visibility", () => {
     // Wait for dropdown
     await page.waitForSelector('[role="menuitem"], .mac-dropdown-item, [class*="DropdownMenuContent"]');
 
-    // Verify all three roles are present
+    // Tech Support Staff should show as always active (no toggle)
     await expect(page.getByText("Tech Support Staff")).toBeVisible();
+    await expect(page.getByText("Always active")).toBeVisible();
+
+    // Should show two toggle switches (Tester and Programmer only)
+    const switches = page.locator('[role="switch"]');
+    await expect(switches).toHaveCount(2);
+
+    // Tester and Programmer should be visible
     await expect(page.getByText("Tester")).toBeVisible();
     await expect(page.getByText("Programmer")).toBeVisible();
   });
@@ -67,8 +73,8 @@ test.describe("Role-Based Tab Visibility", () => {
     // Wait for dropdown to open
     await page.waitForTimeout(500);
 
-    // Find and click the Tester toggle
-    const testerSwitch = page.locator('[role="switch"]').nth(1); // Second switch (0=Tech Support, 1=Tester, 2=Programmer)
+    // Find and click the Tester toggle (first switch, since Tech Support has no switch)
+    const testerSwitch = page.locator('[role="switch"]').first();
     await testerSwitch.click();
 
     // Close dropdown by clicking elsewhere
@@ -78,6 +84,10 @@ test.describe("Role-Based Tab Visibility", () => {
     // Now Test tab should be visible
     const testTab = page.locator('button:has-text("Test"), a:has-text("Test")').first();
     await expect(testTab).toBeVisible();
+
+    // Chat tab should still be visible
+    const chatTab = page.locator('button:has-text("Chat"), a:has-text("Chat")').first();
+    await expect(chatTab).toBeVisible();
   });
 
   test("enabling Programmer role shows Fix tab", async ({ page }) => {
@@ -86,8 +96,8 @@ test.describe("Role-Based Tab Visibility", () => {
     await settingsButton.click();
     await page.waitForTimeout(500);
 
-    // Find and click the Programmer toggle (third switch)
-    const programmerSwitch = page.locator('[role="switch"]').nth(2);
+    // Find and click the Programmer toggle (second switch)
+    const programmerSwitch = page.locator('[role="switch"]').nth(1);
     await programmerSwitch.click();
 
     // Close dropdown
@@ -97,36 +107,34 @@ test.describe("Role-Based Tab Visibility", () => {
     // Now Fix tab should be visible
     const fixTab = page.locator('button:has-text("Fix"), a:has-text("Fix")').first();
     await expect(fixTab).toBeVisible();
+
+    // Chat tab should still be visible
+    const chatTab = page.locator('button:has-text("Chat"), a:has-text("Chat")').first();
+    await expect(chatTab).toBeVisible();
   });
 
-  test("disabling Tech Support hides Chat tab", async ({ page }) => {
-    // Enable Tester first so we have another tab to fall back to
+  test("enabling both Tester and Programmer shows all four tabs", async ({ page }) => {
+    // Open settings
     const settingsButton = page.locator('button[aria-label="Open settings menu"], button:has(svg.lucide-settings)').first();
     await settingsButton.click();
     await page.waitForTimeout(500);
 
-    // Enable Tester
-    const testerSwitch = page.locator('[role="switch"]').nth(1);
+    // Enable both Tester and Programmer
+    const testerSwitch = page.locator('[role="switch"]').first();
+    const programmerSwitch = page.locator('[role="switch"]').nth(1);
     await testerSwitch.click();
     await page.waitForTimeout(200);
-
-    // Disable Tech Support (first switch)
-    const techSupportSwitch = page.locator('[role="switch"]').nth(0);
-    await techSupportSwitch.click();
+    await programmerSwitch.click();
 
     // Close dropdown
     await page.keyboard.press("Escape");
     await page.waitForTimeout(300);
 
-    // Chat tab should now be hidden
-    const chatTab = page.locator('button:has-text("Chat"), a:has-text("Chat")');
-    await expect(chatTab).toHaveCount(0).catch(() => {
-      return expect(chatTab).not.toBeVisible();
-    });
-
-    // Test tab should be visible
-    const testTab = page.locator('button:has-text("Test"), a:has-text("Test")').first();
-    await expect(testTab).toBeVisible();
+    // All four tabs should be visible
+    await expect(page.locator('button:has-text("Chat"), a:has-text("Chat")').first()).toBeVisible();
+    await expect(page.locator('button:has-text("Test"), a:has-text("Test")').first()).toBeVisible();
+    await expect(page.locator('button:has-text("Fix"), a:has-text("Fix")').first()).toBeVisible();
+    await expect(page.locator('button:has-text("Curate"), a:has-text("Curate")').first()).toBeVisible();
   });
 
   test("role states persist after page reload", async ({ page }) => {
@@ -135,7 +143,7 @@ test.describe("Role-Based Tab Visibility", () => {
     await settingsButton.click();
     await page.waitForTimeout(500);
 
-    const testerSwitch = page.locator('[role="switch"]').nth(1);
+    const testerSwitch = page.locator('[role="switch"]').first();
     await testerSwitch.click();
     await page.keyboard.press("Escape");
     await page.waitForTimeout(300);
@@ -144,12 +152,44 @@ test.describe("Role-Based Tab Visibility", () => {
     let testTab = page.locator('button:has-text("Test"), a:has-text("Test")').first();
     await expect(testTab).toBeVisible();
 
-    // Reload page
-    await page.reload();
-    await page.waitForLoadState("networkidle");
+    // Reload page with extended timeout
+    await page.reload({ timeout: 60000 });
+    await page.waitForSelector('button:has-text("Chat"), a:has-text("Chat")', { timeout: 30000 });
 
     // Test tab should still be visible after reload
     testTab = page.locator('button:has-text("Test"), a:has-text("Test")').first();
     await expect(testTab).toBeVisible();
+
+    // Chat tab should still be visible (always-on)
+    const chatTab = page.locator('button:has-text("Chat"), a:has-text("Chat")').first();
+    await expect(chatTab).toBeVisible();
+  });
+
+  test("disabling role while on that tab redirects to Chat", async ({ page }) => {
+    // Enable Tester and navigate to Test tab
+    const settingsButton = page.locator('button[aria-label="Open settings menu"], button:has(svg.lucide-settings)').first();
+    await settingsButton.click();
+    await page.waitForTimeout(500);
+
+    const testerSwitch = page.locator('[role="switch"]').first();
+    await testerSwitch.click();
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(300);
+
+    // Click on Test tab
+    const testTab = page.locator('button:has-text("Test"), a:has-text("Test")').first();
+    await testTab.click();
+    await page.waitForTimeout(300);
+
+    // Disable Tester role
+    await settingsButton.click();
+    await page.waitForTimeout(300);
+    await testerSwitch.click(); // Toggle off
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(300);
+
+    // Should redirect to Chat tab (first available)
+    // URL hash should change to #chat
+    await expect(page).toHaveURL(/#chat/);
   });
 });

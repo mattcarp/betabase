@@ -42,7 +42,8 @@ import { ManualTestingPanel } from "./ManualTestingPanel";
 import { TestHomeDashboard } from "./TestHomeDashboard";
 import { SelfHealingTestViewer } from "./SelfHealingTestViewer";
 import { HistoricalTestExplorer } from "./HistoricalTestExplorer";
-import { Wrench, Home } from "lucide-react";
+import { Wrench, Home, MessageSquare } from "lucide-react";
+import { TesterChatPanel } from "../tester/TesterChatPanel";
 
 interface TestDashboardProps {
   className?: string;
@@ -607,6 +608,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <Home className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Home</span>
             </TabsTrigger>
+            <TabsTrigger value="chat" className="gap-1.5 px-3 shrink-0">
+              <MessageSquare className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Chat</span>
+            </TabsTrigger>
             <TabsTrigger
               value="self-healing"
               className="gap-1.5 px-3 shrink-0"
@@ -665,6 +670,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
                   duration: testStats.duration,
                 }}
               />
+            </TabsContent>
+
+            <TabsContent value="chat" className="m-0 p-4 absolute inset-0 overflow-hidden">
+              <TesterChatPanel className="h-full" />
             </TabsContent>
 
             <TabsContent value="self-healing" className="m-0 p-0 absolute inset-0 overflow-y-auto">
