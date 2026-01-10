@@ -673,4 +673,83 @@ describe("FEAT-018 Phase 4: Conversation Context Isolation", () => {
       expect(module.useConversationStore).toBeDefined();
     });
   });
+
+  describe("P4-003: Sidebar Context Filtering", () => {
+    // These tests define the contract for AppSidebar context-aware filtering
+    // The sidebar should accept a context prop and filter conversations accordingly
+
+    it("should have getConversationsByContext return only matching contexts", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create conversations with different contexts
+      const store = useConversationStore.getState();
+
+      // Create identifiable test conversations
+      const chatConv = store.createConversation("SidebarTest-Chat", "chat");
+      const testConv = store.createConversation("SidebarTest-Test", "test");
+      const fixConv = store.createConversation("SidebarTest-Fix", "fix");
+
+      // Get filtered conversations
+      const chatConvs = store.getConversationsByContext("chat");
+      const testConvs = store.getConversationsByContext("test");
+      const fixConvs = store.getConversationsByContext("fix");
+
+      // Verify no cross-contamination
+      expect(chatConvs.some(c => c.id === testConv.id)).toBe(false);
+      expect(chatConvs.some(c => c.id === fixConv.id)).toBe(false);
+      expect(testConvs.some(c => c.id === chatConv.id)).toBe(false);
+      expect(testConvs.some(c => c.id === fixConv.id)).toBe(false);
+      expect(fixConvs.some(c => c.id === chatConv.id)).toBe(false);
+      expect(fixConvs.some(c => c.id === testConv.id)).toBe(false);
+
+      // Verify correct conversations are in their contexts
+      expect(chatConvs.some(c => c.id === chatConv.id)).toBe(true);
+      expect(testConvs.some(c => c.id === testConv.id)).toBe(true);
+      expect(fixConvs.some(c => c.id === fixConv.id)).toBe(true);
+    });
+
+    it("should update global activeConversationId when setting per-context", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create a conversation
+      const conv = useConversationStore.getState().createConversation("GlobalActiveTest", "test");
+
+      // Set active conversation for test context
+      useConversationStore.getState().setActiveConversationForContext("test", conv.id);
+
+      // Verify global activeConversationId is also updated
+      expect(useConversationStore.getState().activeConversationId).toBe(conv.id);
+    });
+
+    it("should preserve context-specific active conversation when switching contexts", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create conversations in different contexts
+      const chatConv = useConversationStore.getState().createConversation("PreserveTest-Chat", "chat");
+      const testConv = useConversationStore.getState().createConversation("PreserveTest-Test", "test");
+
+      // Set active for each context
+      useConversationStore.getState().setActiveConversationForContext("chat", chatConv.id);
+      useConversationStore.getState().setActiveConversationForContext("test", testConv.id);
+
+      // Switch to test context
+      useConversationStore.getState().setActiveConversationForContext("test", testConv.id);
+
+      // Chat context should still remember its active conversation
+      expect(useConversationStore.getState().getActiveConversationForContext("chat")).toBe(chatConv.id);
+      expect(useConversationStore.getState().getActiveConversationForContext("test")).toBe(testConv.id);
+    });
+
+    it("should create new conversation with correct context when in specific tab", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Simulate creating conversation from Test tab
+      const testTabConv = useConversationStore.getState().createConversation("NewFromTestTab", "test");
+      expect(testTabConv.context).toBe("test");
+
+      // Simulate creating conversation from Fix tab
+      const fixTabConv = useConversationStore.getState().createConversation("NewFromFixTab", "fix");
+      expect(fixTabConv.context).toBe("fix");
+    });
+  });
 });
