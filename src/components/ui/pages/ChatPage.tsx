@@ -55,7 +55,6 @@ import { DraggableLadybug } from "../../tester/DraggableLadybug";
 import { FeedbackDialog } from "../../tester/FeedbackDialog";
 import { SettingsMenu } from "../settings-menu";
 import { FixitPage } from "../../fixit/FixitPage";
-import { useTechSupportStore } from "../../../lib/use-tech-support-store";
 import { useTesterStore } from "../../../lib/use-tester-store";
 import { useProgrammerStore } from "../../../lib/use-programmer-store";
 
@@ -139,16 +138,16 @@ export const ChatPage: React.FC<ChatPageProps> = ({ onLogout }) => {
   const [activeMode, setActiveMode] = useState<ComponentMode["mode"]>("chat");
 
   // Role stores for tab visibility
-  const { isTechSupportEnabled } = useTechSupportStore();
+  // Tech Support Staff is always on - Chat tab always visible
   const { isTesterModeEnabled } = useTesterStore();
   const { isProgrammerModeEnabled } = useProgrammerStore();
 
   // Filter visible modes based on enabled roles
-  // Each role gates access to its corresponding tab
+  // Chat is always visible (Tech Support Staff is primary, non-toggleable)
   const visibleModes = COMPONENT_MODES.filter((mode) => {
     switch (mode.mode) {
       case "chat":
-        return isTechSupportEnabled;
+        return true; // Always visible - Tech Support Staff is always-on
       case "test":
         return isTesterModeEnabled;
       case "fix":
