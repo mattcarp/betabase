@@ -1,14 +1,50 @@
 /**
  * NO MOCKS ALLOWED - Enforcement Setup
- * 
+ *
  * This setup file overrides Vitest's mock functions to throw errors,
  * enforcing a strict no-mock policy across all tests.
- * 
+ *
  * WHY: Mocks break TDD. They make tests pass when code is broken.
  * Tests should use REAL services or FAIL HONESTLY.
  */
 
 import { vi } from 'vitest';
+
+// ============================================================================
+// GLOBAL POLYFILLS FOR NODE ENVIRONMENT
+// ============================================================================
+
+/**
+ * localStorage polyfill for Node.js environment
+ * This is NOT a mock - it's a real in-memory implementation for testing.
+ * Required for Zustand persist middleware and other browser APIs.
+ */
+if (typeof globalThis.localStorage === 'undefined') {
+  const storage = new Map<string, string>();
+  globalThis.localStorage = {
+    getItem: (key: string) => storage.get(key) ?? null,
+    setItem: (key: string, value: string) => storage.set(key, value),
+    removeItem: (key: string) => storage.delete(key),
+    clear: () => storage.clear(),
+    get length() { return storage.size; },
+    key: (index: number) => Array.from(storage.keys())[index] ?? null,
+  };
+}
+
+/**
+ * sessionStorage polyfill for Node.js environment (same API as localStorage)
+ */
+if (typeof globalThis.sessionStorage === 'undefined') {
+  const storage = new Map<string, string>();
+  globalThis.sessionStorage = {
+    getItem: (key: string) => storage.get(key) ?? null,
+    setItem: (key: string, value: string) => storage.set(key, value),
+    removeItem: (key: string) => storage.delete(key),
+    clear: () => storage.clear(),
+    get length() { return storage.size; },
+    key: (index: number) => Array.from(storage.keys())[index] ?? null,
+  };
+}
 
 // Override vi.mock to throw error
 const originalMock = vi.mock;
