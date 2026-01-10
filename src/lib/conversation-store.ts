@@ -25,6 +25,14 @@ export interface ToolInvocation {
   result?: any;
 }
 
+/**
+ * Conversation context type - determines which tab the conversation belongs to
+ * - 'chat': Tech Support Staff (always-on) - general conversations
+ * - 'test': Tester role - test-related conversations
+ * - 'fix': Programmer role - code/fix-related conversations
+ */
+export type ConversationContext = 'chat' | 'test' | 'fix';
+
 export interface Conversation {
   id: string;
   title: string;
@@ -34,6 +42,11 @@ export interface Conversation {
   isPinned?: boolean;
   tags?: string[];
   model?: string;
+  /**
+   * The context/tab this conversation belongs to.
+   * Defaults to 'chat' for backward compatibility.
+   */
+  context?: ConversationContext;
 }
 
 /**
@@ -172,10 +185,15 @@ export function migrateConversationToV6(conv: Conversation): Conversation {
 interface ConversationStore {
   conversations: Conversation[];
   activeConversationId: string | null;
+  /**
+   * Track the active conversation for each context separately.
+   * This allows switching between tabs without losing the current conversation.
+   */
+  activeConversationByContext: Record<ConversationContext, string | null>;
   _hasHydrated: boolean; // True after store has loaded from localStorage
 
   // Actions
-  createConversation: (title?: string) => Conversation;
+  createConversation: (title?: string, context?: ConversationContext) => Conversation;
   deleteConversation: (id: string) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
   setActiveConversation: (id: string) => void;
@@ -187,6 +205,10 @@ interface ConversationStore {
   removeDuplicateConversations: () => void;
   regenerateDefaultTitles: () => number; // Returns count of updated conversations
   setHasHydrated: (hydrated: boolean) => void;
+  // Context-aware methods for Phase 4 FEAT-018
+  getConversationsByContext: (context: ConversationContext) => Conversation[];
+  setActiveConversationForContext: (context: ConversationContext, id: string | null) => void;
+  getActiveConversationForContext: (context: ConversationContext) => string | null;
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -194,11 +216,16 @@ export const useConversationStore = create<ConversationStore>()(
     (set, get) => ({
       conversations: [],
       activeConversationId: null,
+      activeConversationByContext: {
+        chat: null,
+        test: null,
+        fix: null,
+      },
       _hasHydrated: false,
 
       setHasHydrated: (hydrated: boolean) => set({ _hasHydrated: hydrated }),
 
-      createConversation: (title = "New Conversation") => {
+      createConversation: (title = "New Conversation", context: ConversationContext = "chat") => {
         const newConversation: Conversation = {
           id: `conv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title,
@@ -207,11 +234,17 @@ export const useConversationStore = create<ConversationStore>()(
           updatedAt: new Date(),
           isPinned: false,
           tags: [],
+          context, // Add context field
         };
 
         set((state) => ({
           conversations: [newConversation, ...state.conversations],
           activeConversationId: newConversation.id,
+          // Also update the context-specific active conversation
+          activeConversationByContext: {
+            ...state.activeConversationByContext,
+            [context]: newConversation.id,
+          },
         }));
 
         return newConversation;
@@ -371,10 +404,30 @@ export const useConversationStore = create<ConversationStore>()(
         }));
         return updatedCount;
       },
+
+      // Phase 4 FEAT-018: Context-aware methods for conversation isolation
+      getConversationsByContext: (context: ConversationContext) => {
+        return get().conversations.filter((c) => (c.context || "chat") === context);
+      },
+
+      setActiveConversationForContext: (context: ConversationContext, id: string | null) => {
+        set((state) => ({
+          activeConversationByContext: {
+            ...state.activeConversationByContext,
+            [context]: id,
+          },
+          // Also update the global activeConversationId when setting per-context
+          activeConversationId: id ?? state.activeConversationId,
+        }));
+      },
+
+      getActiveConversationForContext: (context: ConversationContext) => {
+        return get().activeConversationByContext[context];
+      },
     }),
     {
       name: "siam-conversations",
-      version: 2, // Bumped for AI SDK v6 migration
+      version: 3, // Bumped for FEAT-018 context isolation
       onRehydrateStorage: () => (state) => {
         // After hydration completes, mark as hydrated and regenerate any default titles
         // This ensures titles are generated from message content after loading from localStorage
@@ -405,6 +458,8 @@ export const useConversationStore = create<ConversationStore>()(
                 ...conv,
                 createdAt: parseDate(conv.createdAt, now),
                 updatedAt: parseDate(conv.updatedAt, parseDate(conv.createdAt, now)),
+                // FEAT-018: Migrate conversations without context to 'chat' (default)
+                context: conv.context || "chat",
                 // Migrate messages from v4 (content) to v6 (parts) format
                 messages:
                   conv.messages?.map((msg: any) => {
@@ -421,6 +476,15 @@ export const useConversationStore = create<ConversationStore>()(
                   }) || [],
               };
             });
+          }
+
+          // FEAT-018: Ensure activeConversationByContext is initialized
+          if (!parsed.state?.activeConversationByContext) {
+            parsed.state.activeConversationByContext = {
+              chat: parsed.state?.activeConversationId || null,
+              test: null,
+              fix: null,
+            };
           }
 
           return parsed;

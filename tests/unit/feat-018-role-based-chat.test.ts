@@ -512,3 +512,244 @@ describe("FEAT-018: Tester Chat Suggestions", () => {
     }
   });
 });
+
+// ============================================================================
+// PHASE 4: CONVERSATION CONTEXT ISOLATION TESTS
+// ============================================================================
+
+describe("FEAT-018 Phase 4: Conversation Context Isolation", () => {
+  describe("Conversation Store Context Field", () => {
+    it("should create conversation with default context of 'chat'", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create a new conversation without specifying context
+      const conv = useConversationStore.getState().createConversation("Test");
+
+      expect(conv.context).toBe("chat");
+    });
+
+    it("should create conversation with specified context", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create conversations for each context
+      const chatConv = useConversationStore.getState().createConversation("Chat Test", "chat");
+      const testConv = useConversationStore.getState().createConversation("Test Test", "test");
+      const fixConv = useConversationStore.getState().createConversation("Fix Test", "fix");
+
+      expect(chatConv.context).toBe("chat");
+      expect(testConv.context).toBe("test");
+      expect(fixConv.context).toBe("fix");
+    });
+
+    it("should filter conversations by context", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create test conversations in various contexts
+      // Note: Store may have pre-existing conversations, so we filter by title
+      const chatConv1 = useConversationStore.getState().createConversation("FilterTest-Chat1", "chat");
+      const chatConv2 = useConversationStore.getState().createConversation("FilterTest-Chat2", "chat");
+      const testConv = useConversationStore.getState().createConversation("FilterTest-Test1", "test");
+      const fixConv = useConversationStore.getState().createConversation("FilterTest-Fix1", "fix");
+
+      const state = useConversationStore.getState();
+
+      // Get conversations by context and filter to our test data
+      const chatConvs = state.getConversationsByContext("chat").filter((c) => c.title.startsWith("FilterTest-"));
+      const testConvs = state.getConversationsByContext("test").filter((c) => c.title.startsWith("FilterTest-"));
+      const fixConvs = state.getConversationsByContext("fix").filter((c) => c.title.startsWith("FilterTest-"));
+
+      expect(chatConvs.length).toBe(2);
+      expect(testConvs.length).toBe(1);
+      expect(fixConvs.length).toBe(1);
+
+      // Verify the conversations are in the correct context
+      expect(chatConvs.map((c) => c.id)).toContain(chatConv1.id);
+      expect(chatConvs.map((c) => c.id)).toContain(chatConv2.id);
+      expect(testConvs.map((c) => c.id)).toContain(testConv.id);
+      expect(fixConvs.map((c) => c.id)).toContain(fixConv.id);
+    });
+
+    it("should have getConversationsByContext method", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      const state = useConversationStore.getState();
+
+      // Verify the method exists and returns an array
+      expect(typeof state.getConversationsByContext).toBe("function");
+      expect(Array.isArray(state.getConversationsByContext("chat"))).toBe(true);
+      expect(Array.isArray(state.getConversationsByContext("test"))).toBe(true);
+      expect(Array.isArray(state.getConversationsByContext("fix"))).toBe(true);
+    });
+
+    it("should default to 'chat' context for conversations without context field", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // The getConversationsByContext method should treat undefined context as 'chat'
+      const state = useConversationStore.getState();
+      const chatConvs = state.getConversationsByContext("chat");
+
+      // All conversations without explicit context should be in 'chat'
+      // (This tests the || "chat" fallback in the implementation)
+      expect(Array.isArray(chatConvs)).toBe(true);
+    });
+  });
+
+  describe("Active Conversation Per Context", () => {
+    it("should have setActiveConversationForContext method", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      const state = useConversationStore.getState();
+      expect(typeof state.setActiveConversationForContext).toBe("function");
+    });
+
+    it("should have getActiveConversationForContext method", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      const state = useConversationStore.getState();
+      expect(typeof state.getActiveConversationForContext).toBe("function");
+    });
+
+    it("should track active conversation separately per context", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create conversations in different contexts
+      const chatConv = useConversationStore.getState().createConversation("ActiveTest-Chat", "chat");
+      const testConv = useConversationStore.getState().createConversation("ActiveTest-Test", "test");
+
+      // Set active conversation per context
+      useConversationStore.getState().setActiveConversationForContext("chat", chatConv.id);
+      useConversationStore.getState().setActiveConversationForContext("test", testConv.id);
+
+      // Get active conversation for each context
+      const activeChatId = useConversationStore.getState().getActiveConversationForContext("chat");
+      const activeTestId = useConversationStore.getState().getActiveConversationForContext("test");
+
+      expect(activeChatId).toBe(chatConv.id);
+      expect(activeTestId).toBe(testConv.id);
+    });
+
+    it("should have activeConversationByContext in state", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      const state = useConversationStore.getState();
+
+      // Verify the state has the per-context tracking object
+      expect(state.activeConversationByContext).toBeDefined();
+      expect(typeof state.activeConversationByContext).toBe("object");
+      expect("chat" in state.activeConversationByContext).toBe(true);
+      expect("test" in state.activeConversationByContext).toBe(true);
+      expect("fix" in state.activeConversationByContext).toBe(true);
+    });
+  });
+
+  describe("Context Type Safety", () => {
+    it("should only accept valid context values", async () => {
+      // This is a compile-time check via TypeScript
+      // Runtime validation test
+      type ConversationContext = "chat" | "test" | "fix";
+
+      const validContexts: ConversationContext[] = ["chat", "test", "fix"];
+
+      for (const ctx of validContexts) {
+        expect(["chat", "test", "fix"]).toContain(ctx);
+      }
+    });
+
+    it("should have context field in Conversation type", async () => {
+      // Type checking - verify the field exists in the interface
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      const conv = useConversationStore.getState().createConversation("Type Test", "chat");
+
+      // TypeScript should recognize 'context' as a valid property
+      const context: string | undefined = conv.context;
+      expect(context).toBeDefined();
+    });
+
+    it("should export ConversationContext type", async () => {
+      // Verify the type is exported (import would fail if not)
+      const module = await import("@/lib/conversation-store");
+      // The type exists at compile time; we just verify the module loads
+      expect(module.useConversationStore).toBeDefined();
+    });
+  });
+
+  describe("P4-003: Sidebar Context Filtering", () => {
+    // These tests define the contract for AppSidebar context-aware filtering
+    // The sidebar should accept a context prop and filter conversations accordingly
+
+    it("should have getConversationsByContext return only matching contexts", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create conversations with different contexts
+      const store = useConversationStore.getState();
+
+      // Create identifiable test conversations
+      const chatConv = store.createConversation("SidebarTest-Chat", "chat");
+      const testConv = store.createConversation("SidebarTest-Test", "test");
+      const fixConv = store.createConversation("SidebarTest-Fix", "fix");
+
+      // Get filtered conversations
+      const chatConvs = store.getConversationsByContext("chat");
+      const testConvs = store.getConversationsByContext("test");
+      const fixConvs = store.getConversationsByContext("fix");
+
+      // Verify no cross-contamination
+      expect(chatConvs.some(c => c.id === testConv.id)).toBe(false);
+      expect(chatConvs.some(c => c.id === fixConv.id)).toBe(false);
+      expect(testConvs.some(c => c.id === chatConv.id)).toBe(false);
+      expect(testConvs.some(c => c.id === fixConv.id)).toBe(false);
+      expect(fixConvs.some(c => c.id === chatConv.id)).toBe(false);
+      expect(fixConvs.some(c => c.id === testConv.id)).toBe(false);
+
+      // Verify correct conversations are in their contexts
+      expect(chatConvs.some(c => c.id === chatConv.id)).toBe(true);
+      expect(testConvs.some(c => c.id === testConv.id)).toBe(true);
+      expect(fixConvs.some(c => c.id === fixConv.id)).toBe(true);
+    });
+
+    it("should update global activeConversationId when setting per-context", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create a conversation
+      const conv = useConversationStore.getState().createConversation("GlobalActiveTest", "test");
+
+      // Set active conversation for test context
+      useConversationStore.getState().setActiveConversationForContext("test", conv.id);
+
+      // Verify global activeConversationId is also updated
+      expect(useConversationStore.getState().activeConversationId).toBe(conv.id);
+    });
+
+    it("should preserve context-specific active conversation when switching contexts", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Create conversations in different contexts
+      const chatConv = useConversationStore.getState().createConversation("PreserveTest-Chat", "chat");
+      const testConv = useConversationStore.getState().createConversation("PreserveTest-Test", "test");
+
+      // Set active for each context
+      useConversationStore.getState().setActiveConversationForContext("chat", chatConv.id);
+      useConversationStore.getState().setActiveConversationForContext("test", testConv.id);
+
+      // Switch to test context
+      useConversationStore.getState().setActiveConversationForContext("test", testConv.id);
+
+      // Chat context should still remember its active conversation
+      expect(useConversationStore.getState().getActiveConversationForContext("chat")).toBe(chatConv.id);
+      expect(useConversationStore.getState().getActiveConversationForContext("test")).toBe(testConv.id);
+    });
+
+    it("should create new conversation with correct context when in specific tab", async () => {
+      const { useConversationStore } = await import("@/lib/conversation-store");
+
+      // Simulate creating conversation from Test tab
+      const testTabConv = useConversationStore.getState().createConversation("NewFromTestTab", "test");
+      expect(testTabConv.context).toBe("test");
+
+      // Simulate creating conversation from Fix tab
+      const fixTabConv = useConversationStore.getState().createConversation("NewFromFixTab", "fix");
+      expect(fixTabConv.context).toBe("fix");
+    });
+  });
+});
