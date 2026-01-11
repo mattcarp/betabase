@@ -28,6 +28,14 @@ export default defineConfig({
     coverage: {
       provider: "v8", // Faster than Istanbul
       reporter: ["text", "json", "html", "lcov"],
+      // Include unit-testable source files (services, lib, utils - not API routes or components)
+      include: [
+        "src/services/**/*.ts",
+        "src/lib/**/*.ts",
+        "src/utils/**/*.ts",
+        "src/hooks/**/*.ts",
+        "lib/**/*.ts",
+      ],
       exclude: [
         "node_modules/",
         "tests/",

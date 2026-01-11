@@ -210,7 +210,11 @@ export function TesterChatPanel({
         console.error("[TesterChatPanel] Error:", error);
         setLocalMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "Sorry, there was an error processing your request. The tester chat API may not be available yet." },
+          {
+            role: "assistant",
+            content:
+              "Sorry, there was an error processing your request. The tester chat API may not be available yet.",
+          },
         ]);
       } finally {
         setLocalLoading(false);
@@ -295,9 +299,9 @@ export function TesterChatPanel({
       <CardHeader className="pb-2 pt-3 px-3 border-b border-border flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <TestTube className="h-4 w-4 text-orange-500" />
+            <TestTube className="h-4 w-4 text-primary" />
             <span className="text-sm font-light text-foreground">Test Assistant</span>
-            <Badge variant="outline" className="text-xs h-5 px-1.5 text-orange-400 border-orange-400/30">
+            <Badge variant="outline" className="text-xs h-5 px-1.5 text-primary border-primary/30">
               Betabase-aware
             </Badge>
           </div>
@@ -322,7 +326,7 @@ export function TesterChatPanel({
             <div className="space-y-4">
               {/* Welcome message */}
               <div className="text-center py-6">
-                <TestTube className="h-10 w-10 mx-auto mb-3 text-orange-500 opacity-70" />
+                <TestTube className="h-10 w-10 mx-auto mb-3 text-primary opacity-70" />
                 <h3 className="text-sm font-light text-foreground mb-1">Test Assistant</h3>
                 <p className="text-xs text-muted-foreground">
                   Find tests, analyze coverage, and generate Playwright code
@@ -366,7 +370,7 @@ export function TesterChatPanel({
                     className={cn(
                       "max-w-[85%] rounded-lg px-3 py-2 text-sm",
                       message.role === "user"
-                        ? "bg-orange-500/20 text-foreground"
+                        ? "bg-primary/20 text-foreground"
                         : "bg-muted/50 text-foreground"
                     )}
                   >
@@ -414,7 +418,7 @@ export function TesterChatPanel({
               type="submit"
               size="icon"
               disabled={localLoading || !inputValue.trim()}
-              className="h-10 w-10 shrink-0 bg-orange-500 hover:bg-orange-600"
+              className="h-10 w-10 shrink-0 bg-primary hover:bg-primary/80"
             >
               {localLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

@@ -1891,7 +1891,7 @@ export function AiSdkChatPanel({
             )}
 
             {/* Message timestamp */}
-            <div className="mt-4 flex items-center justify-between relative">
+            <div className="mt-2 flex items-center justify-between relative">
               <span
                 className={cn(
                   "text-xs opacity-60",

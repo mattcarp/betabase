@@ -44,6 +44,7 @@ import { SelfHealingTestViewer } from "./SelfHealingTestViewer";
 import { HistoricalTestExplorer } from "./HistoricalTestExplorer";
 import { Wrench, Home, MessageSquare } from "lucide-react";
 import { TesterChatPanel } from "../tester/TesterChatPanel";
+import { LadybugCollectionPanel } from "../tester/LadybugCollectionPanel";
 
 interface TestDashboardProps {
   className?: string;
@@ -612,6 +613,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
               <MessageSquare className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Chat</span>
             </TabsTrigger>
+            <TabsTrigger value="ladybug" className="gap-1.5 px-3 shrink-0">
+              <Bug className="h-3.5 w-3.5 text-orange-500" />
+              <span className="hidden sm:inline">Ladybug</span>
+            </TabsTrigger>
             <TabsTrigger
               value="self-healing"
               className="gap-1.5 px-3 shrink-0"
@@ -674,6 +679,10 @@ export const TestDashboard: React.FC<TestDashboardProps> = ({ className }) => {
 
             <TabsContent value="chat" className="m-0 p-4 absolute inset-0 overflow-hidden">
               <TesterChatPanel className="h-full" />
+            </TabsContent>
+
+            <TabsContent value="ladybug" className="m-0 p-0 absolute inset-0 overflow-hidden">
+              <LadybugCollectionPanel className="h-full" />
             </TabsContent>
 
             <TabsContent value="self-healing" className="m-0 p-0 absolute inset-0 overflow-y-auto">
