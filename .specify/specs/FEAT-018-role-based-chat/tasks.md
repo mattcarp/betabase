@@ -3,7 +3,7 @@
 ## Phase 1: Role Infrastructure & Settings
 
 ### P1-001: Audit Existing Role Stores
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 30min
 - **Description**: Review `use-tester-store.ts` and `use-programmer-store.ts` to confirm defaults and persistence
 - **Acceptance**:
@@ -11,9 +11,10 @@
   - localStorage keys are distinct and non-conflicting
   - Persistence verified across page refresh
   - No store needed for Tech Support Staff (always on by design)
+- **Completed**: Verified stores work correctly with unit tests
 
 ### P1-002: Update Settings Menu with Role Display
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Modify `src/components/ui/settings-menu.tsx` to show Tech Support Staff as always-on, with Tester/Programmer toggles
 - **Acceptance**:
@@ -23,9 +24,10 @@
   - Green accent when enabled (matching design system)
   - Toggles wire correctly to respective stores
 - **Files**: `src/components/ui/settings-menu.tsx`
+- **Completed**: Settings menu updated with role toggles
 
 ### P1-003: Create useRoleTabs Hook
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 30min
 - **Description**: Create `src/lib/use-role-tabs.ts` to derive visible tabs from roles
 - **Acceptance**:
@@ -34,9 +36,10 @@
   - Fix tab included when Programmer enabled
   - Reactive to role store changes
 - **Files**: `src/lib/use-role-tabs.ts`
+- **Completed**: Hook created and tested
 
 ### P1-004: Write Unit Tests for Role Infrastructure
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 45min
 - **Description**: Unit tests for role stores and useRoleTabs hook
 - **Acceptance**:
@@ -44,13 +47,14 @@
   - Test persistence across mock reload
   - Test all 4 role combinations for tab derivation (Chat always present)
   - Tests pass in CI
+- **Completed**: 46+ unit tests passing in `tests/unit/feat-018-role-based-chat.test.ts`
 
 ---
 
 ## Phase 2: Tab System Refactor
 
 ### P2-001: Refactor ChatPage Tab Rendering
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 2hr
 - **Description**: Update `src/components/ui/pages/ChatPage.tsx` to use dynamic role-gated tabs
 - **Acceptance**:
@@ -59,9 +63,10 @@
   - No regressions in tab navigation
   - Hash routing still works
 - **Files**: `src/components/ui/pages/ChatPage.tsx`
+- **Completed**: ChatPage uses role-based tab visibility
 
 ### P2-002: Write E2E Tests for Tab Visibility
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Playwright tests for role-based tab visibility
 - **Acceptance**:
@@ -71,13 +76,14 @@
   - Test: Toggle Programmer ON → Fix tab appears
   - Test: Toggle Programmer OFF → Fix tab disappears
 - **Files**: `tests/e2e/features/role-based-tabs.spec.ts`
+- **Completed**: 8 E2E tests in `role-based-tabs.spec.ts`
 
 ---
 
 ## Phase 3: Context-Specific Chat Panels
 
 ### P3-001: Add Tech Support System Prompt
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Create Tech Support-specific system prompt in chat panel
 - **Acceptance**:
@@ -86,9 +92,14 @@
   - Product knowledge focus (betabase documentation)
   - Integrated into existing ai-sdk-chat-panel
 - **Files**: `src/components/ai/ai-sdk-chat-panel.tsx`, `src/lib/prompts/tech-support-prompt.ts`
+- **Completed**: 2026-01-10 - Created `src/lib/prompts/tech-support-prompt.ts` with:
+  - TECH_SUPPORT_SYSTEM_PROMPT constant with friendly, non-technical language
+  - Escalation guidance for Tester and Programmer modes
+  - Helper functions: `shouldSuggestTesterMode()` and `shouldSuggestProgrammerMode()`
+  - Unit tests covering prompt content and escalation helpers
 
 ### P3-002: Create TesterChatPanel Component
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 2hr
 - **Description**: New `src/components/tester/TesterChatPanel.tsx` mirroring FixitChatPanel
 - **Acceptance**:
@@ -97,9 +108,10 @@
   - Response rendering with artifacts
   - Loading/error states
 - **Files**: `src/components/tester/TesterChatPanel.tsx`
+- **Completed**: Pre-existing implementation with full feature set
 
 ### P3-003: Create Tester Chat API Endpoint
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 2hr
 - **Description**: New `src/app/api/tester/chat/route.ts` for test-focused AI chat
 - **Acceptance**:
@@ -108,9 +120,14 @@
   - Can generate Playwright code artifacts
   - Proper error handling and streaming
 - **Files**: `src/app/api/tester/chat/route.ts`
+- **Completed**: Pre-existing implementation with:
+  - Betabase test search (historical_tests_view)
+  - Self-healing attempt search
+  - Google Gemini streaming
+  - Search metadata headers
 
 ### P3-004: Wire TesterChatPanel to Test Dashboard
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Add Chat sub-tab to TestDashboard component
 - **Acceptance**:
@@ -119,9 +136,10 @@
   - Smooth navigation between sub-tabs
   - TesterChatPanel renders correctly
 - **Files**: `src/components/test-dashboard/TestDashboard.tsx`
+- **Completed**: Pre-existing wiring - TesterChatPanel imported and rendered in Chat tab
 
 ### P3-005: Write Integration Tests for Tester Chat
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1.5hr
 - **Description**: Integration tests for TesterChatPanel and API
 - **Acceptance**:
@@ -129,13 +147,17 @@
   - Test: "Generate Playwright test" produces valid code
   - Test: Error handling when betabase unavailable
   - Mocked API responses for unit tests
+- **Completed**: 2026-01-10 - Added to `tests/unit/feat-018-role-based-chat.test.ts`:
+  - API health tests (feature list, provider)
+  - Betabase integration tests (search, Playwright generation)
+  - TesterChatPanel component contract tests
 
 ---
 
 ## Phase 4: Conversation Context Isolation
 
 ### P4-001: Extend Conversation Store Schema
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Add `context` field to conversation-store
 - **Acceptance**:
@@ -144,9 +166,10 @@
   - Migration: existing conversations default to 'chat'
   - Supabase schema updated if using DB persistence
 - **Files**: `src/lib/conversation-store.ts`
+- **Completed**: ConversationContext type and context field added
 
 ### P4-002: Auto-Tag New Conversations by Context
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 45min
 - **Description**: Tag conversations based on originating tab
 - **Acceptance**:
@@ -155,9 +178,10 @@
   - Conversations created in Fix tab → context: 'fix'
   - Context persists with conversation
 - **Files**: `src/lib/conversation-store.ts`, `src/components/ai/ai-sdk-chat-panel.tsx`
+- **Completed**: createConversation accepts context param
 
 ### P4-003: Filter Sidebar by Tab Context
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1.5hr
 - **Description**: Update app-sidebar to filter conversations by current context
 - **Acceptance**:
@@ -166,9 +190,10 @@
   - Test tab → shows 'test' context conversations
   - Fix tab → shows 'fix' context conversations
 - **Files**: `src/components/ui/app-sidebar.tsx`
+- **Completed**: getConversationsByContext method added and wired to sidebar
 
 ### P4-004: Preserve Context State on Tab Switch
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1hr
 - **Description**: Remember and restore last conversation per context
 - **Acceptance**:
@@ -176,9 +201,10 @@
   - Switching back restores that conversation
   - Works across page refresh (localStorage)
   - No data loss on rapid switching
+- **Completed**: activeConversationByContext state with per-context tracking
 
 ### P4-005: Write E2E Tests for Context Isolation
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 1.5hr
 - **Description**: Playwright tests for conversation context isolation
 - **Acceptance**:
@@ -186,9 +212,17 @@
   - Test: Conversations persist to correct context after refresh
   - Test: Switching tabs preserves conversation state
 - **Files**: `tests/e2e/features/conversation-context.spec.ts`
+- **Completed**: 2026-01-11 - Created 7 E2E tests:
+  - conversations default to chat context
+  - Test tab visible when Tester role enabled
+  - conversations filtered by context in localStorage
+  - context state persists after page reload
+  - activeConversationByContext tracks per-context state
+  - TesterChatPanel displayed in Test tab Chat sub-tab
+  - navigating to Test tab changes URL hash
 
 ### P4-006: Migration Script for Existing Conversations
-- **Status**: pending
+- **Status**: done
 - **Estimate**: 30min
 - **Description**: One-time migration to tag existing conversations as 'chat'
 - **Acceptance**:
@@ -196,6 +230,12 @@
   - All existing conversations get context: 'chat'
   - No data loss
   - Logging for audit
+- **Completed**: 2026-01-11 - Created `scripts/migrate-conversation-context.ts`:
+  - migrateConversationContext() - adds context field to legacy conversations
+  - verifyMigration() - validates all conversations have context
+  - runMigration() - console runner with verification
+  - Exports to window for browser console usage
+  - 8 unit tests covering migration logic and verification
 
 ---
 
